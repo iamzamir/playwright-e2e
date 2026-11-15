@@ -1,0 +1,12 @@
+{
+    "USER_ID_IN_SOURCE_REALM": "18c78eda-c7bc-4fee-a977-0d8ee134911f",
+    "USER_ID_IN_TARGET_REALM": "08fe8c0b-3c12-470d-a2d3-df1da0a06459",
+    "PAYLOAD": {
+        "attributes": [],
+        "templateName": "BY-Template",
+        "displayName": "testprocessforMig",
+        "calendarName": "Monthly Calendar",
+        "cycleName": "2025 MAY",
+        "description": "this process is used for migration"
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_011_ColumnChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_012_NetworkCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_013_MyTask.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_014_TreeCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_015_TableCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_016_NPICard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_017_HeatmapChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_018_ScenarioComparisionWithActor.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_020_TabbedCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DirtyState/Test_001_DirtyState.spec.ts"
+  ]
+}

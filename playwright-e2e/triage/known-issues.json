@@ -1,0 +1,58 @@
+{
+  "_schema": {
+    "purpose": "Failures that are already understood and tracked. A failing test that matches an entry does not turn the nightly run verdict red. See docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md §4.1.",
+    "id": "Unique id, KI-<number>.",
+    "jira": "Jira key that tracks the fix (e.g. ABP-12345). Required for PRODUCT_DEFECT entries.",
+    "title": "One line: what is wrong.",
+    "category": "PRODUCT_DEFECT | AUTOMATION_ISSUE | TEST_DATA_ISSUE | ENVIRONMENT_ISSUE",
+    "match": "All given selectors must match. spec: glob relative to tests/ (** spans folders, * stays in one folder). test: case-insensitive substring of the test title. testRegex: case-insensitive regex on the test title, for titles that are a substring of another (e.g. ^Process - vs Sub-process -). messageRegex: regex on the error message (all lines; the first line is shown in reports). environment / gateway: optional lists (QA, INTEROP / AZURE, GRAVITEE); omit to match all.",
+    "owner": "Team or person who follows up.",
+    "since": "Date added, YYYY-MM-DD.",
+    "expires": "Date to re-check, YYYY-MM-DD (max ~3 months). Expired entries stop applying and are listed in the verdict.",
+    "autoCloseAfterPasses": "Consecutive passing runs before suggesting the issue may be fixed; defaults to 3.",
+    "candidates": "npm run triage:suggest -- --results <allure-results> lists recurring failures to register."
+  },
+  "issues": [
+    {
+      "id": "KI-5",
+      "jira": null,
+      "title": "Gravitee pspoat-test1: saved filter \"Default filter 2\" (PSAutomation1) was overwritten on 2026-10-16 with ScopeBatch Test_003 Item/Location/Customer members instead of Time only, so Test_003 Case 4 finds dimensions inside the restriction until it is restored by hand",
+      "category": "TEST_DATA_ISSUE",
+      "match": {
+        "spec": "ProcessOrchestration/ScopeBatch/Test_003_SaveAndDeleteFilterInSettings.spec.ts",
+        "test": "Different Dimension Hierarchy",
+        "messageRegex": "has no dimensions inside the restriction",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO UI automation",
+      "since": "2026-10-16",
+      "expires": "2026-12-16",
+      "autoCloseAfterPasses": 3
+    },
+    {
+      "id": "KI-6",
+      "jira": null,
+      "title": "QA Gravitee: EntityViewProcedureMapping search tests read the request body that the previous mapping test stores in a module-level variable; the spec isn't serial, so when a retry restarts the worker the body is undefined and the test throws \"Cannot read properties of undefined (reading 'procedures')\"",
+      "category": "AUTOMATION_ISSUE",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_00*_EntityViewProcedureMappingWithMultipleViewsFor*.spec.ts",
+        "messageRegex": "reading 'procedures'",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2027-02-05",
+      "autoCloseAfterPasses": 3
+    }
+  ]
+}

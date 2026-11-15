@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Maas Chart Card View",
+    "CARD_NAME": "Maas Chart",
+    "FILTER_TO_APPLY_IN_SCOPE": "Maas Pivot Filter",
+    "SCENARIO_TO_APPLY":"scenario_mass_chart_test"
+}

@@ -1,0 +1,26 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Calendar/Test_001_CalendarsCRUD.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Calendar/Test_002_CyclesCRUD.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_001_ActionItemCRUDWithProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_002_ActionItemCRUDWithSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_004_ActionItemSearchForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_006_ActionItemEditorAndFilterConfig.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_002_ProcessAttribute.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_003_SubprocessAttribute.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_005_ProcessLifecycleCrud.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_006_ProcessSearch.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_008_ProcessDetailsReads.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_001_EntityViewMappingForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_002_EntityViewMappingForSubprocess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_004_EntityViewProcedureMappingWithSingleViewForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_008_EntityViewActorsProcedures.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_009_PresetFilterManagement.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_010_ScopeMapping.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_012_LmSearchV2ActorsAndProcedures.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/UIFields/Test_001_PageConfigContracts.spec.ts"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "PRIVATE_SCENARIONAME": "Dont_Delete_VF_Scope_Dimension_data",
+    "PUBLIC_SCENARIONAME" : "Dont_Delete_Public_Scenario",
+    "BASE_SCENARIONAME" : "Base 25-04-2025-1422"
+}

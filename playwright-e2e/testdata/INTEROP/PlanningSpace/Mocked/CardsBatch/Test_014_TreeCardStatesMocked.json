@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required) - view holding the Tree card, saved with the TreeTable endpoints by DataSetup UIDataReset/Test_008",
+    "CARD_TITLE": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Tree card test view",
+  "CARD_TITLE": "Tree card test"
+}

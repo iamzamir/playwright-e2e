@@ -1,0 +1,11 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/PlanningSpace/Test_001_PlanningListingVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/PlanningSpace/Test_002_AllViewsPanelVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/PlanningSpace/Test_003_HiddenViewsPanelVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/PlanningSpace/Test_004_ViewSettingsVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/ProcessOrchestration/Test_001_ProcessViewMappingVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/ProcessOrchestration/Test_002_ArrangeViewsMapWithVisualValidation.spec.ts",
+    "**/playwright-e2e/tests/VisualAutomation/VisualSpecs/ProcessOrchestration/Test_003_PlanningViewsSettingsVisualValidation.spec.ts"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+    "testFiles": [
+        "**/DataSetup/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+        "**/DrillThroughBatch/Test_001_EndToEndDrillThrough.spec.ts",
+        "**/DrillThroughBatch/Test_002_TargetViewsShouldBeVisibleAsOptions.spec.ts",
+        "**/DrillThroughBatch/Test_004_DTShouldShowsEmittedContextScenarioAndScope.spec.ts",
+        "**/DrillThroughBatch/Test_005_DTWithContextMapper.spec.ts",
+        "**/DrillThroughBatch/Test_006_HiddenViewTransitionInSameTab.spec.ts",
+        "**/DrillThroughBatch/Test_007_HiddenViewTransitionInNewTab.spec.ts",
+        "**/DrillThroughBatch/Test_008_OnRowDrillThrough.spec.ts",
+        "**/DrillThroughBatch/Test_009_CreateScenarioAfterDrillThrough.spec.ts",
+        "**/DrillThroughBatch/Test_010_AssumptionsEndToEndDrillThrough.spec.ts",
+        "**/DrillThroughBatch/Test_011_MultiLevelDrillThroughMassBdewithSubprocess.spec.ts",
+        "**/DrillThroughBatch/Test_012_MultiLevelDrillThroughMassBdeWithProcess.spec.ts",
+        "**/DrillThroughBatch/Test_013_CreateScenarioAfterDrillThroughFromBDECard.spec.ts",
+        "**/DrillThroughBatch/Test_018_DrillThroughSceanrioDefaultAndCheckDefaultInTarget.spec.ts",
+        "**/DrillThroughBatch/Test_019_DrillThroughDefaultScenarioAndcreateDefaultSceanrioInTargetView.spec.ts",
+        "**/DrillThroughBatch/Test_021_CreateMultipleChildScenariosAfterDrillThrough.spec.ts",
+        "**/DrillThroughBatch/Test_027_ContextOverrideNavUsingBreadcrumnbs.spec.ts"
+    ]
+}

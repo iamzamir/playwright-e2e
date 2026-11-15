@@ -1,0 +1,21 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "DR Source",
+    "TC1_DRILL_THROUGH_VIEW_TO": "DR Destination",
+    "TC1_DRILL_THROUGH_CELL": "47",
+    "LV2_DRILL_THROUGH_VIEW_FROM": "DR Destination",
+    "LV2_DRILL_THROUGH_VIEW_TO": "DR Source",
+    "LV2_DRILL_THROUGH_CELL": "47",
+    "TC2_DRILL_THROUGH_VIEW_FROM": "Demand Review",
+    "TC2_DRILL_THROUGH_VIEW_TO": "Demand Analysis",
+    "TC2_DRILL_THROUGH_CELL": "264,170",
+    "TC2_SESSION_NAME": "test11",
+    "DIMENSIONS": {
+        "ITEM": "PF-00",
+        "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-01",
+        "TIME": "CY-2022"
+    }
+}

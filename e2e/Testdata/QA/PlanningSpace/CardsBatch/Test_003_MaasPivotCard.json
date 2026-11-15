@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Maas Pivot Card View",
+    "CARD_NAME": "Maas Pivot",
+    "FILTER_TO_APPLY_IN_SCOPE": "Maas Pivot Filter",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS": "Scenario_For_MaasPivot"
+}

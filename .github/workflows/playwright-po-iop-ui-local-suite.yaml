@@ -1,0 +1,762 @@
+name: playwright-po-iop-ui-local-suite
+run-name: PO UI INTEROP (${{ (github.event_name == 'schedule' && github.event.schedule == '30 22 * * *') && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }})
+
+permissions:
+  contents: read
+
+on:
+  schedule:
+    - cron: '30 21 * * *'  # 3:00 AM IST daily (AZURE)
+    - cron: '30 22 * * *'  # 4:00 AM IST daily (GRAVITEE)
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      branch:
+        description: Branch to run workflow on
+        required: false
+        default: 'main'
+        type: string
+      gateway-type:
+        description: Choose Gateway (AZURE or GRAVITEE)
+        required: false
+        default: 'AZURE'
+        type: choice
+        options:
+          - AZURE
+          - GRAVITEE
+      realm-key:
+        description: Gravitee realm key (used only when gateway-type is GRAVITEE)
+        required: false
+        default: 'pspoat-test1'
+        type: string
+      headless:
+        description: Browser mode
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      batch:
+        description: 'Batch to run (all runs all 6 batches in parallel)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - actionitems
+          - calendar
+          - powerbar
+          - processbatch
+          - scope
+          - other
+      enable-html-report:
+        description: 'Generate and upload Playwright HTML Report (default: false)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      retries:
+        description: 'Number of retries for failed tests (default: 1)'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '0'
+          - '2'
+          - '3'
+
+concurrency:
+  group: playwright-po-iop-ui-local-suite-${{ github.ref }}-${{ (github.event_name == 'schedule' && github.event.schedule == '30 22 * * *') && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }}
+  cancel-in-progress: false
+
+env:
+  TEST_ENV: INTEROP
+  GATEWAY_TYPE: ${{ (github.event_name == 'schedule' && github.event.schedule == '30 22 * * *') && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }}
+  GRAVITEE_REALM_KEY: ${{ github.event.inputs['realm-key'] || 'pspoat-test1' }}
+  # Report folder on gh-pages (PSAutomationReports/<key>) and dashboard suite key, one per gateway.
+  REPORT_CATEGORY: ${{ ((github.event_name == 'schedule' && github.event.schedule == '30 22 * * *') || github.event.inputs['gateway-type'] == 'GRAVITEE') && 'PO-UI-INTEROP-GRAVITEE' || 'PO-UI-INTEROP-AZURE' }}
+  # Folder used before the 2026-10 rename; read only to seed Allure history and the verdict baseline until the new folder exists.
+  LEGACY_REPORT_CATEGORY: ${{ ((github.event_name == 'schedule' && github.event.schedule == '30 22 * * *') || github.event.inputs['gateway-type'] == 'GRAVITEE') && 'PW-PO-UI-INTEROP-GRAVITEE' || 'PW-PO-UI-INTEROP-LOCAL' }}
+  TEST_BATCH: ${{ github.event_name == 'schedule' && 'all' || github.event.inputs.batch || 'all' }}
+  HEADLESS_MODE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.headless || 'true' }}
+  PW_ENABLE_HTML_REPORT: ${{ github.event.inputs['enable-html-report'] || 'false' }}
+  PW_RETRIES: ${{ github.event.inputs.retries || '1' }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_PS_1 }}
+  GRAVITEE_CLIENT_ID_PSPOAT_TEST1: ${{ secrets.GRAVITEE_CLIENT_ID_PSPOAT_TEST1 }}
+  GRAVITEE_CLIENT_SECRET_PSPOAT_TEST1: ${{ secrets.GRAVITEE_CLIENT_SECRET_PSPOAT_TEST1 }}
+  # Run verdict (playwright-e2e/scripts/triage/verdict.js): 'report' only reports it; 'enforce' turns the run red
+  # for unexplained failures or a broken run. Switch with PW_VERDICT_MODE_PO_UI or repository variable PW_VERDICT_MODE.
+  PW_VERDICT_MODE: ${{ vars.PW_VERDICT_MODE_PO_UI || vars.PW_VERDICT_MODE || 'report' }}
+  # Environment health probe (triage E8): 'report' shows an unhealthy probe in the verdict; 'enforce' makes it a BROKEN
+  # reason. Stays 'report' until the probe has run clean for a week (planning task T5.4). Repository variable TRIAGE_ENV_HEALTH_VERDICT.
+  TRIAGE_ENV_HEALTH_VERDICT: ${{ vars.TRIAGE_ENV_HEALTH_VERDICT || 'report' }}
+
+jobs:
+  # Environment health probe (triage E8, scripts/triage/env-health.js): a machine token, the UI pages and one read-only
+  # call per gateway service, checked while the tests start. It also records the UI builds under test (E7,
+  # scripts/triage/collect-versions.js). Nothing waits for it, so it never delays or blocks the tests;
+  # the report job reads its result into the verdict and the dashboard run data.
+  env-health:
+    name: Environment Health
+    # Report-only evidence: a failure anywhere in this job (setup, probe, upload) must never fail the run.
+    continue-on-error: true
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+          cache: npm
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci --ignore-scripts
+
+      - name: Probe Environment
+        id: probe
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          # Same realm as the test step: the Gravitee realm key, or the environment default on Azure.
+          REALM_KEY: ${{ env.GATEWAY_TYPE == 'GRAVITEE' && env.GRAVITEE_REALM_KEY || '' }}
+        run: node scripts/triage/env-health.js --checks token,portal,po-ui,po-gateway,lm-gateway,ai-gateway,uif-gateway,liam --out reports/triage/env-health.json
+
+      # E7: which UI builds this run tests (read from their public bundles; no token, report-only).
+      - name: Collect System-Under-Test Versions
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+        run: node scripts/triage/collect-versions.js --out reports/triage/versions.json
+
+      # A setup failure (checkout, Node, npm) leaves no probe result: record that, so the verdict says why.
+      - name: Record Probe Fallback
+        if: always()
+        run: |
+          mkdir -p playwright-e2e/reports/triage
+          if [ ! -f playwright-e2e/reports/triage/env-health.json ]; then
+            printf '{"schemaVersion":1,"checkedAt":"%s","healthy":null,"error":"probe did not run (environment health job setup failed)","failed":[],"checks":[]}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > playwright-e2e/reports/triage/env-health.json
+          fi
+
+      - name: Upload Environment Health
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: triage-env-health
+          path: |
+            playwright-e2e/reports/triage/env-health.json
+            playwright-e2e/reports/triage/versions.json
+          if-no-files-found: ignore
+          retention-days: 30
+        continue-on-error: true
+
+  run-tests:
+    name: Run PO UI INTEROP ${{ github.event_name == 'schedule' && github.event.schedule == '30 22 * * *' && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }} Tests (${{ matrix.batch }})
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    strategy:
+      fail-fast: false
+      matrix:
+        batch: ${{ (github.event_name == 'schedule' || github.event.inputs.batch == '' || github.event.inputs.batch == 'all') && fromJSON('["actionitems","calendar","powerbar","processbatch","scope","other"]') || fromJSON(format('["{0}"]', github.event.inputs.batch)) }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        working-directory: playwright-e2e
+        run: |
+          # The Azure/GitHub-hosted Ubuntu runner ships Microsoft apt repos
+          # (packages.microsoft.com azure-cli + prod) that intermittently fail
+          # with "Clearsigned file isn't valid, got 'NOSPLIT'", breaking
+          # `apt-get update` and therefore `playwright install --with-deps`.
+          # Disable those flaky repos so the system-dependency install succeeds.
+          sudo rm -f /etc/apt/sources.list.d/*microsoft* \
+                     /etc/apt/sources.list.d/*azure-cli* \
+                     /etc/apt/sources.list.d/*msprod* 2>/dev/null || true
+          # Install browser + OS deps; fall back to browser-only if the deps
+          # step still fails (deps are preinstalled on these runners).
+          npx playwright install --with-deps chrome || npx playwright install chrome
+          npx playwright install ffmpeg
+
+      - name: Install Xvfb (for headed mode)
+        if: ${{ env.HEADLESS_MODE == 'false' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Run Tests - Batch (${{ matrix.batch }})
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          TZ: Australia/Adelaide
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          PW_ENABLE_HTML_REPORT: ${{ env.PW_ENABLE_HTML_REPORT }}
+          PW_RETRIES: ${{ env.PW_RETRIES }}
+        run: |
+          if [[ "${GATEWAY_TYPE}" == "GRAVITEE" ]]; then
+            export REALM_KEY="${GRAVITEE_REALM_KEY}"
+            REALM_KEY_ENV_SUFFIX=$(echo "${REALM_KEY}" | tr '[:lower:]' '[:upper:]' | sed 's/[^A-Z0-9]/_/g')
+            CLIENT_ID_VAR="GRAVITEE_CLIENT_ID_${REALM_KEY_ENV_SUFFIX}"
+            CLIENT_SECRET_VAR="GRAVITEE_CLIENT_SECRET_${REALM_KEY_ENV_SUFFIX}"
+            echo "Gateway: GRAVITEE | Realm key: ${REALM_KEY}"
+            echo "${CLIENT_ID_VAR}: $([[ -n "${!CLIENT_ID_VAR:-}" ]] && echo set || echo NOT SET)"
+            echo "${CLIENT_SECRET_VAR}: $([[ -n "${!CLIENT_SECRET_VAR:-}" ]] && echo set || echo NOT SET)"
+          else
+            echo "Gateway: AZURE"
+          fi
+
+          if [[ "${HEADLESS}" == "false" ]]; then
+            xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npm run test:interop:poui:${{ matrix.batch }}
+          else
+            npm run test:interop:poui:${{ matrix.batch }}
+          fi
+        continue-on-error: true
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: allure-results-${{ matrix.batch }}
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: warn
+
+      - name: Upload Playwright Assets (videos, traces)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-assets-${{ matrix.batch }}
+          path: playwright-e2e/test-results
+          if-no-files-found: warn
+
+      - name: Upload Playwright HTML Report
+        if: always() && (github.event.inputs['enable-html-report'] == 'true')
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-html-report-${{ matrix.batch }}
+          path: playwright-e2e/reports/html-report
+          if-no-files-found: warn
+
+      - name: Upload Monocart Report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: monocart-report-${{ matrix.batch }}
+          path: playwright-e2e/reports/monocart-report
+          if-no-files-found: warn
+
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: [run-tests, env-health]
+    if: always()
+    permissions:
+      contents: write
+    outputs:
+      verdict: ${{ steps.verdict.outputs.verdict }}
+      red: ${{ steps.verdict.outputs.red }}
+      headline: ${{ steps.verdict.outputs.headline }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Download Allure Results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: allure-results-*
+          merge-multiple: true
+          path: playwright-e2e/reports/allure-results
+        continue-on-error: true
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Setup Java (Allure dependency)
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies for Allure CLI
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Generate Allure Report (No Docker)
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RESULTS_DIR="playwright-e2e/reports/allure-results"
+          HISTORY_ROOT="playwright-e2e/reports/allure-history/PSAutomationReports/${{ env.REPORT_CATEGORY }}"
+          CURRENT_REPORT_DIR="${HISTORY_ROOT}/${{ github.run_number }}"
+          LATEST_REPORT_DIR="${HISTORY_ROOT}/latest"
+          PREV_ROOT="gh-pages/PSAutomationReports/${{ env.REPORT_CATEGORY }}"
+          if [ ! -d "$PREV_ROOT" ]; then
+            PREV_ROOT="gh-pages/PSAutomationReports/${{ env.LEGACY_REPORT_CATEGORY }}"
+            echo "No ${{ env.REPORT_CATEGORY }} reports yet; seeding history from ${{ env.LEGACY_REPORT_CATEGORY }}."
+          fi
+          PREV_HISTORY_DIR="${PREV_ROOT}/latest/history"
+
+          mkdir -p "$RESULTS_DIR" "$HISTORY_ROOT"
+
+          # Restore previously published numbered report folders from gh-pages so the
+          # "keep last 7" retention operates over the full history, not just this run.
+          if [ -d "$PREV_ROOT" ]; then
+            for prev in "$PREV_ROOT"/[0-9]*; do
+              [ -d "$prev" ] || continue
+              cp -R "$prev" "$HISTORY_ROOT/"
+            done
+          fi
+
+          if [ -d "$PREV_HISTORY_DIR" ]; then
+            cp -R "$PREV_HISTORY_DIR" "$RESULTS_DIR/history"
+          fi
+
+          # Safety check: clean trace and video attachments from Allure result JSONs and remove binary files
+          node playwright-e2e/scripts/strip-allure-traces.js "$RESULTS_DIR"
+
+          # Triage labels, "Blocked:" reasons for serial-cascade skips, and failure categories.
+          node playwright-e2e/scripts/triage/enrich-allure-results.js "$RESULTS_DIR" || echo "::warning title=Triage::Allure results enrichment failed; report generated without it."
+
+          cd playwright-e2e
+          npx allure generate reports/allure-results --clean -o "reports/allure-history/PSAutomationReports/${{ env.REPORT_CATEGORY }}/${{ github.run_number }}"
+          cd - >/dev/null
+
+          rm -rf "$LATEST_REPORT_DIR"
+          cp -R "$CURRENT_REPORT_DIR" "$LATEST_REPORT_DIR"
+
+          # Keep latest + last 7 numeric report folders.
+          cd "$HISTORY_ROOT"
+          ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf
+          cd - >/dev/null
+
+      - name: Download Environment Health
+        if: always()
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: triage-env-health
+          path: playwright-e2e/reports/triage
+
+      - name: Compute Run Verdict
+        id: verdict
+        if: always()
+        continue-on-error: true
+        working-directory: playwright-e2e
+        run: |
+          node scripts/triage/verdict.js \
+            --results reports/allure-results \
+            --suite "${REPORT_CATEGORY}" \
+            --env "${TEST_ENV}" \
+            --gateway "${GATEWAY_TYPE}" \
+            --mode "${PW_VERDICT_MODE}" \
+            --env-health reports/triage/env-health.json \
+            --env-health-mode "${TRIAGE_ENV_HEALTH_VERDICT}" \
+            --check-count "${{ github.event_name == 'schedule' }}" \
+            --upstream-result "${{ needs.run-tests.result }}" \
+            --out reports/triage/verdict.json
+
+      - name: Upload Run Verdict
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: triage-verdict
+          path: playwright-e2e/reports/triage/verdict.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      # Written under reports/allure-history, so the gh-pages deploy below publishes it to dashboard/data/runs/.
+      - name: Build Dashboard Run Data
+        if: always()
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          SUITE_KEY: ${{ env.REPORT_CATEGORY }}
+          RUN_BRANCH: ${{ github.event.inputs.branch || 'main' }}
+        run: |
+          node scripts/triage/build-run-data.js \
+            --results reports/allure-results \
+            --report "reports/allure-history/PSAutomationReports/${SUITE_KEY}/${{ github.run_number }}" \
+            --verdict reports/triage/verdict.json \
+            --env-health reports/triage/env-health.json \
+            --versions reports/triage/versions.json \
+            --suite "${SUITE_KEY}" \
+            --env "${TEST_ENV}" \
+            --gateway "${GATEWAY_TYPE}" \
+            --workflow "${{ github.workflow }}" \
+            --run-id "${{ github.run_id }}" \
+            --run-number "${{ github.run_number }}" \
+            --run-attempt "${{ github.run_attempt }}" \
+            --trigger "${{ github.event_name }}" \
+            --branch "${RUN_BRANCH}" \
+            --sha "${{ github.sha }}" \
+            --report-url "https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/${SUITE_KEY}/${{ github.run_number }}" \
+            --workflow-url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --out-dir reports/allure-history/dashboard/data/runs
+
+      - name: Sanitize Allure History for gh-pages Deploy
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          HISTORY_DIR="playwright-e2e/reports/allure-history"
+
+          if [ -d "$HISTORY_DIR" ]; then
+            # Container-based actions may leave root-owned files; normalize ownership first.
+            sudo chown -R "$USER":"$USER" "$HISTORY_DIR" || true
+            find "$HISTORY_DIR" -type d -name ".git" -prune -exec sudo rm -rf {} + || true
+            chmod -R u+rwX "$HISTORY_DIR" || true
+          fi
+
+      - name: Deploy report to Github Pages
+        id: deploy-gh-pages
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      # Suites that finish together all push to gh-pages, so a push can land between this action's clone and its push
+      # and get it rejected ("fetch first", or the server's "fatal error in commit_refs"). Each attempt clones gh-pages
+      # afresh, so a retry after a random wait publishes on top of the other run instead of losing this run's report.
+      - name: Wait before retrying the Github Pages deploy
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        shell: bash
+        run: sleep $((20 + RANDOM % 41))
+
+      - name: Deploy report to Github Pages (retry 1)
+        id: deploy-gh-pages-retry
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Wait before the last Github Pages deploy
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        shell: bash
+        run: sleep $((40 + RANDOM % 61))
+
+      - name: Deploy report to Github Pages (retry 2)
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Prune old reports on gh-pages (keep latest + last 7)
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          REL_DIR="PSAutomationReports/${{ env.REPORT_CATEGORY }}"
+          if [ ! -d "gh-pages/$REL_DIR" ]; then
+            echo "Category dir not found; nothing to prune."
+            exit 0
+          fi
+
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin gh-pages || true
+          # Reset latest/ on gh-pages to be a clean copy of the current run directory
+          # to prevent accumulation of orphaned attachments over time.
+          RUN_NUM_DIR="${REL_DIR}/${{ github.run_number }}"
+          if [ -d "$RUN_NUM_DIR" ]; then
+            echo "Resetting ${REL_DIR}/latest to clean copy of ${RUN_NUM_DIR}"
+            rm -rf "${REL_DIR}/latest"
+            cp -R "$RUN_NUM_DIR" "${REL_DIR}/latest"
+          fi
+
+          # keep_files:true never deletes superseded numbered folders, so prune them here.
+          STALE=$(ls -1d "$REL_DIR"/[0-9]* 2>/dev/null | sort -t/ -k3 -n | head -n -7 || true)
+          if [ -n "$STALE" ]; then
+            echo "Removing stale report folders:"
+            echo "$STALE"
+            echo "$STALE" | xargs -r rm -rf
+            git add -A
+            git commit -m "Prune old ${{ env.REPORT_CATEGORY }} reports (keep latest + last 7)" || true
+            git push origin gh-pages || true
+          else
+            echo "No stale folders to prune."
+          fi
+
+      - name: Publish Run Summary
+        if: always()
+        env:
+          TITLE: UI Automation Test Results - ${{ env.REPORT_CATEGORY }} - Playwright
+          BRANCH: ${{ github.event.inputs.branch || 'main' }}
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY: ${{ env.GATEWAY_TYPE }}
+          BATCH: ${{ env.TEST_BATCH }}
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          RUN_NUMBER: ${{ github.run_number }}
+          JOB_STATUS: ${{ job.status }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/${{ env.REPORT_CATEGORY }}/${{ github.run_number }}
+          ARTIFACTS_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import os
+          title = os.environ["TITLE"]
+          branch = os.environ["BRANCH"]
+          environment = os.environ["ENVIRONMENT"]
+          gateway = os.environ["GATEWAY"]
+          batch = os.environ["BATCH"]
+          headless = os.environ["HEADLESS"]
+          run_number = os.environ["RUN_NUMBER"]
+          job_status = os.environ["JOB_STATUS"]
+          report_url = os.environ["REPORT_URL"]
+          artifacts_url = os.environ["ARTIFACTS_URL"]
+          workflow_url = os.environ["WORKFLOW_URL"]
+          summary_path = os.environ["GITHUB_STEP_SUMMARY"]
+          print(f"Report URL: {report_url}")
+          with open(summary_path, "a", encoding="utf-8") as out:
+            out.write(f"## {title}\n\n")
+            out.write(f"- Run Number: #{run_number}\n")
+            out.write(f"- Job Status: {job_status}\n")
+            out.write("\n")
+            out.write("### Test Configuration\n")
+            out.write(f"- Branch: {branch}\n")
+            out.write(f"- Environment: {environment}\n")
+            out.write(f"- Gateway: {gateway}\n")
+            out.write(f"- Batch: {batch}\n")
+            out.write(f"- Headless: {headless}\n")
+            out.write("\n")
+            out.write("### Links\n")
+            out.write(f"- Allure Report: {report_url}\n")
+            out.write(f"- Artifacts: {artifacts_url}\n")
+            out.write(f"- Workflow Run: {workflow_url}\n")
+          PY
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/${{ env.REPORT_CATEGORY }}/${{ github.run_number }}
+          ARTIFACTS_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          VERDICT_HEADLINE: ${{ steps.verdict.outputs.headline }}
+          VERDICT_RED: ${{ steps.verdict.outputs.red }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TEAMS_WEBHOOK_URL)) {
+            Write-Host "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          }
+
+          $title = "UI Automation Test Results - ${{ env.REPORT_CATEGORY }} - Playwright"
+          $summary = "Test Run #${{ github.run_number }}: ${{ job.status }}"
+          $message = "$title`nReport: $($env:REPORT_URL)`nArtifacts: $($env:ARTIFACTS_URL)`nWorkflow: $($env:WORKFLOW_URL)"
+
+          function Send-TeamsPayload {
+            param(
+              [string]$JsonBody
+            )
+
+            $invokeWebRequestParams = @{
+              Method = 'Post'
+              Uri = $env:TEAMS_WEBHOOK_URL
+              Body = $JsonBody
+              ContentType = 'application/json'
+              SkipHttpErrorCheck = $true
+            }
+            $response = Invoke-WebRequest @invokeWebRequestParams
+
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+              return $true
+            }
+
+            Write-Host "Teams webhook returned status: $($response.StatusCode)"
+            return $false
+          }
+
+          # Teams Workflows webhooks only render an Adaptive Card envelope. Simpler payloads
+          # return 202 (accepted) but post nothing, so send the Adaptive Card directly.
+          $adaptivePayload = @{
+            type = 'message'
+            attachments = @(
+              @{
+                contentType = 'application/vnd.microsoft.card.adaptive'
+                content = @{
+                  '$schema' = 'http://adaptivecards.io/schemas/adaptive-card.json'
+                  type = 'AdaptiveCard'
+                  version = '1.4'
+                  body = @(
+                    @{
+                      type = 'TextBlock'
+                      size = 'Medium'
+                      weight = 'Bolder'
+                      text = $title
+                      wrap = $true
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $summary
+                      wrap = $true
+                      spacing = 'Small'
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $(if ([string]::IsNullOrWhiteSpace($env:VERDICT_HEADLINE)) { 'Run verdict: not computed' } else { $env:VERDICT_HEADLINE })
+                      wrap = $true
+                      weight = 'Bolder'
+                      color = $(if ($env:VERDICT_RED -eq 'true') { 'Attention' } else { 'Good' })
+                      spacing = 'Small'
+                    }
+                  )
+                  actions = @(
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Allure Report'
+                      url = $env:REPORT_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Download Artifacts'
+                      url = $env:ARTIFACTS_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Workflow Run'
+                      url = $env:WORKFLOW_URL
+                    }
+                  )
+                }
+              }
+            )
+          } | ConvertTo-Json -Depth 20
+
+          if (Send-TeamsPayload -JsonBody $adaptivePayload) {
+            Write-Host "Teams notification sent using Adaptive Card payload format."
+            exit 0
+          }
+
+          Write-Host "Unable to send Teams notification with available payload formats."
+          exit 0
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: generate-report
+    if: always() && needs.generate-report.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit
+
+  # Last job, so the run status reflects the verdict while reports and Pages still publish first.
+  run-verdict:
+    name: Run Verdict
+    needs: [generate-report, deploy-pages]
+    if: always()
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    steps:
+      - name: Apply Run Verdict
+        env:
+          RED: ${{ needs.generate-report.outputs.red }}
+          HEADLINE: ${{ needs.generate-report.outputs.headline }}
+          REPORT_JOB_RESULT: ${{ needs.generate-report.result }}
+        run: |
+          echo "Run verdict (${PW_VERDICT_MODE} mode): ${HEADLINE:-not computed}"
+          if [[ "${PW_VERDICT_MODE}" != "enforce" ]]; then
+            exit 0
+          fi
+          if [[ "${REPORT_JOB_RESULT}" != "success" ]]; then
+            echo "::error title=Run verdict::Report job ${REPORT_JOB_RESULT}; the run cannot be verified."
+            exit 1
+          fi
+          # Only an explicit red=false passes; a missing output means the verdict could not be computed.
+          if [[ "${RED}" != "false" ]]; then
+            echo "::error title=Run verdict::${HEADLINE:-Verdict was not computed; the run cannot be verified.}"
+            exit 1
+          fi

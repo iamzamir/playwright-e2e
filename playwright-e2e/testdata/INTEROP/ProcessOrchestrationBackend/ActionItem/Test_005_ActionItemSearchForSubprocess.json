@@ -1,0 +1,72 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - process that owns the subprocesses",
+    "SUBPROCESS_NAME": "string (required) - subprocess whose action items are searched",
+    "SIBLING_SUBPROCESS_NAME": "string (required) - subprocess outside the searched subtree, used when the process has no action item entity",
+    "UNKNOWN_PROCESS_NAME": "string (required) - process name that does not exist",
+    "UNKNOWN_SUBPROCESS_NAME": "string (required) - subprocess name that does not exist",
+    "PAGE_SIZES": "number[] (required) - PSR page sizes",
+    "ATTRIBUTE_FILTER": "object (required) - PSR 'Action Items Attribute Search - Subprocess' filter (code lists)",
+    "PO_INVALID_REQUEST_ERROR_CODE": "string (required) - PO errorCode for a hierarchy retrieval error",
+    "CHILD_SUBPROCESS": "object (required) - create body for the temporary child subprocess; name, reference and parent are set at runtime",
+    "CHILD_SUBPROCESS_DELETE_ALLOWED": "object (required) - whether the machine client may delete subprocesses, keyed by GATEWAY_TYPE; AI-09-P03 is skipped when false",
+    "PROCESS_ACTION_ITEM": "object (required) - create body for a process action item; name, entityId, sourceId and origin are set at runtime",
+    "SUBPROCESS_ACTION_ITEM": "object (required) - create body for a subprocess action item; name and entityId are set at runtime"
+  },
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "SIBLING_SUBPROCESS_NAME": "DemandReview",
+  "UNKNOWN_PROCESS_NAME": "PWNoSuchProcess",
+  "UNKNOWN_SUBPROCESS_NAME": "PWNoSuchSubprocess",
+  "PAGE_SIZES": [5, 10, 20],
+  "ATTRIBUTE_FILTER": {
+    "status": "0,1,2,4,5,6,7,8",
+    "actionType": "4,3,1",
+    "priority": "0,1,2,3,4"
+  },
+  "PO_INVALID_REQUEST_ERROR_CODE": "IBP_PO_40_1003",
+  "CHILD_SUBPROCESS": {
+    "attributes": [],
+    "startOffsetReference": "START",
+    "startOffset": "0",
+    "duration": 1,
+    "description": "Playwright PSR gap hierarchy fixture"
+  },
+  "CHILD_SUBPROCESS_DELETE_ALLOWED": {
+    "AZURE": true,
+    "GRAVITEE": true
+  },
+  "PROCESS_ACTION_ITEM": {
+    "attributes": [
+      { "name": "processName", "value": "IntegratedBusinessPlanning", "id": "8220a965-fa89-4b48-8251-37b1360f4213" },
+      { "name": "processDisplayName", "value": "IntegratedBusinessPlanning", "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E" },
+      { "name": "sourceDisplayName", "value": "IntegratedBusinessPlanning", "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857" }
+    ],
+    "status": "0",
+    "actionType": "4",
+    "priority": "0",
+    "dueDate": "2025-04-03T07:28:04.684Z",
+    "assigneeUsers": ["4de6f5fc-59cb-4048-a4a9-3e141b76a802"],
+    "notifyUsers": ["4de6f5fc-59cb-4048-a4a9-3e141b76a802"],
+    "description": "Playwright PSR gap search fixture",
+    "remarks": "Playwright PSR gap search fixture",
+    "sourceType": "PROCESS",
+    "sourceName": "IntegratedBusinessPlanning"
+  },
+  "SUBPROCESS_ACTION_ITEM": {
+    "attributes": [
+      { "name": "processName", "value": "IntegratedBusinessPlanning", "id": "8220a965-fa89-4b48-8251-37b1360f4213" },
+      { "name": "processDisplayName", "value": "IntegratedBusinessPlanning", "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E" },
+      { "name": "sourceDisplayName", "value": "Supply Review", "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857" }
+    ],
+    "status": "0",
+    "actionType": "4",
+    "priority": "3",
+    "dueDate": "2025-04-04T04:49:54.636Z",
+    "assigneeUsers": ["4de6f5fc-59cb-4048-a4a9-3e141b76a802"],
+    "notifyUsers": ["4de6f5fc-59cb-4048-a4a9-3e141b76a802"],
+    "description": "Playwright PSR gap search fixture",
+    "remarks": "Playwright PSR gap search fixture",
+    "sourceType": "SUBPROCESS"
+  }
+}

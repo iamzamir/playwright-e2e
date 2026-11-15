@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT1": "string (required)",
+    "DATA_ENDPOINT2": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Tree card test view",
+  "DATA_ENDPOINT1": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/TreeTable",
+  "DATA_ENDPOINT2": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/TreeTable/columns"
+}

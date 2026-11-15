@@ -1,0 +1,42 @@
+{
+  "_schema": {
+    "ACCEPT_LANGUAGE": "string (required) - locale sent on every request so displayName is deterministic",
+    "UNKNOWN_PAGE_NAME": "string (required) - editor page name that is not seeded",
+    "PAGE_NOT_FOUND_ERROR_CODE": "string (required) - errorCode returned for an unknown page or page/entity mismatch",
+    "EDITORS": "object[] (required) - [{ pageName: string, entityType: string }] editor pages used by lui",
+    "TEMPLATE_EDITOR": "object (required) - { pageName: string, entityType: string } template editor page",
+    "TEMPLATE_VARIANT_FIELD": "string (required) - feature-flagged field name recorded on the template editor",
+    "EDITOR_BASELINE": "object (required) - { '<pageName>:<entityType>': { '<groupName or _header>': sorted field names } }"
+  },
+  "ACCEPT_LANGUAGE": "en-US",
+  "UNKNOWN_PAGE_NAME": "UNKNOWN_EDITOR_PAGE",
+  "PAGE_NOT_FOUND_ERROR_CODE": "IBP_UF_40_1020",
+  "EDITORS": [
+    { "pageName": "PROCESS_EDITOR_PAGE", "entityType": "PROCESS" },
+    { "pageName": "SUBPROCESS_EDITOR_PAGE", "entityType": "SUBPROCESS" },
+    { "pageName": "CALENDAR_EDITOR_PAGE", "entityType": "CALENDAR" },
+    { "pageName": "CYCLE_EDITOR_PAGE", "entityType": "CYCLE" }
+  ],
+  "TEMPLATE_EDITOR": { "pageName": "PROCESS_EDITOR_WITH_TEMPLATE_PAGE", "entityType": "PROCESS" },
+  "TEMPLATE_VARIANT_FIELD": "variant",
+  "EDITOR_BASELINE": {
+    "PROCESS_EDITOR_PAGE:PROCESS": {
+      "_header": ["displayName", "variant"],
+      "General": ["calendarName", "cycleName", "description"]
+    },
+    "SUBPROCESS_EDITOR_PAGE:SUBPROCESS": {
+      "_header": ["displayName"],
+      "General": ["description", "duration", "referenceNodeName", "startOffset", "startOffsetReference"],
+      "Start Process On": ["transition.reference", "transition.referenceNodeNames"]
+    },
+    "CALENDAR_EDITOR_PAGE:CALENDAR": {
+      "_header": ["description", "name"]
+    },
+    "CYCLE_EDITOR_PAGE:CYCLE": {
+      "_header": ["description", "endDate", "name", "startDate"]
+    },
+    "PROCESS_EDITOR_WITH_TEMPLATE_PAGE:PROCESS": {
+      "_header": ["calendarName", "cycleName", "description", "displayName", "templateName", "variant"]
+    }
+  }
+}

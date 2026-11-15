@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-po-ps-1",
+    "PROCESS_NAME": "ODMProcess",
+    "VIEW_NAME": "ViewToTest_MaasAndSparq",
+    "VIEW_NAME2":"Non Interactive View",
+    "CARD_NAME":"Maas Pivot Card ODM",
+    "LoGGEDIN_USER_NAME":"PS Automation1",
+    "SCENARIOS" : "Base 17-04-2025-0610",
+    "SCENARIO_NAME" : "child-scenario-1"
+}

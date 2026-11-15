@@ -1,0 +1,32 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - process whose action item entity is used for the KPI entity mapping",
+    "SUBPROCESS_NAME": "string (required) - fallback entity when the process has no action item entity",
+    "KPI_NAME_PREFIX": "string (required) - prefix for the unique attrName/displayName",
+    "KPI_BODY": "object (required) - PSR ActionItemKpis1 body; attrName and displayName are set at runtime",
+    "UPDATED_DESCRIPTION": "string (required) - PSR ActionItemKpis3 description",
+    "ADDED_ATTRIBUTE": "object (required) - attribute added by PUT without an id",
+    "UNKNOWN_ID": "string (required) - UUID that is not a KPI",
+    "NOT_FOUND_ERROR_CODE": "string (required) - errorCode for an unknown KPI",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a malformed JSON body",
+    "KPI_DELETED_MESSAGE": "string (required) - text returned by DELETE /kpis/{id}"
+  },
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "KPI_NAME_PREFIX": "PW Open High Priority Action Items ",
+  "KPI_BODY": {
+    "description": "Open High Priority Action Items",
+    "isActive": true,
+    "isEnabled": true,
+    "kpiConfigAttributes": [
+      { "kpiAttrName": "status", "attrValue": "1", "isActive": true, "isEnabled": true },
+      { "kpiAttrName": "priority", "attrValue": "2", "isActive": true, "isEnabled": true }
+    ]
+  },
+  "UPDATED_DESCRIPTION": "Open High Priority Action Items - Updated",
+  "ADDED_ATTRIBUTE": { "kpiAttrName": "actionType", "attrValue": "4", "isActive": true, "isEnabled": true },
+  "UNKNOWN_ID": "7d6c1b3e-0000-4000-8000-000000000000",
+  "NOT_FOUND_ERROR_CODE": "IBP_AI_40_1020",
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022",
+  "KPI_DELETED_MESSAGE": "KPI deleted successfully."
+}

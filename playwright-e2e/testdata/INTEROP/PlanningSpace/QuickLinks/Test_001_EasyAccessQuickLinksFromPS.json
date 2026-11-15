@@ -1,0 +1,46 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required) - Azure realm used for the fresh catalog login",
+    "PROCESS_NAME": "string (required) - Planning Space process opened before validating links",
+    "GRAVITEE": "object (required for Gravitee runs) - REALM_NAME / REALM_KEY overrides merged by applyGatewayOverrides",
+    "quickLinks": "array (required) - { name, env, pageTitle }: link label, URL fragment expected after navigation, page title to validate"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  },
+  "quickLinks": [
+    {
+      "name": "Process Summary",
+      "env": "pointegration",
+      "pageTitle": "Initiatives And Assumptions Review"
+    },
+    {
+      "name": "Planning",
+      "env": "ibppsintegration",
+      "pageTitle": "Planning"
+    },
+    {
+      "name": "Action Items",
+      "env": "pointegration",
+      "pageTitle": "Action Items"
+    },
+    {
+      "name": "Interactive Planning",
+      "env": "ibppsintegration",
+      "pageTitle": "Interactive Planning"
+    },
+    {
+      "name": "Process Settings",
+      "env": "pointegration",
+      "pageTitle": "Structure & Schedule"
+    },
+    {
+      "name": "Cognitive Model",
+      "env": "semantic-network-architect-interop",
+      "pageTitle": "Cognitive Model"
+    }
+  ]
+}

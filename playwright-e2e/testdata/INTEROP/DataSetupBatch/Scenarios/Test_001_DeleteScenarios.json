@@ -1,0 +1,24 @@
+{
+  "_schema": {
+    "requestBody": "object (required)",
+    "requestBody2": "object (required)"
+  },
+  "requestBody": {
+    "sourceIds": [
+      "PSAutomation",
+      "ODMProcess",
+      "0a201a66-9d4d-1a54-819d-bdd2e2d3098d"
+    ]
+  },
+  "requestBody2": {
+    "scenarioName": "Scenario_For_MaasPivot",
+    "scenarioDescription": "Scenario_For_MaasPivot",
+    "parentScenario": "Base 24-04-2026-0451",
+    "triggerType": "MANUAL",
+    "visibility": "PUBLIC",
+    "sourceContext": {
+      "sourceId": "PSAutomation",
+      "sourceType": "Process"
+    }
+  }
+}

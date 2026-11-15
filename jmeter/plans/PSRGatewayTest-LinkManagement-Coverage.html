@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:,">
+  <title>PSRGatewayTest.jmx – Link Management API Coverage</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #5b6875;
+      --paper: #f4f6f2;
+      --surface: #ffffff;
+      --line: #d8dfda;
+      --teal: #087f8c;
+      --teal-soft: #dff1f0;
+      --blue: #2c5f9e;
+      --blue-soft: #e6eef8;
+      --green: #2d7d46;
+      --green-soft: #e4f2e8;
+      --amber: #b86412;
+      --amber-soft: #fff0d8;
+      --red: #a93636;
+      --red-soft: #f9e3e3;
+      --code-bg: #1d2731;
+      --code-ink: #e3ebf0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    [id] {
+      scroll-margin-top: 96px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Aptos, "Segoe UI", "Trebuchet MS", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: Cambria, Georgia, serif;
+    }
+
+    code,
+    pre {
+      font-family: "Cascadia Code", Consolas, monospace;
+    }
+
+    .shell {
+      width: min(1360px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .report-header {
+      color: #f7fbfa;
+      background: var(--ink);
+      border-bottom: 5px solid var(--teal);
+    }
+
+    .header-inner {
+      padding: 40px 0 30px;
+    }
+
+    .eyebrow {
+      margin-bottom: 10px;
+      color: #8fd4d1;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .report-header h1 {
+      max-width: 900px;
+      font-size: clamp(1.9rem, 3.6vw, 3rem);
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: #c8d2d8;
+    }
+
+    .subtitle code {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .snapshot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .snapshot span {
+      padding: 3px 10px;
+      color: #d7e1e6;
+      font-size: 0.8rem;
+      border: 1px solid #3a4a58;
+      border-radius: 999px;
+    }
+
+    .report-nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 22px;
+      padding: 12px 0;
+    }
+
+    .nav-inner a {
+      color: var(--blue);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .section {
+      padding: 34px 0 8px;
+    }
+
+    .section > h2 {
+      margin-bottom: 6px;
+      font-size: 1.6rem;
+    }
+
+    .section h3 {
+      margin: 18px 0 6px;
+      font-size: 1.08rem;
+    }
+
+    .lede {
+      max-width: 920px;
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .kpi {
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--teal);
+      border-radius: 8px;
+    }
+
+    .kpi b {
+      display: block;
+      font-family: Cambria, Georgia, serif;
+      font-size: 2rem;
+    }
+
+    .kpi span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .kpi.good {
+      border-top-color: var(--green);
+    }
+
+    .kpi.bad {
+      border-top-color: var(--red);
+    }
+
+    .findings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .finding {
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--amber);
+      border-radius: 8px;
+    }
+
+    .finding h3 {
+      margin: 0 0 6px;
+      font-size: 1.02rem;
+    }
+
+    .finding p {
+      margin: 0;
+      color: #33414d;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      margin: 10px 0 18px;
+      font-size: 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: #3b4853;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      background: #eef2ef;
+    }
+
+    tbody th {
+      width: 160px;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 0.88rem;
+    }
+
+    tr:last-child td,
+    tr:last-child th {
+      border-bottom: 0;
+    }
+
+    td code,
+    p code,
+    li code,
+    dd code,
+    summary code {
+      padding: 1px 5px;
+      font-size: 0.86em;
+      word-break: break-word;
+      background: #eef2ef;
+      border-radius: 4px;
+    }
+
+    .method {
+      display: inline-block;
+      min-width: 60px;
+      padding: 0 6px;
+      font: 700 0.72rem/1.9 "Cascadia Code", Consolas, monospace;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    .method.get {
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .method.post {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .method.put {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .method.delete {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .method.patch {
+      color: #6a3f99;
+      background: #efe7f7;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 1px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      white-space: nowrap;
+      border-radius: 999px;
+    }
+
+    .badge.p1 {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .badge.p2 {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .badge.ok {
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .badge.gap {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .notice {
+      margin: 12px 0;
+      padding: 12px 14px;
+      background: var(--teal-soft);
+      border-left: 4px solid var(--teal);
+      border-radius: 6px;
+    }
+
+    .notice.warn {
+      background: var(--amber-soft);
+      border-left-color: var(--amber);
+    }
+
+    .notice ul {
+      margin: 6px 0 0;
+      padding-left: 20px;
+    }
+
+    .api-card {
+      margin: 18px 0;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .api-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f9fbfa;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .api-head .path {
+      font-size: 1rem;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .api-head .owner {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .api-body {
+      padding: 14px 16px 16px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 8px 14px;
+      margin: 0 0 12px;
+    }
+
+    .meta dt {
+      color: #3b4853;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .meta dd {
+      margin: 0;
+    }
+
+    .meta dd ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .url {
+      display: block;
+      padding: 6px 8px;
+      word-break: break-all;
+      background: #eef2ef;
+      border-radius: 6px;
+    }
+
+    .io {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .api-body h4 {
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    pre {
+      margin: 0 0 10px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      color: var(--code-ink);
+      font-size: 0.8rem;
+      line-height: 1.45;
+      background: var(--code-bg);
+      border-radius: 8px;
+    }
+
+    .tip {
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      background: var(--blue-soft);
+      border-radius: 6px;
+    }
+
+    .flow {
+      margin: 12px 0;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .flow h3 {
+      margin: 0 0 6px;
+    }
+
+    .flow ol {
+      margin: 6px 0 0;
+      padding-left: 22px;
+    }
+
+    .flow li {
+      margin: 4px 0;
+    }
+
+    details {
+      margin: 10px 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    details > summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    details[open] > summary {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .report-footer {
+      padding: 26px 0 40px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .io {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .report-nav {
+        display: none;
+      }
+
+      .api-card,
+      .flow,
+      details {
+        break-inside: avoid;
+      }
+
+      pre {
+        white-space: pre-wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="report-header">
+    <div class="shell header-inner">
+      <div class="eyebrow">JMeter coverage · Link Management</div>
+      <h1>PSRGatewayTest.jmx — Link Management API coverage</h1>
+      <p class="subtitle">Which Link Management (LM) endpoints plan-sop-planning-mfe and plan-sop-lui call, which of them <code>jmeter/Tests/PSRGatewayTest.jmx</code> already drives, and the URL, request payload and response for each. Updated after PR #726, which adds the missing calls and payload shapes.</p>
+      <div class="snapshot">
+        <span>Generated 23 Sep 2026</span>
+        <span>plan-sop-link-management main @ 121f7291</span>
+        <span>plan-sop-planning-mfe main @ 986ab5e9f</span>
+        <span>plan-sop-lui main @ b16378cc5a</span>
+        <span>PSRGatewayTest.jmx @ b736886 (baseline)</span>
+        <span>Updated 23 Sep 2026 · PR #726 @ 0893acf</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="report-nav" aria-label="Report sections">
+    <div class="shell nav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#matrix">Coverage matrix</a>
+      <a href="#common">Common request</a>
+      <a href="#missing">Added APIs</a>
+      <a href="#flows">Implemented JMX flows</a>
+      <a href="#gaps">Payload gaps</a>
+      <a href="#covered">Covered APIs</a>
+      <a href="#unused">Not used by UI</a>
+      <a href="#notes">Notes</a>
+    </div>
+  </nav>
+
+  <main class="shell">
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <p class="lede">After PR #726 the plan drives all 19 LM endpoints that the two UIs call. The PR adds 18 samplers. They cover the bulk view lookup that runs on every Planning Space load, the single-mapping, scope and favourites writes, and the preset and <code>maasactor</code> search payloads the plan didn't send.</p>
+
+      <div class="kpis">
+        <div class="kpi"><b>38</b><span>LM endpoints in 10 controllers</span></div>
+        <div class="kpi"><b>19</b><span>called by the UIs (planning-mfe 17, lui 9)</span></div>
+        <div class="kpi good"><b>19</b><span>driven by the JMX, in 45 samplers (11 in 27 before)</span></div>
+        <div class="kpi good"><b>0</b><span>used by the UIs but missing (8 before: 3 P1, 5 P2)</span></div>
+        <div class="kpi"><b>19</b><span>not called by either UI</span></div>
+      </div>
+
+      <div class="findings">
+        <div class="finding">
+          <h3>The heaviest LM read is now in the plan</h3>
+          <p><code>LMSearch1</code> sends <code>POST /view-entity-map/lm-search/v2</code> as one standalone sampler. It checks that <code>$.views</code> exists, not that it's non-empty, so a failed group query (which still returns <code>200</code>) isn't caught.</p>
+        </div>
+        <div class="finding">
+          <h3>Scope is written as well as read</h3>
+          <p><code>ScopeMapping1</code> saves a scope for a per-thread view and <code>ScopeMapping2</code> resets it to <code>null</code>. LM has no DELETE for scope, so one scope row per thread remains.</p>
+        </div>
+        <div class="finding">
+          <h3>Mapping writes run one call at a time</h3>
+          <p><code>ViewEntityMap1–4</code> map and unmap a <code>maasactor</code> and a procedure, and <code>ViewEntityMapSearch1</code> reads the mapping back. The Duplicate view chain and its parallel <code>PUT</code> burst aren't modelled.</p>
+        </div>
+        <div class="finding">
+          <h3>Favourites and preset variants are exercised</h3>
+          <p><code>Favourites1–4</code> add and remove on both routes, with JSON extractors carrying the <code>id</code>. <code>PresetVariant1–6</code> send the global, subprocess-context and admin "apply to all users" payloads.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="matrix">
+      <h2>Coverage matrix</h2>
+      <p class="lede">Every LM endpoint that either UI calls, with the number of JMX samplers that drive it after PR #726 (the number before is in brackets).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path (relative to base URL)</th>
+              <th>planning-mfe</th>
+              <th>lui</th>
+              <th>JMX samplers</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-lm-search"><code>/view-entity-map/lm-search/v2</code></a></td><td>Yes</td><td>—</td><td>1 (0)</td><td><span class="badge ok">Added · P1</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#api-put-scope"><code>/scope</code></a></td><td>Yes</td><td>Yes</td><td>2 (0)</td><td><span class="badge ok">Added · P1</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#api-put-mapping"><code>/view-entity-map/views/{view}/type/{type}/entity/{entity}</code></a></td><td>Yes</td><td>Yes</td><td>2 (0)</td><td><span class="badge ok">Added · P1</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#api-delete-mapping"><code>/view-entity-map/views/{view}/type/{type}/entity/{entity}</code></a></td><td>—</td><td>Yes</td><td>2 (0)</td><td><span class="badge ok">Added · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-add-fav"><code>/entity/{entityId}/views</code></a></td><td>Yes</td><td>—</td><td>1 (0)</td><td><span class="badge ok">Added · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-add-fav-typed"><code>/type/{type}/entity/{entity}/views</code></a></td><td>Yes</td><td>—</td><td>1 (0)</td><td><span class="badge ok">Added · P2</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#api-remove-fav"><code>/entity/{entityId}/views/{viewId}</code></a></td><td>Yes</td><td>—</td><td>1 (0)</td><td><span class="badge ok">Added · P2</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#api-remove-fav-typed"><code>/type/{type}/entity/{entity}/views/{viewId}</code></a></td><td>Yes</td><td>—</td><td>1 (0)</td><td><span class="badge ok">Added · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-search"><code>/view-entity-map/search</code></a></td><td>Yes</td><td>Yes</td><td>8 (7)</td><td><span class="badge gap">Covered · <code>maasactor</code> added; <code>assumptiontype</code> and 3 actor types not driven</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-map"><code>/view-entity-map</code></a></td><td>Yes</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-clear"><code>/view-entity-map/clear</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-evpm"><code>/entity-view-procedure-map</code></a></td><td>Yes</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-evpm-search"><code>/entity-view-procedure-map/search</code></a></td><td>Yes</td><td>Yes</td><td>5</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-get-scope"><code>/scope</code></a></td><td>Yes</td><td>Yes</td><td>3</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-preset"><code>/preset</code></a></td><td>Yes</td><td>—</td><td>3 (1)</td><td><span class="badge ok">Covered · payload gaps closed</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-search-preset"><code>/search-preset</code></a></td><td>Yes</td><td>—</td><td>3 (1)</td><td><span class="badge ok">Covered · payload gaps closed</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-preset-clear"><code>/preset/clear</code></a></td><td>Yes</td><td>—</td><td>3 (1)</td><td><span class="badge ok">Covered · payload gaps closed</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-get-fav"><code>/entity/{entityId}/views</code></a></td><td>Yes</td><td>—</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-get-fav-typed"><code>/type/{type}/entity/{entity}/views</code></a></td><td>Yes</td><td>—</td><td>1</td><td><span class="badge ok">Covered</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede"><strong>P1</strong> is a hot read path, or a write that feeds one. <strong>P2</strong> is a user-level write or clean-up path.</p>
+    </section>
+
+    <section class="section" id="common">
+      <h2>Common request details</h2>
+      <p class="lede">Every call below uses the same base URL and headers as the LM samplers already in the JMX.</p>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">Base URL</th>
+              <td><code>https://${API_HOST}/cbp/psr/ibp/links/v1</code> → <code>https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1</code>. It's the same base that planning-mfe (<code>pltpsr.apiLinksURL</code>) and lui (<code>psr</code>: <code>cbp/psr/ibp</code> + <code>/links/v1</code>) use.</td>
+            </tr>
+            <tr>
+              <th scope="row">Headers</th>
+              <td><code>Content-Type: application/json</code><br><code>Authorization: Bearer ${__property(access_token)}</code><br><code>accept: application/json</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Token</th>
+              <td>Comes from "Thread Group - Bearer Token" (B2C client-credentials policy <code>B2C_1A_ClientCredential</code>). Every load thread shares this one identity, so per-user data (favourites, presets) all belongs to a single LM user.</td>
+            </tr>
+            <tr>
+              <th scope="row">Errors</th>
+              <td>Bean-validation failures and missing required query parameters return <code>400</code>; an invalid token returns <code>401</code>. Both are asserted in <code>Test_010_ScopeMapping.spec.ts</code>. Error bodies are <code>ApiError</code> objects from <code>plan-sop-rbac-lib</code>.</td>
+            </tr>
+            <tr>
+              <th scope="row">Null fields</th>
+              <td>LM sets no global Jackson inclusion rule, so DTOs without <code>@JsonInclude(NON_NULL)</code> return their <code>null</code> fields. Every <code>ViewDto</code> in the samples below does this.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Placeholders used in the samples</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Placeholder</th>
+              <th>Meaning</th>
+              <th>PSR value or source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>${processName}</code></td><td>Process name; also the process entity ID for view mapping and scope</td><td><code>IntegratedBusinessPlanning</code> in the PS journeys; column 1 of <code>Testdata/LinksData.csv</code> in the mapping block</td></tr>
+            <tr><td><code>${subprocessKey}</code></td><td>Subprocess entity ID for mapping, scope and typed favourites: the process and subprocess names along the tree path, joined</td><td><code>IntegratedBusinessPlanningInitiativesAndAssumptionsReview</code></td></tr>
+            <tr><td><code>${subprocessId}</code></td><td>Subprocess UUID, sent next to <code>${subprocessKey}</code> in searches</td><td><code>A9A4CE72-B389-4680-8A5B-FE61B004BAB1</code> ("Subprocess To PS 6")</td></tr>
+            <tr><td><code>${linkEntityId}</code></td><td>Process ID used by favourites</td><td><code>52570520-d741-46b8-81e6-ea1485510976</code> ("PO To PS 10: Views")</td></tr>
+            <tr><td><code>${processId}</code></td><td>Process ID used by presets (planning-mfe <code>processID</code>)</td><td>"PresetMapping1" uses <code>930999F4-C08E-4DF8-A74F-E88735F08218</code></td></tr>
+            <tr><td><code>${viewId}</code></td><td>Dashboard view ID already mapped in PSR</td><td><code>6836fa95d774815b459a014e</code></td></tr>
+            <tr><td><code>${newViewId}</code></td><td>View created by Duplicate / Save as. The UI gets it from the LUI dashboard create call.</td><td>Use a view ID the thread owns (see <a href="#flows">data rules</a>)</td></tr>
+            <tr><td><code>${sharedViewId}</code>, <code>${sharedFilterId}</code></td><td>Random view and filter IDs, new each iteration</td><td>Existing "User Parameters" element (JMX L411)</td></tr>
+            <tr><td><code>${viewName}</code>, <code>${containerId}</code></td><td>Name and view-group (container) ID of the view in LUI; favourites require both</td><td>LUI dashboard v3 <code>containers</code> APIs</td></tr>
+            <tr><td><code>${maasActor}</code>, <code>${scsActor}</code>, <code>${insightActor}</code>, <code>${uiCacheActor}</code></td><td>Actor names by type</td><td><code>name</code> values from PSR <code>foundation/model/v1/actorsConfig</code>. <code>PerfTestInterop.jmx</code> L455 has an INTEROP example.</td></tr>
+            <tr><td><code>${favouriteId}</code></td><td>LM catalogue ID returned when a favourite is added</td><td>JSON Extractor <code>$.id</code> on the add-favourite response: <code>lmFavouriteId</code> (process) and <code>lmFavouriteIdTyped</code> (subprocess) in the JMX</td></tr>
+            <tr><td><code>${lmPerfViewId}</code></td><td>Dummy view ID fixed per thread, used by every write sampler PR #726 adds</td><td><code>67f7cf8ba975f07a2df2</code> + thread number in 4 hex digits, from "User Parameters"</td></tr>
+            <tr><td><code>${aiProcessName}</code>, <code>${aiProcessSourceId}</code>, <code>${aiSubprocessSourceId}</code></td><td>Real process and subprocess used by the preset variants, because the admin flow needs a process LIAM knows</td><td>"Set Gateway Entity IDs" script: <code>IntegratedBusinessPlanning</code> / <code>9456BB1A-…</code> / <code>A9A4CE72-…</code> on Azure; <code>PSR1</code> / <code>7C2576C0-…</code> / <code>F2C92C20-…</code> on Gravitee</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="missing">
+      <h2>Added APIs (previously missing)</h2>
+      <p class="lede">These 8 endpoints were used by the UIs but not driven by the JMX. PR #726 adds them, and each card ends with the samplers that drive it. Response bodies are built from the LM DTO classes and the existing automation assertions. Values are illustrative, not captured from PSR. JMX line numbers (Lnnnn) refer to the baseline <code>b736886</code>.</p>
+
+      <article class="api-card" id="api-lm-search">
+        <div class="api-head">
+          <span class="badge p1">P1</span>
+          <span class="method post">POST</span>
+          <code class="path">/view-entity-map/lm-search/v2</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">ViewEntityMapController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/lm-search/v2</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong>, every time Planning Space opens: <code>SCASideNav</code> mounts on the process-plan page and calls <code>getEntities()</code> → <code>getViewsWithMappedEntities()</code> (<code>src/hooks/useFetchAllActors.ts</code>). It's also called from <code>refreshEntities()</code> and from Action Planner → Scenario Scope (<code>MaasActorScope.tsx</code>).</dd>
+            <dt>Payload source</dt>
+            <dd>Actor names from foundation <code>actorsConfig</code>, grouped into <code>uicacheactor</code>, <code>scsactor</code>, <code>insightactor</code> and <code>maasactor</code>. Procedure names from foundation <code>proceduresConfig</code>, as <code>SCP-Launch-Interactive-Planning</code>. Groups with no names are dropped.</dd>
+            <dt>Why it matters</dt>
+            <dd>It's the highest-volume LM read. The service runs one DB query per group on the JVM common <code>ForkJoinPool</code> (<code>CompletableFuture.supplyAsync</code> with no executor), so one call means up to 5 parallel queries against a pool capped at 100 connections. If any group's query fails, the error is only logged and the call still returns <code>200</code> with <code>{"views": []}</code>. A failure looks exactly like "no views".</dd>
+            <dt>Validation</dt>
+            <dd><code>requests</code> must not be empty, and each item needs a non-empty <code>entityId</code> list and an <code>entityType</code>; otherwise <code>400</code>.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+<pre><code>{
+  "requests": [
+    { "entityType": "uicacheactor", "entityId": ["${uiCacheActor}"] },
+    { "entityType": "scsactor", "entityId": ["${scsActor}"] },
+    { "entityType": "insightactor", "entityId": ["${insightActor}"] },
+    { "entityType": "maasactor", "entityId": ["${maasActor}"] },
+    {
+      "entityType": "SCP-Launch-Interactive-Planning",
+      "entityId": [
+        "PSR1_1748439162_IM",
+        "CreateScenario",
+        "RunInsightJob",
+        "CreateBaseAndHydrateMaaSOnSchedule",
+        "PublishScenario"
+      ]
+    }
+  ]
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "views": [
+    {
+      "id": "6836fa95d774815b459a014e",
+      "sequence": 1,
+      "hidden": false,
+      "scopeId": null,
+      "quickFilterEnabled": false,
+      "quickFilterConfigId": null,
+      "entityType": null,
+      "entityId": null,
+      "scope": null,
+      "entities": [
+        {
+          "entityType": "maasactor",
+          "entityId": "${maasActor}",
+          "quickFilterEnabled": false,
+          "quickFilterConfigId": null
+        },
+        {
+          "entityType": "SCP-Launch-Interactive-Planning",
+          "entityId": "PSR1_1748439162_IM",
+          "quickFilterEnabled": false,
+          "quickFilterConfigId": null
+        }
+      ]
+    }
+  ]
+}</code></pre>
+              <h4>Response · 200, nothing mapped or a query failed</h4>
+<pre><code>{ "views": [] }</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>LMSearch1: Views Mapped to Actors and Procedures</code>, one standalone sampler. It sends <code>scsactor</code>, <code>insightactor</code> and <code>maasactor</code> groups with two actors each, and <code>Procedure1</code>, <code>Procedure2</code> as the procedures group, and asserts <code>200</code> and that <code>$.views</code> exists. Not done: adding it to the three page-load parallel controllers, sending the 76 procedure names, and asserting <code>$.views</code> isn't empty.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-put-scope">
+        <div class="api-head">
+          <span class="badge p1">P1</span>
+          <span class="method put">PUT</span>
+          <code class="path">/scope?entityType={type}&amp;entityId={id}&amp;viewId={view}</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">ScopeController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/scope?entityType=subprocess&amp;entityId=${processName}&amp;viewId=${newViewId}</code></dd>
+            <dt>Query params</dt>
+            <dd><code>entityType</code>, <code>entityId</code> and <code>viewId</code> are all required; a missing one returns <code>400</code>. For a process, <code>entityType=subprocess</code> and <code>entityId</code> is the process name. For a subprocess, <code>entityId</code> is <code>${subprocessKey}</code>.</dd>
+            <dt>Called by</dt>
+            <dd>
+              <ul>
+                <li><strong>planning-mfe</strong>, on Duplicate / Save as view: <code>SettingsDialog.applySourceViewConfigToTargetView()</code> → <code>useUtil.applyBackendWorkflowFilter()</code>. The body is the source view's workflow filter (<code>{ dimensions }</code> from its <code>GET /scope</code>) plus the quick-filter flag. Assumption views skip this call.</li>
+                <li><strong>lui</strong>, on View Manager → SCP Configuration dialog → Save: <code>saveEntityWorkflowFiltersConfigWithQuickFilterFlag</code> (<code>src/reducers/view_workflowFilter_config.ts</code>). <code>entityType</code> is always <code>subprocess</code>, and <code>scope</code> is <code>null</code> when no dimension is selected.</li>
+              </ul>
+            </dd>
+            <dt>Why it matters</dt>
+            <dd>It's the only write path for the workflow filter and quick-filter flag, and the JMX only reads scope data that never changes. Planning Space runs <code>GET /scope</code> on every view switch. Both GET and PUT call <code>getLatestAndCleanUpDuplicates()</code> inside a transaction, which deletes older duplicate rows for the same entity and view. So once concurrent saves create duplicates, those GETs delete rows too. Each PUT also makes two audit-log calls.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body (one dimension shown)</h4>
+<pre><code>{
+  "scope": {
+    "dimensions": [
+      {
+        "name": "CUSTOMER",
+        "hierarchy": {
+          "name": "DEMANDCHANNELHIERARCHY",
+          "levels": [
+            { "name": "ALLCHANNELS" },
+            { "name": "CHANNEL" },
+            { "name": "CUSTOMER" }
+          ]
+        },
+        "propertiesFilter": [
+          {
+            "levelId": "CHANNEL",
+            "label": "Channel",
+            "values": [
+              {
+                "name": "CHANNELDESCR",
+                "label": "CHANNELDESCR",
+                "values": ["RETAIL"],
+                "data": [{ "id": "RETAIL" }]
+              }
+            ]
+          }
+        ],
+        "levelsFilter": [
+          {
+            "name": "CHANNEL",
+            "label": "Channel",
+            "values": ["CG-01"],
+            "data": [{ "id": "CG-01", "description": "RETAIL" }]
+          }
+        ],
+        "isTimeDimension": false,
+        "isCrossAttributeFilter": true
+      }
+    ]
+  },
+  "quickFilterEnabled": true
+}</code></pre>
+              <h4>Request body, clearing the scope (lui, and clean-up)</h4>
+<pre><code>{ "scope": null, "quickFilterEnabled": false }</code></pre>
+              <p>A full three-dimension PSR sample is <code>putScopeRequest</code> in <a href="../playwright-e2e/testdata/PSR/ProcessOrchestrationBackend/LinkManagement/Test_010_ScopeMapping.json"><code>Test_010_ScopeMapping.json</code></a>.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (<code>scope</code> is the request's scope, returned as sent)</h4>
+<pre><code>{
+  "entityType": "subprocess",
+  "entityId": "IntegratedBusinessPlanning",
+  "viewId": "${newViewId}",
+  "scope": {
+    "dimensions": [
+      {
+        "name": "CUSTOMER",
+        "hierarchy": {
+          "name": "DEMANDCHANNELHIERARCHY",
+          "levels": [
+            { "name": "ALLCHANNELS" },
+            { "name": "CHANNEL" },
+            { "name": "CUSTOMER" }
+          ]
+        },
+        "propertiesFilter": [
+          {
+            "levelId": "CHANNEL",
+            "label": "Channel",
+            "values": [
+              {
+                "name": "CHANNELDESCR",
+                "label": "CHANNELDESCR",
+                "values": ["RETAIL"],
+                "data": [{ "id": "RETAIL" }]
+              }
+            ]
+          }
+        ],
+        "levelsFilter": [
+          {
+            "name": "CHANNEL",
+            "label": "Channel",
+            "values": ["CG-01"],
+            "data": [{ "id": "CG-01", "description": "RETAIL" }]
+          }
+        ],
+        "isTimeDimension": false,
+        "isCrossAttributeFilter": true
+      }
+    ]
+  },
+  "quickFilterEnabled": true
+}</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>ScopeMapping1: Save Workflow Filter Scope</code> sends the one-dimension body above to <code>/scope?entityType=subprocess&amp;entityId=JMeterPerfProcess&amp;viewId=${lmPerfViewId}</code>, and asserts <code>200</code> and <code>$.viewId</code>. <code>ScopeMapping2: Clear Workflow Filter Scope</code> sends the clearing body. The view ID is fixed per thread, so one scope row per thread remains, and <code>6836fa95d774815b459a014e</code> isn't touched.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-put-mapping">
+        <div class="api-head">
+          <span class="badge p1">P1</span>
+          <span class="method put">PUT</span>
+          <code class="path">/view-entity-map/views/{view}/type/{type}/entity/{entity}</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">ViewEntityMapController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/views/${newViewId}/type/maasactor/entity/${maasActor}</code><code class="url" style="margin-top: 6px">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/views/${newViewId}/type/SCP-Launch-Interactive-Planning/entity/PSR1_1748439162_IM</code></dd>
+            <dt>Path params</dt>
+            <dd><code>view</code> is the dashboard view ID. <code>type</code> is <code>maasactor</code>, <code>scsactor</code>, <code>insightactor</code>, <code>uicacheactor</code> or <code>SCP-Launch-Interactive-Planning</code>. <code>entity</code> is the actor or procedure name.</dd>
+            <dt>Called by</dt>
+            <dd>
+              <ul>
+                <li><strong>planning-mfe</strong>, on Duplicate / Save as view: <code>useUtil.handleActorsMappings()</code> sends one PUT per actor of the source view, all at once (<code>Promise.all</code>). The type is the actor type plus <code>actor</code>, for example <code>maasactor</code>. Then <code>handleDefaultProcedureMapping()</code> maps the view's default procedure (<code>SCP-Launch-Interactive-Planning</code>).</li>
+                <li><strong>lui</strong>, on View Manager → Planning Views → Assign actor or procedure: <code>setMapViewsToEntity</code> (<code>src/reducers/view_mapping.ts</code>), then a new search for that type.</li>
+              </ul>
+            </dd>
+            <dt>Why it matters</dt>
+            <dd>Every seeded actor and procedure type is one-view-to-one-entity (<code>entity_types.mappings = 1</code>). So each PUT validates the type, deletes the view's current mapping for that type, gets or creates the entity-type mapping, inserts or updates the row, and writes an audit event. Duplicate view fires several of these at the same time for one view.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+              <p>None. Both UIs send the PUT with no payload, and the controller reads only the path.</p>
+            </div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "entityType": "maasactor",
+  "entityId": "${maasActor}",
+  "views": [
+    {
+      "id": "${newViewId}",
+      "sequence": 0,
+      "hidden": false,
+      "scopeId": null,
+      "quickFilterEnabled": false,
+      "quickFilterConfigId": null,
+      "entityType": null,
+      "entityId": null,
+      "scope": null
+    }
+  ]
+}</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>ViewEntityMap1: Map MaaS Actor to View</code> (<code>maasactor</code> / <code>JMeterPerfMaasActor</code>) and <code>ViewEntityMap2: Map Procedure to View</code> (<code>SCP-Launch-Interactive-Planning</code> / <code>JMeterPerfProcedure</code>) for <code>${lmPerfViewId}</code>, in the "LinkManagement Writes" controller. Both assert <code>200</code> and <code>$.entityId</code>. They run one after another; the planning-mfe parallel burst isn't modelled.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-delete-mapping">
+        <div class="api-head">
+          <span class="badge p2">P2</span>
+          <span class="method delete">DELETE</span>
+          <code class="path">/view-entity-map/views/{view}/type/{type}/entity/{entity}</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">ViewEntityMapController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/views/${newViewId}/type/maasactor/entity/${maasActor}</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>lui</strong>, on View Manager → Planning Views → Remove configuration (<code>unassignActor()</code>) and on deleting an actor (<code>handleDeleteActor</code>), through <code>deletePlanningActor</code> (<code>src/reducers/planning_views.ts</code>). Remove configuration runs strictly in order: DELETE <code>maasactor</code> then search; the same for <code>uicacheactor</code>, <code>scsactor</code> and <code>insightactor</code> if they're set; then one DELETE per mapped procedure, then a procedure search.</dd>
+            <dt>Why it matters</dt>
+            <dd>It's a write-then-read sequence, and it's also the clean-up for the PUT above. It returns <code>200</code> even when nothing matched.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+              <p>None.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (plain text)</h4>
+<pre><code>Deleted 1 view successfully</code></pre>
+              <h4>Response · 200, nothing matched</h4>
+<pre><code>Deleted 0 view successfully</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>ViewEntityMap3: Unmap MaaS Actor from View</code> and <code>ViewEntityMap4: Unmap Procedure from View</code> remove both mappings at the end of "LinkManagement Writes". Each asserts <code>200</code> and that the body contains <code>Deleted 1 view</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-add-fav">
+        <div class="api-head">
+          <span class="badge p2">P2</span>
+          <span class="method post">POST</span>
+          <code class="path">/entity/{entityId}/views</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">LinksController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/entity/52570520-d741-46b8-81e6-ea1485510976/views</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong>, when the user stars a view in process context: <code>SideNavWithRightPanel.addFavourite()</code>. The favourite is stored with entity type <code>*</code>.</dd>
+            <dt>Why it matters</dt>
+            <dd>It's a per-user write. The service looks up the catalogue view by <code>viewId</code> and <code>containerId</code>, inserts it if it's new, checks for an existing favourite, and then inserts the user-entity-view row. The JMX only reads favourites ("PO To PS 10", "AI To PS 10").</dd>
+            <dt>Validation</dt>
+            <dd><code>name</code> (up to 100 characters), <code>viewId</code> (up to 36) and <code>containerId</code> (up to 36) are required. The UI posts its whole selected-view object, and fields LM doesn't know are ignored.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+<pre><code>{
+  "name": "${viewName}",
+  "viewId": "6836fa95d774815b459a014e",
+  "containerId": "${containerId}",
+  "isActive": true,
+  "isScopeEnabled": false
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 201</h4>
+<pre><code>{
+  "id": "${favouriteId}",
+  "name": "${viewName}",
+  "viewId": "6836fa95d774815b459a014e",
+  "containerId": "${containerId}",
+  "isActive": true,
+  "isScopeEnabled": false
+}</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>Favourites1: Add Favourite View - Process</code> posts to <code>/entity/JMeterPerfProcess/views</code> with <code>viewId</code> <code>${lmPerfViewId}</code> and <code>containerId</code> <code>JMeterPerfContainer</code>. It asserts <code>201</code> and <code>$.viewId</code>, and extracts <code>$.id</code> into <code>lmFavouriteId</code>. The dummy pair is fixed per thread, so one catalogue view per thread remains.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-add-fav-typed">
+        <div class="api-head">
+          <span class="badge p2">P2</span>
+          <span class="method post">POST</span>
+          <code class="path">/type/{type}/entity/{entity}/views</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">LinksController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/type/subprocess/entity/IntegratedBusinessPlanningInitiativesAndAssumptionsReview/views</code></dd>
+            <dt>Path params</dt>
+            <dd><code>type</code> is <code>subprocess</code> (then <code>entity</code> is the process name plus the subprocess name) or <code>interactiveCluster</code> (then <code>entity</code> is the cluster ID).</dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong> <code>addFavourite()</code>, in subprocess or interactive-cluster context.</dd>
+            <dt>Why it matters</dt>
+            <dd>Same write path as the process route, stored under the given entity type.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+<pre><code>{
+  "name": "${viewName}",
+  "viewId": "6836fa95d774815b459a014e",
+  "containerId": "${containerId}",
+  "isActive": true,
+  "isScopeEnabled": false
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 201</h4>
+<pre><code>{
+  "id": "${favouriteId}",
+  "name": "${viewName}",
+  "viewId": "6836fa95d774815b459a014e",
+  "containerId": "${containerId}",
+  "isActive": true,
+  "isScopeEnabled": false
+}</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>Favourites3: Add Favourite View - Subprocess</code> posts to <code>/type/subprocess/entity/JMeterPerfProcessJMeterPerfSubprocess/views</code> with the same body as <code>Favourites1</code>. It asserts <code>201</code> and <code>$.viewId</code>, and extracts <code>$.id</code> into <code>lmFavouriteIdTyped</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-remove-fav">
+        <div class="api-head">
+          <span class="badge p2">P2</span>
+          <span class="method delete">DELETE</span>
+          <code class="path">/entity/{entityId}/views/{viewId}</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">LinksController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/entity/52570520-d741-46b8-81e6-ea1485510976/views/${favouriteId}</code></dd>
+            <dt>Path params</dt>
+            <dd><code>viewId</code> is the LM catalogue <code>id</code> that add returned, not the dashboard view ID.</dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong> <code>SideNavWithRightPanel.removeFavourite()</code>, in process context.</dd>
+            <dt>Why it matters</dt>
+            <dd>The service checks that the favourite exists, then deletes the caller's row. It returns an <code>ENTITY_NOT_FOUND</code> error if the view isn't one of the caller's favourites.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+              <p>None.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (plain text)</h4>
+<pre><code>View with id [${favouriteId}] deleted for Entity Id [52570520-d741-46b8-81e6-ea1485510976]</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>Favourites2: Remove Favourite View - Process</code> deletes <code>/entity/JMeterPerfProcess/views/${lmFavouriteId}</code>, and asserts <code>200</code> and that the body contains <code>deleted for Entity Id [JMeterPerfProcess]</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-remove-fav-typed">
+        <div class="api-head">
+          <span class="badge p2">P2</span>
+          <span class="method delete">DELETE</span>
+          <code class="path">/type/{type}/entity/{entity}/views/{viewId}</code>
+          <span class="badge ok">Covered · PR #726</span>
+          <span class="owner">LinksController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/type/subprocess/entity/IntegratedBusinessPlanningInitiativesAndAssumptionsReview/views/${favouriteId}</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong> <code>removeFavourite()</code>, in subprocess or interactive-cluster context.</dd>
+            <dt>Why it matters</dt>
+            <dd>Same delete path as the process route, for the given entity type.</dd>
+          </dl>
+          <div class="notice warn"><strong>Check in a browser trace:</strong> planning-mfe builds this URL as <code>${apiLinksURL}/</code> + <code>/type/…</code>, which gives <code>…/links/v1//type/…</code> with a double slash. Confirm whether the gateway accepts it. In JMeter, use the single-slash path shown above.</div>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+              <p>None.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (plain text)</h4>
+<pre><code>View with id [${favouriteId}] deleted for Entity Id [IntegratedBusinessPlanningInitiativesAndAssumptionsReview] of type [subprocess]</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>In the JMX:</strong> <code>Favourites4: Remove Favourite View - Subprocess</code> deletes <code>/type/subprocess/entity/JMeterPerfProcessJMeterPerfSubprocess/views/${lmFavouriteIdTyped}</code>, with a single slash, and asserts <code>200</code> and that the body contains <code>of type [subprocess]</code>.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="flows">
+      <h2>Implemented JMX flows</h2>
+      <p class="lede">How PR #726 adds the calls. Everything runs in "Thread Group - Tests", after "PresetMapping3" and before "ActionItems1", in this order. Every new sampler uses the existing <code>${API_HOST}</code>, token and headers, so the same samplers run for <code>GATEWAY_TYPE=AZURE</code> and <code>GRAVITEE</code>.</p>
+
+      <div class="flow">
+        <h3><span class="badge ok">Added</span> 1. <code>LMSearch1: Views Mapped to Actors and Procedures</code></h3>
+        <p>One standalone <a href="#api-lm-search"><code>POST /view-entity-map/lm-search/v2</code></a> with <code>scsactor</code>, <code>insightactor</code> and <code>maasactor</code> groups (two actors each) and <code>Procedure1</code>, <code>Procedure2</code> as the procedures group. It asserts <code>200</code> and that <code>$.views</code> exists.</p>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge ok">Added</span> 2. "LinkManagement Writes" controller</h3>
+        <ol>
+          <li><code>ViewEntityMap1: Map MaaS Actor to View</code>: <a href="#api-put-mapping"><code>PUT …/views/${lmPerfViewId}/type/maasactor/entity/JMeterPerfMaasActor</code></a>. Asserts <code>200</code> and <code>$.entityId</code>.</li>
+          <li><code>ViewEntityMapSearch1: Search MaaS Actor Mappings</code>: <a href="#cov-search"><code>POST /view-entity-map/search</code></a> with <code>"entityType": "maasactor"</code>. Asserts the thread's view is in <code>$.views[0].views[*].id</code>.</li>
+          <li><code>ViewEntityMap2: Map Procedure to View</code>: <a href="#api-put-mapping"><code>PUT …/type/SCP-Launch-Interactive-Planning/entity/JMeterPerfProcedure</code></a>. Asserts <code>200</code> and <code>$.entityId</code>.</li>
+          <li><code>ScopeMapping1: Save Workflow Filter Scope</code>: <a href="#api-put-scope"><code>PUT /scope?entityType=subprocess&amp;entityId=JMeterPerfProcess&amp;viewId=${lmPerfViewId}</code></a> with a one-dimension scope. Asserts <code>200</code> and <code>$.viewId</code>.</li>
+          <li><code>ScopeMapping2: Clear Workflow Filter Scope</code>: the same URL with <code>{ "scope": null, "quickFilterEnabled": false }</code>. Asserts <code>200</code>.</li>
+          <li><code>ViewEntityMap3</code> and <code>ViewEntityMap4</code>: <a href="#api-delete-mapping"><code>DELETE</code></a> both mappings. Each asserts <code>200</code> and <code>Deleted 1 view</code>.</li>
+        </ol>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge ok">Added</span> 3. "LinkManagement Favourites" controller</h3>
+        <ol>
+          <li><code>Favourites1: Add Favourite View - Process</code>: <a href="#api-add-fav"><code>POST /entity/JMeterPerfProcess/views</code></a>. Asserts <code>201</code> and <code>$.viewId</code>; extracts <code>$.id</code> into <code>lmFavouriteId</code>.</li>
+          <li><code>Favourites2: Remove Favourite View - Process</code>: <a href="#api-remove-fav"><code>DELETE /entity/JMeterPerfProcess/views/${lmFavouriteId}</code></a>. Asserts <code>200</code> and the deleted message.</li>
+          <li><code>Favourites3</code> and <code>Favourites4</code>: the same on the typed routes (<a href="#api-add-fav-typed">add</a>, <a href="#api-remove-fav-typed">remove</a>) for <code>subprocess</code> / <code>JMeterPerfProcessJMeterPerfSubprocess</code>, using <code>lmFavouriteIdTyped</code>.</li>
+        </ol>
+        <p>Body: <code>{ "name": "JMeterPerfView", "viewId": "${lmPerfViewId}", "containerId": "JMeterPerfContainer", "isActive": true, "isScopeEnabled": false }</code>.</p>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge ok">Added</span> 4. "LinkManagement Preset Variants" controller</h3>
+        <ol>
+          <li><code>PresetVariant1: Create Global Preset</code>: <a href="#gap-preset"><code>POST /preset</code></a> with <code>entityId</code> / <code>entityType</code> <code>*</code> and <code>entityName</code>. Asserts <code>201</code> and <code>$.viewId</code>.</li>
+          <li><code>PresetVariant2: Search Preset - Subprocess Context</code>: <a href="#gap-search-preset"><code>POST /search-preset</code></a> with <code>entityName</code>. Asserts the global preset from step 1 is returned.</li>
+          <li><code>PresetVariant3: Clear Global Preset</code>: <a href="#gap-preset-clear"><code>POST /preset/clear</code></a>. Asserts <code>200</code> and the response text.</li>
+          <li><code>PresetVariant4: Admin Apply Preset to All Users</code>: <code>POST /preset</code> with <code>"applyToAllUsers": true</code> for the gateway's process. Asserts <code>201</code> only, because the body can be empty.</li>
+          <li><code>PresetVariant5: Admin Search Preset - Process Context</code>: <code>POST /search-preset</code> with <code>entityName</code>. Asserts <code>$.presets</code> exists.</li>
+          <li><code>PresetVariant6: Admin Clear Preset for All Users</code>: <code>POST /preset/clear</code> with <code>"applyToAllUsers": true</code>. Asserts <code>200</code> and the response text.</li>
+        </ol>
+      </div>
+
+      <div class="notice">
+        <strong>Where PR #726 differs from the original recommendations</strong>
+        <ul>
+          <li>lm-search/v2 is one standalone sampler, not in the "PO To PS", "Subprocess To PS" and "Action Items To PS" parallel controllers. It sends 8 names, not the 76 procedure names, and doesn't assert that <code>$.views</code> is non-empty.</li>
+          <li>The Duplicate / Save as chain below isn't modelled as a chain. The mapping <code>PUT</code>s run one after another, not as a parallel burst, and the new view isn't mapped with <code>POST /view-entity-map</code> or <code>POST /entity-view-procedure-map</code>.</li>
+          <li>Favourites use a dummy <code>viewId</code> + <code>containerId</code> pair fixed per thread, not a real pair, so one catalogue view per thread remains. The "PO To PS 10: Views" read isn't between add and remove.</li>
+          <li>Not driven: the <code>assumptiontype</code> search, the <code>uicacheactor</code>, <code>scsactor</code> and <code>insightactor</code> per-type searches, and the admin preset for a subprocess.</li>
+        </ul>
+      </div>
+
+      <h3>Original recommendations (for reference)</h3>
+
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> A. Planning Space load</h3>
+        <p>Add <a href="#api-lm-search"><code>POST /view-entity-map/lm-search/v2</code></a> to the "PO To PS", "Subprocess To PS" and "Action Items To PS" parallel controllers, and assert that <code>$.views</code> isn't empty. Keep "PO To PS 7" only if you also want lui's per-type search pattern.</p>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> B. Duplicate / Save as view (planning-mfe <code>SettingsDialog</code>)</h3>
+        <p>Use a new Transaction Controller, with the calls in UI order:</p>
+        <ol>
+          <li><a href="#cov-map"><code>POST /view-entity-map</code></a>: the full ordered view list for <code>${processName}</code>, including the new view.</li>
+          <li><a href="#api-put-mapping"><code>PUT /view-entity-map/views/${newViewId}/type/{actorType}/entity/{actor}</code></a>: one per actor type, inside a Parallel Controller.</li>
+          <li><a href="#api-put-mapping"><code>PUT /view-entity-map/views/${newViewId}/type/SCP-Launch-Interactive-Planning/entity/{procedure}</code></a>: the default procedure.</li>
+          <li><a href="#api-put-scope"><code>PUT /scope?entityType=subprocess&amp;entityId=${processName}&amp;viewId=${newViewId}</code></a>: the source view's scope.</li>
+          <li><a href="#cov-evpm"><code>POST /entity-view-procedure-map</code></a> with <code>"views": ["${newViewId}"]</code>.</li>
+        </ol>
+        <p>Clean up with <a href="#api-delete-mapping"><code>DELETE</code></a> for each actor and procedure mapping, and <code>PUT /scope</code> with <code>{ "scope": null, "quickFilterEnabled": false }</code>.</p>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge p2">P2</span> C. View Manager actor assignment (lui Planning Views)</h3>
+        <ol>
+          <li><a href="#api-put-mapping"><code>PUT /view-entity-map/views/{view}/type/maasactor/entity/{actor}</code></a></li>
+          <li><a href="#cov-search"><code>POST /view-entity-map/search</code></a> with <code>"entityType": "maasactor"</code></li>
+          <li><a href="#api-delete-mapping"><code>DELETE /view-entity-map/views/{view}/type/maasactor/entity/{actor}</code></a></li>
+          <li><a href="#cov-search"><code>POST /view-entity-map/search</code></a> again, to confirm the mapping is gone</li>
+        </ol>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge p2">P2</span> D. Favourite toggle (planning-mfe)</h3>
+        <ol>
+          <li><a href="#api-add-fav"><code>POST /entity/${linkEntityId}/views</code></a>, with a JSON Extractor from <code>$.id</code> into <code>favouriteId</code></li>
+          <li>The existing "PO To PS 10: Views" read</li>
+          <li><a href="#api-remove-fav"><code>DELETE /entity/${linkEntityId}/views/${favouriteId}</code></a></li>
+          <li>Repeat on the typed subprocess routes (<a href="#api-add-fav-typed">add</a>, <a href="#api-remove-fav-typed">remove</a>)</li>
+        </ol>
+      </div>
+
+      <div class="flow">
+        <h3><span class="badge gap">Payload variant</span> E. Admin default filter (planning-mfe <code>SetDefaultFilterPopup</code>)</h3>
+        <ol>
+          <li><a href="#gap-preset"><code>POST /preset</code></a> with <code>"applyToAllUsers": true</code> and <code>entityName</code></li>
+          <li><a href="#gap-search-preset"><code>POST /search-preset</code></a></li>
+          <li><a href="#gap-preset-clear"><code>POST /preset/clear</code></a> with <code>"applyToAllUsers": true</code></li>
+        </ol>
+      </div>
+
+      <div class="notice warn">
+        <strong>Data rules, from the LM service code</strong>
+        <ul>
+          <li><code>POST /view-entity-map</code> deletes every existing mapping of the entities in the request, then inserts the views you sent. Always send the full ordered view list. Only send it for CSV perf entities (<code>LinksData.csv</code>), never a partial list for <code>IntegratedBusinessPlanning</code>.</li>
+          <li>LM has no DELETE for scope. Random per-iteration view IDs leave one scope row per iteration, so use a fixed view ID per thread.</li>
+          <li>Adding a favourite creates a catalogue view when the <code>viewId</code> and <code>containerId</code> pair is new, and removing it never deletes that view. PR #726 uses one dummy pair per thread, so this is bounded to one catalogue view per thread.</li>
+          <li>All threads share one client-credentials token, so favourites and presets all belong to one LM user. PR #726 gives each thread its own view ID to avoid same-row contention.</li>
+          <li>The admin preset flow (<code>"applyToAllUsers": true</code>) needs a process that LIAM knows on the tenant; otherwise it fails with <code>LIAM_RESOURCE_NOT_FOUND</code>. It writes one preset per LIAM user of that process. PR #726 writes them for the dummy per-thread view and clears them in the same iteration.</li>
+          <li>Every LM sampler added in PR #726 has response assertions. The older LM samplers still have none.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="gaps">
+      <h2>Payload gaps on covered endpoints</h2>
+      <p class="lede">The UIs send request shapes the plan never sent. PR #726 closes the preset gaps and adds the <code>maasactor</code> search; each card ends with what's covered now.</p>
+
+      <article class="api-card" id="gap-search-procedures">
+        <div class="api-head">
+          <span class="method post">POST</span>
+          <code class="path">/view-entity-map/search</code>
+          <span class="owner">Planning Space procedure lookup</span>
+        </div>
+        <div class="api-body">
+          <p>"PO To PS 7" and "AI To PS 7" send 76 procedure names as one per-type search. planning-mfe now looks up procedures through <a href="#api-lm-search"><code>lm-search/v2</code></a>, together with the actors. lui Planning Views still sends this per-type search.</p>
+          <div class="io">
+            <div>
+              <h4>JMX sends ("PO To PS 7", L5064; 5 of 76 names shown)</h4>
+<pre><code>{
+  "entityId": [
+    "PSR60_1749018227_IM",
+    "PSR59_1749018204_IM",
+    "Procedure10",
+    "CreateScenario",
+    "PublishScenario"
+  ],
+  "entityType": "SCP-Launch-Interactive-Planning"
+}</code></pre>
+            </div>
+            <div>
+              <h4>planning-mfe sends instead</h4>
+              <p>One <a href="#api-lm-search"><code>lm-search/v2</code></a> call, with the procedures as one group next to the four actor groups.</p>
+            </div>
+          </div>
+          <p class="tip"><strong>Covered:</strong> <code>LMSearch1</code> now sends the lm-search/v2 shape. "PO To PS 7" and "AI To PS 7" still send the per-type search, which is what lui sends.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="gap-search-assumption">
+        <div class="api-head">
+          <span class="method post">POST</span>
+          <code class="path">/view-entity-map/search</code>
+          <span class="owner">assumption page and lui actor lists</span>
+        </div>
+        <div class="api-body">
+          <div class="io">
+            <div>
+              <h4>planning-mfe, assumption page (<code>SCASideNav.fetchContainersAndViewsNew()</code>)</h4>
+<pre><code>{
+  "entityId": ["Risk"],
+  "entityType": "assumptiontype"
+}</code></pre>
+              <p><code>entityId</code> is the assumption type. The JMX never sends <code>assumptiontype</code>.</p>
+            </div>
+            <div>
+              <h4>lui Planning Views (<code>fetchMappedActorsToView()</code>)</h4>
+<pre><code>{
+  "entityId": ["${maasActor}"],
+  "entityType": "maasactor"
+}</code></pre>
+              <p>lui sends one call per actor type: <code>maasactor</code>, <code>uicacheactor</code>, <code>scsactor</code> and <code>insightactor</code>. The JMX sends none of them.</p>
+            </div>
+          </div>
+          <h4>Response · 200 (one entry per requested entityId)</h4>
+<pre><code>{
+  "views": [
+    {
+      "entityType": "assumptiontype",
+      "entityId": "Risk",
+      "views": [
+        {
+          "id": "67d80da8f2967ca960ced3af",
+          "sequence": 1,
+          "hidden": false,
+          "scopeId": null,
+          "quickFilterEnabled": false,
+          "quickFilterConfigId": null,
+          "entityType": null,
+          "entityId": null,
+          "scope": null
+        }
+      ]
+    }
+  ]
+}</code></pre>
+          <p class="tip"><strong>Partly covered:</strong> <code>ViewEntityMapSearch1: Search MaaS Actor Mappings</code> sends the lui <code>maasactor</code> search for <code>JMeterPerfMaasActor</code> right after mapping it, and asserts the thread's view comes back. The <code>assumptiontype</code>, <code>uicacheactor</code>, <code>scsactor</code> and <code>insightactor</code> searches aren't driven (out of scope).</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="gap-preset">
+        <div class="api-head">
+          <span class="method post">POST</span>
+          <code class="path">/preset</code>
+          <span class="owner">FilterPresetController</span>
+        </div>
+        <div class="api-body">
+          <p>With <code>"applyToAllUsers": true</code>, the service calls LIAM for every user of the process (<code>getAllUsersByResource</code>) and saves one preset per user in a single <code>saveAll</code>. The JMX only saves presets for one user.</p>
+          <div class="io">
+            <div>
+              <h4>JMX sends ("PresetMapping1", L1502)</h4>
+<pre><code>{
+  "viewId": "${sharedViewId}",
+  "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+  "entityType": "process",
+  "filterId": "${sharedFilterId}"
+}</code></pre>
+              <h4>planning-mfe, "apply for all" (global)</h4>
+<pre><code>{
+  "viewId": "${viewId}",
+  "entityId": "*",
+  "entityType": "*",
+  "filterId": "${filterId}",
+  "entityName": "IntegratedBusinessPlanning",
+  "applyToAllUsers": false
+}</code></pre>
+            </div>
+            <div>
+              <h4>planning-mfe, admin "apply to all users" (PSR data from Test_011)</h4>
+<pre><code>{
+  "viewId": "68bfb8dd74d5de1a3f960f67",
+  "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+  "entityType": "process",
+  "entityName": "PSAutomation",
+  "filterId": "91d02f4b-9391-4c67-be1f-b95c617192ff",
+  "applyToAllUsers": true
+}</code></pre>
+              <p>For a subprocess, <code>entityName</code> is <code>Process.Subprocess</code>, for example <code>PSAutomation.DemandReview</code>. With <code>applyToAllUsers: true</code>, <code>entityId</code>, <code>entityType</code> and <code>entityName</code> are required unless <code>entityId</code> is <code>*</code>.</p>
+            </div>
+          </div>
+          <div class="io">
+            <div>
+              <h4>Response · 201</h4>
+<pre><code>{
+  "id": "${presetId}",
+  "viewId": "68bfb8dd74d5de1a3f960f67",
+  "filterId": "91d02f4b-9391-4c67-be1f-b95c617192ff",
+  "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+  "entityType": "process",
+  "createdOn": "2026-09-23T10:15:30.123",
+  "updatedOn": "2026-09-23T10:15:30.123",
+  "createdBy": "${userId}",
+  "updatedBy": "${userId}"
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 201, admin call</h4>
+              <p>The body can be empty when the caller isn't one of the process's users in LIAM (noted in <code>Test_011_AdminFilterManagement.spec.ts</code>). Check the result with <code>/search-preset</code> instead of the response body.</p>
+            </div>
+          </div>
+          <p class="tip"><strong>Covered:</strong> <code>PresetVariant1: Create Global Preset</code> sends the global "apply for all" body for <code>${lmPerfViewId}</code>, with <code>entityName</code> <code>${aiProcessName}</code>. <code>PresetVariant4: Admin Apply Preset to All Users</code> sends the admin body with <code>"applyToAllUsers": true</code> for the gateway's process (<code>IntegratedBusinessPlanning</code> on Azure, <code>PSR1</code> on Gravitee), and asserts only <code>201</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="gap-preset-clear">
+        <div class="api-head">
+          <span class="method post">POST</span>
+          <code class="path">/preset/clear</code>
+          <span class="owner">FilterPresetController</span>
+        </div>
+        <div class="api-body">
+          <p>With <code>"applyToAllUsers": true</code>, the service looks up the process's users in LIAM and deletes their presets for the given views.</p>
+          <div class="io">
+            <div>
+              <h4>JMX sends ("PresetMapping3", L1587)</h4>
+<pre><code>{
+  "viewIds": ["${sharedViewId}"],
+  "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+  "entityType": "process"
+}</code></pre>
+            </div>
+            <div>
+              <h4>planning-mfe, admin "apply to all users"</h4>
+<pre><code>{
+  "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+  "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+  "entityType": "process",
+  "applyToAllUsers": true,
+  "entityName": "PSAutomation"
+}</code></pre>
+            </div>
+          </div>
+          <h4>Response · 200 (plain text)</h4>
+<pre><code>Deleted filters as per search request</code></pre>
+          <p class="tip"><strong>Covered:</strong> <code>PresetVariant3: Clear Global Preset</code> clears the global preset, and <code>PresetVariant6: Admin Clear Preset for All Users</code> sends the admin clear with <code>"applyToAllUsers": true</code> and <code>entityName</code>. Both assert <code>200</code> and the response text.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="gap-search-preset">
+        <div class="api-head">
+          <span class="method post">POST</span>
+          <code class="path">/search-preset</code>
+          <span class="owner">FilterPresetController</span>
+        </div>
+        <div class="api-body">
+          <p>planning-mfe calls this on every view switch, in parallel with <code>GET /scope</code> (<code>fetchViewSwitchAPIs</code>). The JMX only covers process context, and never sends <code>entityName</code>.</p>
+          <div class="io">
+            <div>
+              <h4>JMX sends ("PresetMapping2", L1544)</h4>
+<pre><code>{
+  "viewIds": ["${sharedViewId}"],
+  "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+  "entityType": "process"
+}</code></pre>
+            </div>
+            <div>
+              <h4>planning-mfe, subprocess context</h4>
+<pre><code>{
+  "viewIds": ["${viewId}"],
+  "entityId": "${subprocessId}",
+  "entityType": "subprocess",
+  "entityName": "IntegratedBusinessPlanning.InitiativesAndAssumptionsReview"
+}</code></pre>
+            </div>
+          </div>
+          <h4>Response · 200</h4>
+<pre><code>{
+  "presets": [
+    {
+      "viewId": "${viewId}",
+      "filterId": "${filterId}",
+      "isGlobal": false
+    }
+  ]
+}</code></pre>
+          <p class="tip"><strong>Covered:</strong> <code>PresetVariant2: Search Preset - Subprocess Context</code> sends the subprocess body with <code>entityName</code> <code>${aiProcessName}.InitiativesAndAssumptionsReview</code>, and asserts it returns the global preset <code>PresetVariant1</code> created. <code>PresetVariant5: Admin Search Preset - Process Context</code> sends the process context with <code>entityName</code>.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="covered">
+      <h2>Covered APIs</h2>
+      <p class="lede">The 11 LM endpoints the JMX drove before PR #726. Summaries also list the samplers PR #726 added to them. Line numbers (Lnnnn) refer to the baseline <code>b736886</code>. Expand an endpoint to see the request the JMX sends and the response shape.</p>
+
+      <details id="cov-map">
+        <summary><span class="method post">POST</span><code>/view-entity-map</code> · "EntityViewMapping1: Map 30 Views for a Process" (L455), "EntityViewMapping5: Bulk Mapping 30 Views to 1 process &amp; 15 subprocess" (L779)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map</code></p>
+          <p>This call replaces every existing mapping of the listed entities. It returns <code>200</code>, although the controller's Swagger annotation says 201.</p>
+          <div class="io">
+            <div>
+              <h4>Request (EntityViewMapping1, first 2 of 30 views)</h4>
+<pre><code>{
+  "entities": [
+    { "type": "subprocess", "entityId": ["${processName}"] }
+  ],
+  "views": [
+    { "id": "6836fa95d774815b459a014e", "sequence": 1, "hidden": false },
+    { "id": "6836faa4d774815b459a014f", "sequence": 2, "hidden": false }
+  ]
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "requestedMappingDetails": {
+    "entities": [
+      { "type": "subprocess", "entityId": ["${processName}"] }
+    ],
+    "views": [
+      {
+        "id": "6836fa95d774815b459a014e",
+        "sequence": 1,
+        "hidden": false,
+        "scopeId": null,
+        "quickFilterEnabled": false,
+        "quickFilterConfigId": null,
+        "entityType": null,
+        "entityId": null,
+        "scope": null
+      }
+    ],
+    "entitiesCount": 1,
+    "viewsCount": 30
+  },
+  "responseSummary": {
+    "mappingsUpdated": 0,
+    "mappingsInserted": 30,
+    "mappingsWithNoChanges": 0,
+    "mappingsDeleted": 30,
+    "message": "Successfully Mapped Entities to Views for tenantId ${tenantId}, updatedRecords 0, insertedRecords 30"
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-search">
+        <summary><span class="method post">POST</span><code>/view-entity-map/search</code> · EntityViewMapping2, 4, 6, 8; "PO To PS 7"; "Subprocess To PS 6"; "AI To PS 7"; added: "ViewEntityMapSearch1"</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/search</code></p>
+          <div class="io">
+            <div>
+              <h4>Request ("Subprocess To PS 6", L5892)</h4>
+<pre><code>{
+  "entityId": [
+    "IntegratedBusinessPlanningInitiativesAndAssumptionsReview",
+    "A9A4CE72-B389-4680-8A5B-FE61B004BAB1"
+  ],
+  "entityType": "subprocess"
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200 (unmapped IDs come back with empty <code>views</code>)</h4>
+<pre><code>{
+  "views": [
+    {
+      "entityType": "subprocess",
+      "entityId": "IntegratedBusinessPlanningInitiativesAndAssumptionsReview",
+      "views": [
+        {
+          "id": "6836fa95d774815b459a014e",
+          "sequence": 1,
+          "hidden": false,
+          "scopeId": null,
+          "quickFilterEnabled": false,
+          "quickFilterConfigId": null,
+          "entityType": null,
+          "entityId": null,
+          "scope": null
+        }
+      ]
+    },
+    {
+      "entityType": "subprocess",
+      "entityId": "A9A4CE72-B389-4680-8A5B-FE61B004BAB1",
+      "views": []
+    }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-clear">
+        <summary><span class="method post">POST</span><code>/view-entity-map/clear</code> · "EntityViewMapping3: Clear Mappings" (L695), "EntityViewMapping7: Clear Bulk Mappings" (L1079)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/view-entity-map/clear</code></p>
+          <div class="io">
+            <div>
+              <h4>Request</h4>
+<pre><code>{
+  "entityId": ["${processName}"],
+  "entityType": "subprocess"
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200 (plain text)</h4>
+<pre><code>Deleted 30 views successfully</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-evpm">
+        <summary><span class="method post">POST</span><code>/entity-view-procedure-map</code> · "EntityViewProcedureMapping1" (L1223), "EntityViewProcedureMapping3" (L1388)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/entity-view-procedure-map</code></p>
+          <p>"EntityViewProcedureMapping3" removes the procedures by sending <code>"procedures": []</code>. The Duplicate view flow sends <code>"views": ["${newViewId}"]</code>.</p>
+          <div class="io">
+            <div>
+              <h4>Request (first 2 of 30 views and 10 procedures)</h4>
+<pre><code>{
+  "entityId": "${processName}",
+  "entityType": "subprocess",
+  "views": [
+    "6836fa95d774815b459a014e",
+    "6836faa4d774815b459a014f"
+  ],
+  "procedures": [
+    { "procedureName": "Procedure1", "primary": true, "secondary": false },
+    { "procedureName": "Procedure2", "primary": false, "secondary": true }
+  ]
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "entityViewProcedures": [
+    {
+      "entityType": "subprocess",
+      "entityId": "${processName}",
+      "viewId": "6836fa95d774815b459a014e",
+      "procedures": [
+        { "procedureName": "Procedure1", "primary": true, "secondary": false, "sequence": 0 },
+        { "procedureName": "Procedure2", "primary": false, "secondary": true, "sequence": 0 }
+      ]
+    }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-evpm-search">
+        <summary><span class="method post">POST</span><code>/entity-view-procedure-map/search</code> · EntityViewProcedureMapping2, 4; "PO To PS 8"; "Subprocess To PS 13"; "AI To PS 8"</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/entity-view-procedure-map/search</code></p>
+          <div class="io">
+            <div>
+              <h4>Request ("PO To PS 8", L5183)</h4>
+<pre><code>{
+  "entityId": "IntegratedBusinessPlanning",
+  "entityType": "subprocess",
+  "viewId": "6836fa95d774815b459a014e"
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200 (<code>reason</code> is only present for <code>PROCEDURES_NEVER_MAPPED_TO_VIEW</code> or <code>PLANNER_WANTS_NO_PROCEDURES</code>)</h4>
+<pre><code>{
+  "entityType": "subprocess",
+  "entityId": "IntegratedBusinessPlanning",
+  "viewId": "6836fa95d774815b459a014e",
+  "procedures": [
+    { "procedureName": "Procedure1", "primary": true, "secondary": false, "sequence": 0 }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-get-scope">
+        <summary><span class="method get">GET</span><code>/scope</code> · "PO To PS 9" (L5224), "Subprocess To PS 7" (L5937), "AI To PS 9" (L7204)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/scope?entityType=subprocess&amp;entityId=IntegratedBusinessPlanning&amp;viewId=6836fa95d774815b459a014e</code></p>
+          <div class="io">
+            <div>
+              <h4>Request</h4>
+              <p>No body. All three query parameters are required.</p>
+              <h4>Response · 200, no scope saved yet</h4>
+<pre><code>{
+  "entityType": "subprocess",
+  "entityId": "IntegratedBusinessPlanning",
+  "viewId": "6836fa95d774815b459a014e",
+  "scope": null,
+  "quickFilterEnabled": false
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200, scope saved</h4>
+<pre><code>{
+  "entityType": "subprocess",
+  "entityId": "IntegratedBusinessPlanning",
+  "viewId": "6836fa95d774815b459a014e",
+  "scope": {
+    "dimensions": [
+      {
+        "name": "CUSTOMER",
+        "hierarchy": { "name": "DEMANDCHANNELHIERARCHY" },
+        "isTimeDimension": false,
+        "isCrossAttributeFilter": true
+      }
+    ]
+  },
+  "quickFilterEnabled": true
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-preset">
+        <summary><span class="method post">POST</span><code>/preset</code> · "PresetMapping1: Create a Preset Filter" (L1502); added: "PresetVariant1", "PresetVariant4"</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/preset</code></p>
+          <p>The JMX request, the <code>201</code> response and the UI variants are shown under <a href="#gap-preset">payload gaps</a>.</p>
+        </div>
+      </details>
+
+      <details id="cov-search-preset">
+        <summary><span class="method post">POST</span><code>/search-preset</code> · "PresetMapping2: Search Preset Filter" (L1544); added: "PresetVariant2", "PresetVariant5"</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/search-preset</code></p>
+          <p>The JMX request, the response and the UI variant are shown under <a href="#gap-search-preset">payload gaps</a>.</p>
+        </div>
+      </details>
+
+      <details id="cov-preset-clear">
+        <summary><span class="method post">POST</span><code>/preset/clear</code> · "PresetMapping3: Clear Preset Filter" (L1587); added: "PresetVariant3", "PresetVariant6"</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/preset/clear</code></p>
+          <p>The JMX request, the response and the admin variant are shown under <a href="#gap-preset-clear">payload gaps</a>.</p>
+        </div>
+      </details>
+
+      <details id="cov-get-fav">
+        <summary><span class="method get">GET</span><code>/entity/{entityId}/views</code> · "PO To PS 10: Views" (L5279), "AI To PS 10: Views" (L7259)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/entity/52570520-d741-46b8-81e6-ea1485510976/views</code></p>
+          <div class="io">
+            <div>
+              <h4>Request</h4>
+              <p>No body. Returns the calling user's favourites for the entity.</p>
+            </div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "views": [
+    {
+      "id": "${favouriteId}",
+      "name": "${viewName}",
+      "viewId": "6836fa95d774815b459a014e",
+      "containerId": "${containerId}",
+      "isActive": true,
+      "isScopeEnabled": false
+    }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-get-fav-typed">
+        <summary><span class="method get">GET</span><code>/type/{type}/entity/{entity}/views</code> · "Subprocess To PS 8: Views" (L5992)</summary>
+        <div class="api-body">
+          <p><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/links/v1/type/subprocess/entity/IntegratedBusinessPlanningInitiativesAndAssumptionsReview/views</code></p>
+          <p>No request body. The response has the same shape as the untyped favourites read above.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="unused">
+      <h2>Not used by either UI</h2>
+      <p class="lede">No non-test source file in plan-sop-planning-mfe or plan-sop-lui calls these endpoints, so they're low priority for this perf plan.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Controller</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method patch">PATCH</span></td><td><code>/scope?entityType&amp;entityId&amp;viewId</code> (body <code>{ "quickFilterConfigId": "…" }</code>)</td><td>ScopeController</td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><code>/entity-view-procedure-map/type/{entityType}/entity/{entityId}/views/{viewId}</code></td><td>EntityViewProcedureMapController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/views</code></td><td>LinksController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/views</code></td><td>LinksController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/entity</code></td><td>SourceEntityController</td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><code>/entity/{id}</code></td><td>SourceEntityController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/tenant</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/tenants</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/tenants</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/tenants/{tenantId}</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><code>/tenants/{tenantId}</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><code>/tenants/{tenantId}</code></td><td>TenantController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/users/{user_id}</code></td><td>UserController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/users/me</code></td><td>UserController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/users</code></td><td>UserController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/validate</code></td><td>EntityValidationController</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><code>/job/validation/{task_id}</code></td><td>EntityValidationController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/exportData</code></td><td>ImportExportController</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><code>/importData</code></td><td>ImportExportController</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <h2>Notes and sources</h2>
+      <div class="notice">
+        <strong>How this report was built</strong>
+        <ul>
+          <li>The endpoint list comes from every request-mapping annotation in <code>plan-sop-link-management/src/main/java</code>.</li>
+          <li>UI usage comes from a static scan of non-test files in <code>plan-sop-planning-mfe/src</code> and <code>plan-sop-lui/src</code>, tracing each call to its component. No browser trace or gateway log was used.</li>
+          <li>JMX coverage comes from the <code>HTTPSampler.path</code> and <code>HTTPSampler.method</code> of every sampler in <code>jmeter/Tests/PSRGatewayTest.jmx</code>.</li>
+          <li>Response bodies are built from the LM DTO and service classes, plus the assertions in <code>Test_008</code>, <code>Test_010</code> and <code>Test_011</code> under <code>tests/ProcessOrchestrationBackend/LinkManagement</code>. Values are illustrative, not captured from PSR.</li>
+          <li>Updated 23 Sep 2026 for PR #726 (commits <code>9124a69</code>, <code>36912f4</code>, <code>0893acf</code>), which adds 18 samplers to <code>PSRGatewayTest.jmx</code>. They were checked in offline JMeter 5.6.3 runs for both <code>GATEWAY_TYPE=AZURE</code> and <code>GRAVITEE</code>, not yet against PSR.</li>
+        </ul>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Repository</th>
+              <th>Files used</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>plan-sop-link-management</td>
+              <td><code>v2/refactor/viewtoentity/ViewEntityMapController.java</code>, <code>ViewToEntityMappingService.java</code>, <code>ViewsToEntitiesMappingOrchestrationService.java</code>, <code>ViewsToEntitiesMapService.java</code>; <code>v2/refactor/scope/ScopeController.java</code>, <code>ScopeService.java</code>; <code>v2/refactor/proceduretoview/EntityViewProcedureMapController.java</code>; <code>controllers/LinksController.java</code>, <code>service/LinksService.java</code>; <code>controllers/FilterPresetController.java</code>, <code>service/FilterPresetService.java</code>; DTOs under <code>dto/</code>, <code>requests/</code> and <code>responses/</code>; <code>resources/db/changelog/insert_data_to_entity_types.sql</code></td>
+            </tr>
+            <tr>
+              <td>plan-sop-planning-mfe</td>
+              <td><code>src/config.ts</code>, <code>src/config/StaticData.json</code>, <code>src/hooks/useFetchAllActors.ts</code>, <code>src/hooks/useUtil.tsx</code>, <code>src/components/SCASideNav/index.tsx</code>, <code>src/components/SideNav/SideNavWithRightPanel.tsx</code>, <code>src/components/SideNav/settingsDialog/SettingsDialog.tsx</code>, <code>src/components/SideNav/DashboardMenuComponents/SetDefaultFilterPopup.tsx</code>, <code>src/reducers/favourites.ts</code>, <code>src/reducers/guided_workflow.ts</code>, <code>src/reducers/actions_procedure_config.ts</code>, <code>src/pages/ActionPlanner/ActionPages/ScenarioScope/MaasActorScope.tsx</code></td>
+            </tr>
+            <tr>
+              <td>plan-sop-lui</td>
+              <td><code>src/config.ts</code>, <code>src/Components/ViewManager/PlanningViews/index.tsx</code>, <code>src/Components/ViewManager/ViewMapping/index.tsx</code>, <code>src/Components/ViewManager/ViewMapping/SCPConfigurationModal/index.tsx</code>, <code>src/reducers/view_mapping.ts</code>, <code>src/reducers/planning_views.ts</code>, <code>src/reducers/view_procedure_config.ts</code>, <code>src/reducers/view_workflowFilter_config.ts</code>, <code>src/hooks/useFetchViews.tsx</code></td>
+            </tr>
+            <tr>
+              <td>plan-sop-ui-automation</td>
+              <td><code>jmeter/Tests/PSRGatewayTest.jmx</code>, <code>jmeter/Tests/PerfTestInterop.jmx</code>, <code>jmeter/Tests/PSRSmokeAPITest.jmx</code>, and <code>playwright-e2e/testdata/PSR/ProcessOrchestrationBackend/LinkManagement/*.json</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="report-footer shell">
+    Link Management coverage for PSRGatewayTest.jmx · generated 23 Sep 2026 from local source checkouts under <code>C:\Backend</code>, updated the same day for PR #726. The page is self-contained and works offline.
+  </footer>
+</body>
+</html>

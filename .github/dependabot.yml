@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - '*'
+  # Note: npm updater for /playwright-e2e requires a Dependabot registry secret
+  # configured by an admin (JFROG_AUTH_TOKEN) because package-lock.json resolves
+  # through JFrog artifactory (jdasoftware.jfrog.io). Scoped to github-actions
+  # per T2.5 scope until private registry credentials are added.

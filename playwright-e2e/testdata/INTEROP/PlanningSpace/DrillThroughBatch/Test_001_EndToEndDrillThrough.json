@@ -1,0 +1,32 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC1_DRILL_THROUGH_CELL": "string (required)",
+    "TC1_DRILL_THROUGH_TARGET_CELL": "string (required)",
+    "LV2_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "LV2_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "LV2_DRILL_THROUGH_CELL": "string (required)",
+    "LV2_DRILL_THROUGH_TARGET_CELL": "string (required)",
+    "FILTER_NAME": "string (required)",
+    "CARD_TITLE": "string (optional)",
+    "TC1_FALLBACK_CELLS": "array (optional)",
+    "LV2_FALLBACK_CELLS": "array (optional)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "CARD_TITLE": "Maas Pivot",
+  "TC1_DRILL_THROUGH_VIEW_FROM": "DR Source",
+  "TC1_DRILL_THROUGH_VIEW_TO": "DR Destination",
+  "TC1_DRILL_THROUGH_CELL": "48",
+  "TC1_FALLBACK_CELLS": ["48", "54", "57", "60", "43"],
+  "TC1_DRILL_THROUGH_TARGET_CELL": "54",
+  "LV2_DRILL_THROUGH_VIEW_FROM": "DR Destination",
+  "LV2_DRILL_THROUGH_VIEW_TO": "DR Source",
+  "LV2_DRILL_THROUGH_CELL": "54",
+  "LV2_FALLBACK_CELLS": ["54", "48", "100", "90"],
+  "LV2_DRILL_THROUGH_TARGET_CELL": "48",
+  "FILTER_NAME": "DR Source"
+}

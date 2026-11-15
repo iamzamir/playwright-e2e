@@ -1,0 +1,7 @@
+{
+    "testFiles": [
+        "**/DrillThroughBatch/Test_025_DrillThroughUsingNewViewUI.spec.ts",
+        "**/DrillThroughBatch/Test_026_DrillThroughInNewViews.spec.ts",
+        "**/ViewsBatch/Test_021_NewViewUiModalViewsRender.spec.ts"
+    ]
+}

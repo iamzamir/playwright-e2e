@@ -1,0 +1,917 @@
+name: playwright-po-backend-suite
+run-name: PO Backend ${{ (github.event_name == 'schedule' && (github.event.schedule == '30 19 * * *' || github.event.schedule == '00 20 * * *')) && 'QA' || github.event.inputs.environment || 'INTEROP' }} (${{ (github.event_name == 'schedule' && (github.event.schedule == '00 20 * * *' || github.event.schedule == '30 20 * * *')) && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }})
+
+permissions:
+  contents: read
+
+on:
+  schedule:
+    - cron: '30 19 * * *'  # Runs at 1:00 AM IST daily (QA, AZURE)
+    - cron: '00 20 * * *'  # Runs at 1:30 AM IST daily (QA, GRAVITEE)
+    - cron: '30 20 * * *'  # Runs at 2:00 AM IST daily (INTEROP, GRAVITEE)
+    - cron: '00 21 * * *'  # Runs at 2:30 AM IST daily (INTEROP, AZURE)
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      environment:
+        description: Choose environment
+        required: false
+        default: 'INTEROP'
+        type: choice
+        options:
+          - INTEROP
+          - QA
+      branch:
+        description: Branch to run workflow on
+        required: false
+        default: 'main'
+        type: string
+      url-mode:
+        description: Choose URL mode
+        required: false
+        default: 'OLD'
+        type: choice
+        options:
+          - OLD
+          - NEW
+      gateway-type:
+        description: Choose Gateway (AZURE or GRAVITEE)
+        required: false
+        default: 'AZURE'
+        type: choice
+        options:
+          - AZURE
+          - GRAVITEE
+      realm-key:
+        description: Realm Key for Gravitee (e.g. cbpf-test23)
+        required: false
+        default: 'cbpf-test23'
+        type: string
+      realm-key-source:
+        description: Source Realm Key for Gravitee migration (e.g. cbpf-test41)
+        required: false
+        default: 'cbpf-test41'
+        type: string
+      realm-key-target:
+        description: Target Realm Key for Gravitee migration (e.g. cbpf-test23)
+        required: false
+        default: 'cbpf-test23'
+        type: string
+      enable-token-cache:
+        description: 'Enable API Bearer Token Cache'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      run-alm-deploy:
+        description: 'Run ALM Deploy Resource Migration test'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      batch:
+        description: 'Batch to run (all runs all 6 batches in parallel)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - actionitem
+          - calendar
+          - linkmanagement
+          - migration
+          - processbatch
+          - uifields
+          - smokebatch
+      enable-html-report:
+        description: 'Generate and upload Playwright HTML Report (default: false)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      retries:
+        description: 'Number of retries for failed tests (default: 1)'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '0'
+          - '2'
+          - '3'
+
+env:
+  TEST_ENV: ${{ (github.event_name == 'schedule' && (github.event.schedule == '30 19 * * *' || github.event.schedule == '00 20 * * *')) && 'QA' || github.event.inputs.environment || 'INTEROP' }}
+  RUN_ALM_DEPLOY: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs['run-alm-deploy'] || 'true' }}
+  GATEWAY_TYPE: ${{ (github.event_name == 'schedule' && (github.event.schedule == '00 20 * * *' || github.event.schedule == '30 20 * * *')) && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }}
+  REALM_KEY: ${{ github.event.inputs['realm-key'] || 'cbpf-test23' }}
+  REALM_KEY_SOURCE: ${{ github.event.inputs['realm-key-source'] || 'cbpf-test41' }}
+  REALM_KEY_TARGET: ${{ github.event.inputs['realm-key-target'] || 'cbpf-test23' }}
+  ENABLE_TOKEN_CACHE: ${{ github.event.inputs['enable-token-cache'] || 'true' }}
+  PW_ENABLE_HTML_REPORT: ${{ github.event.inputs['enable-html-report'] || 'false' }}
+  PW_RETRIES: ${{ github.event.inputs.retries || '1' }}
+  QA_GRAVITEE_CLIENT_ID: ${{ secrets.QA_GRAVITEE_CLIENT_ID }}
+  QA_GRAVITEE_CLIENT_SECRET: ${{ secrets.QA_GRAVITEE_CLIENT_SECRET }}
+  GRAVITEE_CLIENT_ID: ${{ secrets.GRAVITEE_CLIENT_ID }}
+  GRAVITEE_CLIENT_SECRET: ${{ secrets.GRAVITEE_CLIENT_SECRET }}
+  REALM_CLIENT_SECRET_GVT_SOURCE_PO_PS_1: ${{ secrets.REALM_CLIENT_SECRET_GVT_SOURCE_PO_PS_1 }}
+  PSR_GRAVITEE_CLIENT_ID: ${{ secrets.PSR_GRAVITEE_CLIENT_ID }}
+  PSR_GRAVITEE_CLIENT_SECRET: ${{ secrets.PSR_GRAVITEE_CLIENT_SECRET }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  URL_MODE: ${{ github.event.inputs['url-mode'] || 'OLD' }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_PS_1 }}
+  # Link-management DB verification: database/user are shared, host/password are per environment.
+  SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+  SQL_USER: ${{ secrets.SQL_USER }}
+  SQL_SERVER_IOP: ${{ secrets.SQL_SERVER_IOP }}
+  SQL_PASSWORD_IOP: ${{ secrets.SQL_PASSWORD_IOP }}
+  SQL_SERVER_QA: ${{ secrets.SQL_SERVER_QA }}
+  SQL_PASSWORD_QA: ${{ secrets.SQL_PASSWORD_QA }}
+  # Run verdict (playwright-e2e/scripts/triage/verdict.js): 'report' only reports it; 'enforce' turns the run red
+  # for unexplained failures or a broken run. Switch with PW_VERDICT_MODE_PO_BACKEND or repository variable PW_VERDICT_MODE.
+  PW_VERDICT_MODE: ${{ vars.PW_VERDICT_MODE_PO_BACKEND || vars.PW_VERDICT_MODE || 'report' }}
+  # Environment health probe (triage E8): 'report' shows an unhealthy probe in the verdict; 'enforce' makes it a BROKEN
+  # reason. Stays 'report' until the probe has run clean for a week (planning task T5.4). Repository variable TRIAGE_ENV_HEALTH_VERDICT.
+  TRIAGE_ENV_HEALTH_VERDICT: ${{ vars.TRIAGE_ENV_HEALTH_VERDICT || 'report' }}
+
+jobs:
+  # Environment health probe (triage E8, scripts/triage/env-health.js): a machine token, the UI pages and one read-only
+  # call per gateway service, checked while the tests start. It also records the UI builds under test (E7,
+  # scripts/triage/collect-versions.js). Nothing waits for it, so it never delays or blocks the tests;
+  # the report job reads its result into the verdict and the dashboard run data.
+  env-health:
+    name: Environment Health
+    # Report-only evidence: a failure anywhere in this job (setup, probe, upload) must never fail the run.
+    continue-on-error: true
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+          cache: npm
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci --ignore-scripts
+
+      - name: Probe Environment
+        id: probe
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          REALM_KEY: ${{ env.REALM_KEY }}
+          URL_MODE: ${{ env.URL_MODE }}
+        run: node scripts/triage/env-health.js --checks token,po-gateway,lm-gateway,ai-gateway,uif-gateway,liam --out reports/triage/env-health.json
+
+      # E7: which UI builds this run tests (read from their public bundles; no token, report-only).
+      - name: Collect System-Under-Test Versions
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+        run: node scripts/triage/collect-versions.js --out reports/triage/versions.json
+
+      # A setup failure (checkout, Node, npm) leaves no probe result: record that, so the verdict says why.
+      - name: Record Probe Fallback
+        if: always()
+        run: |
+          mkdir -p playwright-e2e/reports/triage
+          if [ ! -f playwright-e2e/reports/triage/env-health.json ]; then
+            printf '{"schemaVersion":1,"checkedAt":"%s","healthy":null,"error":"probe did not run (environment health job setup failed)","failed":[],"checks":[]}' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > playwright-e2e/reports/triage/env-health.json
+          fi
+
+      - name: Upload Environment Health
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: triage-env-health
+          path: |
+            playwright-e2e/reports/triage/env-health.json
+            playwright-e2e/reports/triage/versions.json
+          if-no-files-found: ignore
+          retention-days: 30
+        continue-on-error: true
+
+  # ============================
+  # 1. Run Tests Job
+  # ============================
+  run-tests:
+    name: Run PO Backend ${{ (github.event_name == 'schedule' && (github.event.schedule == '30 19 * * *' || github.event.schedule == '00 20 * * *')) && 'QA' || github.event.inputs.environment || 'INTEROP' }} (${{ (github.event_name == 'schedule' && (github.event.schedule == '00 20 * * *' || github.event.schedule == '30 20 * * *')) && 'GRAVITEE' || github.event.inputs['gateway-type'] || 'AZURE' }}) Tests
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    outputs:
+      artifact-url: ${{ steps.get-artifact-url.outputs.artifact-url }}
+      batches-failed: ${{ steps.tests_all.outputs.batches_failed || steps.tests_single.outputs.batches_failed }}
+      test-outcome: ${{ steps.tests_all.outcome || steps.tests_single.outcome }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Print Workflow Inputs & Configuration
+        run: |
+          echo "=========================================================="
+          echo "  WORKFLOW INPUTS & ENVIRONMENT CONFIGURATION"
+          echo "=========================================================="
+          echo "Event Name:        ${{ github.event_name }}"
+          echo "Chosen OS:         ${{ github.event.inputs.chosen-os || 'default' }}"
+          echo "Environment:       ${{ env.TEST_ENV }}"
+          echo "Branch:            ${{ github.event.inputs.branch || 'main' }}"
+          echo "Batch Requested:   ${{ github.event.inputs.batch || 'all' }}"
+          echo "Gateway Type:      ${{ env.GATEWAY_TYPE }}"
+          echo "Realm Key:         ${{ env.REALM_KEY }}"
+          echo "URL Mode:          ${{ env.URL_MODE }}"
+          echo "Run ALM Deploy:    ${{ env.RUN_ALM_DEPLOY }}"
+          echo "Enable Token Cache:${{ env.ENABLE_TOKEN_CACHE }}"
+          if [[ "${TEST_ENV}" == "QA" ]]; then SQL_HOST="${SQL_SERVER_QA}"; SQL_VAR="SQL_SERVER_QA"; else SQL_HOST="${SQL_SERVER_IOP}"; SQL_VAR="SQL_SERVER_IOP"; fi
+          if [[ -n "${SQL_HOST}" ]]; then
+            echo "SQL Host:          ${SQL_VAR} is set"
+          else
+            echo "SQL Host:          ${SQL_VAR} NOT SET - link-management DB checks will skip or hit the wrong database"
+          fi
+          echo "=========================================================="
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      # Link-management user-token specs sign in through the portal once per run to mint a
+      # user (not machine) bearer token, so this otherwise API-only suite needs a browser.
+      - name: Install Playwright Browsers
+        working-directory: playwright-e2e
+        run: |
+          # The Azure/GitHub-hosted Ubuntu runner ships Microsoft apt repos
+          # (packages.microsoft.com azure-cli + prod) that intermittently fail
+          # with "Clearsigned file isn't valid, got 'NOSPLIT'", breaking
+          # `apt-get update` and therefore `playwright install --with-deps`.
+          # Disable those flaky repos so the system-dependency install succeeds.
+          sudo rm -f /etc/apt/sources.list.d/*microsoft* \
+                     /etc/apt/sources.list.d/*azure-cli* \
+                     /etc/apt/sources.list.d/*msprod* 2>/dev/null || true
+          # Install browser + OS deps; fall back to browser-only if the deps
+          # step still fails (deps are preinstalled on these runners).
+          npx playwright install --with-deps chrome || npx playwright install chrome
+
+      - name: Run Tests - All Batches in Parallel
+        id: tests_all
+        if: ${{ github.event_name == 'schedule' || github.event.inputs.batch == '' || github.event.inputs.batch == 'all' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          REALM_KEY: ${{ env.REALM_KEY }}
+          ENABLE_TOKEN_CACHE: ${{ env.ENABLE_TOKEN_CACHE }}
+          TZ: Australia/Adelaide
+          URL_MODE: ${{ env.URL_MODE }}
+          RUN_ALM_DEPLOY: ${{ env.RUN_ALM_DEPLOY }}
+          PW_DISABLE_INLINE_ALLURE_FILTER: 'true'
+        run: |
+          ENV_KEY=$(echo "${TEST_ENV}" | tr '[:upper:]' '[:lower:]')
+          declare -A PIDS=()
+          for b in actionitem calendar linkmanagement migration processbatch uifields; do
+            # Migration tests aren't supported on QA (Test_009 has no QA data and the whole batch fails at load).
+            if [[ "$b" == "migration" && "${TEST_ENV}" == "QA" ]]; then
+              echo "::notice title=Migration skipped::Migration tests are not supported on QA; batch skipped."
+              continue
+            fi
+            args=()
+            if [[ "$b" == "migration" && "${RUN_ALM_DEPLOY}" == "false" ]]; then
+              args=(-- --grep-invert "ALM Deploy Resource Migration")
+            fi
+            PW_REPORT_TAG="$b" npm run "test:${ENV_KEY}:pobackend:${b}" "${args[@]}" &
+            PIDS[$b]=$!
+          done
+          FAILED=()
+          for b in "${!PIDS[@]}"; do
+            wait "${PIDS[$b]}" || FAILED+=("$b")
+          done
+          node scripts/strip-allure-traces.js
+          echo "batches_failed=${FAILED[*]}" >> "$GITHUB_OUTPUT"
+          if [[ ${#FAILED[@]} -gt 0 ]]; then
+            echo "::warning::Batches with non-zero exit: ${FAILED[*]}"
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Run Tests - Batch (${{ github.event.inputs.batch }})
+        id: tests_single
+        if: ${{ github.event.inputs.batch != '' && github.event.inputs.batch != 'all' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          REALM_KEY: ${{ env.REALM_KEY }}
+          ENABLE_TOKEN_CACHE: ${{ env.ENABLE_TOKEN_CACHE }}
+          TZ: Australia/Adelaide
+          URL_MODE: ${{ env.URL_MODE }}
+          RUN_ALM_DEPLOY: ${{ env.RUN_ALM_DEPLOY }}
+        run: |
+          echo "=========================================================="
+          echo "  EXECUTING BATCH:    '${{ github.event.inputs.batch }}'"
+          echo "  ENVIRONMENT:        '${TEST_ENV}'"
+          echo "  GATEWAY_TYPE:       '${GATEWAY_TYPE}'"
+          echo "  REALM_KEY:          '${REALM_KEY}'"
+          echo "  ENABLE_TOKEN_CACHE: '${ENABLE_TOKEN_CACHE}'"
+          echo "  RUN_ALM_DEPLOY:     '${RUN_ALM_DEPLOY}'"
+          echo "=========================================================="
+
+          RAW_BATCH="${{ github.event.inputs.batch }}"
+          BATCH_KEY=$(echo "$RAW_BATCH" | tr '[:upper:]' '[:lower:]' | sed 's/\.json//g')
+
+          case "$BATCH_KEY" in
+            smokebatch|pobackendsmokebatch|smoke)
+              BATCH_SCRIPT="smokebatch"
+              ;;
+            actionitem|calendar|linkmanagement|migration|processbatch|uifields)
+              BATCH_SCRIPT="$BATCH_KEY"
+              ;;
+            *)
+              echo "::error title=Unknown batch::Batch '$RAW_BATCH' (normalized: '$BATCH_KEY') is not valid. Allowed batches: actionitem, calendar, linkmanagement, migration, processbatch, uifields, smokebatch"
+              exit 1
+              ;;
+          esac
+
+          if [[ "$BATCH_SCRIPT" == "migration" && "${TEST_ENV}" == "QA" ]]; then
+            echo "::error title=Unsupported batch::Migration tests are not supported on QA. Run them on INTEROP."
+            exit 1
+          fi
+
+          ENV_KEY=$(echo "${TEST_ENV}" | tr '[:upper:]' '[:lower:]')
+          CMD=(npm run "test:${ENV_KEY}:pobackend:${BATCH_SCRIPT}")
+          if [[ "${RUN_ALM_DEPLOY}" == "false" ]]; then
+            CMD+=(-- --grep-invert "ALM Deploy Resource Migration")
+          fi
+
+          printf 'Executing: %q ' "${CMD[@]}"; echo
+          EXIT_CODE=0
+          "${CMD[@]}" || EXIT_CODE=$?
+          node scripts/strip-allure-traces.js
+          if [[ $EXIT_CODE -ne 0 ]]; then
+            echo "batches_failed=${BATCH_SCRIPT}" >> "$GITHUB_OUTPUT"
+            exit $EXIT_CODE
+          else
+            echo "batches_failed=" >> "$GITHUB_OUTPUT"
+          fi
+        continue-on-error: true
+
+      - name: Upload Allure Results
+        id: upload-artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: allure-results
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: warn
+
+      - name: Upload Playwright HTML Report
+        if: always() && (github.event.inputs['enable-html-report'] == 'true')
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-html-report
+          path: playwright-e2e/reports/html-report
+          if-no-files-found: warn
+
+      - name: Upload Monocart Report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: monocart-report
+          path: playwright-e2e/reports/monocart-report
+          if-no-files-found: warn
+
+      - name: Upload Playwright Assets (traces, test-results)
+        id: upload-assets
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-assets
+          path: playwright-e2e/test-results
+          if-no-files-found: warn
+
+      - name: Get Artifact URL
+        if: always()
+        id: get-artifact-url
+        run: |
+          ASSETS_ID="${{ steps.upload-assets.outputs.artifact-id }}"
+          if [[ -n "$ASSETS_ID" ]]; then
+            ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${ASSETS_ID}"
+          else
+            ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }}"
+          fi
+          echo "artifact-url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+          echo "Artifact URL: $ARTIFACT_URL"
+
+  # ============================
+  # 2. Report Generation Job
+  # ============================
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: [run-tests, env-health]
+    if: always()
+    permissions:
+      contents: write
+    outputs:
+      verdict: ${{ steps.verdict.outputs.verdict }}
+      red: ${{ steps.verdict.outputs.red }}
+      headline: ${{ steps.verdict.outputs.headline }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Download Allure Results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: allure-results
+          path: playwright-e2e/reports/allure-results
+        continue-on-error: true
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Setup Java (Allure dependency)
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies for Allure CLI
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Generate Allure Report (No Docker)
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RESULTS_DIR="playwright-e2e/reports/allure-results"
+          HISTORY_ROOT="playwright-e2e/reports/allure-history/PSAutomationReports/PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE}"
+          CURRENT_REPORT_DIR="${HISTORY_ROOT}/${{ github.run_number }}"
+          LATEST_REPORT_DIR="${HISTORY_ROOT}/latest"
+          PREV_ROOT="gh-pages/PSAutomationReports/PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE}"
+          PREV_HISTORY_DIR="${PREV_ROOT}/latest/history"
+
+          mkdir -p "$RESULTS_DIR" "$HISTORY_ROOT"
+
+          # Restore previously published numbered report folders from gh-pages so the
+          # "keep last 7" retention operates over the full history, not just this run.
+          if [ -d "$PREV_ROOT" ]; then
+            for prev in "$PREV_ROOT"/[0-9]*; do
+              [ -d "$prev" ] || continue
+              cp -R "$prev" "$HISTORY_ROOT/"
+            done
+          fi
+
+          if [ -d "$PREV_HISTORY_DIR" ]; then
+            cp -R "$PREV_HISTORY_DIR" "$RESULTS_DIR/history"
+          fi
+
+          # Safety check: clean trace and video attachments from Allure result JSONs and remove binary files
+          node playwright-e2e/scripts/strip-allure-traces.js "$RESULTS_DIR"
+
+          # Triage labels, "Blocked:" reasons for serial-cascade skips, and failure categories.
+          node playwright-e2e/scripts/triage/enrich-allure-results.js "$RESULTS_DIR" || echo "::warning title=Triage::Allure results enrichment failed; report generated without it."
+
+          cd playwright-e2e
+          npx allure generate reports/allure-results --clean -o "reports/allure-history/PSAutomationReports/PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE}/${{ github.run_number }}"
+          cd - >/dev/null
+
+          rm -rf "$LATEST_REPORT_DIR"
+          cp -R "$CURRENT_REPORT_DIR" "$LATEST_REPORT_DIR"
+
+          # Keep latest + last 7 numeric report folders.
+          cd "$HISTORY_ROOT"
+          ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf
+          cd - >/dev/null
+
+      - name: Download Environment Health
+        if: always()
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: triage-env-health
+          path: playwright-e2e/reports/triage
+
+      - name: Compute Run Verdict
+        id: verdict
+        if: always()
+        continue-on-error: true
+        working-directory: playwright-e2e
+        run: |
+          node scripts/triage/verdict.js \
+            --results reports/allure-results \
+            --suite "PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE}" \
+            --env "${TEST_ENV}" \
+            --gateway "${GATEWAY_TYPE}" \
+            --mode "${PW_VERDICT_MODE}" \
+            --env-health reports/triage/env-health.json \
+            --env-health-mode "${TRIAGE_ENV_HEALTH_VERDICT}" \
+            --check-count "${{ github.event_name == 'schedule' }}" \
+            --upstream-result "${{ needs.run-tests.result }}" \
+            --test-outcome "${{ needs.run-tests.outputs.test-outcome }}" \
+            --batches-failed "${{ needs.run-tests.outputs.batches-failed }}" \
+            --out reports/triage/verdict.json
+
+      - name: Upload Run Verdict
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: triage-verdict
+          path: playwright-e2e/reports/triage/verdict.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      # Written under reports/allure-history, so the gh-pages deploy below publishes it to dashboard/data/runs/.
+      - name: Build Dashboard Run Data
+        if: always()
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          SUITE_KEY: PW-PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }}
+          RUN_BRANCH: ${{ github.event.inputs.branch || 'main' }}
+        run: |
+          node scripts/triage/build-run-data.js \
+            --results reports/allure-results \
+            --report "reports/allure-history/PSAutomationReports/${SUITE_KEY}/${{ github.run_number }}" \
+            --verdict reports/triage/verdict.json \
+            --env-health reports/triage/env-health.json \
+            --versions reports/triage/versions.json \
+            --suite "${SUITE_KEY}" \
+            --env "${TEST_ENV}" \
+            --gateway "${GATEWAY_TYPE}" \
+            --workflow "${{ github.workflow }}" \
+            --run-id "${{ github.run_id }}" \
+            --run-number "${{ github.run_number }}" \
+            --run-attempt "${{ github.run_attempt }}" \
+            --trigger "${{ github.event_name }}" \
+            --branch "${RUN_BRANCH}" \
+            --sha "${{ github.sha }}" \
+            --report-url "https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/${SUITE_KEY}/${{ github.run_number }}" \
+            --workflow-url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --out-dir reports/allure-history/dashboard/data/runs
+
+      - name: Deploy report to Github Pages
+        id: deploy-gh-pages
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      # Suites that finish together all push to gh-pages, so a push can land between this action's clone and its push
+      # and get it rejected ("fetch first", or the server's "fatal error in commit_refs"). Each attempt clones gh-pages
+      # afresh, so a retry after a random wait publishes on top of the other run instead of losing this run's report.
+      - name: Wait before retrying the Github Pages deploy
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        shell: bash
+        run: sleep $((20 + RANDOM % 41))
+
+      - name: Deploy report to Github Pages (retry 1)
+        id: deploy-gh-pages-retry
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Wait before the last Github Pages deploy
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        shell: bash
+        run: sleep $((40 + RANDOM % 61))
+
+      - name: Deploy report to Github Pages (retry 2)
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Prune old reports on gh-pages (keep latest + last 7)
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          REL_DIR="PSAutomationReports/PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE}"
+          if [ ! -d "gh-pages/$REL_DIR" ]; then
+            echo "Category dir not found; nothing to prune."
+            exit 0
+          fi
+
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin gh-pages || true
+          # Reset latest/ on gh-pages to be a clean copy of the current run directory
+          # to prevent accumulation of orphaned attachments over time.
+          RUN_NUM_DIR="${REL_DIR}/${{ github.run_number }}"
+          if [ -d "$RUN_NUM_DIR" ]; then
+            echo "Resetting ${REL_DIR}/latest to clean copy of ${RUN_NUM_DIR}"
+            rm -rf "${REL_DIR}/latest"
+            cp -R "$RUN_NUM_DIR" "${REL_DIR}/latest"
+          fi
+
+          # keep_files:true never deletes superseded numbered folders, so prune them here.
+          STALE=$(ls -1d "$REL_DIR"/[0-9]* 2>/dev/null | sort -t/ -k3 -n | head -n -7 || true)
+          if [ -n "$STALE" ]; then
+            echo "Removing stale report folders:"
+            echo "$STALE"
+            echo "$STALE" | xargs -r rm -rf
+            git add -A
+            git commit -m "Prune old PW-PO-BACKEND-${TEST_ENV}-${GATEWAY_TYPE} reports (keep latest + last 7)" || true
+            git push origin gh-pages || true
+          else
+            echo "No stale folders to prune."
+          fi
+
+      - name: Publish Run Summary
+        if: always()
+        env:
+          TITLE: API Automation Test Results - PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }} - Playwright
+          BRANCH: ${{ github.event.inputs.branch || 'main' }}
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          GATEWAY_TYPE: ${{ env.GATEWAY_TYPE }}
+          REALM_KEY: ${{ env.REALM_KEY }}
+          URL_MODE: ${{ env.URL_MODE }}
+          BATCH: ${{ github.event.inputs.batch || 'all' }}
+          BATCHES_FAILED: ${{ needs.run-tests.outputs.batches-failed }}
+          RETRIES: ${{ env.PW_RETRIES }}
+          RUN_NUMBER: ${{ github.run_number }}
+          JOB_STATUS: ${{ job.status }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PW-PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }}/${{ github.run_number }}
+          ARTIFACTS_URL: ${{ needs.run-tests.outputs.artifact-url }}
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import os
+          title = os.environ["TITLE"]
+          branch = os.environ["BRANCH"]
+          environment = os.environ["ENVIRONMENT"]
+          gateway_type = os.environ["GATEWAY_TYPE"]
+          realm_key = os.environ["REALM_KEY"]
+          url_mode = os.environ["URL_MODE"]
+          batch = os.environ["BATCH"]
+          batches_failed = os.environ.get("BATCHES_FAILED", "")
+          retries = os.environ.get("RETRIES", "1")
+          run_number = os.environ["RUN_NUMBER"]
+          job_status = os.environ["JOB_STATUS"]
+          report_url = os.environ["REPORT_URL"]
+          artifacts_url = os.environ.get("ARTIFACTS_URL", "")
+          workflow_url = os.environ["WORKFLOW_URL"]
+          summary_path = os.environ["GITHUB_STEP_SUMMARY"]
+          print(f"Report URL: {report_url}")
+          with open(summary_path, "a", encoding="utf-8") as out:
+            out.write(f"## {title}\n\n")
+            out.write(f"- Run Number: #{run_number}\n")
+            out.write(f"- Job Status: {job_status}\n")
+            if batches_failed:
+              out.write(f"- Batches With Failures: {batches_failed}\n")
+            out.write("\n")
+            out.write("### Test Configuration\n")
+            out.write(f"- Branch: {branch}\n")
+            out.write(f"- Environment: {environment}\n")
+            out.write(f"- Gateway Type: {gateway_type}\n")
+            out.write(f"- Realm Key: {realm_key}\n")
+            out.write(f"- URL Mode: {url_mode}\n")
+            out.write(f"- Batch: {batch}\n")
+            out.write(f"- Retries: {retries}\n")
+            out.write("\n")
+            out.write("### Links\n")
+            out.write(f"- Allure Report: {report_url}\n")
+            if artifacts_url:
+              out.write(f"- Artifacts: {artifacts_url}\n")
+            out.write(f"- Workflow Run: {workflow_url}\n")
+          PY
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PW-PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }}/${{ github.run_number }}
+          ARTIFACTS_URL: ${{ needs.run-tests.outputs.artifact-url }}
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          VERDICT_HEADLINE: ${{ steps.verdict.outputs.headline }}
+          VERDICT_RED: ${{ steps.verdict.outputs.red }}
+          BATCHES_FAILED: ${{ needs.run-tests.outputs.batches-failed }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TEAMS_WEBHOOK_URL)) {
+            Write-Host "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          }
+
+          $title = "API Automation Test Results - PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }} - Playwright"
+          $summary = "Test Run #${{ github.run_number }}: ${{ job.status }}"
+          if (-not [string]::IsNullOrWhiteSpace($env:BATCHES_FAILED)) {
+            $summary += " (Failed: $($env:BATCHES_FAILED))"
+          }
+          $message = "API Automation Test Results - PO-BACKEND-${{ env.TEST_ENV }}-${{ env.GATEWAY_TYPE }} - Playwright`nReport: $($env:REPORT_URL)`nArtifacts: $($env:ARTIFACTS_URL)`nWorkflow: $($env:WORKFLOW_URL)"
+
+          function Send-TeamsPayload {
+            param(
+              [string]$JsonBody
+            )
+
+            $invokeWebRequestParams = @{
+              Method = 'Post'
+              Uri = $env:TEAMS_WEBHOOK_URL
+              Body = $JsonBody
+              ContentType = 'application/json'
+              SkipHttpErrorCheck = $true
+            }
+            $response = Invoke-WebRequest @invokeWebRequestParams
+
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+              return $true
+            }
+
+            Write-Host "Teams webhook returned status: $($response.StatusCode)"
+            return $false
+          }
+
+          # Teams Workflows webhooks only render an Adaptive Card envelope. Simpler payloads
+          # return 202 (accepted) but post nothing, so send the Adaptive Card directly.
+          $adaptivePayload = @{
+            type = 'message'
+            attachments = @(
+              @{
+                contentType = 'application/vnd.microsoft.card.adaptive'
+                content = @{
+                  '$schema' = 'http://adaptivecards.io/schemas/adaptive-card.json'
+                  type = 'AdaptiveCard'
+                  version = '1.4'
+                  body = @(
+                    @{
+                      type = 'TextBlock'
+                      size = 'Medium'
+                      weight = 'Bolder'
+                      text = $title
+                      wrap = $true
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $summary
+                      wrap = $true
+                      spacing = 'Small'
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $(if ([string]::IsNullOrWhiteSpace($env:VERDICT_HEADLINE)) { 'Run verdict: not computed' } else { $env:VERDICT_HEADLINE })
+                      wrap = $true
+                      weight = 'Bolder'
+                      color = $(if ($env:VERDICT_RED -eq 'true') { 'Attention' } else { 'Good' })
+                      spacing = 'Small'
+                    }
+                  )
+                  actions = @(
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Allure Report'
+                      url = $env:REPORT_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Download Artifacts'
+                      url = $env:ARTIFACTS_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Workflow Run'
+                      url = $env:WORKFLOW_URL
+                    }
+                  )
+                }
+              }
+            )
+          } | ConvertTo-Json -Depth 20
+
+          if (Send-TeamsPayload -JsonBody $adaptivePayload) {
+            Write-Host "Teams notification sent using Adaptive Card payload format."
+            exit 0
+          }
+
+          Write-Host "Unable to send Teams notification with available payload formats."
+          exit 0
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: generate-report
+    if: always() && needs.generate-report.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit
+
+  # Last job, so the run status reflects the verdict while reports and Pages still publish first.
+  run-verdict:
+    name: Run Verdict
+    needs: [generate-report, deploy-pages]
+    if: always()
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    steps:
+      - name: Apply Run Verdict
+        env:
+          RED: ${{ needs.generate-report.outputs.red }}
+          HEADLINE: ${{ needs.generate-report.outputs.headline }}
+          REPORT_JOB_RESULT: ${{ needs.generate-report.result }}
+        run: |
+          echo "Run verdict (${PW_VERDICT_MODE} mode): ${HEADLINE:-not computed}"
+          if [[ "${PW_VERDICT_MODE}" != "enforce" ]]; then
+            exit 0
+          fi
+          if [[ "${REPORT_JOB_RESULT}" != "success" ]]; then
+            echo "::error title=Run verdict::Report job ${REPORT_JOB_RESULT}; the run cannot be verified."
+            exit 1
+          fi
+          # Only an explicit red=false passes; a missing output means the verdict could not be computed.
+          if [[ "${RED}" != "false" ]]; then
+            echo "::error title=Run verdict::${HEADLINE:-Verdict was not computed; the run cannot be verified.}"
+            exit 1
+          fi

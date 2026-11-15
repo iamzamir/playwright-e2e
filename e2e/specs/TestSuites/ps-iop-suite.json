@@ -1,0 +1,11 @@
+{
+    "testFiles": [
+        "**/DataSetup/ODM/Test_002_RestartMaasCluster.spec.ts",
+        "**/DataSetup/Scenarios/Test_002_SetBaseScenarioAsDefault.spec.ts",
+        "**/DataSetup/Scenarios/Test_003_AddChildScenariosToMaas.spec.ts",
+        "**/DataSetup/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+        "**/DataSetup/UIDataReset/Test_002_MapViewsToContext.spec.ts",
+        "**/DataSetup/UIDataReset/Test_004_UpdateFeatureToggle.spec.ts",
+        "**/DataSetup/ODM/Test_003_RestartPlanningInstance.spec.ts"
+    ]
+}

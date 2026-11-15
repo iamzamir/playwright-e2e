@@ -1,0 +1,8 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/WorkFlowFilter/Test_001_WorkFlowFilter.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/WorkFlowFilter/Test_002_DrillThroughSourceWithoutMerge.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/WorkFlowFilter/Test_003_DrillThroughSourceWithMerge.spec.ts"
+  ]
+}
+

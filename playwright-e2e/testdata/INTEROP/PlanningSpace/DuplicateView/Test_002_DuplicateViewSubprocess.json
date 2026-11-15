@@ -1,0 +1,38 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DUPLICATED_VIEW_NAME": "string (required)",
+    "QUICK_FILTER": "string[] (required)",
+    "WORKFLOW_FILTER": "object (required)",
+    "CARDS": "string[] (required)",
+    "SCA_PROCEDURES": "object (required)",
+    "ACTORS_AND_DEFAULT_PROCEDURE": "object[] (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "Initiatives And Assumptions Review",
+  "VIEW_NAME": "duplicate view automation subprocess",
+  "DUPLICATED_VIEW_NAME": "copy of duplicate view automation subprocess",
+  "QUICK_FILTER": ["Item", "Region"],
+  "WORKFLOW_FILTER": {
+    "DIMENSION_NAME": "LOCATION",
+    "ATTRIBUTE_NAME": "Region",
+    "VALUES": ["REGION-00"]
+  },
+  "CARDS": ["Maas Pivot Card", "BDE Card", "Maas Chart", "Demand Chart"],
+  "SCA_PROCEDURES": {
+    "PRIMARY_ACTION": "Clone Member",
+    "SECONDARY_ACTION": "Create Scenario",
+    "OTHER_ACTIONS": [
+      { "procedureDisplayName": "CreateScenarioPopup" },
+      { "procedureDisplayName": "InteractiveDemand" }
+    ]
+  },
+  "ACTORS_AND_DEFAULT_PROCEDURE": [
+    { "label": "Insight", "value": "Insight_actor" },
+    { "label": "Default Procedure", "value": "OnDemandMaasCluster" }
+  ]
+}

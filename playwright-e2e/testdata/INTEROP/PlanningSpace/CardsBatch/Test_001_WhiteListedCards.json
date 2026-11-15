@@ -1,0 +1,12 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "VIEW_NAME": "string (required)",
+        "CARD_NAMES": "string (required)"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "arrange views view1",
+    "CARD_NAMES": "Analytics,KPI,Multi-KPI,Table,Line and Area Chart,Exception Aggregation,Column and Bar Chart,Combination Chart,Inline Analytics"
+}

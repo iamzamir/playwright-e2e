@@ -1,0 +1,18 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "PROCEDURE_NAME": "CreateScenarioPopup",
+    "PROCEDURE_TYPE": "CreateScenarioPopup",
+    "VIEW_NAME": "BDE",
+    "VIEW_NAME1": "Maas Pivot Card View",
+    "CARD_NAME": "BDE Card",
+    "REQUEST_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/",
+    "PARENT_SCENARIO_ID": "9faba47b-3fa4-4fdd-9698-e888bc131e2c",
+    "IS_DEFAULT_SEARCH": true,
+    "REQUEST_BODY": {
+        "sourceIds": [
+            "PSAutomation"
+        ]
+    },
+    "PROCEDURE_EXECUTION_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/v1ioptst/procedureExecutions"
+}

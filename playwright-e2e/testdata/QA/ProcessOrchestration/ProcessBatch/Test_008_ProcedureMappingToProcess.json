@@ -1,0 +1,19 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "PO_PROCESS_NAME": "string (required)",
+        "ATTRIBUTE_VALUE": "string (required)",
+        "PROCEDURE": "object (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "ProcedureMappingCheck",
+    "PO_PROCESS_NAME": "ProcedureMappingCheck",
+    "ATTRIBUTE_VALUE": "SCP-Reporting",
+    
+    "PROCEDURE": {
+        "PROCEDURENAME1": "CreateScenario1",
+        "PROCEDURENAME2": "CreateChildScenario",
+        "PROCEDURENAME3": "CreateScenarioWithPopup"
+    }
+}

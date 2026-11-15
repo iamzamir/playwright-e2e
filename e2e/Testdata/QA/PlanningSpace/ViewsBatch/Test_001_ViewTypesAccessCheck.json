@@ -1,0 +1,11 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "ViewPermissionTest",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ASSUMPTION": "AssumptionViewCheck",
+    "ADMIN_VIEW_TYPES": "All Views,Favourites,Hidden Views",
+    "USER_VIEW_TYPES": "All Views,Favourites",
+    "ALL_VIEWS": "Assortment Card Table,SC Test 1,Amazing Report With Data,Automation Process View1,view name sssssssssssssssssss,Donut Chart,Scope through procedure in interactive demand,test 19,Save And Delete Filter",
+    "HIDDEN_VIEWS": "Edit View Disabled",
+    "FAVOURITES": "Save And Delete Filter"
+}

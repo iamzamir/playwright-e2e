@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "AUTH_USER_ALIAS": "string (required): user1; the spec switches to user2 itself in its last test"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "DemandReview",
+  "AUTH_USER_ALIAS": "user1"
+}

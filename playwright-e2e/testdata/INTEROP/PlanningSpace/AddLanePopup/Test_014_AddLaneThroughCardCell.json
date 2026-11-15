@@ -1,0 +1,62 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "SPARQ_ENGINE_PROCEDURE_NAME": "string (required)",
+    "ADDLANE_FORM_INPUT_FIELDS": "object[] (required)"
+  },
+  "REALM_NAME": "cbp-test-interop-5",
+  "VIEW_NAME": "AddLanePopup_Testing",
+  "PROCESS_NAME": "IDSP",
+  "PROCEDURE_NAME": "Create Lane",
+  "SPARQ_ENGINE_PROCEDURE_NAME": "Start SPARQ Interactive Planning",
+  "ADDLANE_FORM_INPUT_FIELDS": [
+    {
+      "labelName": "Item",
+      "value": "FG-01",
+      "fieldType": "combobox"
+    },
+    {
+      "labelName": "Source",
+      "value": "DC-01",
+      "fieldType": "combobox"
+    },
+    {
+      "labelName": "Destination",
+      "value": "DC-11",
+      "fieldType": "combobox"
+    },
+    {
+      "labelName": "Effective Date",
+      "fieldType": "date",
+      "value": "1"
+    },
+    {
+      "labelName": "Discontinue Date",
+      "fieldType": "date",
+      "value": "10"
+    },
+    {
+      "labelName": "Transport Mode",
+      "value": "Efficient",
+      "fieldType": "dropdown"
+    },
+    {
+      "labelName": "Lead Time (days)",
+      "value": "10",
+      "fieldType": "text"
+    },
+    {
+      "labelName": "Priority",
+      "value": "1",
+      "fieldType": "text"
+    },
+    {
+      "labelName": "Sourcing Factor",
+      "value": "7",
+      "fieldType": "text"
+    }
+  ]
+}

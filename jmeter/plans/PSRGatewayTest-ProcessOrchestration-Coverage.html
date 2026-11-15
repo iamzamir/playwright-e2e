@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:,">
+  <title>PSRGatewayTest.jmx – Process Orchestration API Coverage</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #5b6875;
+      --paper: #f4f6f2;
+      --surface: #ffffff;
+      --line: #d8dfda;
+      --teal: #087f8c;
+      --teal-soft: #dff1f0;
+      --blue: #2c5f9e;
+      --blue-soft: #e6eef8;
+      --green: #2d7d46;
+      --green-soft: #e4f2e8;
+      --amber: #b86412;
+      --amber-soft: #fff0d8;
+      --red: #a93636;
+      --red-soft: #f9e3e3;
+      --grey-soft: #eceff1;
+      --code-bg: #1d2731;
+      --code-ink: #e3ebf0;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: 96px; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Aptos, "Segoe UI", "Trebuchet MS", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3 { margin: 0; font-family: Cambria, Georgia, serif; }
+    code, pre { font-family: "Cascadia Code", Consolas, monospace; }
+
+    .shell { width: min(1360px, calc(100% - 32px)); margin: 0 auto; }
+
+    .report-header { color: #f7fbfa; background: var(--ink); border-bottom: 5px solid var(--teal); }
+    .header-inner { padding: 40px 0 30px; }
+    .eyebrow { margin-bottom: 10px; color: #8fd4d1; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .report-header h1 { max-width: 960px; font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.08; }
+    .subtitle { max-width: 900px; margin: 14px 0 0; color: #c8d2d8; }
+    .subtitle code { color: #ffffff; background: rgba(255, 255, 255, 0.14); }
+    .snapshot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .snapshot span { padding: 3px 10px; color: #d7e1e6; font-size: 0.8rem; border: 1px solid #3a4a58; border-radius: 999px; }
+
+    .report-nav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+    .nav-inner { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 12px 0; }
+    .nav-inner a { color: var(--blue); font-size: 0.9rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+
+    .section { padding: 34px 0 8px; }
+    .section > h2 { margin-bottom: 6px; font-size: 1.6rem; }
+    .section h3 { margin: 18px 0 6px; font-size: 1.08rem; }
+    .lede { max-width: 940px; margin: 0 0 16px; color: var(--muted); }
+
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0; }
+    .kpi { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; }
+    .kpi b { display: block; font-family: Cambria, Georgia, serif; font-size: 2rem; }
+    .kpi span { color: var(--muted); font-size: 0.86rem; }
+    .kpi.good { border-top-color: var(--green); }
+    .kpi.bad { border-top-color: var(--red); }
+
+    .findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+    .finding { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--amber); border-radius: 8px; }
+    .finding h3 { margin: 0 0 6px; font-size: 1.02rem; }
+    .finding p { margin: 0; color: #33414d; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; margin: 10px 0 18px; font-size: 0.9rem; background: var(--surface); border: 1px solid var(--line); border-collapse: collapse; }
+    th, td { padding: 8px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: #3b4853; font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase; background: #eef2ef; }
+    tbody th { width: 160px; text-transform: none; letter-spacing: 0; font-size: 0.88rem; }
+    tr.group td { padding: 6px 10px; font-weight: 700; color: #3b4853; background: #f6f8f6; }
+    tr:last-child td, tr:last-child th { border-bottom: 0; }
+
+    td code, p code, li code, dd code, summary code {
+      padding: 1px 5px; font-size: 0.86em; word-break: break-word; background: #eef2ef; border-radius: 4px;
+    }
+
+    .method { display: inline-block; min-width: 60px; padding: 0 6px; font: 700 0.72rem/1.9 "Cascadia Code", Consolas, monospace; text-align: center; border-radius: 4px; }
+    .method.get { color: var(--green); background: var(--green-soft); }
+    .method.post { color: var(--blue); background: var(--blue-soft); }
+    .method.put { color: var(--amber); background: var(--amber-soft); }
+    .method.delete { color: var(--red); background: var(--red-soft); }
+
+    .badge { display: inline-block; padding: 1px 8px; font-size: 0.72rem; font-weight: 800; white-space: nowrap; border-radius: 999px; }
+    .badge.p1 { color: var(--red); background: var(--red-soft); }
+    .badge.p2 { color: var(--amber); background: var(--amber-soft); }
+    .badge.p3 { color: #4a5660; background: var(--grey-soft); }
+    .badge.ok { color: var(--green); background: var(--green-soft); }
+    .badge.gap { color: var(--blue); background: var(--blue-soft); }
+
+    .notice { margin: 12px 0; padding: 12px 14px; background: var(--teal-soft); border-left: 4px solid var(--teal); border-radius: 6px; }
+    .notice.warn { background: var(--amber-soft); border-left-color: var(--amber); }
+    .notice ul { margin: 6px 0 0; padding-left: 20px; }
+
+    .api-card { margin: 18px 0; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+    .api-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 16px; background: #f9fbfa; border-bottom: 1px solid var(--line); }
+    .api-head .path { font-size: 1rem; font-weight: 700; word-break: break-all; }
+    .api-head .owner { margin-left: auto; color: var(--muted); font-size: 0.8rem; }
+    .api-body { padding: 14px 16px 16px; }
+
+    .meta { display: grid; grid-template-columns: 150px 1fr; gap: 8px 14px; margin: 0 0 12px; }
+    .meta dt { color: #3b4853; font-size: 0.88rem; font-weight: 700; }
+    .meta dd { margin: 0; }
+    .meta dd ul { margin: 0; padding-left: 18px; }
+
+    .url { display: block; padding: 6px 8px; word-break: break-all; background: #eef2ef; border-radius: 6px; }
+    .io { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .api-body h4 { margin: 6px 0; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    pre { margin: 0 0 10px; padding: 12px 14px; overflow-x: auto; color: var(--code-ink); font-size: 0.8rem; line-height: 1.45; background: var(--code-bg); border-radius: 8px; }
+
+    .tip { margin: 12px 0 0; padding: 10px 12px; font-size: 0.9rem; background: var(--blue-soft); border-radius: 6px; }
+
+    .flow { margin: 12px 0; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+    .flow h3 { margin: 0 0 6px; }
+    .flow ol { margin: 6px 0 0; padding-left: 22px; }
+    .flow li { margin: 4px 0; }
+
+    details { margin: 10px 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+    details > summary { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+    details[open] > summary { border-bottom: 1px solid var(--line); }
+
+    .report-footer { padding: 26px 0 40px; color: var(--muted); font-size: 0.85rem; }
+
+    @media (max-width: 900px) { .io { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) { .meta { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: #ffffff; }
+      .report-nav { display: none; }
+      .api-card, .flow, details { break-inside: avoid; }
+      pre { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="report-header">
+    <div class="shell header-inner">
+      <div class="eyebrow">JMeter coverage · Process Orchestration</div>
+      <h1>PSRGatewayTest.jmx — Process Orchestration API coverage</h1>
+      <p class="subtitle">This report lists the Process Orchestration (PO) endpoints that plan-sop-planning-mfe and plan-sop-lui call, shows which ones <code>jmeter/Tests/PSRGatewayTest.jmx</code> already drives, and gives the URL, request payload and response shape for each one the plan is missing.</p>
+      <div class="snapshot">
+        <span>Generated 24 Sep 2026</span>
+        <span>Updated 24 Sep 2026 after phase 1 (PR #727)</span>
+        <span>plan-sop-process-orchestration-service main @ 2963a9bb</span>
+        <span>plan-sop-planning-mfe main @ 986ab5e9f</span>
+        <span>plan-sop-lui main @ b16378cc5a</span>
+        <span>PSRGatewayTest.jmx @ ABP-19338/psr-po-coverage</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="report-nav" aria-label="Report sections">
+    <div class="shell nav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#matrix">Coverage matrix</a>
+      <a href="#common">Common request</a>
+      <a href="#p1">Missing · P1</a>
+      <a href="#p2">Missing · P2</a>
+      <a href="#p3">Missing · P3</a>
+      <a href="#flows">Recommended JMX flows</a>
+      <a href="#covered">Covered APIs</a>
+      <a href="#unused">Not used by UI</a>
+      <a href="#notes">Notes</a>
+    </div>
+  </nav>
+
+  <main class="shell">
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <p class="lede">After phase 1, the plan's 116 PO samplers cover 31 of the 58 PO routes the two UIs call, up from 18 routes in 83 samplers. Phase 1 added process context and scope, all Calendar Manager routes, and supply chain action CRUD. What's still missing is the entity-limit and scenario-validation reads, Settings transitions and templates, action item bulk and by-ID reads, and the process lifecycle writes. In this report, process and subprocess routes count as separate endpoints.</p>
+
+      <div class="notice">
+        <strong>Phase 1 smoke run, 24 Sep 2026 (1 thread, 60 s)</strong>
+        <ul>
+          <li>Azure run <code>35965364407</code>: 395 samples. Gravitee run <code>35965406527</code>: 591 samples.</li>
+          <li>All 33 new PO samplers passed on both gateways except <code>POScope1: Get Process Scope</code>. It returned HTTP 200, but its assertion expected a <code>dimensions</code> key that the <code>IntegratedBusinessPlanning</code> scope doesn't have. The assertion now checks only that the body is a JSON object.</li>
+          <li>The clean-up thread group found no leftover <code>JMeterPerf*</code> calendars or supply chain actions.</li>
+        </ul>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><b>58</b><span>PO routes the UIs call (planning-mfe 16, lui 53)</span></div>
+        <div class="kpi good"><b>31</b><span>driven by the JMX, in 116 samplers (18 before phase 1)</span></div>
+        <div class="kpi bad"><b>27</b><span>used by the UIs but still missing (2 P1, 12 P2, 13 P3)</span></div>
+        <div class="kpi"><b>33</b><span>of the 116 PO samplers have response assertions: all phase 1 samplers. The 83 older ones still have none.</span></div>
+        <div class="kpi"><b>5</b><span>routes driven by the JMX but not called by either UI (<code>POST /tenant/onboard</code>, cycle by name, SCA create, update and delete)</span></div>
+      </div>
+
+      <div class="findings">
+        <div class="finding">
+          <h3>Planning Space process context is now covered</h3>
+          <p>planning-mfe calls <code>GET /process/{p}/context?all=true</code> every time Planning Space opens (<code>SideNavWithRightPanel.didGetProcessContext</code>). Phase 1 added it to the "PO To PS", "Subprocess To PS" and "Action Items To PS" controllers. It also added sequential <code>POContext1</code> and <code>POContext2</code> samplers, which extract the calendar and cycle names for the calendar reads.</p>
+        </div>
+        <div class="finding">
+          <h3>Scenario quota validation calls other services</h3>
+          <p><code>POST /process/{p}/validate/SCENARIO?isAsync=false</code> runs when the Scenario table loads. It finds every process that shares the template, then calls the foundation simulation service and the assumptions service before it returns. If a request leaves out <code>isAsync=false</code>, the default is async, and the service writes a job row on every call.</p>
+        </div>
+        <div class="finding">
+          <h3>PO process pages skip the entity-limit lookup</h3>
+          <p>lui calls <code>GET /process/{p}/entity/ACTION_ITEM</code> when a user enters a process (<code>SideNavTabPanel</code>) and when a process is opened from the listing. The call merges template, tenant and default quota limits. It's missing from "PO Details Page", "Subprocess Details Page" and the "PS To" controllers.</p>
+        </div>
+        <div class="finding">
+          <h3>Older samplers are still not asserted</h3>
+          <p>All 33 phase 1 samplers assert the response code and the body. The 83 older PO samplers still have no assertions, so a 4xx or 5xx response from them still counts as a normal sample. Also, "Subprocess Details Page 7" and "PS To Subprocess 7" read KPIs for <code>IntegratedBusinessPlanning/subprocess/subprocess1</code>, while the other samplers in those controllers use <code>PSR1/subprocess1</code>. Check that this pair exists in PSR.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="matrix">
+      <h2>Coverage matrix</h2>
+      <p class="lede">The table lists every PO route that either UI calls, with the number of JMX samplers that drive it. Paths are relative to the base URL. <code>{p}</code> is the process name and <code>{s}</code> is the subprocess name.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>planning-mfe</th><th>lui</th><th>JMX samplers</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr class="group"><td colspan="6">Missing · P1 (reads that run on page load)</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-entity-limits"><code>/process/{p}/entity/{entityName}</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p1">Missing · P1</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-validate"><code>/process/{p}/validate/{entityName}</code></a></td><td>Yes</td><td>—</td><td>0</td><td><span class="badge p1">Missing · P1</span></td></tr>
+
+            <tr class="group"><td colspan="6">Missing · P2 (reads and light writes that a user triggers)</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-ai-by-id"><code>/actionitem/{id}</code></a></td><td>Yes</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-meter"><code>/meter/{entityType}/{entityOperation}/{scopeType}/{scopeId}</code></a></td><td>Yes</td><td>—</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-template"><code>/template/Id/{templateId}</code></a></td><td>Yes</td><td>—</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-template"><code>/template/{templateName}/type/{templateType}/template-entity</code></a></td><td>Yes</td><td>—</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-ai-bulk"><code>/process/{p}/actionitem/bulk</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-ai-bulk"><code>/process/{p}/subprocess/{s}/actionitem/bulk</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-transitions"><code>/process/{p}/transitionhierarchy</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-transitions"><code>/process/{p}/transition-options</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-transitions"><code>/process/{p}/subprocess/{s}/transition-options</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-transitions"><code>/process/{p}/transition</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#api-transitions"><code>/process/{p}/subprocess/{s}/transition</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-refnodes"><code>/process/{p}/subprocess/{s}/referenceableNodes</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p2">Missing · P2</span></td></tr>
+
+            <tr class="group"><td colspan="6">Missing · P3 (admin and state-changing writes; drive only with dedicated data)</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-process"><code>/process/template</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-process"><code>/process</code> (deprecated)</a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-process"><code>/process/{p}</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#p3-process"><code>/process/{p}</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-subprocess"><code>/process/{p}/subprocess</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-subprocess"><code>/process/{p}/subprocess/{s}</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#p3-subprocess"><code>/process/{p}/subprocess/{s}</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-startstop"><code>/process/{p}/start</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-startstop"><code>/process/{p}/stop</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-startstop"><code>/process/{p}/subprocess/{s}/start</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-startstop"><code>/process/{p}/subprocess/{s}/stop</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-schedule"><code>/process/{p}/planstartdate</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-schedule"><code>/process/{p}/calendarcycle/{cycleName}/reschedule</code></a></td><td>—</td><td>Yes</td><td>0</td><td><span class="badge p3">Missing · P3</span></td></tr>
+
+            <tr class="group"><td colspan="6">Covered · phase 1 (PR #727, smoke-tested on Azure and Gravitee)</td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-context"><code>/process/{p}/context</code></a></td><td>Yes (<code>?all=true</code>)</td><td>Yes (no param)</td><td>5</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-scope-get"><code>/process/{p}/scope</code></a></td><td>Yes</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#api-scope-put"><code>/process/{p}/scope</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-calendars"><code>/calendar</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-calendars"><code>/calendar/{name}</code></a></td><td>—</td><td>Yes</td><td>3</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-calendar"><code>/calendar</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-calendar"><code>/calendar/{name}</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#p3-calendar"><code>/calendar/{name}</code></a></td><td>—</td><td>Yes</td><td>3</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-cycles"><code>/calendar/{calendarName}/cycle</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#p3-calendar"><code>/calendar/{calendarName}/cycle</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#p3-calendar"><code>/calendar/{calendarName}/cycle/{cycleName}</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method delete">DELETE</span></td><td><a href="#p3-calendar"><code>/calendar/{calendarName}/cycle/{cycleName}</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#api-sca-id"><code>/supplyChainAction/{id}</code></a></td><td>Yes</td><td>—</td><td>2</td><td><span class="badge ok">Covered · phase 1</span></td></tr>
+
+            <tr class="group"><td colspan="6">Covered · before phase 1</td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-search"><code>/process/search</code></a></td><td>Yes</td><td>Yes</td><td>9</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-process"><code>/process/{p}</code></a></td><td>Yes</td><td>Yes</td><td>9</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-subprocess"><code>/process/{p}/subprocess/{s}</code></a></td><td>Yes</td><td>Yes</td><td>6</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-users"><code>/process/{p}/users</code></a></td><td>Yes</td><td>Yes</td><td>7</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-tree"><code>/process/{p}/tree</code></a></td><td>Yes</td><td>Yes</td><td>4</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-kpi"><code>/process/{p}/kpi</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-kpi"><code>/process/{p}/subprocess/{s}/kpi</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge gap">Covered · check data</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-gantt"><code>/process/{p}/processGantt</code></a></td><td>—</td><td>Yes</td><td>2</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-children"><code>/process/{p}/children</code></a></td><td>—</td><td>Yes</td><td>5</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-children"><code>/process/{p}/subprocess/{s}/children</code></a></td><td>—</td><td>Yes</td><td>5</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-tenant"><code>/tenant</code></a></td><td>Yes</td><td>Yes</td><td>6</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method get">GET</span></td><td><a href="#cov-sca"><code>/supplyChainAction</code></a></td><td>Yes</td><td>Yes</td><td>5</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-ai"><code>/process/{p}/actionitem</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-ai"><code>/process/{p}/subprocess/{s}/actionitem</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#cov-ai"><code>/process/{p}/actionitem/{id}</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method put">PUT</span></td><td><a href="#cov-ai"><code>/process/{p}/subprocess/{s}/actionitem/{id}</code></a></td><td>—</td><td>Yes</td><td>1</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-ai-search"><code>/process/{p}/actionitem/search</code></a></td><td>Yes</td><td>Yes</td><td>7</td><td><span class="badge ok">Covered</span></td></tr>
+            <tr><td><span class="method post">POST</span></td><td><a href="#cov-ai-search"><code>/process/{p}/subprocess/{s}/actionitem/search</code></a></td><td>—</td><td>Yes</td><td>7</td><td><span class="badge ok">Covered</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede"><strong>P1</strong> is a read that runs when a page loads. <strong>P2</strong> is a read or light write that a user triggers. <strong>P3</strong> changes shared process or calendar state, so it needs dedicated data and a low-rate thread group.</p>
+    </section>
+
+    <section class="section" id="common">
+      <h2>Common request details</h2>
+      <p class="lede">Every call below uses the same base URL, token and headers as the PO samplers already in the JMX.</p>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><th scope="row">Base URL</th><td><code>https://${API_HOST}/cbp/psr/ibp/process-orchestration/v1</code> → <code>https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1</code>. planning-mfe (<code>pltpsr.apiURL</code>) and lui (<code>psr</code>: <code>cbp/psr/ibp</code> + <code>/process-orchestration/v1</code>, <code>config.apis.poAPIUrl</code>) use the same base. In both UIs, <code>useApi</code> adds this base to any URL that doesn't contain <code>http</code>.</td></tr>
+            <tr><th scope="row">Headers</th><td><code>Content-Type: application/json</code><br><code>Authorization: Bearer ${__property(access_token)}</code><br><code>accept: application/json</code></td></tr>
+            <tr><th scope="row">RBAC</th><td>Process, subprocess and calendar routes carry <code>@PreAuthorize("@ibp.hasAction('RBAC_PROCESS.&lt;name&gt;', {'LSNOP_VIEW'})")</code> or the matching CREATE, EDIT, DELETE, START or STOP action. The client-credentials identity needs those rights on each process. The existing <code>GET /process/{p}</code> samplers already depend on the VIEW right.</td></tr>
+            <tr><th scope="row">Errors</th><td><code>LocalExceptionHandler</code> extends the rbac-lib <code>GlobalExceptionHandler</code> and returns an <code>ApiError</code> body. Any exception it doesn't map becomes <code>UNHANDLED_EXCEPTION</code>. PO error codes use the form <code>IBP_PO_50_&lt;code&gt;</code>: <code>2002</code> PROCESS_NOT_FOUND (404), <code>2042</code> LAST_CYCLE_REACHED (500) and <code>2043</code> ERROR_MOVING_CYCLE (500). lui reads the code from <code>errors[0].errorCode</code>.</td></tr>
+            <tr><th scope="row">Shapes</th><td>Many PO routes return <code>Map&lt;String,Object&gt;</code> built by stored procedures, and have no DTO. For those routes, the samples below show only the keys the service code or the UI reads. All values are illustrative, not captured from PSR.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Placeholders used in the samples</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Placeholder</th><th>Meaning</th><th>PSR value or source</th></tr></thead>
+          <tbody>
+            <tr><td><code>${processName}</code></td><td>Process name</td><td><code>IntegratedBusinessPlanning</code> (Azure) or <code>PSR1</code> (Gravitee). The JMX already sets <code>${aiProcessName}</code> in "Set Gateway Entity IDs".</td></tr>
+            <tr><td><code>${subprocessName}</code></td><td>Subprocess name</td><td><code>InitiativesAndAssumptionsReview</code>, or <code>subprocess1</code> under <code>PSR1</code></td></tr>
+            <tr><td><code>${calendarName}</code></td><td>Calendar of the process</td><td>Take <code>$.calendarName</code> from <code>GET /process/{p}</code>. PSR automation uses <code>Monthly Calendar</code>.</td></tr>
+            <tr><td><code>${templateId}</code>, <code>${templateName}</code></td><td>Process template</td><td>Take <code>$.templateId</code> from <code>GET /process/{p}</code>. PSR automation uses the template name <code>BY-Template</code>.</td></tr>
+            <tr><td><code>${actionItem_id}</code>, <code>${subprocessActionItem_id}</code></td><td>Action item IDs</td><td>Already extracted by "ActionItems1" and "ActionItems5"</td></tr>
+            <tr><td><code>${actionItemTemplateId}</code></td><td>Action item template for bulk create</td><td>From the actionitems service <code>GET /actionitems/v1/actionitemTemplates</code>. There's no PSR value in the repo yet.</td></tr>
+            <tr><td><code>${scaId}</code></td><td>Supply chain action ID</td><td><code>$[0].id</code> from the existing <code>GET /supplyChainAction</code> samplers</td></tr>
+            <tr><td><code>${perfCalendar}</code></td><td>Calendar owned by one thread</td><td><code>JMeterPerfCalendar${__threadNum}</code>, created and deleted in the same iteration</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="p1">
+      <h2>Missing APIs · P1</h2>
+      <p class="lede">These reads run on page load. Each card shows the UI trigger, what the service does per call, the request and the response. Phase 1 covered context, scope and cycles. Their cards stay here for reference and are marked <span class="badge ok">Covered · phase 1</span>. Entity limits and scenario validation are still missing.</p>
+
+      <article class="api-card" id="api-context">
+        <div class="api-head">
+          <span class="badge p1">P1</span><span class="method get">GET</span>
+          <code class="path">/process/{p}/context?all=true</code>
+          <span class="owner">ProcessController · RBAC PROCESS:VIEW</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/context?all=true</code></dd>
+            <dt>Called by</dt>
+            <dd>
+              <ul>
+                <li><strong>planning-mfe</strong>, on every Planning Space load and process switch. <code>SideNavWithRightPanel</code> runs a <code>useEffect</code> on <code>params.processName</code> that calls <code>didGetProcessContext()</code>, which calls <code>getProcessContext()</code> in <code>reducers/all_process_data.ts</code> with <code>all: true</code>. The URL always uses the process name, even in subprocess context. <code>useConfigCacheRefill</code> also calls it. It goes through <code>portalCacheWrapper</code> (local cache, then a network refresh). A 401 from any <code>/process/…/context</code> call redirects the user to Unauthorized (<code>apis/apis.ts</code>).</li>
+                <li><strong>lui</strong>, without <code>all</code>, from Settings → Process Scope → horizon submit with the cycle-start anchor (<code>Settings/ProcessScope/helper.tsx</code>)</li>
+              </ul>
+            </dd>
+            <dt>Service work</dt>
+            <dd><code>ProcessService.getProcessContext()</code> calls <code>getProcessDetails()</code>, the same work as <code>GET /process/{p}</code>: get_process, attribute value names and a node-schedule check for <code>hasScheduleExceeded</code>. Then it calls <code>getScope()</code>, reads the stored scope JSON and parses it. It works out <code>processStartDate</code> and <code>processEndDate</code> from <code>cycleStartDate</code> and the scope's <code>horizon</code>, with a default of 30 past and 30 future days. With <code>all=false</code>, the response keeps only 16 process keys.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request</h4>
+              <p>No body. <code>all</code> defaults to <code>false</code>. planning-mfe sends <code>all=true</code>.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (keys shortened)</h4>
+<pre><code>{
+  "id": "5a61b5d3-4779-4101-8750-467899ae37a6",
+  "name": "IntegratedBusinessPlanning",
+  "displayName": "Integrated Business Planning",
+  "description": "",
+  "isActive": true,
+  "status": "In Progress",
+  "calendarName": "Monthly Calendar",
+  "cycleName": "2026 SEP",
+  "cycleStartDate": "2026-09-01T00:00:00",
+  "startDate": "2026-09-01T00:00:00",
+  "endDate": "2026-09-30T00:00:00",
+  "planStartDate": "2026-09-01",
+  "templateId": "…",
+  "actionItemEntityId": "…",
+  "attributes": [ … ],
+  "hasScheduleExceeded": false,
+  "scope": {
+    "dimensions": [ … ],
+    "horizon": { "anchor": "2026-09-01", "pastDays": 30, "futureDays": 30 }
+  },
+  "processStartDate": "2026-08-02",
+  "processEndDate": "2026-10-01"
+}</code></pre>
+            </div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> The parallel samplers are "PO To PS 11", "Subprocess To PS 14" and "AI To PS 11" (<code>?all=true</code>). The sequential samplers are <code>POContext1</code> (<code>?all=true</code>, which extracts <code>calendarName</code> and <code>cycleName</code>) and <code>POContext2</code> (no param). All of them assert <code>200</code> and <code>$.scope</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-scope-get">
+        <div class="api-head">
+          <span class="badge p1">P1</span><span class="method get">GET</span>
+          <code class="path">/process/{p}/scope</code>
+          <span class="owner">ProcessController · RBAC PROCESS:VIEW</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/scope</code></dd>
+            <dt>Called by</dt>
+            <dd>
+              <ul>
+                <li><strong>planning-mfe</strong>: on Interactive Planning page load (<code>InteractivePlanning.tsx</code>, via <code>getProcessScope()</code> in <code>reducers/planning_scope_details.ts</code>)</li>
+                <li><strong>lui</strong>: on Assumptions view load (<code>AssumptionsView.tsx</code>), on Settings → Process Scope load and after each save (<code>helper.tsx</code>), and on View Manager → View Mapping → SubProcess (<code>getProcessScopeDetails()</code> in <code>reducers/process_details.ts</code>)</li>
+              </ul>
+            </dd>
+            <dt>Service work</dt>
+            <dd>One repository read of the stored scope JSON (<code>processRepository.getScope(tenantId, processName)</code>), which is parsed and returned as sent. Both UIs read only <code>dimensions</code> and <code>horizon</code>.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body and no query parameters.</p></div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "dimensions": [
+    { "name": "CUSTOMER", "hierarchy": { "name": "DEMANDCHANNELHIERARCHY" }, … }
+  ],
+  "horizon": { "anchor": "2026-09-01", "pastDays": 30, "futureDays": 30 }
+}</code></pre>
+              <p>Both keys are optional. In PSR, <code>IntegratedBusinessPlanning</code> returns neither (verified in the phase 1 smoke run), and lui reads <code>scope?.dimensions</code>.</p>
+            </div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> <code>POScope1</code> and <code>POScope3</code> read the <code>IntegratedBusinessPlanning</code> scope, which <code>-JSCOPE_PROCESS_NAME</code> can override. They assert <code>200</code> and a JSON-object body. <code>POScope3</code> also checks that the round-trip left the scope unchanged.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-entity-limits">
+        <div class="api-head">
+          <span class="badge p1">P1</span><span class="method get">GET</span>
+          <code class="path">/process/{p}/entity/ACTION_ITEM</code>
+          <span class="owner">ProcessController · no RBAC annotation</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/entity/ACTION_ITEM</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>lui</strong> <code>setProcessTemplateDetails()</code> (<code>reducers/app_selections.ts</code>), with <code>entityName = ENTITY_TYPE.actionItem = 'ACTION_ITEM'</code>. It runs from <code>SideNavTabPanel</code> when a user enters a process and the context features aren't loaded yet, and from <code>ListProcess</code> when a process is opened. The result sets the action item limits in the create form.</dd>
+            <dt>Service work</dt>
+            <dd><code>getEntityLimits()</code> looks up the process's template ID, then calls <code>quotaManagementService.getMergedLimits("TEMPLATE", templateId, entityType)</code>, which merges template, tenant and default limits.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body.</p></div>
+            <div>
+              <h4>Response · 200</h4>
+<pre><code>{
+  "entityLimits": [
+    { "operationtype": "create", "limit": 500, "enforcementtype": "SOFT" }
+  ]
+}</code></pre>
+              <p>The key names are lowercase, exactly as written in <code>ProcessService.generateResponse()</code>.</p>
+            </div>
+          </div>
+          <p class="tip"><strong>Add to the JMX:</strong> add it to the "PO Details Page", "Subprocess Details Page", "PS To PO" and "PS To Subprocess" parallel controllers. Assert <code>200</code> and <code>$.entityLimits</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-validate">
+        <div class="api-head">
+          <span class="badge p1">P1</span><span class="method post">POST</span>
+          <code class="path">/process/{p}/validate/SCENARIO?isAsync=false</code>
+          <span class="owner">ProcessController · no RBAC annotation</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/validate/SCENARIO?isAsync=false</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>planning-mfe</strong>: <code>ScenarioQuotaLimitWarning</code> mounts on the Scenario table and dispatches <code>getScenarioQuotaLimitDetails()</code> in <code>reducers/scenario_quota_limit.ts</code>. The URL comes from <code>config.getScenarioQuotaLimit</code>, and the request has no body. The UI stores <code>$.status</code>, which drives the soft or hard limit banner.</dd>
+            <dt>Service work</dt>
+            <dd><code>EntityServiceHelper.validate()</code> looks up the template ID, the quota limits for the tenant and global scope, and the default thresholds. Then it lists every process that shares the template. <code>ScenarioEntity.validate()</code> calls <code>simulationProxyService.getScenarios(processNames, "PROCESS")</code> and <code>assumptionProxyService.getAssumptionIds(processIds)</code>. If there are assumptions, it calls <code>getScenarios(…, "ASSUMPTION")</code> as well. That's two or three downstream HTTP calls per request. If the template or entity isn't found, the service returns <code>SUCCESS</code> straight away. If the call has no <code>isAsync</code> parameter, the default is <code>true</code>: the service inserts a <code>job_execution_status</code> row and returns a <code>statusUrl</code>.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request</h4>
+              <p>No body. An optional <code>EntityLimitDto</code> is <code>{ "operations": ["…"] }</code>; without it, the service checks every configured operation.</p>
+            </div>
+            <div>
+              <h4>Response · 200 (sync)</h4>
+<pre><code>{ "status": "SUCCESS", "message": "Validated Successfully" }</code></pre>
+              <p>Other values are <code>"WARNING"</code>, with the limit message, and <code>"ERROR"</code>, with the exception message. Both still return HTTP 200.</p>
+              <h4>Response · 200 (async, if <code>isAsync</code> is left out)</h4>
+<pre><code>{ "statusUrl": "/job/{jobId}/status" }</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>Add to the JMX:</strong> add a standalone "Scenario Table" sampler that always sends <code>?isAsync=false</code>. Assert <code>200</code>, and assert that <code>$.status</code> isn't <code>ERROR</code>. Watch its latency: most of it comes from the foundation simulation service.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-cycles">
+        <div class="api-head">
+          <span class="badge p1">P1</span><span class="method get">GET</span>
+          <code class="path">/calendar/{calendarName}/cycle?pageNumber=0&amp;pageSize=100</code>
+          <span class="owner">CalendarController · RBAC CALENDAR:VIEW</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt>
+            <dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/calendar/Monthly%20Calendar/cycle?pageNumber=0&amp;pageSize=100</code></dd>
+            <dt>Called by</dt>
+            <dd><strong>lui</strong> <code>getCalendarCycles()</code> in <code>reducers/calendarCycle.ts</code> (page 0, size 100). It runs on Assumptions view and Assumption listing load, with the calendar name taken from the process (<code>processDetails.data[0].calendarName</code>). Calendar Manager → calendar details → Cycles tab also calls it, with table paging.</dd>
+            <dt>Service work</dt>
+            <dd>A paged repository read of the calendar's cycles. <code>pageNumber</code> defaults to 0 and <code>pageSize</code> to 20.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body. URL-encode the space in the calendar name.</p></div>
+            <div>
+              <h4>Response · 200 (<code>CycleListResponseDto</code>)</h4>
+<pre><code>{
+  "data": [
+    { "id": 101, "name": "2026 SEP", "startDate": "2026-09-01T00:00:00.000+00:00",
+      "endDate": "2026-09-30T00:00:00.000+00:00", "description": "" }
+  ],
+  "pager": { "pageNumber": 0, "pageSize": 100, "numberOfElements": 1,
+             "totalElements": 1, "totalPages": 1 }
+}</code></pre>
+              <p>The dates are <code>java.util.Date</code>. Their serialized form depends on the Jackson setup, which wasn't checked against PSR.</p>
+            </div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> <code>CalendarCycle1</code> reads the process's real calendar, whose name comes from <code>POContext1</code> and is percent-encoded. <code>CalendarCycle4</code> reads the thread's own perf calendar. Both assert <code>200</code>. <code>CalendarCycle1</code> also asserts <code>$.data</code> and <code>$.pager</code>, and <code>CalendarCycle4</code> asserts <code>totalElements = 2</code>.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="p2">
+      <h2>Missing APIs · P2</h2>
+      <p class="lede">These reads and light writes happen when a user acts on a detail page, in Settings or in Calendar Manager. Phase 1 covered scope <code>PUT</code>, supply chain action by ID and the Calendar Manager reads, and their cards are marked <span class="badge ok">Covered · phase 1</span>.</p>
+
+      <article class="api-card" id="api-ai-by-id">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/actionitem/{id}</code>
+          <span class="owner">ActionItemProxyController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>URL</dt><dd><code class="url">https://api-psrtest.jdadelivers.com/cbp/psr/ibp/process-orchestration/v1/actionitem/${actionItem_id}</code></dd>
+            <dt>Called by</dt>
+            <dd>
+              <ul>
+                <li><strong>lui</strong>: when the action item view page opens (<code>ActionItemView</code> calls <code>getActionItemDetails()</code>), on Edit from the action items grid (<code>ActionItemDetails.tsx</code>), after an update when details are refreshed, and in the assumption flyout</li>
+                <li><strong>planning-mfe</strong>: in Assumptions flyout → Action item details (<code>useActionItemDetails.ts</code>, <code>config.apis.actionItemDetailsApi</code>)</li>
+              </ul>
+            </dd>
+            <dt>Service work</dt>
+            <dd>PO proxies the call to the actionitems service at <code>GET {services.actionitem.url}/actionitems/{id}</code> through <code>RestTemplate</code>. <code>updateActionItemsResponse()</code> then fills in node display names.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body.</p></div>
+            <div>
+              <h4>Response · 200 (<code>ActionItemsResponse</code>, null fields left out)</h4>
+<pre><code>{
+  "data": [
+    { "id": "${actionItem_id}", "name": "AI NAME", "status": "2", "priority": "1",
+      "actionType": "1", "entityId": "…", "sourceId": "…", "sourceType": "PROCESS",
+      "sourceName": "IntegratedBusinessPlanning", "dueDate": "…", … }
+  ]
+}</code></pre>
+              <p>Both UIs read <code>data[0]</code>.</p>
+            </div>
+          </div>
+          <p class="tip"><strong>Add to the JMX:</strong> add <code>GET …/actionitem/${actionItem_id}</code> between "ActionItems3" and "ActionItems4", and <code>…/actionitem/${subprocessActionItem_id}</code> between "ActionItems7" and "ActionItems8". Assert <code>$.data[0].id</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-scope-put">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method put">PUT</span>
+          <code class="path">/process/{p}/scope</code>
+          <span class="owner">ProcessController · RBAC PROCESS:EDIT</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>lui</strong> Settings → Process Scope: member filter submit, reset dimensions, horizon submit and reset horizon, through <code>putProcessScopeDetails()</code>. The body is always the full scope with one part changed, and a <code>GET /process/{p}/scope</code> follows.</dd>
+            <dt>Service work</dt><dd>The whole body is written as the new scope JSON (<code>processRepository.updateScope</code>), and <code>auditLogService.doAuditLogOnProcessScopeUpdate</code> runs. Every later <code>context</code> call returns this scope, so it changes Planning Space for all users of the process.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body</h4>
+<pre><code>{
+  "dimensions": [ … ],
+  "horizon": { "anchor": "2026-09-01", "pastDays": 30, "futureDays": 30 }
+}</code></pre>
+            </div>
+            <div><h4>Response · 200 (plain text)</h4><pre><code>Scope updated successfully</code></pre></div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> <code>POScope2</code> sends back the exact body <code>POScope1</code> read, on <code>IntegratedBusinessPlanning</code>. It asserts <code>200</code> and <code>Scope updated successfully</code>, and it's skipped if the read didn't return a JSON object. Each call still writes an audit row.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-meter">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/meter/POLYTOPE/execution/TEMPLATE/{templateId}</code>
+          <span class="owner">MeteringController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>planning-mfe</strong> <code>setQuota(processDetails.templateId)</code> in <code>hooks/usePolytopeRunUtil.tsx</code>, when the Polytope or experiment run panel loads. It reads <code>quota</code> and <code>enforcement</code>.</dd>
+            <dt>Service work</dt><dd><code>MeteringService.getMeterAndQuota()</code> looks up the quota limit for the entity, operation, scope and tenant (tenant or global), then the scope metering row, or the metering configuration if there's no row. The controller returns the remaining quota, with 0 as the lowest value.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body.</p></div>
+            <div><h4>Response · 200 (<code>AvailableQuotaResponseDto</code>)</h4><pre><code>{ "quota": 20, "enforcement": "SOFT" }</code></pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-sca-id">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/supplyChainAction/{id}</code>
+          <span class="owner">SupplyChainActionController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>planning-mfe</strong> <code>getActionProcedure()</code> in <code>reducers/actions_procedure_config.ts</code>, from <code>useUtil</code>, when a supply chain action that isn't a process model is opened. It reads <code>uiConfig</code>.</dd>
+            <dt>Service work</dt><dd>A single <code>findById</code>. Returns 404 if the ID doesn't exist.</dd>
+          </dl>
+          <div class="io">
+            <div><h4>Request</h4><p>No body.</p></div>
+            <div>
+              <h4>Response · 200 (<code>SupplyChainActionDto</code>; audit fields are <code>@JsonIgnore</code>)</h4>
+<pre><code>{ "id": "${scaId}", "name": "…", "type": "…", "description": "…",
+  "procedureName": "…", "uiConfig": "{…}", "isActive": true, "isEnabled": true }</code></pre>
+            </div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> <code>SCA2</code> reads an SCA the thread just created and asserts <code>$.id</code> and <code>$.uiConfig</code>. <code>SCA5</code> checks that the ID returns <code>404</code> after it's deleted. The same controller also covers create, update and delete. The create request copies <code>type</code> from an existing PSR SCA and sends <code>uiConfig: "{}"</code>.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-template">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/template/Id/{templateId} · /template/{templateName}/type/PROCESS/template-entity</code>
+          <span class="owner">TemplateController · TemplateEntityController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>planning-mfe</strong> <code>AssumptionFormModal</code>: <code>getTemplateDetails()</code> reads the template by ID, then <code>getReminderValue()</code> reads the template entity limits by template name.</dd>
+            <dt>Service work</dt><dd>The first route is a template lookup by ID. The second validates the template, reads the template entity rows, and adds the default thresholds that aren't defined.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Response · 200 · <code>/template/Id/{id}</code> (<code>TemplateDto</code>)</h4>
+<pre><code>{ "id": "${templateId}", "name": "BY-Template", "type": "PROCESS",
+  "isActive": true, "isEnabled": true, "isGlobal": true,
+  "config": { … }, "entityLimits": { … } }</code></pre>
+            </div>
+            <div>
+              <h4>Response · 200 · <code>template-entity</code></h4>
+<pre><code>{
+  "definedLimits": [
+    { "id": "…", "templateId": "${templateId}", "tenantId": "…",
+      "entityName": "ASSUMPTION", "entityOperation": "…",
+      "enforcementType": "SOFT", "entityLimit": 100, "isActive": true }
+  ],
+  "defaultLimits": [ … ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-ai-bulk">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method post">POST</span>
+          <code class="path">/process/{p}[/subprocess/{s}]/actionitem/bulk</code>
+          <span class="owner">ActionItemProxyController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>lui</strong> <code>createFromTemplate()</code> in <code>reducers/activities_data.ts</code>, from Action items → Create from template, on the process or subprocess action item grid</dd>
+            <dt>Service work</dt><dd>PO validates <code>templateId</code> (<code>@NotEmpty</code>), fills <code>entityId</code>, <code>sourceId</code>, <code>sourceName</code> and <code>origin</code> from the process or subprocess record, and posts to the actionitems service at <code>/actionitems/bulk</code>. One call creates every item in the template.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>Request body (lui sends extra fields; PO reads only <code>templateId</code>)</h4>
+<pre><code>{
+  "templateId": "${actionItemTemplateId}",
+  "entityId": "…", "sourceId": "…", "sourceType": "PROCESS", "origin": "…"
+}</code></pre>
+            </div>
+            <div>
+              <h4>Response · 201 (<code>ActionItemBulkResponse</code>)</h4>
+<pre><code>{ "id": "…", "name": "…", "entityId": "…", "sourceId": "…",
+  "sourceName": "IntegratedBusinessPlanning", "sourceType": "PROCESS",
+  "origin": "…", "data": [ { "id": "…", "name": "…", … } ] }</code></pre>
+            </div>
+          </div>
+          <p class="tip"><strong>Clean-up:</strong> delete every <code>$.data[*].id</code> with the actionitems service <code>DELETE /actionitems/v1/actionitems/{id}</code> or its bulk delete, in the same iteration.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-transitions">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span><span class="method post">POST</span>
+          <code class="path">transitionhierarchy · transition-options · transition</code>
+          <span class="owner">TransitionController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>lui</strong> Settings → Transitions (<code>Components/Settings/NodeTransitions</code>): <code>getRecords()</code> reads <code>GET /process/{p}/transitionhierarchy</code>. Expanding a row reads <code>GET …/transition-options</code>, on the process or subprocess route depending on <code>rowData.parentName</code>. Saving a row posts to <code>POST …/transition</code>.</dd>
+            <dt>Service work</dt><dd>The routes call stored procedures, and the response JSON comes from those procedures. <code>transition-options</code> first works out which nodes the caller can access (<code>getAccessibleNodesOfProcess</code>). <code>POST</code> writes the whole map with the tenant and user.</dd>
+          </dl>
+          <div class="io">
+            <div>
+              <h4>POST body</h4>
+<pre><code>{ "outboundChildren": ["DemandReview"], "outboundPeers": ["SupplyReview"] }</code></pre>
+              <h4>POST response · 201 (<code>MessageResponseDto</code>)</h4>
+<pre><code>{ "message": "Transition created" }</code></pre>
+            </div>
+            <div>
+              <h4>GET transitionhierarchy · 200 (the keys lui reads)</h4>
+<pre><code>[
+  { "name": "InitiativesAndAssumptionsReview", "processName": "IntegratedBusinessPlanning",
+    "parentName": "IntegratedBusinessPlanning",
+    "outboundChildren": [ … ], "outboundPeers": [ … ], … }
+]</code></pre>
+              <p><code>transition-options</code> returns a map of the nodes the row can point to. lui keeps the whole object.</p>
+            </div>
+          </div>
+          <p class="tip"><strong>Add to the JMX:</strong> the reads are safe to add as they are. For the writes, post back the outbounds just read, on a perf-only process.</p>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-refnodes">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/process/{p}/subprocess/{s}/referenceableNodes</code>
+          <span class="owner">NodeController</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>lui</strong> <code>SubProcessFormModal.getReferenceNodesForEdit()</code>, when a user opens Edit on a subprocess</dd>
+            <dt>Response</dt><dd>200, with <code>List&lt;Map&gt;</code> from <code>nodeService.getPossibleReferenceNodes()</code>: the nodes the subprocess can use as its schedule reference</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="api-card" id="api-calendars">
+        <div class="api-head">
+          <span class="badge p2">P2</span><span class="method get">GET</span>
+          <code class="path">/calendar?pageNumber&amp;pageSize · /calendar/{name}</code>
+          <span class="owner">CalendarController · RBAC CALENDAR:VIEW</span>
+        </div>
+        <div class="api-body">
+          <dl class="meta">
+            <dt>Called by</dt><dd><strong>lui</strong> Calendar Manager: the listing grid (<code>CalendarManager/index.tsx</code>, table paging) and calendar details (<code>getCalendarDetails()</code> in <code>reducers/calendarDetail.ts</code>, followed by a UI Fields detail-page-config call)</dd>
+          </dl>
+          <div class="io">
+            <div><h4>GET /calendar · 200 (<code>CalendarListResponseDto</code>)</h4>
+<pre><code>{ "data": [ { "name": "Monthly Calendar", "description": "…" } ],
+  "pager": { "pageNumber": 0, "pageSize": 10, "numberOfElements": 1,
+             "totalElements": 1, "totalPages": 1 } }</code></pre></div>
+            <div><h4>GET /calendar/{name} · 200 (<code>CalendarResponseDto</code>)</h4>
+<pre><code>{ "name": "Monthly Calendar", "description": "…" }</code></pre></div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> <code>Calendar1</code> reads the calendar list. <code>Calendar2</code> reads the process's calendar and <code>Calendar4</code> reads the perf calendar. <code>Calendar7</code> checks the perf calendar returns 404 after it's deleted. <code>Cleanup1</code>, in the tearDown thread group, lists up to 500 calendars.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="p3">
+      <h2>Missing APIs · P3</h2>
+      <p class="lede">These lui writes create, change or delete processes, subprocesses and calendars, or move a process through its cycle. Model them in a separate, low-rate thread group that owns its data, as <a href="../../playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_005_ProcessLifecycleCrud.spec.ts"><code>Test_005_ProcessLifecycleCrud</code></a> does.</p>
+
+      <details id="p3-process">
+        <summary><span class="method post">POST</span><code>/process/template</code> · <span class="method post">POST</span><code>/process</code> · <span class="method put">PUT</span> / <span class="method delete">DELETE</span><code>/process/{p}</code></summary>
+        <div class="api-body">
+          <p><strong>lui:</strong> <code>ProcessTemplateFormModal</code> (create from template), <code>ProcessFormModal</code> (create uses the deprecated <code>POST /process</code>; edit uses <code>PUT</code>) and delete from the side nav or Schedule &amp; Structure. The RBAC actions are PROCESS:CREATE, EDIT and DELETE.</p>
+          <div class="io">
+            <div>
+              <h4>POST /process/template (<code>ProcessCreateByTemplateRequestDto</code>)</h4>
+<pre><code>{
+  "templateName": "BY-Template",
+  "processName": "JMeterPerfProcess1",
+  "displayName": "JMeter Perf Process 1",
+  "calendarName": "Monthly Calendar",
+  "cycleName": "2025 MAY",
+  "description": "",
+  "variant": null
+}</code></pre>
+              <p><code>processName</code> must match <code>^[a-zA-Z0-9]*$</code>, and <code>displayName</code> must be letters, digits and spaces. The response is 201 with a <code>Map&lt;String,String&gt;</code>.</p>
+            </div>
+            <div>
+              <h4>Other responses</h4>
+<pre><code>POST /process        → 201 Map&lt;String,String&gt;  (deprecated)
+PUT /process/{p}     → 200 Map&lt;String,String&gt;
+DELETE /process/{p}  → 200 "Deleted process successfully"</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="p3-subprocess">
+        <summary><span class="method post">POST</span><code>/process/{p}/subprocess</code> · <span class="method put">PUT</span> / <span class="method delete">DELETE</span><code>/process/{p}/subprocess/{s}</code></summary>
+        <div class="api-body">
+          <p><strong>lui:</strong> <code>SubProcessFormModal</code> (create and edit) and delete from Process details or Schedule &amp; Structure (<code>reducers/create_subprocess_form_modal.ts</code>)</p>
+          <div class="io">
+            <div>
+              <h4>POST body (PSR sample, <code>Test_005</code> <code>LEVEL_ONE.create</code>)</h4>
+<pre><code>{
+  "name": "LevelOneSubprocess",
+  "displayName": "LevelOneSubprocess",
+  "attributes": [],
+  "referenceNodeName": "ExecutiveBusinessReview",
+  "startOffsetReference": "END",
+  "startOffset": "1",
+  "duration": 1,
+  "description": "",
+  "transition": { "reference": "END", "referenceNodeNames": ["ExecutiveBusinessReview"] }
+}</code></pre>
+            </div>
+            <div>
+              <h4>Responses</h4>
+<pre><code>POST   → 201 Map&lt;String,String&gt;
+PUT    → 200 Object
+DELETE → 200 "Deleted node successfully"</code></pre>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="p3-startstop">
+        <summary><span class="method post">POST</span><code>/process/{p}/start|stop</code> · <code>/process/{p}/subprocess/{s}/start|stop</code></summary>
+        <div class="api-body">
+          <p><strong>lui:</strong> the Start and Stop buttons on the process side nav and on subprocess rows (<code>reducers/start_stop_node.ts</code>). None of these calls has a body.</p>
+          <div class="io">
+            <div>
+              <h4>Process start / stop · 200</h4>
+<pre><code>{ "entityName": "IntegratedBusinessPlanning",
+  "statusUrl": "/transitionJob/{jobId}/status" }</code></pre>
+              <h4>Subprocess start / stop · 200 (plain text)</h4>
+<pre><code>Node started successfully.
+Node stopped successfully.</code></pre>
+            </div>
+            <div>
+              <h4>Behaviour</h4>
+              <ul>
+                <li>The transition runs asynchronously; poll <code>statusUrl</code>.</li>
+                <li>Starting a process that's already <code>IN_PROGRESS</code> returns the previous job ID.</li>
+                <li>Starting a <code>COMPLETED</code> process moves it to the next cycle. If the calendar has no cycles left, the call fails with <code>IBP_PO_50_2042</code> (LAST_CYCLE_REACHED); a failed move gives <code>2043</code>. lui shows its "cannot start" modal for both.</li>
+                <li>Stopping doesn't undo a cycle move. Leave this out of steady-state load.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="p3-schedule">
+        <summary><span class="method put">PUT</span><code>/process/{p}/planstartdate</code> · <span class="method put">PUT</span><code>/process/{p}/calendarcycle/{cycleName}/reschedule</code></summary>
+        <div class="api-body">
+          <div class="io">
+            <div>
+              <h4>planstartdate (lui <code>ChangePlanStartDate</code>)</h4>
+<pre><code>PUT /process/{p}/planstartdate?cycleName=2026%20SEP&amp;planStartDate=2026-09-01
+(no body) → 200</code></pre>
+              <p>This updates <code>node_schedule</code>, and lui then calls <code>GET /process/{p}</code> again.</p>
+            </div>
+            <div>
+              <h4>reschedule (lui <code>OverrideScheduleModal</code>)</h4>
+              <p>The body is a <code>List&lt;Map&gt;</code> of the changed node rows (<code>diffArray</code>), and the response is 200 with a text message. The service is <code>nodeService.rescheduleNode()</code>. The map keys weren't traced in this scan.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details id="p3-calendar">
+        <summary><span class="method post">POST</span> / <span class="method put">PUT</span> / <span class="method delete">DELETE</span><code>/calendar[/{name}]</code> and <code>/calendar/{c}/cycle[/{cycleName}]</code></summary>
+        <div class="api-body">
+          <p><strong>lui:</strong> <code>calendarmodal</code> (create and edit, with <code>name</code> renamed to <code>calendarName</code>), <code>cyclemodal</code>, and delete in Calendar Manager and calendar details (<code>reducers/calendarmodal.ts</code>, <code>reducers/calendarCycle.ts</code>). The RBAC actions are CALENDAR:CREATE, EDIT and DELETE.</p>
+          <div class="io">
+            <div>
+              <h4>POST /calendar (<code>CalendarRequestDto</code>, PSR sample from <code>Test_001_CalendarsCRUD</code>)</h4>
+<pre><code>{
+  "calendarName": "${perfCalendar}",
+  "description": "JMeter perf calendar",
+  "cycles": [
+    { "cycleName": "Sample Cycle 1", "description": "Sample Cycle 1",
+      "startDate": "2024-01-22T06:57:33.967Z", "endDate": "2024-02-22T06:57:33.967Z" }
+  ]
+}</code></pre>
+              <p><code>calendarName</code> is required, up to 100 characters; <code>description</code> can be up to 1000.</p>
+            </div>
+            <div>
+              <h4>POST /calendar/{c}/cycle (<code>CycleRequestDto</code>, <code>Test_002_CyclesCRUD</code>)</h4>
+<pre><code>{ "cycleName": "Sample Cycle 2", "description": "Sample Cycle 2",
+  "startDate": "2024-03-22T06:59:33.967Z", "endDate": "2024-04-22T06:59:33.967Z" }</code></pre>
+              <h4>Responses (all with an empty body)</h4>
+<pre><code>POST calendar / cycle     → 201
+PUT calendar / cycle      → 200
+DELETE calendar / cycle   → 200</code></pre>
+            </div>
+          </div>
+          <p class="tip"><span class="badge ok">Covered · phase 1</span> The "PO Calendar Writes" controller works on the thread's own <code>JMeterPerfCalendar&lt;n&gt;</code>, which no process uses:
+          <code>CalendarSetup</code> (pre-clean DELETE, 200 or 404) → <code>Calendar3</code> POST → <code>Calendar5</code> PUT → <code>CalendarCycle3</code> POST → <code>CalendarCycle6</code> PUT → <code>CalendarCycle7</code> DELETE → <code>Calendar6</code> DELETE. <code>Cleanup2</code> deletes anything left behind. The cycle dates are in 2030, and the cycle update keeps them unchanged, so the service doesn't recalculate node schedules.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="flows">
+      <h2>Recommended JMX flows</h2>
+      <p class="lede">Each flow uses the existing <code>${API_HOST}</code>, token and headers, and the gateway variables from "Set Gateway Entity IDs", so it runs for both <code>GATEWAY_TYPE=AZURE</code> and <code>GRAVITEE</code>. Add response assertions to every new sampler. Flows marked <span class="badge ok">Done</span> or <span class="badge gap">Partly done</span> were implemented in phase 1.</p>
+
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> <span class="badge ok">Done</span> A. Planning Space load</h3>
+        <p>Added <a href="#api-context"><code>GET /process/IntegratedBusinessPlanning/context?all=true</code></a> to the "PO To PS", "Subprocess To PS" and "Action Items To PS" parallel controllers. They assert <code>$.scope</code>.</p>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> B. PO process and subprocess pages (lui)</h3>
+        <p>Add <a href="#api-entity-limits"><code>GET /process/{p}/entity/ACTION_ITEM</code></a> to the "PO Details Page", "Subprocess Details Page", "PS To PO" and "PS To Subprocess" parallel controllers. Assert <code>$.entityLimits</code>.</p>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> <span class="badge ok">Done</span> C. Assumptions page (lui)</h3>
+        <p>Implemented as sequential samplers instead of a parallel controller, because extracted variables must be available to later samplers. <code>POContext1</code> extracts <code>calendarName</code> and <code>cycleName</code>, and a JSR223 script percent-encodes them for the URL path (<code>__urlencode</code> would produce <code>+</code>). <code>POScope1</code> and <code>CalendarCycle1</code> then use them.</p>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p1">P1</span> <span class="badge gap">Partly done</span> D. Scenario table and Interactive Planning (planning-mfe)</h3>
+        <ol>
+          <li>Still to do: <a href="#api-validate"><code>POST /process/{p}/validate/SCENARIO?isAsync=false</code></a>, with no body. Assert that <code>$.status</code> isn't <code>ERROR</code>.</li>
+          <li>Done: <a href="#api-scope-get"><code>GET /process/{p}/scope</code></a> (<code>POScope1</code>)</li>
+          <li>Optional: <a href="#api-meter"><code>GET /meter/POLYTOPE/execution/TEMPLATE/${templateId}</code></a>, with <code>templateId</code> extracted from <code>GET /process/{p}</code></li>
+        </ol>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p2">P2</span> E. Action item details</h3>
+        <ol>
+          <li><a href="#api-ai-by-id"><code>GET /actionitem/${actionItem_id}</code></a> after "ActionItems3"</li>
+          <li><code>GET /actionitem/${subprocessActionItem_id}</code> after "ActionItems7"</li>
+          <li>Optional: <a href="#api-ai-bulk">bulk create from template</a>, then delete the items it creates. This needs an action item template ID in PSR.</li>
+        </ol>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p2">P2</span> <span class="badge gap">Partly done</span> F. Settings and Calendar Manager reads (lui)</h3>
+        <ol>
+          <li><a href="#api-transitions"><code>GET /process/{p}/transitionhierarchy</code></a>, then <code>GET …/transition-options</code> for the process and one subprocess</li>
+          <li><a href="#api-refnodes"><code>GET /process/{p}/subprocess/{s}/referenceableNodes</code></a></li>
+          <li>Done: <a href="#api-calendars"><code>GET /calendar?pageNumber=0&amp;pageSize=10</code></a>, <code>GET /calendar/{name}</code> and <code>GET /calendar/{name}/cycle</code> (<code>Calendar1</code>, <code>Calendar2</code>, <code>CalendarCycle1</code>)</li>
+          <li>Done for a perf SCA: <code>GET /supplyChainAction/{id}</code> (<code>SCA2</code>). Still to do: the two <a href="#api-template">template reads</a></li>
+        </ol>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p2">P2</span> <span class="badge gap">Partly done</span> G. Writes on data the thread owns</h3>
+        <ol>
+          <li>Done: calendar and cycle create, update and delete on <code>JMeterPerfCalendar&lt;n&gt;</code>, with a pre-clean and a tearDown clean-up</li>
+          <li>Done: scope <code>GET</code> → <code>PUT</code> with the same body → <code>GET</code> and compare, on <code>IntegratedBusinessPlanning</code></li>
+          <li>Done: supply chain action create, get, update and delete on <code>JMeterPerfSCA&lt;n&gt;_&lt;millis&gt;</code></li>
+          <li>Still to do: <code>GET transition-options</code>, then <code>POST …/transition</code> with the outbounds just read, on a perf-only process</li>
+        </ol>
+      </div>
+      <div class="flow">
+        <h3><span class="badge p3">P3</span> H. Process lifecycle (separate low-rate thread group)</h3>
+        <p><code>POST /process/template</code> → <code>POST …/subprocess</code> → <code>PUT …/subprocess/{s}</code> → <code>DELETE …/subprocess/{s}</code> → <code>DELETE /process/{p}</code>, with names unique per thread. Leave start/stop, planstartdate and reschedule out of steady-state load: they change the process's cycle and schedule, and can't be undone in the same iteration.</p>
+      </div>
+
+      <div class="notice warn">
+        <strong>Data rules, from the PO service code</strong>
+        <ul>
+          <li><code>PUT /process/{p}/scope</code> stores the whole body as the new scope, and every later <code>context</code> call returns it. A partial body on <code>IntegratedBusinessPlanning</code> changes Planning Space for everyone.</li>
+          <li><code>validate/{entityName}</code> is async unless <code>isAsync=false</code> is sent; every async call inserts a job row.</li>
+          <li>Starting a completed process moves it to the next cycle. Once the calendar runs out, starts fail with <code>IBP_PO_50_2042</code>.</li>
+          <li>Bulk action item creation makes one item per template entry in the actionitems service. Delete them in the same iteration.</li>
+          <li>All threads share one client-credentials identity. Give per-thread names to anything a thread creates (calendars, processes).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="covered">
+      <h2>Covered APIs</h2>
+      <p class="lede">The JMX now drives 31 of the UI-used PO routes. The 13 added in phase 1 are listed first, and all of their samplers have assertions. The 18 older routes follow, and their samplers still have no assertions.</p>
+
+      <details id="cov-phase1" open>
+        <summary><span class="badge ok">Phase 1</span> Process context and scope, Calendar Manager and supply chain actions: 33 samplers, all asserted</summary>
+        <div class="api-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Controller</th><th>Samplers</th></tr></thead>
+              <tbody>
+                <tr><td>"PO To PS", "Subprocess To PS", "Action Items To PS" (parallel)</td><td>"PO To PS 11", "Subprocess To PS 14" and "AI To PS 11" (Process Context)</td></tr>
+                <tr><td>PO Process Context and Scope</td><td><code>POContext1</code>, <code>POContext2</code>, <code>POScope1</code>, <code>POScope2</code> and <code>POScope3</code> (the last two run only if <code>POScope1</code> returned a JSON object)</td></tr>
+                <tr><td>PO Calendar Reads (runs if the process has a calendar)</td><td><code>Calendar1</code>, <code>Calendar2</code>, <code>CalendarCycle1</code> and <code>CalendarCycle2</code></td></tr>
+                <tr><td>PO Calendar Writes</td><td><code>CalendarSetup</code>, <code>Calendar3</code>–<code>Calendar7</code> and <code>CalendarCycle3</code>–<code>CalendarCycle7</code></td></tr>
+                <tr><td>PO Supply Chain Action CRUD</td><td><code>SCA0</code> (list; copies the <code>type</code>) and <code>SCA1</code>–<code>SCA5</code></td></tr>
+                <tr><td>tearDown Thread Group - PO Perf Data Cleanup</td><td><code>Cleanup1</code>–<code>Cleanup4</code> (list, then delete any leftover <code>JMeterPerf*</code> data)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+      <details id="cov-search">
+        <summary><span class="method post">POST</span><code>/process/search</code> · "POListingPage3", "Load Process With Page Size 5/10/20" (5 is listed twice), "Next Page …" ×3, "PO Attribute Search"</summary>
+        <div class="api-body">
+          <p>planning-mfe sends <code>{ "pageNumber": 0, "pageSize": 100, "filters": {} }</code> (<code>all_process_data.getAllProcess</code>, <code>useContextSwitcher</code>). lui sends the listing grid page and filters (<code>ListProcess.tsx</code>), or page size 100 for View Mapping (<code>view_mapping.getAllProcess</code>). The response is a map with <code>data</code> (the list of processes) and paging keys.</p>
+        </div>
+      </details>
+      <details id="cov-process">
+        <summary><span class="method get">GET</span><code>/process/{p}</code> · "PO Details Page 3", "Subprocess Details Page 3", "AI 1", "PO/PS/Subprocess/AI To … 5", "PS To Subprocess 3", "PS To AI 1"</summary>
+        <div class="api-body"><p>planning-mfe <code>getProcessDetails()</code> runs on the Scenario, SCA, Interactive Planning and scope pages. lui <code>getProcessDetails()</code> and <code>setProcessDetails()</code> run on process page load, followed by UI Fields detail-page-config. Keys are listed under <a href="#api-context">context</a>.</p></div>
+      </details>
+      <details id="cov-subprocess">
+        <summary><span class="method get">GET</span><code>/process/{p}/subprocess/{s}</code> · "Subprocess Details Page 4", "AI 1/2 - Subprocess", "Subprocess To PS 10/11", "PS To Subprocess 4"</summary>
+        <div class="api-body"><p>planning-mfe <code>getSubProcessDetails()</code> (<code>useUtil.getSubprocessUtil</code>); lui <code>getNodeDetails()</code> and Schedule &amp; Structure → Edit</p></div>
+      </details>
+      <details id="cov-users">
+        <summary><span class="method get">GET</span><code>/process/{p}/users</code> · "PO Details Page 6", "Subprocess Details Page 5", "AI 2", "AI 3 - Subprocess", "PS To PO 7", "PS To Subprocess 5", "PS To AI 2"</summary>
+        <div class="api-body"><p>planning-mfe <code>getUsersByProcessName()</code> is called from about 15 components (SCASideNav, Scenario pages, action item forms, and others); lui calls <code>getUsersByProcessId()</code>. The response is a <code>List&lt;UsersDto&gt;</code>.</p></div>
+      </details>
+      <details id="cov-tree">
+        <summary><span class="method get">GET</span><code>/process/{p}/tree</code> · "PO Details Page 8", "Subprocess Details Page 6", "PS To PO 9", "PS To Subprocess 6"</summary>
+        <div class="api-body"><p>planning-mfe calls it from the context switcher, ContextSetting, the playbook list, and SideNavWithRightPanel when a subprocess has no tree loaded, and always skips the cache. lui calls it from the process pages, Schedule &amp; Structure and View Mapping.</p></div>
+      </details>
+      <details id="cov-kpi">
+        <summary><span class="method get">GET</span><code>/process/{p}/kpi</code> · "PO Details Page 7", "PS To PO 8" · <code>/process/{p}/subprocess/{s}/kpi</code> · "Subprocess Details Page 7", "PS To Subprocess 7"</summary>
+        <div class="api-body"><p>lui <code>getProcessKPIs()</code> and <code>getSubProcessKPIs()</code> run on page load and after every action item create or update. The subprocess samplers use <code>IntegratedBusinessPlanning/subprocess/subprocess1</code>, while the rest of those controllers use <code>PSR1</code>. Check the pair in PSR.</p></div>
+      </details>
+      <details id="cov-gantt">
+        <summary><span class="method get">GET</span><code>/process/{p}/processGantt</code> · "PO Details Page 4", "PS To PO 10"</summary>
+        <div class="api-body"><p>lui <code>getProcessGanttDetails()</code> on process details</p></div>
+      </details>
+      <details id="cov-children">
+        <summary><span class="method get">GET</span><code>/process/{p}/children</code> and <code>/process/{p}/subprocess/{s}/children</code> · 5 samplers each</summary>
+        <div class="api-body"><p>lui <code>ProcessDetails.getPhaseTableData()</code> sends <code>?pageNumber&amp;pageSize</code> from the grid. The service defaults are page 0 and size 20.</p></div>
+      </details>
+      <details id="cov-tenant">
+        <summary><span class="method get">GET</span><code>/tenant</code> · "POListingPage1", "PO/PS/Subprocess/AI To … 4/5/12"</summary>
+        <div class="api-body"><p>planning-mfe calls <code>getRealmLevelDetails()</code> and <code>getRealmLevelDetailsWithLocalCache()</code>; lui calls <code>getRealmLevelDetails()</code>. Both read <code>namespace</code>, <code>galleryId</code> and <code>verticalFilterInstance</code>.</p></div>
+      </details>
+      <details id="cov-sca">
+        <summary><span class="method get">GET</span><code>/supplyChainAction</code> · "PO To PS 6", "Subprocess To PS 12", "AI To PS 6"</summary>
+        <div class="api-body"><p>planning-mfe calls <code>getAllActionProcedure()</code> from <code>App.tsx</code> and config-cache refill; lui calls it from process details. The response is a <code>List&lt;SupplyChainActionDto&gt;</code> from the v2 controller.</p></div>
+      </details>
+      <details id="cov-ai">
+        <summary><span class="method post">POST</span> / <span class="method put">PUT</span> <code>/process/{p}[/subprocess/{s}]/actionitem[/{id}]</code> · "ActionItems1/3/5/7"</summary>
+        <div class="api-body"><p>lui <code>postActionItems()</code> and <code>putActionItems()</code>. <code>ActionItemRequestDto</code> requires <code>name</code> (up to 100 characters), <code>status</code>, <code>priority</code>, <code>actionType</code> and <code>dueDate</code>. Create returns 201 and update returns 200.</p></div>
+      </details>
+      <details id="cov-ai-search">
+        <summary><span class="method post">POST</span><code>/process/{p}[/subprocess/{s}]/actionitem/search</code> · 7 samplers each</summary>
+        <div class="api-body"><p>planning-mfe <code>useActionItemList</code> sends <code>{ "filter": { "entityId": … }, "pageNumber", "pageSize", "sort": "createdOn,desc" }</code>. lui <code>ActionItemDetails</code> sends the grid filters, or <code>entityId</code> for assumptions. The JMX never sends <code>sort</code>.</p></div>
+      </details>
+    </section>
+
+    <section class="section" id="unused">
+      <h2>Not used by either UI</h2>
+      <p class="lede">No non-test source file in plan-sop-planning-mfe or plan-sop-lui calls these PO routes, so they're low priority for this perf plan.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Controller</th><th>Routes</th></tr></thead>
+          <tbody>
+            <tr><td>ProcessController</td><td><code>GET /process</code>, <code>/process/name/{displayName}</code>, <code>/process/id/{processId}</code>, <code>/process/import</code>, <code>/process/{p}/export</code>, <code>GET /process/{p}/status</code>, <code>POST /process/status</code>, <code>/process/{p}/processGanttWithTree</code>, <code>/process/{p}/report/folder</code>, <code>/process/{p}/eventAction/**</code>, <code>/process/migrate/**</code></td></tr>
+            <tr><td>NodeController</td><td><code>/process/{p}/subprocess/{s}/tree</code>, <code>…/processGantt</code>, <code>…/processGanttWithTree</code></td></tr>
+            <tr><td>TransitionController</td><td><code>…/cycle/{c}/transition/generate</code>, subprocess <code>transitionhierarchy</code>, all <code>DELETE</code> routes</td></tr>
+            <tr><td>CalendarController</td><td><code>GET /calendar/{c}/cycle/{cycleName}</code>. Phase 1 drives it anyway (<code>CalendarCycle2</code>, <code>CalendarCycle5</code>).</td></tr>
+            <tr><td>Template / TemplateEntity / SupplyChainAction</td><td>Template routes other than the two reads above; <code>POST</code> and <code>DELETE</code> template-entity; <code>POST</code>, <code>PUT</code> and <code>DELETE</code> <code>/supplyChainAction</code>. Phase 1 drives these anyway, on a perf SCA (<code>SCA1</code>, <code>SCA3</code>, <code>SCA4</code>).</td></tr>
+            <tr><td>Tenant</td><td>Everything except <code>GET /tenant</code>. <code>POST /tenant/onboard</code> is driven 5× by the JMX (the "… 3/4/11: Onboard" samplers), but neither UI's source calls it.</td></tr>
+            <tr><td>Other controllers</td><td>NodeAttribute, NodeSchedule, POConfiguration (ALM), ExecutionStatus (<code>/job/{id}/status</code>, <code>/transitionJob/{id}/status</code>), ImportExport, Insight (deprecated), Quota, Reporting, User, RbacProxy, ProcedureProxy, and the LIAM mock (<code>/mock/**</code>, not for production)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <h2>Notes and sources</h2>
+      <div class="notice">
+        <strong>How this report was built</strong>
+        <ul>
+          <li>UI usage comes from a static scan of non-test files in <code>plan-sop-planning-mfe/src</code> and <code>plan-sop-lui/src</code>. The scan covered every URL passed through <code>useApi</code> (any URL without <code>http</code> gets the PO base) and every <code>config.apiURL</code>, <code>config.tenantDetails</code> and <code>config.apis.poAPIUrl</code> route, each traced to its caller. No browser trace or gateway log was used.</li>
+          <li>JMX coverage comes from the <code>HTTPSampler.path</code> and <code>HTTPSampler.method</code> of every sampler in <code>jmeter/Tests/PSRGatewayTest.jmx</code> whose path contains <code>process-orchestration/v1</code>.</li>
+          <li>Request and response shapes come from the PO controllers, DTOs and service code: <code>ProcessService</code>, <code>NodeService</code>, <code>EntityServiceHelper</code>, <code>ScenarioEntity</code>, <code>MeteringService</code>, <code>ActionItemProxyService</code> and <code>TransitionService</code>. PSR samples come from <code>playwright-e2e/testdata/PSR/ProcessOrchestrationBackend</code>. Values are illustrative.</li>
+          <li>lui <code>saveKPis()</code> sends <code>PATCH /snope/api/processkpi/{id}</code>. That relative URL resolves to the PO base, where no such route exists. This is legacy code and isn't counted above.</li>
+          <li>Phase 1 was smoke-tested on 24 Sep 2026 with 1 thread for 60 s: Azure run <code>35965364407</code> and Gravitee run <code>35965406527</code>. The only failure was the over-strict <code>POScope1</code> assertion, which is now fixed.</li>
+          <li>Not verified: whether PSR has a <code>subprocess1</code> KPI under <code>IntegratedBusinessPlanning</code>, the key names in the reschedule body, how <code>java.util.Date</code> is serialized, and an action item template ID for bulk create.</li>
+        </ul>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Repository</th><th>Files used</th></tr></thead>
+          <tbody>
+            <tr><td>plan-sop-process-orchestration-service</td><td><code>rest/controller/ProcessController.java</code>, <code>NodeController.java</code>, <code>CalendarController.java</code>, <code>TransitionController.java</code>, <code>ActionItemProxyController.java</code>, <code>MeteringController.java</code>, <code>TemplateController.java</code>, <code>TemplateEntityController.java</code>, <code>SupplyChainActionController.java</code>; <code>v2/refactor/supplychainaction</code>, <code>v2/refactor/tenant</code>; <code>service/impl/ProcessService.java</code>, <code>NodeService.java</code>, <code>MeteringService.java</code>; <code>service/helper/EntityServiceHelper.java</code>, <code>ScenarioEntity.java</code>; <code>service/proxy/ActionItemProxyService.java</code>; DTOs under <code>rest/dto</code>; <code>logging/LocalExceptionHandler.java</code>; <code>utils/exceptions/POServiceException.java</code></td></tr>
+            <tr><td>plan-sop-planning-mfe</td><td><code>src/config.ts</code>, <code>src/apis/useApi.tsx</code>, <code>src/apis/apis.ts</code>, <code>src/portalCacheWrapper.ts</code>, <code>src/reducers/all_process_data.ts</code>, <code>all_subprocess_data.ts</code>, <code>planning_scope_details.ts</code>, <code>process_users.ts</code>, <code>scenario_quota_limit.ts</code>, <code>actions_procedure_config.ts</code>, <code>app_selections.ts</code>, <code>src/hooks/useConfigCacheRefill.ts</code>, <code>usePolytopeRunUtil.tsx</code>, <code>ContextSwitcher/useContextSwitcher.tsx</code>, <code>src/components/SideNav/SideNavWithRightPanel.tsx</code>, <code>AssumptionFormModal/index.tsx</code>, <code>src/pages/Assumptions/AssumptionsFlyout/ActionItems/*</code></td></tr>
+            <tr><td>plan-sop-lui</td><td><code>src/config.ts</code>, <code>src/apis/useApi.ts</code>, <code>src/reducers/process_details.ts</code>, <code>start_stop_node.ts</code>, <code>actionItems_data.ts</code>, <code>action_item_details.ts</code>, <code>activities_data.ts</code>, <code>app_selections.ts</code>, <code>calendarCycle.ts</code>, <code>calendarDetail.ts</code>, <code>calendarmodal.ts</code>, <code>create_process_form_modal.ts</code>, <code>create_process_template_modal.ts</code>, <code>create_subprocess_form_modal.ts</code>, <code>mutli_kpi_card_data.ts</code>, <code>override_Schedule.ts</code>, <code>process_users.ts</code>, <code>view_mapping.ts</code>; <code>Components/Settings/NodeTransitions</code>, <code>Settings/ProcessScope/helper.tsx</code>, <code>Common/SideNav/SideNavTabPanel.tsx</code>, <code>Common/SubProcessFormModal</code>, <code>ProcessOrchestration/*</code>, <code>CalendarManager/*</code></td></tr>
+            <tr><td>plan-sop-ui-automation</td><td><code>jmeter/Tests/PSRGatewayTest.jmx</code>; <code>playwright-e2e/testdata/PSR/ProcessOrchestrationBackend/{Calendar,ProcessBatch}/*.json</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="report-footer shell">
+    Process Orchestration coverage for PSRGatewayTest.jmx · generated 24 Sep 2026 from local source checkouts under <code>C:\Backend</code>, and updated the same day after phase 1 (PR #727). This page is self-contained and works offline.
+  </footer>
+</body>
+</html>

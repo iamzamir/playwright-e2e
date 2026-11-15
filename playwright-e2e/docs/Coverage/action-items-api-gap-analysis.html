@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Action Item Service &mdash; API Automation Coverage Gap Report</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm 10mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px; line-height: 1.45; color: #1f2430; margin: 0; padding: 24px 28px;
+    background: #ffffff;
+  }
+  h1 { font-size: 24px; margin: 0 0 4px; color: #0b2b52; letter-spacing: -0.2px; }
+  h2 { font-size: 16px; margin: 26px 0 10px; color: #0b2b52; border-bottom: 2px solid #0b2b52; padding-bottom: 5px; }
+  h3 { font-size: 13px; margin: 18px 0 7px; color: #14406f; }
+  h4 { font-size: 11.5px; margin: 12px 0 5px; color: #333c4d; }
+  p  { margin: 6px 0; }
+  .sub { color: #5b6478; font-size: 11px; margin: 0 0 14px; }
+  .meta-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+  .meta-grid div {
+    background: #f2f5fa; border: 1px solid #dfe6f1; border-radius: 5px;
+    padding: 6px 11px; font-size: 10.5px;
+  }
+  .meta-grid b { color: #0b2b52; }
+
+  .cards { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
+  .card {
+    flex: 1 1 150px; border: 1px solid #dfe6f1; border-left: 4px solid #0b6bcb;
+    border-radius: 6px; padding: 10px 12px; background: #fbfcfe;
+  }
+  .card .n { font-size: 22px; font-weight: 700; color: #0b2b52; line-height: 1.1; }
+  .card .l { font-size: 9.5px; text-transform: uppercase; letter-spacing: .5px; color: #5b6478; margin-top: 3px; }
+  .card.red    { border-left-color: #c62828; }
+  .card.green  { border-left-color: #2e7d32; }
+  .card.amber  { border-left-color: #ef6c00; }
+  .card.purple { border-left-color: #6a1b9a; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 10px; }
+  th, td { border: 1px solid #d8dfea; padding: 5px 6px; vertical-align: top; text-align: left; }
+  th { background: #0b2b52; color: #fff; font-weight: 600; font-size: 9.5px; text-transform: uppercase; letter-spacing: .3px; }
+  tbody tr:nth-child(even) { background: #f7f9fc; }
+  td.c, th.c { text-align: center; }
+  code, .mono { font-family: "Cascadia Mono", Consolas, "Courier New", monospace; font-size: 9.5px; }
+
+  .pill { display: inline-block; padding: 1px 7px; border-radius: 9px; font-size: 9px; font-weight: 700; white-space: nowrap; }
+  .p0 { background:#c62828; color:#fff; }
+  .p1 { background:#ef6c00; color:#fff; }
+  .p2 { background:#f9a825; color:#3a2b00; }
+  .p3 { background:#90a4ae; color:#fff; }
+  .sev-critical { background:#7b1010; color:#fff; }
+  .sev-high     { background:#c62828; color:#fff; }
+  .sev-medium   { background:#ef6c00; color:#fff; }
+  .sev-low      { background:#607d8b; color:#fff; }
+  .yes { background:#2e7d32; color:#fff; }
+  .no  { background:#c62828; color:#fff; }
+  .dep { background:#ede7f6; color:#4527a0; border:1px solid #d1c4e9; }
+
+  .bar-wrap { background:#e8edf5; border-radius:3px; height:11px; width:100%; position:relative; }
+  .bar { background: linear-gradient(90deg,#0b6bcb,#4a9df5); height:11px; border-radius:3px; }
+  .bar.red { background: linear-gradient(90deg,#c62828,#ef5350); }
+
+  pre {
+    background:#f4f7fb; border:1px solid #dde5f0; border-left:3px solid #0b6bcb;
+    border-radius:4px; padding:7px 9px; margin:5px 0 10px; white-space:pre-wrap; word-break:break-word;
+    font-family:"Cascadia Mono", Consolas, "Courier New", monospace; font-size:9px; line-height:1.4; color:#1c2733;
+  }
+  pre.resp { border-left-color:#2e7d32; background:#f4faf5; border-color:#dcebdd; }
+
+  .note {
+    background:#fff8e1; border:1px solid #ffe0a3; border-left:4px solid #f9a825;
+    border-radius:4px; padding:8px 11px; margin:10px 0; font-size:10.5px;
+  }
+  .legend { font-size:9.5px; color:#5b6478; margin:4px 0 12px; }
+  .legend span { margin-right:14px; }
+  .page-break { page-break-before: always; }
+  .avoid-break { page-break-inside: avoid; }
+  footer { margin-top:24px; padding-top:9px; border-top:1px solid #dfe6f1; font-size:9px; color:#7a8496; }
+  .ep { font-family:"Cascadia Mono", Consolas, monospace; font-size:9.5px; }
+  .m  { font-weight:700; font-size:9px; padding:1px 5px; border-radius:3px; color:#fff; }
+  .m.GET{background:#2e7d32;} .m.POST{background:#0b6bcb;} .m.PUT{background:#ef6c00;}
+  .m.DELETE{background:#c62828;} .m.PATCH{background:#6a1b9a;}
+.upd-b{display:inline-block;margin:3px 3px 0 0;padding:0 6px;border-radius:8px;font:600 9.5px/1.7 "Segoe UI",Arial,sans-serif;color:#fff;white-space:nowrap;letter-spacing:0;text-transform:none}.upd-ok{background:#1a7f45}.upd-po{background:#5a6876}.upd-setup{background:#8a6d00}.upd-gone{background:#7a2e8a}.upd-dep{background:#6b7785}.upd-banner{border:1px solid #1a7f45;border-left:5px solid #1a7f45;background:#f1faf4;padding:10px 14px;margin:16px 0;border-radius:6px;font-size:12px;line-height:1.5}.upd-banner ul{margin:6px 0 0 18px;padding:0}.upd-old{color:#8a96a3;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<h1>Action Item Service &mdash; API Automation Coverage Gap Report</h1>
+<p class="sub">Backend under review: <b>plan-sop-actionitem</b> &nbsp;|&nbsp; Automation suite reviewed: <b>plan-sop-ui-automation / playwright-e2e / tests / ProcessOrchestrationBackend</b></p>
+
+<div class="meta-grid">
+  <div><b>Report date:</b> 31-Aug-2026 &middot; <b>Updated:</b> 05-Oct-2026</div>
+  <div><b>Backend repo:</b> C:\Backend\plan-sop-actionitem @ 822513ce (2026-09-18)</div>
+  <div><b>Automation repo:</b> C:\Backend\plan-sop-ui-automation</div>
+  <div><b>Test data path:</b> playwright-e2e\testdata\&lt;ENV&gt;\ProcessOrchestrationBackend</div>
+  <div><b>Framework:</b> Playwright Test + TypeScript (ApiUtil.processAPIRequest)</div>
+  <div><b>Evidence:</b> 2026-10-04 nightly runs on INTEROP and QA, Azure and Gravitee + @RestController scan</div>
+</div>
+
+<div class="upd-banner">
+  <b>Update 05-Oct-2026.</b> Coverage was re-measured from the service source and the request logs of the four nightly backend runs.
+  <ul>
+    <li><b>13 of 73</b> active endpoints (17.8%) are now exercised in a test, up from 8 of 88 (9.1%). The 31-Aug figure counted deprecated routes and routes hit only in setup; today's excludes 15 <code>@Deprecated</code> routes and the 2 mock routes.</li>
+    <li>New since 31-Aug: <code>ActionItem/Test_004</code>&ndash;<code>Test_008</code> (2026-10-01) cover editor/filter config, templates and KPI configuration.</li>
+    <li><b>Lost direct coverage:</b> the legacy suite called the AI service directly; the Playwright CRUD specs go through the PO proxy. <code>GET /actionitems/{id}</code>, <code>/exportData</code> and <code>/importData</code> are now reached only via PO, and <code>DELETE /actionitems/{id}</code>, <code>POST /entity</code> and <code>DELETE /entity/{id}</code> only in teardown or setup.</li>
+    <li>Every endpoint row below carries a status badge: <span class="upd-b upd-ok">&#10003; Covered</span>, <span class="upd-b upd-po">Via PO only</span>, <span class="upd-b upd-setup">Setup/teardown only</span> or <span class="upd-b upd-dep">@Deprecated</span>. Rows without a badge are still open.</li>
+    <li>Full endpoint matrix and UI-caller priorities: <a href="action-items-api-coverage-matrix.html">action-items-api-coverage-matrix.html</a> and the <a href="backend-api-coverage-dashboard.html">dashboard</a>. Verified contracts: <a href="PSR-Gap-Plans/03-ActionItems-PSR-Gap-Plan.md">AI PSR gap plan</a>.</li>
+  </ul>
+</div>
+
+<h2>1. Executive Summary</h2>
+
+<div class="cards">
+  <div class="card purple"><div class="n">90</div><div class="l">Total endpoints exposed</div></div>
+  <div class="card"><div class="n">73</div><div class="l">Active, in scope <span class="upd-old">88</span></div></div>
+  <div class="card green"><div class="n">13</div><div class="l">Currently automated <span class="upd-old">8</span></div></div>
+  <div class="card red"><div class="n">60</div><div class="l">Not automated (gap) <span class="upd-old">80</span></div></div>
+  <div class="card amber"><div class="n">17.8%</div><div class="l">API coverage <span class="upd-old">9.1%</span></div></div>
+  <div class="card red"><div class="n">~237 h</div><div class="l">Remaining effort (~30 p-days) <span class="upd-old">261 h</span></div></div>
+</div>
+
+<p>
+The <span class="mono">ProcessOrchestrationBackend</span> suite now has <b>8 ActionItem specs</b>. <span class="mono">Test_001</span>&ndash;<span class="mono">Test_003</span>
+cover single-record CRUD through the PO proxy for PROCESS, SUBPROCESS and ASSUMPTION sources. <span class="mono">Test_004</span>/<span class="mono">Test_005</span>
+cover search through the PO proxy, <span class="mono">Test_006</span> the editor and filter config, <span class="mono">Test_007</span> templates and
+<span class="mono">Test_008</span> KPI configuration CRUD. <span class="mono">Migration/Test_005</span> and <span class="mono">Test_009</span> also create and list KPIs.
+</p>
+<p>
+<b>The Playbook sub-system (18 endpoints), all bulk and status operations, the attribute &amp; UI configuration endpoints and KPI mapping
+are still completely un-automated.</b> lui calls the bulk create/delete, bulk status and page-summary routes directly.
+</p>
+
+<h3>Coverage by functional module</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width:22%">Module (Controller)</th>
+      <th class="c" style="width:7%">Total</th>
+      <th class="c" style="width:7%">Covered</th>
+      <th class="c" style="width:7%">Gap</th>
+      <th class="c" style="width:8%">Coverage</th>
+      <th style="width:17%">Coverage bar</th>
+      <th class="c" style="width:8%">Effort (h)</th>
+      <th style="width:24%">Business risk if left un-automated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Playbook (PlaybookController)</td><td class="c">18</td><td class="c">0</td><td class="c"><b>18</b></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">80</td><td>Unchanged. Template design, initiation, recurrence and instance execution are entirely unverified.</td></tr>
+    <tr><td>Attribute &amp; UI Configuration</td><td class="c">16</td><td class="c">0</td><td class="c"><b>16</b></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">42</td><td>Unchanged. Drives editor/filter/summary rendering; only the resulting editor/filter reads are asserted.</td></tr>
+    <tr><td>Action Item Core</td><td class="c">14</td><td class="c">4 <span class="upd-old">4</span></td><td class="c"><b>10</b> <span class="upd-old">10</span></td><td class="c">28.6%</td><td><div class="bar-wrap"><div class="bar" style="width:28.6%"></div></div></td><td class="c">39 <span class="upd-old">45</span></td><td>Editor and filters now covered (<span class="mono">Test_006</span>). Search and GET by id run only via PO, delete only in teardown. Bulk create/delete, bulk status and page summary (all called by lui) are untested.</td></tr>
+    <tr><td>KPI Configuration</td><td class="c">12</td><td class="c">5 <span class="upd-old">2</span></td><td class="c"><b>7</b> <span class="upd-old">10</span></td><td class="c">41.7%</td><td><div class="bar-wrap"><div class="bar" style="width:41.7%"></div></div></td><td class="c">21 <span class="upd-old">28</span></td><td>KPI CRUD covered by <span class="mono">Test_008</span>. Mapping (<span class="mono">/kpi/entity</span>, <span class="mono">/kpi/map/entities</span>, un-map) and config attributes remain.</td></tr>
+    <tr><td>Tenant</td><td class="c">1 <span class="upd-old">6</span></td><td class="c">0</td><td class="c"><b>1</b></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">10</td><td>Only <span class="mono">GET /tenant</span> is active; the 5 <span class="mono">/tenants</span> routes are deprecated and excluded from the total.</td></tr>
+    <tr><td>Comments</td><td class="c">0 <span class="upd-old">5</span></td><td class="c">&mdash;</td><td class="c">&mdash;</td><td class="c">&mdash;</td><td></td><td class="c">12</td><td>All 5 routes are <span class="mono">@Deprecated</span>; excluded from the total. Effort kept in case they stay routable.</td></tr>
+    <tr><td>Users / RBAC Proxy</td><td class="c">1 <span class="upd-old">5</span></td><td class="c">0</td><td class="c"><b>1</b></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">10</td><td>Only <span class="mono">GET /users/info</span> is active; 4 routes are deprecated.</td></tr>
+    <tr><td>Action Item Templates</td><td class="c">4</td><td class="c">3 <span class="upd-old">0</span></td><td class="c"><b>1</b> <span class="upd-old">4</span></td><td class="c">75%</td><td><div class="bar-wrap"><div class="bar" style="width:75%"></div></div></td><td class="c">3 <span class="upd-old">11</span></td><td>Create, list and delete covered by <span class="mono">Test_007</span>; <span class="mono">PUT /actionitemTemplates/{id}</span> remains.</td></tr>
+    <tr><td>Source Entity</td><td class="c">3</td><td class="c">0</td><td class="c"><b>3</b></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">11</td><td><span class="mono">POST /entity</span> and <span class="mono">DELETE /entity/{id}</span> run in setup/teardown of <span class="mono">Test_004</span>/<span class="mono">Test_005</span> but are not asserted; the cascade delete is still unverified.<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">POST /entity &middot; Setup/teardown only</span> <span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">DELETE /entity/{id} &middot; Setup/teardown only</span></td></tr>
+    <tr><td>KPI Runtime</td><td class="c">2</td><td class="c">1 <span class="upd-old">0</span></td><td class="c"><b>1</b> <span class="upd-old">2</span></td><td class="c">50%</td><td><div class="bar-wrap"><div class="bar" style="width:50%"></div></div></td><td class="c">5 <span class="upd-old">8</span></td><td><span class="mono">GET /kpi/entities/{id}</span> covered; <span class="mono">POST /kpi/entities</span> runs only via PO <span class="mono">GET /process/{p}/kpi</span>.</td></tr>
+    <tr><td>Collaboration Proxy</td><td class="c">0 <span class="upd-old">1</span></td><td class="c">&mdash;</td><td class="c">&mdash;</td><td class="c">&mdash;</td><td></td><td class="c">4</td><td><span class="mono">POST /channel</span> is <span class="mono">@Deprecated</span>; excluded from the total.</td></tr>
+    <tr><td>Import / Export</td><td class="c">2</td><td class="c">0 <span class="upd-old">2</span></td><td class="c"><b>2</b> <span class="upd-old">0</span></td><td class="c">0%</td><td><div class="bar-wrap"><div class="bar red" style="width:0%"></div></div></td><td class="c">0</td><td>Reached only via PO <span class="mono">/exportData</span> and <span class="mono">/importData</span> in the Migration specs; the AI-native contract is not asserted.</td></tr>
+    <tr style="background:#eef2f8"><td><b>Total (active)</b></td><td class="c"><b>73</b> <span class="upd-old">88</span></td><td class="c"><b>13</b> <span class="upd-old">8</span></td><td class="c"><b>60</b> <span class="upd-old">80</span></td><td class="c"><b>17.8%</b> <span class="upd-old">9.1%</span></td><td><div class="bar-wrap"><div class="bar" style="width:17.8%"></div></div></td><td class="c"><b>237</b> <span class="upd-old">261</span></td><td>Of the 60 gaps, 8 run only via PO or in setup/teardown.</td></tr>
+    <tr><td colspan="8" style="background:#fafbfd;color:#5b6478"><i>Excluded from scope: <span class="mono">POST /mock/</span> and <span class="mono">GET /mock/convert</span> (MockController &mdash; developer test harness, not a product API).</i></td></tr>
+  </tbody>
+</table>
+
+<h3>What is already automated (baseline, updated 05-Oct-2026)</h3>
+<table>
+  <thead><tr><th style="width:8%">Method</th><th style="width:22%">Endpoint</th><th style="width:35%">Covering spec</th><th>Environments (2026-10-04 nightly)</th></tr></thead>
+  <tbody>
+    <tr><td><span class="m POST">POST</span></td><td class="ep">/actionitems</td><td class="mono">ActionItem/Test_003_ActionItemCRUDWithAssumptions, ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m PUT">PUT</span></td><td class="ep">/actionitems/{id}</td><td class="mono">ActionItem/Test_001_ActionItemCRUDWithProcess, ActionItem/Test_002_ActionItemCRUDWithSubProcess, ActionItem/Test_003_ActionItemCRUDWithAssumptions</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/actionitems/editor</td><td class="mono">ActionItem/Test_006_ActionItemEditorAndFilterConfig</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/actionitems/filters</td><td class="mono">ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess, ActionItem/Test_006_ActionItemEditorAndFilterConfig</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/actionitemTemplates</td><td class="mono">ActionItem/Test_007_ActionItemTemplates</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m POST">POST</span></td><td class="ep">/actionitemTemplates</td><td class="mono">ActionItem/Test_007_ActionItemTemplates</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/actionitemTemplates/{id}</td><td class="mono">ActionItem/Test_007_ActionItemTemplates</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/kpi/entities/{id}</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/kpis</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud, Migration/Test_009_ALMDeployResourceMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m POST">POST</span></td><td class="ep">/kpis</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud, Migration/Test_005_AssumptionAndActionItemKPIMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/kpis/{id}</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud, Migration/Test_005_AssumptionAndActionItemKPIMigration, Migration/Test_009_ALMDeployResourceMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m GET">GET</span></td><td class="ep">/kpis/{id}</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+    <tr><td><span class="m PUT">PUT</span></td><td class="ep">/kpis/{id}</td><td class="mono">ActionItem/Test_008_ActionItemKpiConfigCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+</tbody>
+</table>
+
+<div class="note">
+<b>Observations on existing tests (quality findings, not gaps; re-checked 05-Oct-2026):</b>
+<ul style="margin:5px 0 0 16px;padding:0">
+  <li><b>Fixed &mdash; silent-pass negatives.</b> The Playwright Test_001/002/003 assert the 400 status and message directly; there is no <span class="mono">try/catch</span> wrapper.</li>
+  <li><b>Fixed &mdash; copy-paste descriptions.</b> No action-item step is labelled with Calendar wording any more.</li>
+  <li><b>Still open &mdash; inconsistent expected error text.</b> Test_001/002 expect <span class="mono">"Invalid input provided."</span> while Test_003 expects <span class="mono">"The operation could not be completed due to an invalid or inappropriate argument."</span> for the same validation. Test_003 TC5 fails on this assertion in three of the four 2026-10-04 nightly runs. Assert on error <b>code</b> (<span class="mono">IBP_40_1027</span>), not free text.</li>
+  <li><b>Fixed &mdash; cleanup guard.</b> Deletes now run in <span class="mono">afterAll</span> hooks in every ActionItem spec.</li>
+</ul>
+</div>
+
+<div class="page-break"></div>
+<h2>2. Un-Automated API Inventory &mdash; Priority, Severity &amp; Effort</h2>
+
+<p class="legend">
+  <span><b>Priority</b> = when to build it: <span class="pill p0">P0</span> current sprint &nbsp; <span class="pill p1">P1</span> next sprint &nbsp; <span class="pill p2">P2</span> backlog &nbsp; <span class="pill p3">P3</span> low / deprecated</span><br/>
+  <span><b>Severity</b> = production blast radius if the endpoint silently regresses: <span class="pill sev-critical">Critical</span> <span class="pill sev-high">High</span> <span class="pill sev-medium">Medium</span> <span class="pill sev-low">Low</span></span><br/>
+  <span><b>Effort</b> = hours for one automation engineer to build spec + test data + assertions + negatives + teardown, in this framework.</span>
+</p>
+
+<h3>2.1 Action Item Core &mdash; 10 gaps, 45 h</h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:7%">Method</th><th style="width:20%">Endpoint</th><th style="width:6%">Pri</th><th style="width:7%">Sev</th><th class="c" style="width:6%">Effort</th><th>Why it matters / what to assert</th></tr></thead>
+  <tbody>
+    <tr><td>AI-01</td><td><span class="m POST">POST</span></td><td class="ep">/searchActionItems<br/><span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">Via PO only</span></td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">8</td><td>Primary grid feed. Assert pagination (pageNumber/pageSize), sort order, each filter key, empty-result shape, and that the embedded UI config block is returned.</td></tr>
+    <tr><td>AI-02</td><td><span class="m POST">POST</span></td><td class="ep">/actionitems/bulk</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">8</td><td>Creates N action items from a template. Assert count created equals template item count, attribute inheritance, partial-failure response, invalid templateId 400/404.</td></tr>
+    <tr><td>AI-03</td><td><span class="m PUT">PUT</span></td><td class="ep">/actionitems/status</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">6</td><td>Bulk status transition used by the grid. Assert returned id list, <span class="mono">updateEndDate</span> flag behaviour, invalid status enum rejection, mixed valid/invalid id list.</td></tr>
+    <tr><td>AI-04</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/actionitems/bulk?ids=</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">5</td><td>Multi-delete via query param. Assert all-or-nothing semantics, non-existent id handling, and that a subsequent search returns zero rows.</td></tr>
+    <tr><td>AI-05</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/actionitems/entity/{id}</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Cascade delete for a source entity. Assert only the target entity's items are removed and sibling entities are untouched.</td></tr>
+    <tr><td>AI-06</td><td><span class="m GET">GET</span></td><td class="ep">/actionitems/{entityId}/{id}</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Entity-scoped fetch. Assert cross-entity id returns empty / 404 (tenant &amp; entity isolation check).</td></tr>
+    <tr><td>AI-07</td><td><span class="m PUT">PUT</span></td><td class="ep">/actionitems/{id}/extend</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Due-date extension. Assert new dueDate delta, behaviour on already-closed items, and 404 on unknown id.</td></tr>
+    <tr><td>AI-08</td><td><span class="m GET">GET</span></td><td class="ep">/actionitems/editor<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_006">&#10003; Covered &middot; ActionItem/Test_006</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Editor field metadata. Assert required query params enforced, field list, sequence and visibility flags per contextType.</td></tr>
+    <tr><td>AI-09</td><td><span class="m GET">GET</span></td><td class="ep">/actionitems/filters<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004, ActionItem/Test_005, ActionItem/Test_006">&#10003; Covered &middot; ActionItem/Test_004, ActionItem/Test_005 +1</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Filter metadata that powers the grid filter bar. Assert filter list matches the attribute config created in Phase 0.</td></tr>
+    <tr><td>AI-10</td><td><span class="m GET">GET</span></td><td class="ep">/actionitems/page/summary</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Summary page config. Static metadata &mdash; smoke assertion on 200 + non-empty field list.</td></tr>
+  </tbody>
+</table>
+
+<h3>2.2 Playbook &mdash; 18 gaps, 80 h &nbsp;<span class="pill p0">HIGHEST PRIORITY MODULE</span></h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:7%">Method</th><th style="width:26%">Endpoint</th><th style="width:6%">Pri</th><th style="width:7%">Sev</th><th class="c" style="width:6%">Effort</th><th>Why it matters / what to assert</th></tr></thead>
+  <tbody>
+    <tr><td>PB-01</td><td><span class="m POST">POST</span></td><td class="ep">/playbook</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">6</td><td>Root of the whole feature. Assert 201, generated <span class="mono">name</span> slug, RECURRING vs AD_HOC validation, duplicate-name rejection, RBAC 403 without <span class="mono">lsnop.edit</span>.</td></tr>
+    <tr><td>PB-02</td><td><span class="m PUT">PUT</span></td><td class="ep">/playbook/{playbookName}</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Assert partial update semantics, assignee list replacement, type switch AD_HOC&rarr;RECURRING, 404 on unknown playbook.</td></tr>
+    <tr><td>PB-03</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/playbook/{playbookName}</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Cascades to all steps. Assert 204, that child action items are gone, and that live instances behave per spec.</td></tr>
+    <tr><td>PB-04</td><td><span class="m POST">POST</span></td><td class="ep">/playbook/{playbookName}/action-items</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">6</td><td>Step definition. Assert 201, <span class="mono">displayOrder</span> honoured, <span class="mono">savedFilter</span> and <span class="mono">linkedProcedure</span> round-trip, blank displayName 400.</td></tr>
+    <tr><td>PB-05</td><td><span class="m PUT">PUT</span></td><td class="ep">/playbook/{playbookName}/action-items/{actionItemName}</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Assert reorder via displayOrder, targetView change, 404 on unknown step.</td></tr>
+    <tr><td>PB-06</td><td><span class="m GET">GET</span></td><td class="ep">/playbook/{playbookName}/action-items</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Assert steps returned in displayOrder ascending and full field fidelity vs. create payload.</td></tr>
+    <tr><td>PB-07</td><td><span class="m POST">POST</span></td><td class="ep">/playbook/{playbookName}/initiate</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">8</td><td>Creates a runnable instance. Assert 201, instance id generated, one instance-item per template step, dueDate propagation, assignee fan-out, notification side-effect.</td></tr>
+    <tr><td>PB-08</td><td><span class="m PUT">PUT</span></td><td class="ep">/playbook/instances/{instanceId}/action-items/{actionItemName}</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">5</td><td>Core execution tick-off. Assert <span class="mono">actioned=true/false</span> toggling, instance roll-up status change when the last step is actioned.</td></tr>
+    <tr><td>PB-09</td><td><span class="m GET">GET</span></td><td class="ep">/playbook/instances/{instanceId}/action-items</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Assert instance snapshot reflects step statuses set by PB-08 and is decoupled from later template edits.</td></tr>
+    <tr><td>PB-10</td><td><span class="m POST">POST</span></td><td class="ep">/playbook/search</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">6</td><td>Assert each filter (name, status, type, duration, visibility=ASSIGNED_TO_ME / CREATED_BY_ME), null-status excludes CANCELLED+COMPLETED, sorting and paging.</td></tr>
+    <tr><td>PB-11</td><td><span class="m POST">POST</span></td><td class="ep">/playbook/recurring/initiate</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">6</td><td>Batch trigger for all recurring playbooks in a process. Assert returned count, idempotency on re-run, AD_HOC playbooks excluded.</td></tr>
+    <tr><td>PB-12</td><td><span class="m PUT">PUT</span></td><td class="ep">/playbook/instances/{instanceId}/action-items</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Bulk tick-off. Assert every step flips, instance completes, and repeat call is idempotent.</td></tr>
+    <tr><td>PB-13</td><td><span class="m GET">GET</span></td><td class="ep">/playbooks</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Manage-playbooks list. Assert default sort (dueDate,createdOn,updatedOn asc), type filter, page/pageSize, total count.</td></tr>
+    <tr><td>PB-14</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/playbook/{playbookName}/action-items/{actionItemName}</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert 204, remaining steps keep contiguous ordering, live instances unaffected.</td></tr>
+    <tr><td>PB-15</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/playbook/{playbookName}/action-items</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert all steps removed, playbook shell survives, subsequent GET returns empty array not 404.</td></tr>
+    <tr><td>PB-16</td><td><span class="m GET">GET</span></td><td class="ep">/playbook/{playbookName}/instances/action-items</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>User-scoped instance items. Assert filtering by <span class="mono">userId</span> and that other users' items are excluded.</td></tr>
+    <tr><td>PB-17</td><td><span class="m POST">POST</span></td><td class="ep">/playbook/search/grouped</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">5</td><td>Assert grouping key = playbookName + dueDate, assignee aggregation per group, and parity of the group set with PB-10 for the same filter.</td></tr>
+    <tr><td>PB-18</td><td><span class="m GET">GET</span></td><td class="ep">/playbook/history</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">3</td><td>Archive read. Assert an archived instance appears with correct finalStatus and archivedOn; date-range and paging params.</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+<h3>2.3 KPI (Runtime + Configuration) &mdash; 12 gaps, 36 h</h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:7%">Method</th><th style="width:24%">Endpoint</th><th style="width:6%">Pri</th><th style="width:7%">Sev</th><th class="c" style="width:6%">Effort</th><th>Why it matters / what to assert</th></tr></thead>
+  <tbody>
+    <tr><td>KP-01</td><td><span class="m POST">POST</span></td><td class="ep">/kpi/entities<br/><span class="upd-b upd-po" title="GET /process/{processName}/kpi">Via PO only</span></td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">5</td><td>Computes the dashboard KPI tiles. Assert counts change correctly after creating/closing action items, and that <span class="mono">queryMap</span> / <span class="mono">attributeValues</span> filters are applied.</td></tr>
+    <tr><td>KP-02</td><td><span class="m POST">POST</span></td><td class="ep">/kpi/map/entities</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Bulk map one KPI to many entities. Assert every entity gets the mapping and duplicates are idempotent.</td></tr>
+    <tr><td>KP-03</td><td><span class="m POST">POST</span></td><td class="ep">/kpi-config-attributes</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Defines the KPI computation rule. Assert persisted attrValue, size-limit 400s, and that KP-01 output changes accordingly.</td></tr>
+    <tr><td>KP-04</td><td><span class="m POST">POST</span></td><td class="ep">/kpi/entity<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; GET /kpi/entities/{id} &middot; Covered &middot; ActionItem/Test_008</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Single KPI&rarr;entity mapping. Assert 201 and appearance in <span class="mono">GET /kpi/entities/{id}</span>.</td></tr>
+    <tr><td>KP-05</td><td><span class="m PUT">PUT</span></td><td class="ep">/kpis/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; Covered &middot; ActionItem/Test_008</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Assert displayName/description update, isActive=false hides the KPI from KP-01 output.</td></tr>
+    <tr><td>KP-06</td><td><span class="m GET">GET</span></td><td class="ep">/kpi/entities/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; Covered &middot; ActionItem/Test_008</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert configured KPI list per entity and tenant isolation.</td></tr>
+    <tr><td>KP-07</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/kpi/{kpiId}/entity/{entityId}</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Un-map. Assert mapping removed but the KPI definition survives.</td></tr>
+    <tr><td>KP-08</td><td><span class="m GET">GET</span></td><td class="ep">/kpis<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008, Migration/Test_009">&#10003; Covered &middot; ActionItem/Test_008, Migration/Test_009</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert list contains the KPI created in setup, with paging if applicable.</td></tr>
+    <tr><td>KP-09</td><td><span class="m GET">GET</span></td><td class="ep">/kpis/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; Covered &middot; ActionItem/Test_008</span></td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert full-fidelity read-back including nested <span class="mono">kpiConfigAttributes</span>.</td></tr>
+    <tr><td>KP-10</td><td><span class="m PUT">PUT</span></td><td class="ep">/kpi-config-attributes/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert rule change is reflected in the next KP-01 call.</td></tr>
+    <tr><td>KP-11</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/kpi-config-attributes/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert 200 and that the parent KPI remains valid.</td></tr>
+    <tr><td>KP-12</td><td><span class="m GET">GET</span></td><td class="ep">/kpi-config-attributes/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Read-back smoke assertion.</td></tr>
+  </tbody>
+</table>
+
+<h3>2.4 Attribute &amp; UI Field Configuration &mdash; 16 gaps, 42 h</h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:7%">Method</th><th style="width:24%">Endpoint</th><th style="width:6%">Pri</th><th style="width:7%">Sev</th><th class="c" style="width:6%">Effort</th><th>Why it matters / what to assert</th></tr></thead>
+  <tbody>
+    <tr><td>CF-01</td><td><span class="m POST">POST</span></td><td class="ep">/attribute-config</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Creates a custom attribute. Assert 201, isCustom default, duplicate name rejection, and that it surfaces in <span class="mono">/actionitems/editor</span>.</td></tr>
+    <tr><td>CF-02</td><td><span class="m POST">POST</span></td><td class="ep">/ui-field-config</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Places an attribute on a page/component. Assert sequence, groupId, isVisible, and effect on the editor/filter/summary endpoints.</td></tr>
+    <tr><td>CF-03</td><td><span class="m POST">POST</span></td><td class="ep">/attribute-config/values</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Adds a picklist value. Assert isDefault / isEditorDefault exclusivity and sequence ordering.</td></tr>
+    <tr><td>CF-04</td><td><span class="m PUT">PUT</span></td><td class="ep">/attribute-config/{id}</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Assert title/description update and isEnabled=false removes it from editor config.</td></tr>
+    <tr><td>CF-05</td><td><span class="m GET">GET</span></td><td class="ep">/attribute-config</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert seeded system attributes plus the custom one created in CF-01.</td></tr>
+    <tr><td>CF-06</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/attribute-config/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert cascade to values and ui-field-config, and rejection when the attribute is in use.</td></tr>
+    <tr><td>CF-07</td><td><span class="m PUT">PUT</span></td><td class="ep">/attribute-config/values/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert value rename propagates to <span class="mono">displayValue</span> on existing action items.</td></tr>
+    <tr><td>CF-08</td><td><span class="m PUT">PUT</span></td><td class="ep">/ui-field-config/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert re-sequencing changes editor field order.</td></tr>
+    <tr><td>CF-09</td><td><span class="m GET">GET</span></td><td class="ep">/attribute-config/{id}/values</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert value list order and flags.</td></tr>
+    <tr><td>CF-10</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/attribute-config/values/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert removal and behaviour when the value is referenced by an action item.</td></tr>
+    <tr><td>CF-11</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/ui-field-config/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert field disappears from editor config.</td></tr>
+    <tr><td>CF-12</td><td><span class="m GET">GET</span></td><td class="ep">/ui-field-config</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert list + entityId scoping.</td></tr>
+    <tr><td>CF-13</td><td><span class="m GET">GET</span></td><td class="ep">/attribute-config/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Read-back fidelity + 404 negative.</td></tr>
+    <tr><td>CF-14</td><td><span class="m GET">GET</span></td><td class="ep">/ui-field-config/{id}</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Read-back fidelity + 404 negative.</td></tr>
+    <tr><td>CF-15</td><td><span class="m GET">GET</span></td><td class="ep">/page</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Reference data for CF-02. Assert known page ids exist.</td></tr>
+    <tr><td>CF-16</td><td><span class="m GET">GET</span></td><td class="ep">/ui-component</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Reference data for CF-02. Assert known component ids exist.</td></tr>
+  </tbody>
+</table>
+
+<h3>2.5 Source Entity, Templates, Comments, Collaboration, Tenant, Users &mdash; 24 gaps, 58 h</h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:7%">Method</th><th style="width:22%">Endpoint</th><th style="width:11%">Module</th><th style="width:6%">Pri</th><th style="width:7%">Sev</th><th class="c" style="width:6%">Effort</th><th>Why it matters / what to assert</th></tr></thead>
+  <tbody>
+    <tr><td>SE-01</td><td><span class="m POST">POST</span></td><td class="ep">/entity<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">Setup/teardown only</span></td><td>Source Entity</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-critical">Critical</span></td><td class="c">4</td><td>Prerequisite for every other flow. Assert 201, generated entityId, nested <span class="mono">sourceAttributes</span> persisted, size-limit 400s.</td></tr>
+    <tr><td>SE-02</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/entity/{id}<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">Setup/teardown only</span></td><td>Source Entity</td><td><span class="pill p0">P0</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Widest blast radius in the service. Assert cascade to action items, comments, templates and KPI maps; assert tenant isolation.</td></tr>
+    <tr><td>SE-03</td><td><span class="m PATCH">PATCH</span></td><td class="ep">/entity/attribute</td><td>Source Entity</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">3</td><td>Assert attribute value update reflects on subsequent action-item reads.</td></tr>
+    <tr><td>TM-01</td><td><span class="m POST">POST</span></td><td class="ep">/actionitemTemplates<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; Covered &middot; ActionItem/Test_007</span></td><td>Templates</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">4</td><td>Blocks AI-02. Assert 201, <span class="mono">ids</span> list persisted, empty-ids 400, duplicate-name behaviour.</td></tr>
+    <tr><td>TM-02</td><td><span class="m PUT">PUT</span></td><td class="ep">/actionitemTemplates/{id}</td><td>Templates</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert name/description update; 404 negative.</td></tr>
+    <tr><td>TM-03</td><td><span class="m GET">GET</span></td><td class="ep">/actionitemTemplates?entityId=<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; Covered &middot; ActionItem/Test_007</span></td><td>Templates</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert entity scoping and missing-param 400.</td></tr>
+    <tr><td>TM-04</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/actionitemTemplates/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; Covered &middot; ActionItem/Test_007</span></td><td>Templates</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert 200 and that already-generated action items survive.</td></tr>
+    <tr><td>TN-01</td><td><span class="m GET">GET</span></td><td class="ep">/tenant</td><td>Tenant</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-high">High</span></td><td class="c">2</td><td>Auto-provisions the tenant on first call. Assert lazy-create behaviour and idempotency on second call.</td></tr>
+    <tr><td>US-01</td><td><span class="m GET">GET</span></td><td class="ep">/users/info</td><td>Users/RBAC</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert identity fields match the bearer token; 401 without token.</td></tr>
+    <tr><td>US-02</td><td><span class="m GET">GET</span></td><td class="ep">/users/me<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Users/RBAC</td><td><span class="pill p1">P1</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assert profile payload and tenant binding.</td></tr>
+    <tr><td>US-03</td><td><span class="m GET">GET</span></td><td class="ep">/users<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Users/RBAC</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">2</td><td>Assignee picker feed. Assert non-empty list and that assignees used in AI tests are present.</td></tr>
+    <tr><td>US-04</td><td><span class="m GET">GET</span></td><td class="ep">/users/{user_id}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Users/RBAC</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Read-back + unknown-id negative.</td></tr>
+    <tr><td>CO-01</td><td><span class="m POST">POST</span></td><td class="ep">/channel<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Collaboration</td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">4</td><td>Assert channel id returned, userIds invited, autoAcceptInvitations honoured, blank name/description 400.</td></tr>
+    <tr><td>CM-01</td><td><span class="m POST">POST</span></td><td class="ep">/comments<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Comments <span class="pill dep">deprecated</span></td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert 201, channelId required (36-char cap), parent/child threading.</td></tr>
+    <tr><td>CM-02</td><td><span class="m GET">GET</span></td><td class="ep">/comments?entityId&amp;entityType<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Comments <span class="pill dep">deprecated</span></td><td><span class="pill p2">P2</span></td><td><span class="pill sev-medium">Medium</span></td><td class="c">3</td><td>Assert scoping by entityId+entityType and missing-param 400.</td></tr>
+    <tr><td>CM-03</td><td><span class="m PUT">PUT</span></td><td class="ep">/comments/{id}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Comments <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Assert message edit and updatedOn change.</td></tr>
+    <tr><td>CM-04</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/comments/{id}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Comments <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Assert 200 and removal from the list read.</td></tr>
+    <tr><td>CM-05</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/comments/entity/{id}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Comments <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Assert bulk cascade delete for an entity.</td></tr>
+    <tr><td>TN-02</td><td><span class="m POST">POST</span></td><td class="ep">/tenants<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Tenant <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Contract-only smoke; slated for removal.</td></tr>
+    <tr><td>TN-03</td><td><span class="m GET">GET</span></td><td class="ep">/tenants<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Tenant <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">1</td><td>Contract-only smoke.</td></tr>
+    <tr><td>TN-04</td><td><span class="m GET">GET</span></td><td class="ep">/tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Tenant <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">1</td><td>Contract-only smoke.</td></tr>
+    <tr><td>TN-05</td><td><span class="m PUT">PUT</span></td><td class="ep">/tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Tenant <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Contract-only smoke.</td></tr>
+    <tr><td>TN-06</td><td><span class="m DELETE">DELETE</span></td><td class="ep">/tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Tenant <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Destructive &mdash; run only in an isolated throw-away tenant.</td></tr>
+    <tr><td>US-05</td><td><span class="m GET">GET</span></td><td class="ep">/entity/{entityId}/users<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>Users/RBAC <span class="pill dep">deprecated</span></td><td><span class="pill p3">P3</span></td><td><span class="pill sev-low">Low</span></td><td class="c">2</td><td>Contract-only smoke; superseded by <span class="mono">/users</span>.</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+<h2>3. Sample Payloads &amp; Responses (for the highest-priority gaps)</h2>
+<p class="sub">All requests require <span class="mono">Authorization: Bearer &lt;token&gt;</span> and <span class="mono">Content-Type: application/json</span>. Values below are shaped from the actual request DTOs in <span class="mono">com.blueyonder.actionitem.requests</span>.</p>
+
+<div class="avoid-break">
+<h3>AI-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/searchActionItems</span></h3>
+<h4>Request</h4>
+<pre>{
+  "filter": {
+    "entityId": "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+    "sourceType": "PROCESS",
+    "status": "0",
+    "priority": "2",
+    "sortBy": "dueDate,asc"
+  },
+  "pageNumber": 0,
+  "pageSize": 25
+}</pre>
+<h4>Expected response &mdash; 200 OK</h4>
+<pre class="resp">{
+  "data": [
+    {
+      "id": "d1cbec01-8cb1-49c3-9f3c-9b469a29455e",
+      "name": "Automation Action 3",
+      "entityId": "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+      "sourceId": "217DDF1E-A3FA-4E82-B52D-9721195EB06F",
+      "sourceName": "IntegratedBusinessPlanning",
+      "sourceType": "PROCESS",
+      "status": "Not Started",
+      "actionType": "Task",
+      "priority": "High",
+      "dueDate": "2026-09-30T07:28:04",
+      "attributes": [ { "name": "processName", "value": "IntegratedBusinessPlanning" } ]
+    }
+  ],
+  "totalElements": 1,
+  "totalPages": 1,
+  "pageNumber": 0,
+  "pageSize": 25,
+  "uiConfig": { "columns": [ "name", "status", "priority", "dueDate", "assigneeUsers" ] }
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>AI-02 &nbsp; <span class="m POST">POST</span> <span class="ep">/actionitems/bulk</span></h3>
+<h4>Request</h4>
+<pre>{
+  "templateId": "6f0a2c11-8d44-4a2b-9c17-0b8f2e5a71d3",
+  "entityId":   "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "sourceId":   "217DDF1E-A3FA-4E82-B52D-9721195EB06F",
+  "sourceName": "IntegratedBusinessPlanning",
+  "sourceType": "PROCESS",
+  "origin":     "217DDF1E-A3FA-4E82-B52D-9721195EB06F",
+  "attributes": [
+    { "name": "processName",        "value": "IntegratedBusinessPlanning" },
+    { "name": "processDisplayName", "value": "IntegratedBusinessPlanning" }
+  ]
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "createdCount": 3,
+  "failedCount": 0,
+  "actionItems": [
+    { "id": "a1f2...", "name": "Review Demand Plan",   "status": "Not Started" },
+    { "id": "b3c4...", "name": "Validate Supply Plan", "status": "Not Started" },
+    { "id": "c5d6...", "name": "Approve Consensus",    "status": "Not Started" }
+  ],
+  "errors": []
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>AI-03 &nbsp; <span class="m PUT">PUT</span> <span class="ep">/actionitems/status</span></h3>
+<h4>Request</h4>
+<pre>{
+  "id": [
+    "a1f2b3c4-1111-2222-3333-444455556666",
+    "b3c4d5e6-1111-2222-3333-444455556666"
+  ],
+  "status": 2,
+  "updateEndDate": true
+}</pre>
+<h4>Expected response &mdash; 200 OK</h4>
+<pre class="resp">[
+  "a1f2b3c4-1111-2222-3333-444455556666",
+  "b3c4d5e6-1111-2222-3333-444455556666"
+]</pre>
+<h4>Negative &mdash; empty id list &rarr; 400 Bad Request</h4>
+<pre class="resp">{ "status": 400, "code": "INVALID_ARGUMENT", "message": "Invalid input provided." }</pre>
+</div>
+
+<div class="avoid-break">
+<h3>PB-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/playbook</span></h3>
+<h4>Request</h4>
+<pre>{
+  "displayName":     "Monthly Demand Review Playbook",
+  "description":     "Standard steps for the monthly demand review cycle",
+  "type":            "RECURRING",
+  "processName":     "IntegratedBusinessPlanning",
+  "subprocessName":  "DemandReview",
+  "assigned":        [ "4de6f5fc-59cb-4048-a4a9-3e141b76a802" ],
+  "isCollaborative": true
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "name": "monthly-demand-review-playbook",
+  "displayName": "Monthly Demand Review Playbook",
+  "description": "Standard steps for the monthly demand review cycle",
+  "type": "RECURRING",
+  "processName": "IntegratedBusinessPlanning",
+  "subprocessName": "DemandReview",
+  "assigned": [ "4de6f5fc-59cb-4048-a4a9-3e141b76a802" ],
+  "isCollaborative": true,
+  "createdOn": "2026-08-31T10:15:00",
+  "createdBy": "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+}</pre>
+<h4>Negative &mdash; missing <span class="mono">displayName</span> &rarr; 400 &nbsp;|&nbsp; caller lacks <span class="mono">lsnop.edit</span> &rarr; 403</h4>
+<pre class="resp">{ "status": 403, "code": "FORBIDDEN", "message": "Access is denied." }</pre>
+</div>
+
+<div class="avoid-break">
+<h3>PB-04 &nbsp; <span class="m POST">POST</span> <span class="ep">/playbook/{playbookName}/action-items?processName=IntegratedBusinessPlanning</span></h3>
+<h4>Request</h4>
+<pre>{
+  "displayName":     "Review statistical forecast",
+  "description":     "Open the forecast view and validate the baseline",
+  "targetView":      "DemandForecastView",
+  "savedFilter":     { "id": "8f21b0c4-5d3e-4a77-93aa-2c1f6d40b8e9", "label": "My Region" },
+  "linkedProcedure": [ "SOP-DEM-001", "SOP-DEM-002" ],
+  "displayOrder":    1
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "name": "review-statistical-forecast",
+  "displayName": "Review statistical forecast",
+  "description": "Open the forecast view and validate the baseline",
+  "targetView": "DemandForecastView",
+  "savedFilter": { "id": "8f21b0c4-5d3e-4a77-93aa-2c1f6d40b8e9", "label": "My Region" },
+  "linkedProcedure": [ "SOP-DEM-001", "SOP-DEM-002" ],
+  "displayOrder": 1,
+  "playbookName": "monthly-demand-review-playbook"
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>PB-07 &nbsp; <span class="m POST">POST</span> <span class="ep">/playbook/{playbookName}/initiate?processName=IntegratedBusinessPlanning</span></h3>
+<h4>Request</h4>
+<pre>{
+  "playbookName": "monthly-demand-review-playbook",
+  "dueDate":      "2026-09-15T17:00:00",
+  "assigned":     [ "4de6f5fc-59cb-4048-a4a9-3e141b76a802" ]
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">"Initiated successfully"</pre>
+<p style="font-size:10px;margin-top:2px">Follow-up assertion: <span class="mono">POST /playbook/search</span> must return the new instance with <span class="mono">status = IN_PROGRESS</span>, then <span class="mono">GET /playbook/instances/{instanceId}/action-items</span> must return one item per template step with <span class="mono">actioned = false</span>.</p>
+</div>
+
+<div class="avoid-break">
+<h3>PB-08 &nbsp; <span class="m PUT">PUT</span> <span class="ep">/playbook/instances/{instanceId}/action-items/{actionItemName}?processName=IntegratedBusinessPlanning</span></h3>
+<h4>Request</h4>
+<pre>{ "actioned": true }</pre>
+<h4>Expected response &mdash; 200 OK (empty body)</h4>
+<pre class="resp">HTTP/1.1 200 OK
+Content-Length: 0</pre>
+</div>
+
+<div class="avoid-break">
+<h3>PB-10 &nbsp; <span class="m POST">POST</span> <span class="ep">/playbook/search?processName=IntegratedBusinessPlanning&amp;page=0&amp;pageSize=10</span></h3>
+<h4>Request</h4>
+<pre>{
+  "name":     "Monthly Demand",
+  "status":   "ALL",
+  "type":     "RECURRING",
+  "duration": { "id": "CUSTOM", "startDate": "2026-09-01", "endDate": "2026-09-30" },
+  "visibility": "ASSIGNED_TO_ME"
+}</pre>
+<h4>Expected response &mdash; 200 OK</h4>
+<pre class="resp">{
+  "playbooks": [
+    {
+      "instanceId": "7c9e1a02-4b6d-4f11-a2c8-9d5e3f7b1a44",
+      "playbookName": "monthly-demand-review-playbook",
+      "displayName": "Monthly Demand Review Playbook",
+      "type": "RECURRING",
+      "status": "IN_PROGRESS",
+      "dueDate": "2026-09-15T17:00:00",
+      "assigned": [ "4de6f5fc-59cb-4048-a4a9-3e141b76a802" ],
+      "completedSteps": 1,
+      "totalSteps": 3
+    }
+  ],
+  "totalElements": 1, "totalPages": 1, "pageNumber": 0, "pageSize": 10
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>KP-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/kpi/entities</span></h3>
+<h4>Request</h4>
+<pre>{
+  "entity": "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "queryMap": { "sourceType": "PROCESS", "sourceId": "217DDF1E-A3FA-4E82-B52D-9721195EB06F" },
+  "attributeValues": { "status": { "0": "Not Started", "1": "In Progress", "2": "Completed" } }
+}</pre>
+<h4>Expected response &mdash; 200 OK</h4>
+<pre class="resp">[
+  { "name": "openActionItems",      "displayName": "Open Action Items",      "value": "12" },
+  { "name": "overdueActionItems",   "displayName": "Overdue Action Items",   "value": "3"  },
+  { "name": "completedActionItems", "displayName": "Completed Action Items", "value": "27" }
+]</pre>
+</div>
+
+<div class="avoid-break">
+<h3>SE-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/entity</span></h3>
+<h4>Request</h4>
+<pre>{
+  "name":        "AUT_Entity_ProcessOrchestration",
+  "description": "Entity created by API automation suite",
+  "isActive":    true,
+  "sourceAttributes": [
+    { "name": "processName", "value": "IntegratedBusinessPlanning" },
+    { "name": "sourceType",  "value": "PROCESS" }
+  ]
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "id": "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "name": "AUT_Entity_ProcessOrchestration",
+  "description": "Entity created by API automation suite",
+  "isActive": true,
+  "sourceAttributes": [
+    { "id": "3a7c...", "name": "processName", "value": "IntegratedBusinessPlanning" },
+    { "id": "5b8d...", "name": "sourceType",  "value": "PROCESS" }
+  ],
+  "createdOn": "2026-08-31T10:00:00"
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>TM-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/actionitemTemplates</span></h3>
+<h4>Request</h4>
+<pre>{
+  "name":        "AUT_MonthlyReviewTemplate",
+  "entityId":    "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "description": "Template used by bulk-create automation",
+  "isActive":    true,
+  "isDeleted":   false,
+  "ids": [
+    "a1f2b3c4-1111-2222-3333-444455556666",
+    "b3c4d5e6-1111-2222-3333-444455556666"
+  ]
+}</pre>
+<h4>Expected response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "id": "6f0a2c11-8d44-4a2b-9c17-0b8f2e5a71d3",
+  "name": "AUT_MonthlyReviewTemplate",
+  "entityId": "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "description": "Template used by bulk-create automation",
+  "isActive": true,
+  "ids": [ "a1f2b3c4-...", "b3c4d5e6-..." ]
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>CF-01 / CF-03 / CF-02 &nbsp; Attribute &amp; UI field configuration chain</h3>
+<h4>CF-01 <span class="m POST">POST</span> <span class="ep">/attribute-config</span></h4>
+<pre>{
+  "name":        "autRiskLevel",
+  "title":       "Risk Level",
+  "description": "Custom attribute created by automation",
+  "entityType":  "ACTIONITEM",
+  "isCustom":    true,
+  "isActive":    true,
+  "isEnabled":   true,
+  "values": [
+    { "name": "Low",  "value": "0", "sequence": 1, "isDefault": true,  "isVisible": true },
+    { "name": "High", "value": "1", "sequence": 2, "isDefault": false, "isVisible": true }
+  ]
+}</pre>
+<h4>CF-03 <span class="m POST">POST</span> <span class="ep">/attribute-config/values</span></h4>
+<pre>{
+  "name": "Critical", "value": "2",
+  "attributeId": "cc11ee22-3344-5566-7788-99aabbccddee",
+  "sequence": 3, "isVisible": true, "isDefault": false,
+  "isEditorDefault": false, "isEnabled": true, "isActive": true
+}</pre>
+<h4>CF-02 <span class="m POST">POST</span> <span class="ep">/ui-field-config</span></h4>
+<pre>{
+  "attributeId":   "cc11ee22-3344-5566-7788-99aabbccddee",
+  "pageId":        1,
+  "uiComponentId": 3,
+  "groupId":       "GENERAL",
+  "sequence":      10,
+  "entityId":      "91e161f1-41f1-476f-9ab1-64ad16ec2c94",
+  "isVisible":     true, "isActive": true, "isEnabled": true, "isRemote": false
+}</pre>
+<h4>Verification &mdash; <span class="m GET">GET</span> <span class="ep">/actionitems/editor?contextType=ENTITY&amp;contextId=91e161f1-...</span> &rarr; 200</h4>
+<pre class="resp">{
+  "fields": [
+    { "attributeId": "cc11ee22-...", "name": "autRiskLevel", "title": "Risk Level",
+      "groupId": "GENERAL", "sequence": 10, "isVisible": true,
+      "values": [ { "name": "Low", "value": "0" }, { "name": "High", "value": "1" }, { "name": "Critical", "value": "2" } ] }
+  ]
+}</pre>
+</div>
+
+<div class="avoid-break">
+<h3>CO-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/channel</span> &nbsp;&nbsp;|&nbsp;&nbsp; CM-01 &nbsp; <span class="m POST">POST</span> <span class="ep">/comments</span></h3>
+<h4>CO-01 request</h4>
+<pre>{
+  "name":        "AUT_ActionItem_Channel",
+  "description": "Collaboration channel for automation action item",
+  "longDescription": "Created by the API automation regression suite",
+  "userIds":     [ "4de6f5fc-59cb-4048-a4a9-3e141b76a802" ],
+  "autoAcceptInvitations": true
+}</pre>
+<h4>CO-01 response &mdash; 200/201</h4>
+<pre class="resp">{ "channelId": "ch_9d2f1a7b4c", "name": "AUT_ActionItem_Channel", "memberCount": 1 }</pre>
+<h4>CM-01 request</h4>
+<pre>{
+  "parentId":   null,
+  "entityId":   "d1cbec01-8cb1-49c3-9f3c-9b469a29455e",
+  "entityType": "ACTIONITEM",
+  "message":    "Automation comment - baseline validated",
+  "channelId":  "ch_9d2f1a7b4c",
+  "isActive":   true
+}</pre>
+<h4>CM-01 response &mdash; 201 Created</h4>
+<pre class="resp">{
+  "id": "e7a1c9d3-2b55-4f18-8c0a-6d4e2f9b3a71",
+  "entityId": "d1cbec01-8cb1-49c3-9f3c-9b469a29455e",
+  "entityType": "ACTIONITEM",
+  "message": "Automation comment - baseline validated",
+  "channelId": "ch_9d2f1a7b4c",
+  "isActive": true,
+  "createdOn": "2026-08-31T10:22:00"
+}</pre>
+</div>
+
+<div class="page-break"></div>
+<h2>4. Test Cases &mdash; Ordered Execution Plan</h2>
+<p class="sub">
+Sequence matters: later phases consume identifiers produced by earlier ones. Run phases strictly in order within a single
+worker; inside a phase, cases may run in parallel unless a dependency is listed. Every phase ends with its own teardown so
+the INTEROP environment is left clean even on partial failure &mdash; put deletes in <span class="mono">after()</span> / <span class="mono">afterEach()</span> hooks, never in a trailing <span class="mono">it()</span>.
+</p>
+
+<h3>Phase 0 &mdash; Bootstrap &amp; Identity &nbsp;<span class="pill p0">P0</span> &nbsp;(est. 8 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-000</td><td>Acquire bearer token &amp; verify identity</td><td class="ep">GET /users/info<br/>GET /users/me<br/><span class="upd-b upd-dep">GET /users/me &middot; @Deprecated</span></td><td>200; <span class="mono">userId</span>/<span class="mono">tenantId</span> match the token claims; 401 when the header is omitted.</td><td><span class="mono">userId</span></td><td>&mdash;</td></tr>
+    <tr><td>TC-001</td><td>Tenant auto-provisioning is idempotent</td><td class="ep">GET /tenant</td><td>200 on first call creates the tenant; second call returns the same <span class="mono">tenantId</span>; no duplicate row.</td><td><span class="mono">tenantId</span></td><td>TC-000</td></tr>
+    <tr><td>TC-002</td><td>Assignee directory is populated</td><td class="ep">GET /users<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200; array non-empty; the automation assignee GUID is present.</td><td>assignee list</td><td>TC-000</td></tr>
+    <tr><td>TC-003</td><td>Create source entity with attributes</td><td class="ep">POST /entity<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">Setup/teardown only</span></td><td>201; <span class="mono">id</span> is a GUID; both <span class="mono">sourceAttributes</span> echoed back with generated ids.</td><td><span class="mono">entityId</span></td><td>TC-001</td></tr>
+    <tr><td>TC-004</td><td>Reject over-length entity name (&gt;100 chars)</td><td class="ep">POST /entity<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">Setup/teardown only</span></td><td>400; error code <span class="mono">INVALID_ARGUMENT</span>; no entity persisted.</td><td>&mdash;</td><td>TC-001</td></tr>
+    <tr><td>TC-005</td><td>Patch a source attribute value</td><td class="ep">PATCH /entity/attribute</td><td>200; a subsequent action-item read shows the new value.</td><td>&mdash;</td><td>TC-003</td></tr>
+    <tr><td>TC-006</td><td>Reference data for UI config exists</td><td class="ep">GET /page<br/>GET /ui-component</td><td>200; expected page and component ids are present (used as fixtures in Phase 1).</td><td>pageId, componentId</td><td>TC-000</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 1 &mdash; Attribute &amp; UI Configuration &nbsp;<span class="pill p1">P1</span> &nbsp;(est. 42 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-100</td><td>Create custom attribute with picklist values</td><td class="ep">POST /attribute-config</td><td>201; <span class="mono">isCustom=true</span>; nested values persisted with sequence.</td><td><span class="mono">attributeId</span></td><td>TC-003</td></tr>
+    <tr><td>TC-101</td><td>Read attribute list &amp; single attribute</td><td class="ep">GET /attribute-config<br/>GET /attribute-config/{id}</td><td>200; new attribute present; unknown id &rarr; 404.</td><td>&mdash;</td><td>TC-100</td></tr>
+    <tr><td>TC-102</td><td>Add a picklist value</td><td class="ep">POST /attribute-config/values<br/>GET /attribute-config/{id}/values</td><td>201; value appears at the correct sequence; only one <span class="mono">isDefault=true</span> exists.</td><td><span class="mono">valueId</span></td><td>TC-100</td></tr>
+    <tr><td>TC-103</td><td>Update attribute title &amp; value label</td><td class="ep">PUT /attribute-config/{id}<br/>PUT /attribute-config/values/{id}</td><td>200; read-back reflects changes; <span class="mono">updatedOn</span> advanced.</td><td>&mdash;</td><td>TC-102</td></tr>
+    <tr><td>TC-104</td><td>Bind attribute to a UI page/component</td><td class="ep">POST /ui-field-config<br/>GET /ui-field-config</td><td>201; record scoped to <span class="mono">entityId</span>; sequence and groupId persisted.</td><td><span class="mono">uiFieldId</span></td><td>TC-100, TC-006</td></tr>
+    <tr><td>TC-105</td><td>Custom field surfaces in editor &amp; filter config</td><td class="ep">GET /actionitems/editor<br/>GET /actionitems/filters<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_006">&#10003; GET /actionitems/editor &middot; Covered &middot; ActionItem/Test_006</span> <span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004, ActionItem/Test_005, ActionItem/Test_006">&#10003; GET /actionitems/filters &middot; Covered &middot; ActionItem/Test_004, ActionItem/Test_005 +1</span></td><td>200; the custom attribute appears with all three picklist values; missing query params &rarr; 400.</td><td>&mdash;</td><td>TC-104</td></tr>
+    <tr><td>TC-106</td><td>Summary page config smoke</td><td class="ep">GET /actionitems/page/summary</td><td>200; non-empty field list.</td><td>&mdash;</td><td>TC-000</td></tr>
+    <tr><td>TC-107</td><td>Re-sequencing a UI field reorders the editor</td><td class="ep">PUT /ui-field-config/{id}<br/>GET /actionitems/editor<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_006">&#10003; GET /actionitems/editor &middot; Covered &middot; ActionItem/Test_006</span></td><td>200; field order in the editor response matches the new sequence.</td><td>&mdash;</td><td>TC-105</td></tr>
+    <tr><td>TC-108</td><td>Teardown &mdash; unbind and delete config</td><td class="ep">DELETE /ui-field-config/{id}<br/>DELETE /attribute-config/values/{id}<br/>DELETE /attribute-config/{id}</td><td>200 for each; field disappears from editor config; cascade removes remaining values.</td><td>&mdash;</td><td>TC-107</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 2 &mdash; KPI Definition, Mapping &amp; Computation &nbsp;<span class="pill p0">P0/P1</span> &nbsp;(est. 36 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-200</td><td>Create KPI definition</td><td class="ep">POST /kpis<br/>GET /kpis/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008, Migration/Test_005">&#10003; POST /kpis &middot; Covered &middot; ActionItem/Test_008, Migration/Test_005</span> <span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; GET /kpis/{id} &middot; Covered &middot; ActionItem/Test_008</span></td><td>201; read-back matches including nested <span class="mono">kpiConfigAttributes</span>.</td><td><span class="mono">kpiId</span></td><td>TC-003</td></tr>
+    <tr><td>TC-201</td><td>List KPIs</td><td class="ep">GET /kpis<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008, Migration/Test_009">&#10003; Covered &middot; ActionItem/Test_008, Migration/Test_009</span></td><td>200; new KPI present.</td><td>&mdash;</td><td>TC-200</td></tr>
+    <tr><td>TC-202</td><td>Add / update / read KPI config attribute</td><td class="ep">POST, PUT, GET /kpi-config-attributes</td><td>201/200; <span class="mono">attrValue</span> persisted; &gt;1000-char value &rarr; 400.</td><td><span class="mono">kpiAttrId</span></td><td>TC-200</td></tr>
+    <tr><td>TC-203</td><td>Map KPI to a single entity</td><td class="ep">POST /kpi/entity<br/>GET /kpi/entities/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; GET /kpi/entities/{id} &middot; Covered &middot; ActionItem/Test_008</span></td><td>201; mapping visible for the entity; not visible for a sibling entity.</td><td>&mdash;</td><td>TC-200, TC-003</td></tr>
+    <tr><td>TC-204</td><td>Bulk map KPI to multiple entities</td><td class="ep">POST /kpi/map/entities</td><td>200/201; every entity in the list gets the mapping; re-run is idempotent.</td><td>&mdash;</td><td>TC-200</td></tr>
+    <tr><td>TC-205</td><td>KPI summary reflects action-item state</td><td class="ep">POST /kpi/entities<br/><span class="upd-b upd-po" title="GET /process/{processName}/kpi">Via PO only</span></td><td>200; baseline captured; after Phase 3 creates items the open count increases by exactly N; after closure the completed count increases by N.</td><td>&mdash;</td><td>TC-203, TC-303</td></tr>
+    <tr><td>TC-206</td><td>Deactivating a KPI removes it from summary</td><td class="ep">PUT /kpis/{id}<br/>POST /kpi/entities<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008">&#10003; PUT /kpis/{id} &middot; Covered &middot; ActionItem/Test_008</span> <span class="upd-b upd-po" title="GET /process/{processName}/kpi">POST /kpi/entities &middot; Via PO only</span></td><td>200; KPI absent from the summary array when <span class="mono">isActive=false</span>.</td><td>&mdash;</td><td>TC-205</td></tr>
+    <tr><td>TC-207</td><td>Teardown &mdash; unmap and delete KPI</td><td class="ep">DELETE /kpi/{kpiId}/entity/{entityId}<br/>DELETE /kpi-config-attributes/{id}<br/>DELETE /kpis/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_008, Migration/Test_005, Migration/Test_009">&#10003; DELETE /kpis/{id} &middot; Covered &middot; ActionItem/Test_008, Migration/Test_005 +1</span></td><td>200 for each; mapping removed before definition; definition delete succeeds.</td><td>&mdash;</td><td>TC-206</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 3 &mdash; Action Item Advanced Operations &nbsp;<span class="pill p0">P0</span> &nbsp;(est. 45 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-300</td><td>Seed action items for search/bulk tests<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_003, ActionItem/Test_004, ActionItem/Test_005">&#10003; Covered &middot; ActionItem/Test_003, ActionItem/Test_004 +1</span></td><td class="ep">POST /actionitems &times; 5</td><td>201 each; capture ids; vary status, priority and dueDate to exercise filters.</td><td>5 &times; <span class="mono">actionItemId</span></td><td>TC-003</td></tr>
+    <tr><td>TC-301</td><td>Create action-item template from seeded items</td><td class="ep">POST /actionitemTemplates<br/>GET /actionitemTemplates?entityId=<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; POST /actionitemTemplates &middot; Covered &middot; ActionItem/Test_007</span> <span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; GET /actionitemTemplates?entityId= &middot; Covered &middot; ActionItem/Test_007</span></td><td>201; <span class="mono">ids</span> persisted; list is entity-scoped; missing <span class="mono">entityId</span> &rarr; 400.</td><td><span class="mono">templateId</span></td><td>TC-300</td></tr>
+    <tr><td>TC-302</td><td>Update &amp; read back template metadata</td><td class="ep">PUT /actionitemTemplates/{id}</td><td>200; name/description updated; unknown id &rarr; 404.</td><td>&mdash;</td><td>TC-301</td></tr>
+    <tr><td>TC-303</td><td>Bulk create action items from template</td><td class="ep">POST /actionitems/bulk</td><td>201; <span class="mono">createdCount</span> equals the template item count; attributes inherited; <span class="mono">failedCount=0</span>.</td><td>bulk ids</td><td>TC-301</td></tr>
+    <tr><td>TC-304</td><td>Bulk create with invalid templateId</td><td class="ep">POST /actionitems/bulk</td><td>400 or 404 &mdash; <b>must not</b> return 201; nothing persisted.</td><td>&mdash;</td><td>TC-301</td></tr>
+    <tr><td>TC-305</td><td>Search &mdash; filter, page and sort</td><td class="ep">POST /searchActionItems<br/><span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">Via PO only</span></td><td>200; each filter key narrows results correctly; <span class="mono">totalElements</span> accurate; page 1 differs from page 0; sort asc/desc honoured.</td><td>&mdash;</td><td>TC-300, TC-303</td></tr>
+    <tr><td>TC-306</td><td>Search &mdash; no-match and empty-filter</td><td class="ep">POST /searchActionItems<br/><span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">Via PO only</span></td><td>200 with empty <span class="mono">data</span> array (not 404); empty filter returns all items for the tenant.</td><td>&mdash;</td><td>TC-305</td></tr>
+    <tr><td>TC-307</td><td>Bulk status update</td><td class="ep">PUT /actionitems/status<br/>POST /searchActionItems<br/><span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">POST /searchActionItems &middot; Via PO only</span></td><td>200; returned id list matches the request; search confirms the new status; <span class="mono">updateEndDate=true</span> sets the end date.</td><td>&mdash;</td><td>TC-305</td></tr>
+    <tr><td>TC-308</td><td>Bulk status update negatives</td><td class="ep">PUT /actionitems/status</td><td>Empty id list &rarr; 400; unknown status enum &rarr; 400; mixed valid/invalid ids behaves per contract (documented, deterministic).</td><td>&mdash;</td><td>TC-307</td></tr>
+    <tr><td>TC-309</td><td>Extend due date</td><td class="ep">PUT /actionitems/{id}/extend<br/>GET /actionitems/{id}<br/><span class="upd-b upd-po" title="GET /actionitem/{id}">GET /actionitems/{id} &middot; Via PO only</span></td><td>200; <span class="mono">dueDate</span> moved by the configured delta; unknown id &rarr; 404.</td><td>&mdash;</td><td>TC-300</td></tr>
+    <tr><td>TC-310</td><td>Entity-scoped fetch &amp; isolation</td><td class="ep">GET /actionitems/{entityId}/{id}</td><td>200 for the correct pair; wrong entityId returns empty/404 &mdash; proves entity and tenant isolation.</td><td>&mdash;</td><td>TC-300</td></tr>
+    <tr><td>TC-311</td><td>Bulk delete by id list</td><td class="ep">DELETE /actionitems/bulk?ids=<br/>POST /searchActionItems<br/><span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">POST /searchActionItems &middot; Via PO only</span></td><td>200; all listed ids gone; a mixed list containing an unknown id behaves per contract; search returns zero rows.</td><td>&mdash;</td><td>TC-307</td></tr>
+    <tr><td>TC-312</td><td>Delete all action items of an entity</td><td class="ep">DELETE /actionitems/entity/{id}</td><td>200; only the target entity's items removed; a control entity's items survive.</td><td>&mdash;</td><td>TC-303</td></tr>
+    <tr><td>TC-313</td><td>Teardown &mdash; delete template</td><td class="ep">DELETE /actionitemTemplates/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_007">&#10003; Covered &middot; ActionItem/Test_007</span></td><td>200; previously generated action items are unaffected.</td><td>&mdash;</td><td>TC-312</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 4 &mdash; Collaboration &amp; Comments &nbsp;<span class="pill p2">P2</span> &nbsp;(est. 16 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-400</td><td>Create collaboration channel</td><td class="ep">POST /channel<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200/201; channel id returned; invited users present; blank name/description &rarr; 400.</td><td><span class="mono">channelId</span></td><td>TC-002</td></tr>
+    <tr><td>TC-401</td><td>Create and thread comments</td><td class="ep">POST /comments &times; 2<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>201; second comment carries <span class="mono">parentId</span> of the first; missing <span class="mono">channelId</span> &rarr; 400; <span class="mono">channelId</span> &gt;36 chars &rarr; 400.</td><td><span class="mono">commentId</span></td><td>TC-400, TC-300</td></tr>
+    <tr><td>TC-402</td><td>Read comments by entity</td><td class="ep">GET /comments?entityId&amp;entityType<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200; both comments returned; wrong <span class="mono">entityType</span> returns empty; missing param &rarr; 400.</td><td>&mdash;</td><td>TC-401</td></tr>
+    <tr><td>TC-403</td><td>Update &amp; delete a comment</td><td class="ep">PUT /comments/{id}<br/>DELETE /comments/{id}<br/><span class="upd-b upd-dep">PUT /comments/{id} &middot; @Deprecated</span> <span class="upd-b upd-dep">DELETE /comments/{id} &middot; @Deprecated</span></td><td>200; message updated; after delete the list read no longer contains it.</td><td>&mdash;</td><td>TC-402</td></tr>
+    <tr><td>TC-404</td><td>Cascade delete comments for an entity</td><td class="ep">DELETE /comments/entity/{id}<br/>GET /comments<br/><span class="upd-b upd-dep">DELETE /comments/entity/{id} &middot; @Deprecated</span> <span class="upd-b upd-dep">GET /comments &middot; @Deprecated</span></td><td>200; list read returns empty for that entity.</td><td>&mdash;</td><td>TC-403</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 5 &mdash; Playbook Design (Template Authoring) &nbsp;<span class="pill p0">P0</span> &nbsp;(est. 33 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-500</td><td>Create AD_HOC playbook</td><td class="ep">POST /playbook</td><td>201; slugified <span class="mono">name</span>; all fields echoed; <span class="mono">createdBy</span> = token user.</td><td><span class="mono">adhocPlaybook</span></td><td>TC-000</td></tr>
+    <tr><td>TC-501</td><td>Create RECURRING playbook</td><td class="ep">POST /playbook</td><td>201; <span class="mono">type=RECURRING</span>; <span class="mono">subprocessName</span> persisted.</td><td><span class="mono">recurringPlaybook</span></td><td>TC-000</td></tr>
+    <tr><td>TC-502</td><td>Create playbook negatives</td><td class="ep">POST /playbook</td><td>Missing <span class="mono">displayName</span> &rarr; 400; invalid <span class="mono">type</span> &rarr; 400; duplicate name &rarr; 409/400; <b>must not</b> return 201.</td><td>&mdash;</td><td>TC-500</td></tr>
+    <tr><td>TC-503</td><td>Playbook create is RBAC protected</td><td class="ep">POST /playbook</td><td>403 when the token lacks <span class="mono">lsnop.edit</span> on the process; 401 with no token.</td><td>&mdash;</td><td>TC-000</td></tr>
+    <tr><td>TC-504</td><td>Add three ordered steps</td><td class="ep">POST /playbook/{name}/action-items &times; 3</td><td>201 each; <span class="mono">displayOrder</span> 1..3; <span class="mono">savedFilter</span> and <span class="mono">linkedProcedure</span> round-trip exactly.</td><td>3 step names</td><td>TC-501</td></tr>
+    <tr><td>TC-505</td><td>Read steps in order</td><td class="ep">GET /playbook/{name}/action-items</td><td>200; array length 3; ascending <span class="mono">displayOrder</span>; full field fidelity vs. TC-504 payloads.</td><td>&mdash;</td><td>TC-504</td></tr>
+    <tr><td>TC-506</td><td>Update a step (rename + reorder)</td><td class="ep">PUT /playbook/{name}/action-items/{item}</td><td>200; new displayName and targetView; re-read shows the new order; unknown step &rarr; 404.</td><td>&mdash;</td><td>TC-505</td></tr>
+    <tr><td>TC-507</td><td>Update playbook metadata</td><td class="ep">PUT /playbook/{name}</td><td>200; description and <span class="mono">assigned</span> list replaced; unknown playbook &rarr; 404.</td><td>&mdash;</td><td>TC-501</td></tr>
+    <tr><td>TC-508</td><td>Manage-playbooks list with paging &amp; type filter</td><td class="ep">GET /playbooks</td><td>200; both playbooks present; <span class="mono">type=RECURRING</span> filter returns only one; default sort applied; pageSize honoured.</td><td>&mdash;</td><td>TC-501</td></tr>
+    <tr><td>TC-509</td><td>Delete one step, then all steps</td><td class="ep">DELETE /playbook/{name}/action-items/{item}<br/>DELETE /playbook/{name}/action-items</td><td>204 each; after the second call GET returns an empty array (not 404); the playbook shell survives.</td><td>&mdash;</td><td>TC-506</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 6 &mdash; Playbook Execution (Instances) &nbsp;<span class="pill p0">P0</span> &nbsp;(est. 39 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-600</td><td>Initiate an AD_HOC playbook</td><td class="ep">POST /playbook/{name}/initiate</td><td>201; body "Initiated successfully"; a searchable instance now exists.</td><td><span class="mono">instanceId</span></td><td>TC-504</td></tr>
+    <tr><td>TC-601</td><td>Instance snapshot mirrors the template</td><td class="ep">GET /playbook/instances/{id}/action-items</td><td>200; one item per template step; same order; all <span class="mono">actioned=false</span>.</td><td>step names</td><td>TC-600</td></tr>
+    <tr><td>TC-602</td><td>Initiate negatives</td><td class="ep">POST /playbook/{name}/initiate</td><td>Unknown playbook &rarr; 404; missing <span class="mono">processName</span> query param &rarr; 400; no <span class="mono">lsnop.edit</span> &rarr; 403.</td><td>&mdash;</td><td>TC-600</td></tr>
+    <tr><td>TC-603</td><td>Tick off a single step</td><td class="ep">PUT /playbook/instances/{id}/action-items/{item}<br/>GET .../action-items</td><td>200; that step is <span class="mono">actioned=true</span>, others unchanged; instance status becomes IN_PROGRESS.</td><td>&mdash;</td><td>TC-601</td></tr>
+    <tr><td>TC-604</td><td>Un-tick a step (toggle back)</td><td class="ep">PUT /playbook/instances/{id}/action-items/{item}</td><td>200 with <span class="mono">actioned=false</span>; instance drops out of the completed state.</td><td>&mdash;</td><td>TC-603</td></tr>
+    <tr><td>TC-605</td><td>Bulk tick-off completes the instance</td><td class="ep">PUT /playbook/instances/{id}/action-items</td><td>200; every step <span class="mono">actioned=true</span>; instance status becomes COMPLETED; repeat call is idempotent.</td><td>&mdash;</td><td>TC-604</td></tr>
+    <tr><td>TC-606</td><td>Template edits do not mutate live instances</td><td class="ep">PUT /playbook/{name}/action-items/{item}<br/>GET /playbook/instances/{id}/action-items</td><td>Instance snapshot retains the pre-edit step definition &mdash; proves template/instance decoupling.</td><td>&mdash;</td><td>TC-601</td></tr>
+    <tr><td>TC-607</td><td>Search instances by every filter</td><td class="ep">POST /playbook/search</td><td>200; name (partial), <span class="mono">type</span>, <span class="mono">status</span>, custom <span class="mono">duration</span> range each narrow results; <span class="mono">status=ALL</span>/null excludes CANCELLED and COMPLETED.</td><td>&mdash;</td><td>TC-605</td></tr>
+    <tr><td>TC-608</td><td>Search visibility scoping</td><td class="ep">POST /playbook/search</td><td><span class="mono">ASSIGNED_TO_ME</span> returns only instances assigned to the token user; <span class="mono">CREATED_BY_ME</span> only those created by them; the two sets differ for a second user.</td><td>&mdash;</td><td>TC-607</td></tr>
+    <tr><td>TC-609</td><td>Search paging &amp; sorting</td><td class="ep">POST /playbook/search</td><td>200; <span class="mono">pageSize</span> respected; page 0 &ne; page 1; default sort <span class="mono">initiatedAt,asc</span>; explicit <span class="mono">sort</span> param overrides it.</td><td>&mdash;</td><td>TC-607</td></tr>
+    <tr><td>TC-610</td><td>Grouped search aggregates correctly</td><td class="ep">POST /playbook/search/grouped</td><td>200; grouping key = playbookName + dueDate; assignees aggregated per group; group set is consistent with TC-607 for the same filter.</td><td>&mdash;</td><td>TC-607</td></tr>
+    <tr><td>TC-611</td><td>User-scoped instance items</td><td class="ep">GET /playbook/{name}/instances/action-items?userId=</td><td>200; only the given user's items; another user's <span class="mono">userId</span> returns a different (or empty) set.</td><td>&mdash;</td><td>TC-605</td></tr>
+    <tr><td>TC-612</td><td>Recurring batch initiation</td><td class="ep">POST /playbook/recurring/initiate</td><td>201; returned count equals the number of RECURRING playbooks for the process; AD_HOC playbooks are not initiated; re-run does not duplicate for the same period.</td><td>&mdash;</td><td>TC-501</td></tr>
+    <tr><td>TC-613</td><td>Execution history / archive</td><td class="ep">GET /playbook/history</td><td>200; the completed instance appears with correct <span class="mono">finalStatus</span> and <span class="mono">archivedOn</span>; process/type/status/date-range filters and paging work.</td><td>&mdash;</td><td>TC-605</td></tr>
+    <tr><td>TC-614</td><td>Teardown &mdash; delete playbooks</td><td class="ep">DELETE /playbook/{name} &times; 2</td><td>204 each; child steps removed; a follow-up GET on steps returns 404/empty; search no longer lists the instances.</td><td>&mdash;</td><td>TC-613</td></tr>
+  </tbody>
+</table>
+
+<h3>Phase 7 &mdash; Cross-Cutting &amp; Teardown &nbsp;<span class="pill p1">P1</span> &nbsp;(est. 12 h)</h3>
+<table>
+  <thead><tr><th style="width:9%">Case ID</th><th style="width:26%">Title</th><th style="width:18%">Endpoint(s)</th><th style="width:24%">Key assertions</th><th style="width:12%">Produces</th><th style="width:11%">Depends on</th></tr></thead>
+  <tbody>
+    <tr><td>TC-700</td><td>Unauthenticated access is rejected everywhere</td><td class="ep">All P0 endpoints</td><td>401 with no <span class="mono">Authorization</span> header; 401 with an expired token &mdash; run as a data-driven loop over the endpoint table.</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>TC-701</td><td>Cross-tenant data isolation</td><td class="ep">GET /actionitems/{id}<br/>POST /searchActionItems<br/>POST /playbook/search<br/><span class="upd-b upd-po" title="GET /actionitem/{id}">GET /actionitems/{id} &middot; Via PO only</span> <span class="upd-b upd-po" title="POST /process/{processName}/actionitem/search">POST /searchActionItems &middot; Via PO only</span></td><td>Tenant B's token cannot read Tenant A's ids; search returns zero rows &mdash; highest-severity security assertion in the suite.</td><td>&mdash;</td><td>TC-001</td></tr>
+    <tr><td>TC-702</td><td>Malformed / oversized payload handling</td><td class="ep">POST /actionitems<br/>POST /playbook<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_003, ActionItem/Test_004, ActionItem/Test_005">&#10003; POST /actionitems &middot; Covered &middot; ActionItem/Test_003, ActionItem/Test_004 +1</span></td><td>Invalid JSON &rarr; 400; over-length fields &rarr; 400 with field-level message; never 500.</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>TC-703</td><td>Export / import round-trip regression</td><td class="ep">POST /exportData<br/>POST /importData<br/><span class="upd-b upd-po" title="POST /exportData">POST /exportData &middot; Via PO only</span> <span class="upd-b upd-po" title="POST /importData">POST /importData &middot; Via PO only</span></td><td>Extends existing Migration coverage to include the new custom attribute, KPI and playbook objects created above.</td><td>&mdash;</td><td>TC-108, TC-207</td></tr>
+    <tr><td>TC-704</td><td>Entity delete cascade (destructive, run last)</td><td class="ep">DELETE /entity/{id}<br/><span class="upd-b upd-setup" title="ActionItem/Test_004, ActionItem/Test_005">Setup/teardown only</span></td><td>200; all action items, comments, templates and KPI mappings for that entity are gone; a control entity is untouched.</td><td>&mdash;</td><td>All phases</td></tr>
+    <tr><td>TC-705</td><td>Deprecated-endpoint contract smoke</td><td class="ep">/tenants*, /entity/{id}/users</td><td>200 and stable response shape &mdash; guards consumers until the endpoints are formally removed. Run in an isolated throw-away tenant.</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h2>5. Delivery Plan &amp; Effort Roll-Up</h2>
+<table>
+  <thead><tr><th style="width:8%">Sprint</th><th style="width:22%">Scope</th><th class="c" style="width:8%">Endpoints</th><th class="c" style="width:8%">Test cases</th><th class="c" style="width:8%">Effort (h)</th><th style="width:24%">Exit criteria</th><th>Status 05-Oct-2026</th></tr></thead>
+  <tbody>
+    <tr><td><b>S1</b></td><td>Phase 0 Bootstrap + Phase 3 Action Item Advanced</td><td class="c">13</td><td class="c">21</td><td class="c">53</td><td>Search, bulk create, bulk status and bulk delete are green in CI; action-item coverage rises from 28.6% &rarr; 100%.</td><td><b>Partly done.</b> Editor, filters and search via PO covered (<span class="mono">Test_004</span>&ndash;<span class="mono">Test_006</span>). Bulk create/delete, bulk status, extend and page summary open.</td></tr>
+    <tr><td><b>S2</b></td><td>Phase 5 Playbook Design + Phase 6 Playbook Execution</td><td class="c">18</td><td class="c">25</td><td class="c">72</td><td>Full playbook lifecycle (author &rarr; initiate &rarr; execute &rarr; archive) automated; playbook coverage 0% &rarr; 100%.</td><td><b>Not started.</b></td></tr>
+    <tr><td><b>S3</b></td><td>Phase 2 KPI + Phase 1 Attribute/UI Configuration</td><td class="c">26</td><td class="c">17</td><td class="c">78</td><td>Config-driven editor/filter behaviour verified end to end; KPI arithmetic asserted against real action-item state.</td><td><b>Partly done.</b> KPI CRUD and templates covered (<span class="mono">Test_007</span>, <span class="mono">Test_008</span>). KPI mapping and all attribute/UI config writes open.</td></tr>
+    <tr><td><b>S4</b></td><td>Phase 4 Collaboration/Comments + Phase 7 Cross-cutting + deprecated smokes</td><td class="c">23</td><td class="c">11</td><td class="c">58</td><td>Auth, tenant-isolation and cascade-delete suites green; deprecated endpoints under contract smoke.</td><td><b>Not started.</b> Comments and collaboration routes are deprecated.</td></tr>
+    <tr style="background:#eef2f8"><td colspan="2"><b>Total</b></td><td class="c"><b>80</b></td><td class="c"><b>74</b></td><td class="c"><b>261</b></td><td><b>~33 person-days &asymp; 6.5 person-weeks for one engineer, or ~2 sprints with a pair.</b></td><td><b>~237 h (~30 person-days) remain.</b></td></tr>
+  </tbody>
+</table>
+
+<h3>Recommendations before writing the new specs</h3>
+<ol style="margin:5px 0 0 18px;padding:0">
+  <li><b>Done &mdash; silent-pass pattern.</b> The Playwright negatives assert the status directly. Next, align the expected error text between Test_001/002 and Test_003, or assert the code.</li>
+  <li><b>Externalise every route into <span class="mono">.env</span>.</b> Several specs build URLs by string concatenation inline (<span class="mono">url + 'process/' + name + '/actionitem'</span>). Move them to named env keys so this gap report maps 1:1 to configuration.</li>
+  <li><b>Introduce a shared fixture builder</b> (entity, attribute, KPI, template, playbook) with automatic <span class="mono">after()</span> cleanup, so Phases 1&ndash;6 do not each re-implement setup. <i>05-Oct: <span class="mono">util/action-item.util.ts</span> (<span class="mono">ActionItemApiHelper</span>) now creates and deletes entities and process/subprocess/assumption action items; extend it for templates, KPIs, attributes and playbooks.</i></li>
+  <li><b>Assert on error codes, not free-text messages.</b> The two conflicting expected strings in Test_001 vs Test_003 prove the message is not a stable contract.</li>
+  <li><b>Add a nightly contract check</b> that diffs the controllers against the automated-endpoint list and fails when a new endpoint lands without a spec &mdash; this keeps coverage from regressing again. <i>05-Oct: <span class="mono">npm run docs:api-coverage</span> produces that list from the nightly allure-results.</i></li>
+</ol>
+
+<footer>
+Generated from a static review of <b>plan-sop-actionitem</b> (14 <span class="mono">@RestController</span> classes, 90 request mappings) and
+<b>plan-sop-ui-automation / e2e / specs / ProcessOrchestrationBackend</b> (20 spec files, 93 distinct API invocations).
+Priority, severity and effort figures are estimates for planning purposes and should be re-baselined with the delivery team.
+Updated 05-Oct-2026 from the controllers at <span class="mono">822513ce</span> and the request logs of the 2026-10-04 nightly runs of
+<b>playwright-e2e / tests / ProcessOrchestrationBackend</b> (45 specs).
+</footer>
+
+</body>
+</html>

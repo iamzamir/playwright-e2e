@@ -1,0 +1,39 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required) - view whose global scope filter is created",
+    "VIEW_NAME_2": "string (required) - second view used to check the filter applies globally",
+    "DEFAULT_SCOPE_VIEW_NAME": "string (required) - view with a default scope; must be a unique view name",
+    "DRAFT_SCOPE_LEVEL": "object (required) - { dimension, hierarchy, hierarchyLabel?, values[] } of the global scope filter the spec creates",
+    "DRAFT_TOGGLE_VALUE": "string (required) - member of DRAFT_SCOPE_LEVEL toggled to make the default filter a draft",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "GlobalScopeView1",
+  "VIEW_NAME_2": "GlobalScopeView2",
+  "DEFAULT_SCOPE_VIEW_NAME": "Draft Filter Default Scope View",
+  "DRAFT_SCOPE_LEVEL": {
+    "dimension": "ITEM",
+    "hierarchy": "Brand",
+    "values": [
+      "PF-00"
+    ]
+  },
+  "DRAFT_TOGGLE_VALUE": "PF-10",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "DRAFT_SCOPE_LEVEL": {
+      "dimension": "Item",
+      "hierarchy": "Brand",
+      "hierarchyLabel": "Brand",
+      "values": [
+        "PB-001"
+      ]
+    },
+    "DRAFT_TOGGLE_VALUE": "PB-002",
+    "DEFAULT_SCOPE_VIEW_NAME": "TestViewOne"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "REALM_NAME": "cdp-interop-npi",
+    "PROCESS_NAME": "IBPNA",
+    "VIEW_NAME": "New Product Introduction",
+    "CARD_NAME": "NPI Demo Workflow",
+    "CARD_PIVOT_VIEW_NAME": "NPI_Basant View",
+    "CARD_ACTION_NAME": "Create Placeholder - ILC",
+    "ITEM_TO_CLONE": "adsfad-Pepsi 250ml",
+    "PROCEDURE_NAME": "NPIFlyoutProcedureByNaveen",
+    "PROCEDURE_URL": "https://api-tst.jdadelivers.com/cbp/foundation-model/v1ioptst/proceduresConfig/",
+    "ACTOR_CONFIG_BASE_URL": "https://api-tst.jdadelivers.com/cbp/foundation-model/v1ioptst/actorsConfig/",
+    "NODE_CONFIG_BASE_URL": "https://api-tst.jdadelivers.com/cbp/foundation-model/v1ioptst/nodes/"
+}

@@ -1,0 +1,43 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "USER_ALIAS": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC2_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC1_DRILL_THROUGH_CELL": "string (required)",
+    "SCOPE_TAB": "string (required)",
+    "FILTERCONFIGS": "object[] (required)",
+    "BACKEND_FILTERS": "object (required)",
+    "DRILL_THROUGH_SCOPE": "object[] (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "USER_ALIAS": "user2",
+  "TC1_DRILL_THROUGH_VIEW_FROM": "Source View Without Merge",
+  "TC1_DRILL_THROUGH_VIEW_TO": "Target View Without Backend Filter",
+  "TC2_DRILL_THROUGH_VIEW_TO": "Target View With Backend Filter",
+  "TC1_DRILL_THROUGH_CELL": "44",
+  "SCOPE_TAB": "Scope",
+  "FILTERCONFIGS": [
+    { "type": "ITEM", "category": "Brand", "value": ["PL-01"] }
+  ],
+  "BACKEND_FILTERS": {
+    "DIMENSION_NAME": "LOCATION",
+    "ATTRIBUTE_NAME": "Region",
+    "VALUES": ["REGION-10"]
+  },
+  "DRILL_THROUGH_SCOPE": [
+    {
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-00"]
+    },
+    {
+      "DIMENSION_NAME": "TIME",
+      "ATTRIBUTE_NAME": "CALENDARYEAR",
+      "VALUES": ["CY-2022"]
+    }
+  ]
+}

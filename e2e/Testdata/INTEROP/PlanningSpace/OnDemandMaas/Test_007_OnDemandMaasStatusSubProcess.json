@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "REALM_ID": "b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "ViewToTest_MaasCluster",
+    "CARD_NAME":"Maas Pivot Card - ODM",
+    "LoGGEDIN_USER_NAME":"PS Automation1",
+    "SCENARIOS" : ["CopyOf-mmm","Base 09-10-2025-0904"],
+    "BASE_SCENARIO_NAME" : "Base 09-10-2025-0904",
+    "SCENARIO_NAME" : "Scenario_For_MaasPivot",
+    "FILTER_TO_APPLY_IN_SCOPE" : "ODM Filter1",
+    "HIERARCHY_LEVEL_TO_APPLY_IN_SCOPE" : "ODM filter 2"
+}

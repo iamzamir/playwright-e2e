@@ -1,0 +1,149 @@
+name: experimental
+
+on:
+  # schedule:
+  #   - cron: '00 23 * * *'  # 4:30 AM IST daily
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: Choose testing type
+        required: false
+        default: 'saucelabs'
+        type: choice
+        options:
+          - local
+          - saucelabs
+      suite-name:
+        description: Choose suite name to run tests
+        required: true
+        default: 'iopSuite'
+        type: string
+
+env:
+  SAUCE_USERNAME: ${{ secrets.SAUCE_PS_USERNAME }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+  SAUCE_BAIL: ${{ secrets.SAUCE_BAIL }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  SUITENAME: ${{ github.event.inputs.suite-name || 'iopSuite' }}
+
+jobs:
+  automation-tests:
+    name: Run UI Tests & Generate Allure Report
+    runs-on: ["az-prod-ubuntu-latest-8Core"]
+    strategy:
+      matrix:
+        node-version: [ '20.x' ]
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+         echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+         echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: e2e/node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('e2e/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+          npm install -g saucectl@latest
+          chromedriver --version
+          google-chrome --version
+
+      # - name: Install Chrome dependencies
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y libnss3 libatk-bridge2.0-0 libgtk-3-0 libxss1 libasound2 libgbm1
+
+      # - name: Sauce Connect tunnel proxy
+      #   if: ${{ contains(github.event.inputs.test-type, 'saucelabs') || github.event.inputs.test-type == '' }}
+      #   uses: saucelabs/sauce-connect-action@v2
+      #   with:
+      #     username: ${{ secrets.SAUCE_PS_USERNAME }}
+      #     accessKey: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+      #     tunnelName: ${{ secrets.SAUCE_PS_USERNAME }}_tunnel_name
+
+      # - name: Run Data Reset Tests
+      #   working-directory: e2e
+      #   env:
+      #     SUITENAME: dataReset
+      #   run: |
+      #     if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+      #       npm run wdio:test:interop
+      #     else
+      #       npm run wdio:saucelabs:interop
+      #     fi
+      #   continue-on-error: true
+      
+      - name: Kill all Chrome processes
+        run: |
+          pkill -f chrome || true
+          pkill -f chromium || true
+
+      - name: Run Tests
+        working-directory: e2e
+        run: |
+          if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+            npm run wdio:test:interop
+          else
+            npm run wdio:saucelabs:interop
+          fi
+        continue-on-error: true
+
+      - name: Print driver-logs
+        working-directory: e2e
+        run: |
+          echo "=== driver-logs ==="
+          cat driver-logs/* || echo "No driver-logs found"
+
+      - name: Print .e2e/logs
+        working-directory: e2e
+        run: |
+          echo "=== .e2e/logs ==="
+          cat .e2e/logs/* || echo "No .e2e/logs found"
+
+      - name: Upload driver-logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: driver-logs
+          path: e2e/driver-logs/
+
+      - name: Upload .e2e logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-logs
+          path: e2e/.e2e/logs/
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: e2e/screenshots/
+
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos
+          path: e2e/.e2e/videos/
+
+      - name: Kill all Chrome processes
+        run: |
+          pkill -f chrome || true
+          pkill -f chromium || true

@@ -1,0 +1,16 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "APP_NAME": "string (required)",
+        "CONTEXT": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "VIEW_1": "string (required)",
+        "VIEW_2": "string (required)"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "APP_NAME": "Planning",
+    "CONTEXT": "Process",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_1": "arrange views view1",
+    "VIEW_2": "arrange views view 2"
+}

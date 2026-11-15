@@ -1,0 +1,12 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_001_ViewTypesAccessCheckAdmin.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_002_ViewTypesAccessCheckUser.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_006_ConfigureViewToEntityPartA.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_006_ConfigureViewToEntityPartB.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_007_SettingsArrangeViews.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_009_ViewGroupExpand.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_014_ViewProcedureMapping.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_018_StaleFavouriteFallback.spec.ts"
+  ]
+}

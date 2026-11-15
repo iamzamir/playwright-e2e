@@ -1,0 +1,13 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "GLOBAL_SCOPE_FILTER_NAME": "GlobalScopeFilter",
+    "DEFAULT_FILTER_OPTION_NAME":"No Filter Override",
+    "DEFAULT_FILTER_NAME_IN_VF":"Preselected",
+    "SUB_PROCESS_VIEW_NAME": "Automation Sub Process View1",
+    "OTHER_SUB_PROCESS_NAME_IN_BREADCRUMB": "Supply Review",
+    "SUB_PROCESS": {
+        "SUB_PROCESS_NAME": "Demand Review",
+        "OTHER_SUB_PROCESS_NAME": "Supply Review"
+    } 
+}

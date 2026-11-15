@@ -1,0 +1,13 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_001_ProcessApiStartStop.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_002_ProcessAttribute.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_003_SubprocessAttribute.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_004_ProcessApiStartStopTwice.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_005_ProcessLifecycleCrud.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_006_ProcessSearch.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_007_ProcessContextAndScope.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_008_ProcessDetailsReads.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ProcessBatch/Test_009_SupplyChainActionCrud.spec.ts"
+  ]
+}

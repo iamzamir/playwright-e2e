@@ -1,0 +1,14 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SUB_PROCESS_NAME": "string (required)",
+        "SUBPROCESS_DISPLAY_NAME": "string (required)",
+        "QUICK_LINKS": "string[] (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "SUBPROCESS_DISPLAY_NAME":"Initiatives And Assumptions Review",
+    "QUICK_LINKS": ["Action Items", "Scenario", "Supply Chain Procedures - History"]
+}

@@ -1,0 +1,4 @@
+.vscode/
+.git/
+# artifacts/ <- Commented out to allow artifacts to be uploaded
+# *.log <- Commented out to allow log files as artifacts

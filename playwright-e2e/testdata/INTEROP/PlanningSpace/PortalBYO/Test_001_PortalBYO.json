@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "USER_FULL_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "AGENT_NAME": "string (required)",
+    "EVENT_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "USER_FULL_NAME": "PS Automation1",
+  "PROCESS_NAME": "PSAutomation",
+  "AGENT_NAME": "Planning Mock Agent",
+  "EVENT_NAME": "refresh the current view"
+}

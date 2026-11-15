@@ -1,0 +1,25 @@
+{
+  "_schema": {
+    "CalcEngineId": "string[] (required)",
+    "PlanningInstanceId": "string | string[] (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "CalcEngineId": [
+    "c4231521-5485-4c19-a0e0-b23e97c69b71",
+    "50fcfd1f-8905-4df3-8fc6-72346b019679",
+    "42e205a8-cfae-41ed-8241-d076525b56fc",
+    "7fae40b8-4ca6-4ac9-9e14-a1d3dbe5648a"
+  ],
+  "PlanningInstanceId": "63c3f6bd-d483-425a-b924-d7fcdfe6696a",
+  "GRAVITEE": {
+    "REALM_KEY": "pspoat-test1",
+    "CalcEngineId": [
+      "029e471a-8a0f-4ab3-aa0f-13f9b012f746",
+      "b0a03947-17ed-436b-b1d5-9f60dfffe5e5"
+    ],
+    "PlanningInstanceId": [
+      "c16cfad7-2016-415e-9c17-57fe4f11fa56",
+      "abb5df33-34fb-4439-8e32-cfe5a3a96750"
+    ]
+  }
+}

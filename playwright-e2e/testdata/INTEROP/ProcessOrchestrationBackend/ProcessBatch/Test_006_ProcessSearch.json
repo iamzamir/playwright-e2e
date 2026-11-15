@@ -1,0 +1,29 @@
+{
+  "_schema": {
+    "ATTRIBUTE_PROCESS_NAME": "string (required) - existing process that receives a run-unique custom attribute for the attribute filter test; not the Test_002 process, whose afterAll deletes every attribute",
+    "CALENDAR_NAME": "string (required) - calendar used by the calendarName filter",
+    "STATUS_FILTER": "string (required) - raw node status sent as the PSR 'PO Attribute Search' filter",
+    "STATUS_DISPLAY": "object (required) - raw node status -> display value the search returns",
+    "STATUS_IN_FILTER": "string[] (required) - raw statuses used for the IN filter",
+    "PAGE_SIZES": "number[] (required) - PSR page sizes",
+    "PAGE_NUMBER_PAST_END": "number (required) - page number beyond the last page",
+    "ALL_ROWS_PAGE_SIZE": "number (required) - page size large enough to return every process",
+    "ROW_STRING_KEYS": "string[] (required) - keys every row carries as a string",
+    "VALIDATION_ERROR_CODE": "string (required) - errorCode for a bean validation failure",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a missing or malformed body"
+  },
+  "ATTRIBUTE_PROCESS_NAME": "IntegratedBusinessPlanning",
+  "CALENDAR_NAME": "Monthly Calendar",
+  "STATUS_FILTER": "NOT_STARTED",
+  "STATUS_DISPLAY": {
+    "NOT_STARTED": "Not Started",
+    "IN_PROGRESS": "In Progress"
+  },
+  "STATUS_IN_FILTER": ["NOT_STARTED", "IN_PROGRESS"],
+  "PAGE_SIZES": [5, 10, 20],
+  "PAGE_NUMBER_PAST_END": 9999,
+  "ALL_ROWS_PAGE_SIZE": 500,
+  "ROW_STRING_KEYS": ["id", "name", "displayName", "status", "calendarName", "cycleName", "createdOn", "startTransitionType", "endTransitionType"],
+  "VALIDATION_ERROR_CODE": "IBP_40_1003",
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022"
+}

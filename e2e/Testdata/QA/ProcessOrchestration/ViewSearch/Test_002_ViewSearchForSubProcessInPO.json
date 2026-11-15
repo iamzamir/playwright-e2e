@@ -1,0 +1,8 @@
+{
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "InitiativesAndAssumptionsReview",
+  "SUBPROCESS_DISPLAY_NAME":"Initiatives And Assumptions Review",
+  "SUBPROCESS_VIEW_NAME": "arrange Views view1",
+  "SUBPROCESS_HIDDEN_VIEW_NAME": "arrange Views view 2"
+}

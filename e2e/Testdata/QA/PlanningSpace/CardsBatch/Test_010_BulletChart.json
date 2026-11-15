@@ -1,0 +1,11 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Bullet Chart View Test",
+    "CONFIG_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/interop/maas/config/v1",
+    "CONTROLLER_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/interop/maas/controller/v1",
+    "CALC_ENGINE_ID": "50104796-004a-44db-a944-9c2031033492",
+    "DATA_ENDPOINT":"https://jsonblob.com/api/1292834325203378176", 
+    "NO_DATA_ENDPOINT":"https://jsonblob.com/api/1296356849258192896",
+    "WRONG_ENDPOINT": "invalid/endpoint"
+}

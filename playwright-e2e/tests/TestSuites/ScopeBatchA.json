@@ -1,0 +1,11 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_001_CheckScopeComponent.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_002_SaveOverwriteAndDeleteFilterSubprocess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_003_SaveAndDeleteFilter.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_005_ScopePresetMappingInSubProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_007_ScopePresetMappingInProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_008_ScopeInInteractiveProcedure.spec.ts"
+  ]
+}
+

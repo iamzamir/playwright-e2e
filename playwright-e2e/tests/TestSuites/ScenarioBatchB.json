@@ -1,0 +1,10 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_009_SubprocessScenarioActions.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_010_SubprocessScenarioComparisonInPivot.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_011_SelectScenarioinSidenav.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_012_CustomHeaderWithScenarioBudge.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_013_ScenariosDefault.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_014_VFDimensiondatawithPrivateandPublicScenario.spec.ts"
+  ]
+}

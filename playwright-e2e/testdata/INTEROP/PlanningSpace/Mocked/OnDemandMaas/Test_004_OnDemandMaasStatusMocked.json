@@ -1,0 +1,16 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "REALM_ID": "string (required) - realm id shown in the More details modal",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required) - interactive view with procedure mapping",
+    "SCENARIO_NAME": "string (required) - scenario the spec pins as default and expects in the Data Sync card",
+    "LOGGED_IN_USER_NAME": "string (required) - full name the mocked process user list returns for the mocked run-by user"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "REALM_ID": "b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasCluster",
+  "SCENARIO_NAME": "Base 30-03-2026-0535",
+  "LOGGED_IN_USER_NAME": "PS Automation1"
+}

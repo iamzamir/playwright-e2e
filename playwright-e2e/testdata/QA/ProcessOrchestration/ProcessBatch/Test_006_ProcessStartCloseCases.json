@@ -1,0 +1,12 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SUBPROCESS_NAME1": "string (required)",
+        "SUBPROCESS_NAME2": "string (required)"
+    },
+    "REALM_NAME": "cbp-qa-ps-automation",
+    "PROCESS_NAME":"PSManual3",
+    "SUBPROCESS_NAME1": "Demand Review",
+    "SUBPROCESS_NAME2": "Supply Review"
+}

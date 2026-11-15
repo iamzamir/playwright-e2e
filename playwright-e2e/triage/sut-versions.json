@@ -1,0 +1,17 @@
+{
+  "_schema": {
+    "purpose": "Where the system-under-test builds are read from for each environment (triage plan E7). scripts/triage/collect-versions.js fetches each app's page, finds its JavaScript bundle and reads the build identity the build inlines (GITHUB_SHA, BUILD_TIME, GITHUB_RUN_NUMBER, GITHUB_REF_NAME, GITHUB_REPOSITORY). See docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md §4.2.",
+    "environments": "Environment name (configs/env) -> apps. An environment with no apps records no versions.",
+    "apps.key": "Service key from triage/service-map.json; name and repo come from there.",
+    "apps.url": "The app's own page (the iframe the portal loads), not the portal route. Find it in a nightly run's network log: the static host that serves <app>/env.js.",
+    "services": "The backend services (PO, AI, LM, UI Fields) expose no version through the gateway (2026-11-05: /actuator/* and /v1/version answer 'No API path found'), so they are not listed."
+  },
+  "environments": {
+    "INTEROP": {
+      "apps": [
+        { "key": "planning-mfe", "url": "https://endpoint-test-staging-us-static1-aehpebbgekfqg8a0.z01.azurefd.net/s1/f8815348bcd7de72f2b60fd0/1-ps-mfe/" },
+        { "key": "lui", "url": "https://endpoint-test-staging-us-static1-aehpebbgekfqg8a0.z01.azurefd.net/s1/bfbcd0bcd1b35c7d1f4face3/1-po-mfe/" }
+      ]
+    }
+  }
+}

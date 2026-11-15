@@ -1,0 +1,18 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required) - realm the Planning Space user logs in to",
+    "PROCESS_NAME": "string (required) - process with views mapped and no other spec switching its view type for user1",
+    "STALE_FAVOURITE": "object (required) - favourite created through the links API; viewId must not exist in the dashboards catalogue, containerId is resolved at runtime from a mapped view",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "testervalue",
+  "STALE_FAVOURITE": {
+    "name": "PWAutoStaleFavourite",
+    "viewId": "6650aaaa00000000000000f1"
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

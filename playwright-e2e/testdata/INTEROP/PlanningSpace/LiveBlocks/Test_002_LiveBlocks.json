@@ -1,0 +1,22 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required) - realm to log in to",
+    "SECOND_USER": "string (required) - display name of user 2, mentioned in comments and checked in TC2",
+    "PROCESS_NAME": "string (required) - process that holds VIEW_NAME",
+    "VIEW_NAME": "string (required) - view with the pivot card the comments are added to",
+    "CARD_NAME": "string (required) - pivot card title",
+    "CARD_TYPE": "string (required) - CellCardType used to locate cells (PivotCard)",
+    "FILTER_NAME": "string (required) - saved scope filter applied before using the cells; the user's global scope can point at a deleted filter",
+    "CELL_VALUE_1": "string (required) - exact cell text for comment 1",
+    "CELL_VALUE_2": "string (required) - exact cell text for comment 2"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "SECOND_USER": "PS Automation2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Live Blocks Test",
+  "CARD_NAME": "Maas Pivot Card",
+  "CARD_TYPE": "PivotCard",
+  "FILTER_NAME": "Maas Pivot Filter",
+  "CELL_VALUE_1": "120",
+  "CELL_VALUE_2": "110"
+}

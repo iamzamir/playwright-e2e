@@ -1,0 +1,12 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "RECENTLY_OPENED_PROCESS": "string[] (required)",
+        "IS_PLANNING_SPACE": "boolean (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "RECENTLY_OPENED_PROCESS": ["ViewPermissionTest", "PSAutomation", "PSManual"],
+    "IS_PLANNING_SPACE" : false
+}

@@ -1,0 +1,56 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "FILTER_NAME": "string (required)",
+    "FILTER_NAME_AFTER_DT": "string (required)",
+    "VIEW_NAME1": "string (required)",
+    "VIEW_NAME2": "string (required)",
+    "CARD_NAME1": "string (required)",
+    "CARD_NAME2": "string (required)",
+    "DEFAULT_SCENARIO_NAME": "string (required)",
+    "DATA_SYNC_MESSAGE": "string (required)",
+    "SCOPE_FILTER_VALUES": "object (required)",
+    "SCOPE_FILTER_VALUES_AFTER_DT": "object (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "FILTER_NAME": "Filter to Test Drill Through",
+  "FILTER_NAME_AFTER_DT": "Preselected",
+  "VIEW_NAME1": "ViewToTest_DT_BDE_Maas",
+  "VIEW_NAME2": "ViewToValidate_Maas_BDE",
+  "CARD_NAME1": "BDE Card for DT",
+  "CARD_NAME2": "Maas Pivot Card - ODM",
+  "DEFAULT_SCENARIO_NAME": "Base 30-03-2026-0535",
+  "DATA_SYNC_MESSAGE": "Data is Synced",
+  "SCOPE_FILTER_VALUES": {
+    "Brand": [
+      "PL-01",
+      "PL-02",
+      "PL-11"
+    ],
+    "Region": [
+      "REGION-00",
+      "REGION-10",
+      "REGION-20"
+    ],
+    "Customer": [
+      "CUST-01",
+      "CUST-02",
+      "CUST-03"
+    ],
+    "CALENDARYEAR": [
+      "CY-2023",
+      "CY-2024",
+      "CY-2025"
+    ]
+  },
+  "SCOPE_FILTER_VALUES_AFTER_DT": {
+    "Customer": [
+      "CUST-01"
+    ],
+    "Item": [
+      "FG-21"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUB_PROCESS_NAME": "Initiatives And Assumptions Review",
+    "VIEW_NAME": "GlobalScopeView1",
+    "VIEW_NAME_2": "GlobalScopeView2",
+    "DEFAULT_SCOPE_VIEW_NAME": "DefaultScopeView1"
+}

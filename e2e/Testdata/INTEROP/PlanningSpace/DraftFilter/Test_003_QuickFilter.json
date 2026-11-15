@@ -1,0 +1,57 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SOURCE_VIEW": [
+        {"SourceView1": "duplicate view automation"},
+        {"SourceView2": "Maas Pivot Card View AT"}
+    ],
+    "TARGET_VIEW": [
+        {"TargetView1": "Maas Pivot Card View"},
+        {"TargetView2": "duplicate view automation subprocess"}
+    ],
+    "CARD_NAME": "Maas Pivot Card - ODM",
+    "HYDRATE_VIEW_NAME": "Quick Filter AT View",
+    "DRILL_THROUGH_CELLS": [
+        {"SourceView1": "CUST-03"},
+        {"SourceView2": "FG-03"}
+    ],
+    "FILTER_TO_APPLY_IN_SCOPE": "Quick Filter AT",
+    "CUSTOMER_VALUE": "CUST-03",
+    "SCOPE_EDIT_DIMENSION": "LOCATION",
+    "SCOPE_EDIT_HIERARCHY": "Region",
+    "SCOPE_UNCHECK_VALUE": "Region-20",
+    "QUICK_FILTER_ATTRIBUTES": [
+        {"filterName": "ITEM", "hierarchy": "Item"},
+        {"filterName": "LOCATION", "hierarchy": "Region"},
+        {"filterName": "CUSTOMER", "hierarchy": "Customer"}
+    ],
+    "QUICK_FILTER_VALUES": [
+        {"qfItemName": "Item", "qfValue": "FG-01"},
+        {"qfItemName": "Region", "qfValue": "REGION-00"},
+        {"qfItemName": "Customer", "qfValue": "CUST-01"}
+    ],
+    "SCOPE_FILTER_VALUES_AFTER_DRILLTHROUGH": [
+        {"filterValue1": "CUST-03", "filterValue2": "RETAIL OTHERS"}
+    ],
+    "SCOPE_FILTER_VALUES_AFTER_NAVIGATING_BACK": [
+        {"filterValue1": "CUST-03", "filterValue2": "RETAIL OTHERS"}
+    ],
+    "QUICK_FILTER_VALUE_VALIDATION": [
+        {"qfItemName": "Item", "qfValue": "FG-03"},
+        {"qfItemName": "Region", "qfValue": "REGION-10"}
+    ],
+    "UPDATE_QUICK_FILTER_VALUES": [
+        {"qfItemName": "Item", "qfValue": "FG-02"}
+    ],
+    "WORKFLOW_FILTER": {
+        "VIEW_NAME": "Quick Filter AT View",
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-00"]
+    },
+     "WORKFLOW_FILTER_SCOPE_TO_DEFINE":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-01"]
+    }
+}

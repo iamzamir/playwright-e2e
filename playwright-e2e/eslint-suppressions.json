@@ -1,0 +1,132 @@
+{
+  "scripts/save-snapshot.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/DataSetupBatch/Scenarios/Test_002_SetBaseScenarioAsDefault.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/PlanningSpace/AddLanePopup/Test_011_AddLaneSCA.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/AddLanePopup/Test_014_AddLaneThroughCardCell.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 3
+    }
+  },
+  "tests/PlanningSpace/Collaboration/Test_001_CollaborationPanel.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 3
+    }
+  },
+  "tests/PlanningSpace/DirtyState/Test_001_DirtyState.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 4
+    }
+  },
+  "tests/PlanningSpace/DrillThroughBatch/Test_008_MultiLevelDrillThroughMassBdeWithSubprocess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/PlanningSpace/DrillThroughBatch/Test_009_MultiLevelDrillThroughMassBdeWithAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/PlanningSpace/DuplicateView/Test_001_DuplicateViewProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 3
+    }
+  },
+  "tests/PlanningSpace/DuplicateView/Test_003_DuplicateViewAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 3
+    }
+  },
+  "tests/PlanningSpace/ObjectiveBar/Test_001_ObjectiveBarForProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/PlanningSpace/ObjectiveBar/Test_002_ObjectiveBarForSubProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/ObjectiveBar/Test_003_ObjectiveBarForAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/PortalBYO/Test_001_PortalBYO.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/QuickLinks/Test_002_LinkValidationPS.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 5
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_002_SaveOverwriteAndDeleteFilterSubprocess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_004_SaveOverwriteAndDeleteFilterAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_007_ScopePresetMappingInProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_009_DefaultFilterForProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 4
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_010_DefaultFilterForSubProcess.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 4
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_011_DefaultFilterForAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 4
+    }
+  },
+  "tests/PlanningSpace/ScopeBatch/Test_012_DefaultFilterPageContext.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 3
+    }
+  },
+  "tests/PlanningSpace/ViewsBatch/Test_008_ArrangeViewsForAssumption.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 2
+    }
+  },
+  "tests/PlanningSpace/WorkFlowFilter/Test_001_WorkFlowFilter.spec.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  },
+  "util/test.util.ts": {
+    "no-restricted-syntax": {
+      "count": 9
+    }
+  },
+  "util/wait-helpers.ts": {
+    "playwright/no-wait-for-timeout": {
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "name": "plan-sop-ui-automation",
+  "displayName": "UI & API Automation Framework",
+  "org": "BY-Product-Development",
+  "type": "test-automation",
+  "language": "typescript",
+  "primaryFramework": "@playwright/test ^1.52",
+  "legacyFramework": "webdriverio (e2e/)",
+  "performanceTooling": "jmeter",
+  "httpClient": "axios",
+  "logging": "winston",
+  "reporting": ["allure", "monocart", "playwright-html"],
+  "cloudRunner": "saucelabs (saucectl)",
+  "timezone": "Australia/Adelaide",
+  "environments": ["INTEROP", "QA", "PSR"],
+  "structure": {
+    "pageObjects": 22,
+    "utilities": 22,
+    "testSuites": 21,
+    "timeoutTiers": 11,
+    "specAreas": ["PlanningSpace", "ProcessOrchestration", "ProcessOrchestrationBackend", "DataSetupBatch", "Performance", "VisualAutomation"]
+  },
+  "specCounts": { "PlanningSpace": 126, "ProcessOrchestrationBackend": 45, "ProcessOrchestration": 29, "DataSetupBatch": 19, "Performance": 4, "VisualAutomation": 3 },
+  "switches": {
+    "ENVIRONMENT": { "default": "INTEROP", "values": ["QA", "INTEROP", "PSR"] },
+    "URL_MODE": { "default": "OLD", "values": ["OLD", "NEW"] },
+    "GATEWAY_TYPE": { "default": "AZURE", "values": ["AZURE", "GRAVITEE"] }
+  },
+  "timeoutTiers": {
+    "TINY": 2000,
+    "SHORT": 5000,
+    "MEDIUM": 10000,
+    "LONG": 15000,
+    "XLARGE": 30000,
+    "EXTREME": 60000,
+    "ACTION": 60000,
+    "TEST": 900000,
+    "EXTENDED": 1800000,
+    "POLL_INTERVAL": 500,
+    "TYPE_CHAR_DELAY": 50,
+    "POST_INPUT_SETTLE": 200
+  },
+  "testDataCoverage": {
+    "INTEROP": ["DataSetupBatch", "Performance", "PlanningSpace", "ProcessOrchestration", "ProcessOrchestrationBackend", "VisualAutomation", "VisualBaseValidations"],
+    "QA": ["PlanningSpace", "ProcessOrchestration", "ProcessOrchestrationBackend", "VisualAutomation"],
+    "PSR": ["Performance", "ProcessOrchestrationBackend"]
+  },
+  "quarantinedSpecs": [
+    "tests/ProcessOrchestration/PowerBar/Test_003_PowerBarForAssumptionInPO.spec.ts",
+    "tests/ProcessOrchestration/ProcessBatch/Test_002_AdoptVariantWhileCreateEditProcess.spec.ts",
+    "tests/ProcessOrchestration/ViewSearch/Test_003_ViewSearchForAssumptionInPO.spec.ts"
+  ],
+  "targets": ["plan-sop-planning-mfe", "plan-sop-lui", "plan-sop-process-orchestration-service", "plan-sop-actionitem", "plan-sop-link-management", "plan-sop-ui-fields-service"],
+  "keyCommands": {
+    "targetedRun": "npm run test:target",
+    "fullRun": "npm run test:interop",
+    "debug": "npm run test:debug",
+    "visual": "npm run test:visual",
+    "report": "npm run report",
+    "regenerateDocs": "npm run docs:testcases",
+    "cleanReports": "npm run clean-reports",
+    "regenerateApiCoverage": "npm run docs:api-coverage"
+  },
+  "frameworkGaps": [
+    "accessibility-testing",
+    "ui-fields-beyond-page-config",
+    "psr-test-data-sparse",
+    "qa-datasetup-data-missing",
+    "visual-coverage-breadth",
+    "action-item-playbooks",
+    "lui-settings-screens",
+    "ui-used-endpoints-untested",
+    "commons-version-drift-check",
+    "legacy-wdio-migration"
+  ],
+  "backendSpecCounts": { "LinkManagement": 14, "Migration": 9, "ProcessBatch": 9, "ActionItem": 8, "Calendar": 3, "UIFields": 2 },
+  "endpointCoverage": {
+    "generated": "2026-10-05",
+    "source": "docs/Coverage/backend-api-coverage-dashboard.html",
+    "PO": { "active": 144, "exercised": 59 },
+    "AI": { "active": 73, "exercised": 13 },
+    "LM": { "active": 30, "exercised": 21 },
+    "UIF": { "active": 28, "exercised": 4 },
+    "total": { "active": 275, "exercised": 97, "percent": 35.3 }
+  },
+  "agentResources": {
+    "learnings": ".agents/learnings.md",
+    "skills": ["jmeter-psr-samplers", "psr-gap-api-tests"],
+    "defectReport": "playwright-e2e/docs/Coverage/PSR-Gap-Plans/ActionItems-UIFields-Defect-Report.html"
+  },
+  "lastReviewed": "2026-10-05"
+}

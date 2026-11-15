@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "HAR_AREA": "string (required): folder under testdata/<ENV>/har/",
+    "HAR_NAME": "string (required): HAR file name without .har"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "Demand Review",
+  "HAR_AREA": "ScenarioBatch",
+  "HAR_NAME": "Test_003_ScenarioVisibilityFilter"
+}

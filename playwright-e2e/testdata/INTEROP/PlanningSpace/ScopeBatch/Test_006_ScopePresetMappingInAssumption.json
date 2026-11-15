@@ -1,0 +1,22 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "ASSUMPTION_NAME": "string (required)",
+    "PRESELECTED_SCOPE_FOR_ASSUMPTION": "object (required)",
+    "SCOPE_TO_APPLY_IN_PLANNING_FOR_ASSUMPTION": "object (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION_NAME": "PS Auto Assumption 4",
+  "PRESELECTED_SCOPE_FOR_ASSUMPTION": {
+    "DIMENSION_NAME": "LOCATION",
+    "ATTRIBUTE_NAME": "AllLocations",
+    "VALUE": "ALL"
+  },
+  "SCOPE_TO_APPLY_IN_PLANNING_FOR_ASSUMPTION": {
+    "DIMENSION_NAME": "LOCATION",
+    "ATTRIBUTE_NAME": "AllLocations",
+    "VALUE": "ALL"
+  }
+}

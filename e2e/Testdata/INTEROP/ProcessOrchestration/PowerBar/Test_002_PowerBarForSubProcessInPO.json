@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "SUBPROCESS_DISPLAY_NAME":"Initiatives And Assumptions Review",
+    "QUICK_LINKS": ["Action Items", "Scenario"]
+}

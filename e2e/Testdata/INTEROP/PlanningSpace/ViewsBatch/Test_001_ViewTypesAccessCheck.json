@@ -1,0 +1,11 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "ViewPermissionTest",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ASSUMPTION": "AssumptionViewCheck",
+    "ADMIN_VIEW_TYPES": "All Views,Favourites,Hidden Views",
+    "USER_VIEW_TYPES": "All Views,Favourites",
+    "ALL_VIEWS": "ViewOne,Save And Delete Filter",
+    "HIDDEN_VIEWS": "Edit View Disabled",
+    "FAVOURITES": "Save And Delete Filter"
+}

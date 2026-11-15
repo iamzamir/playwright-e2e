@@ -1,0 +1,10 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_001_ConfigurePrimaryAndSecondarySCA.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_002_SCAHistoryAndCreateScenario.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_003_SCPWizardLayout.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_004_SCPPopup.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_005_PublishScenario.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/SupplyChainActionsBatch/Test_006_SCAButtonVerifyByEnablingToggle.spec.ts"
+  ]
+}

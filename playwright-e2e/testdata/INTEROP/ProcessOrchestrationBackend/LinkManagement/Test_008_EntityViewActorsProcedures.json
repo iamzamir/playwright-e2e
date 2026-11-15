@@ -1,0 +1,81 @@
+{
+    "_schema": {
+        "VIEW_GROUP_NAME": "string (required)",
+        "VIEW_NAME": "string (required)",
+        "VIEW_ID": "string (required)",
+        "combinations": "object[] (required)"
+    },
+    "VIEW_GROUP_NAME": "Arrange Views View Group 1",
+    "VIEW_NAME": "Testing Card Actor",
+    "VIEW_ID": "68825c3747194343d8506e5a",
+    "combinations": [
+        {
+            "actor": "Default",
+            "procedure": "Default",
+            "entityType": "SCP-Launch-Interactive-Planning",
+            "entityId": "DefaultScopeTest_1747303152_IM",
+            "viewId": "68825c3747194343d8506e5a",
+            "mapRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": "DefaultScopeTest_1747303152_IM",
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": ["DefaultScopeTest_1747303152_IM"],
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "Maas",
+            "procedure": "Default",
+            "entityType": "maasactor",
+            "entityId": "ActorCfgBringUpOnDemandMaas",
+            "viewId": "68825c3747194343d8506e5a",
+            "mapRequest": {
+                "entityType": "maasactor",
+                "entityId": "ActorCfgBringUpOnDemandMaas",
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "maasactor",
+                "entityId": ["ActorCfgBringUpOnDemandMaas"],
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "UI Cache",
+            "procedure": "Default",
+            "entityType": "SCP-Launch-Interactive-Planning",
+            "entityId": "OnDemandMaasCluster",
+            "viewId": "68825c3747194343d8506e5a",
+            "mapRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": "OnDemandMaasCluster",
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": ["OnDemandMaasCluster"],
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "Scenario Comparison",
+            "procedure": "Default",
+            "entityType": "scsactor",
+            "entityId": "SCSMetadataFillRate",
+            "viewId": "68825c3747194343d8506e5a",
+            "mapRequest": {
+                "entityType": "scsactor",
+                "entityId": "SCSMetadataFillRate",
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "scsactor",
+                "entityId": ["SCSMetadataFillRate"],
+                "views": [{ "id": "68825c3747194343d8506e5a", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        }
+    ]
+}

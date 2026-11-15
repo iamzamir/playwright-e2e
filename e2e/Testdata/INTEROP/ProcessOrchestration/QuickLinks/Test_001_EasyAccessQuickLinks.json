@@ -1,0 +1,46 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "quickLinks": [
+        {
+            "name": "Process Summary",
+            "env": "pointegration",
+            "pageTitle": "Initiatives And Assumptions Review"
+        },
+        {
+            "name": "Planning",
+            "env": "ibppsintegration",
+            "pageTitle": "Planning"
+        },
+        {
+            "name": "Assumptions",
+            "env": "pointegration",
+            "pageTitle": "Assumptions"
+        },
+        {
+            "name": "Action Items",
+            "env": "pointegration",
+            "pageTitle": "Action Items"
+        },
+        {
+            "name": "Scenario",
+            "env": "ibppsintegration",
+            "pageTitle": "All Scenarios"
+        },
+        {
+            "name": "Interactive Planning",
+            "env": "ibppsintegration",
+            "pageTitle": "Interactive Planning"
+        },
+        {
+            "name": "Cognitive Model",
+            "env": "semantic-network-architect-interop",
+            "pageTitle": "Cognitive Model"
+        },
+        {
+            "name": "Process Settings",
+            "env": "pointegration",
+            "pageTitle": "Structure & Schedule"
+        }
+    ]
+}

@@ -1,0 +1,84 @@
+{
+    "_schema": {
+        "FULL_EXPORT_PAYLOAD": "object (required)",
+        "PARTIAL_EXPORT_PAYLOAD": "object (required)",
+        "PARTIAL_EXPORT_EXPECTED_COUNTS": "object (required)",
+        "MALFORMED_EXPORT_PAYLOAD": "object (required)"
+    },
+    "FULL_EXPORT_PAYLOAD": {
+        "calendars": [],
+        "processes": [],
+        "customFields": {
+            "attributes": [],
+            "uiFields": []
+        },
+        "actionItems": {
+            "attributes": [],
+            "kpis": [],
+            "ui_fields": []
+        },
+        "assumptions": {
+            "attributes": [],
+            "ui_fields": [],
+            "ui_fields_values": [],
+            "kpi_configs": [],
+            "assumption_types": []
+        },
+        "links": {
+            "entityViews": [],
+            "entityViewsProcedure": []
+        },
+        "supplyChainActions": [],
+        "featureToggle": {
+            "tenantLevel": [],
+            "processes": [],
+            "subProcesses": [],
+            "assumptions": []
+        }
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "calendars": [
+            "Monthly Calendar"
+        ],
+        "processes": [
+            "IntegratedBusinessPlanning"
+        ],
+        "actionItems": {
+            "kpis": [
+                "089ba8a1-fdc2-4348-9d48-ed9598ea5c6a"
+            ]
+        },
+        "supplyChainActions": [
+            "Publish Scenario"
+        ],
+        "links": {
+            "entityViews": [
+                {
+                    "type": "subprocess",
+                    "entityId": [
+                        "IntegratedBusinessPlanning"
+                    ]
+                }
+            ],
+            "entityViewsProcedure": [
+                {
+                    "type": "subprocess",
+                    "entityId": [
+                        "IntegratedBusinessPlanning"
+                    ]
+                }
+            ]
+        }
+    },
+    "PARTIAL_EXPORT_EXPECTED_COUNTS": {
+        "processes": 1,
+        "calendars": 1,
+        "actionItemKpis": 1,
+        "supplyChainActions": 1,
+        "entityViews": 1,
+        "entityViewsProcedure": 1
+    },
+    "MALFORMED_EXPORT_PAYLOAD": {
+        "processes": "IntegratedBusinessPlanning"
+    }
+}

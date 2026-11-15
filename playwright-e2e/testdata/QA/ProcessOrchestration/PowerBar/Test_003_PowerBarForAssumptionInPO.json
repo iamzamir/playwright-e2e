@@ -1,0 +1,15 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "ASSUMPTION": "object (required)",
+        "QUICK_LINKS": "string[] (required)"
+    },
+    "REALM_NAME": "cbp-qa-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption",
+        "ASSUMPTION_TYPE": "Opportunity"
+    },
+    "QUICK_LINKS": ["Action Items", "Scenario", "Supply Chain Procedures - History"]
+}

@@ -1,0 +1,60 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "FILTER_TO_APPLY_IN_SCOPE": "string (required)",
+    "CARD_NAME": "string (required)",
+    "PIVOT_VIEW": "string (required)",
+    "CREATE_RESOURCE_CELL": "string (required) - pivot cell used to trigger Create Resource",
+    "constraintDetails": {
+      "ResourceDetails": {
+        "resource": "string (required) - resource name prefix; spec appends a random suffix",
+        "resourceLocation": "string (required) - Location dropdown value",
+        "constraintType": "string|number (required) - Type dropdown value",
+        "timeGranularity": "string (required) - Granularity dropdown value",
+        "group": "string (required) - Group dropdown value",
+        "timeData": "array (required) - [{ timeLabel, regularCapacity, regularCost }] for the Capacity Planning grid",
+        "RESOURCETYPE": "string|number (optional) - Resource Type dropdown value",
+        "QTYUOM": "string (optional) - Quantity UOM value"
+      },
+      "AddAssociationDetails": {
+        "query": "string (required) - Constrained Items query used for Create/Copy submit"
+      },
+      "EditDetails": {
+        "constraintType": "string (required) - new Type value set during Edit",
+        "query": "string (required) - new Constrained Items query set during Edit"
+      }
+    }
+  },
+  "REALM_NAME": "ibp-iop-aug-02",
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "VIEW_NAME": "SupplyUseCase-View31",
+  "FILTER_TO_APPLY_IN_SCOPE": "SupplyInsights",
+  "CARD_NAME": "Capacity Constraints Pivot",
+  "PIVOT_VIEW": "Resource",
+  "CREATE_RESOURCE_CELL": "Pack-V-C02",
+  "constraintDetails": {
+    "ResourceDetails": {
+      "resource": "AT-DynamicConstraint",
+      "resourceLocation": "COPACK-02",
+      "constraintType": "Hard",
+      "timeGranularity": "CALENDARYEAR",
+      "group": "Packing CoPack",
+      "timeData": [
+        { "timeLabel": "CY-2026", "regularCapacity": 10, "regularCost": 20 },
+        { "timeLabel": "CY-2027", "regularCapacity": 30, "regularCost": 40 },
+        { "timeLabel": "CY-2028", "regularCapacity": 50, "regularCost": 60 }
+      ],
+      "RESOURCETYPE": 4,
+      "QTYUOM": "ml"
+    },
+    "AddAssociationDetails": {
+      "query": "Brand Property = \"Beer\""
+    },
+    "EditDetails": {
+      "constraintType": "Unconstrained",
+      "query": "Brand Property = \"Blue Goose\""
+    }
+  }
+}

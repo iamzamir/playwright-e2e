@@ -1,0 +1,69 @@
+{
+  "_schema": {
+    "requestBody": "object (required)",
+    "requestBody2": "object (required)",
+    "requestBody3": "object (required)",
+    "requestBody4": "object (required)",
+    "requestSearchBody": "object (required)"
+  },
+  "requestBody": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "66eabdb1c8d8f6859997d3f8", "sequence": 1, "hidden": false },
+      { "id": "66eabdc4c8d8f6859997d3fa", "sequence": 2, "hidden": false },
+      { "id": "66eabde7dd31724a800ab45a", "sequence": 3, "hidden": false },
+      { "id": "66fe674b99fdb3e716ebb5f5", "sequence": 4, "hidden": false },
+      { "id": "67162b75447ddd454193363a", "sequence": 5, "hidden": false },
+      { "id": "673b2d7814f92241fdfdb3e2", "sequence": 6, "hidden": false },
+      { "id": "67b5d636417468cc6442c82c", "sequence": 7, "hidden": false },
+      { "id": "681dd65a0a5fe7437aa289a0", "sequence": 8, "hidden": false }
+    ]
+  },
+  "requestBody2": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "66eabdb1c8d8f6859997d3f8", "sequence": 1, "hidden": false },
+      { "id": "66eabdc4c8d8f6859997d3fa", "sequence": 2, "hidden": false },
+      { "id": "66eabde7dd31724a800ab45a", "sequence": 3, "hidden": false },
+      { "id": "66fe674b99fdb3e716ebb5f5", "sequence": 4, "hidden": false },
+      { "id": "673b2d7814f92241fdfdb3e2", "sequence": 5, "hidden": true },
+      { "id": "67162b75447ddd454193363a", "sequence": 6, "hidden": true }
+    ]
+  },
+  "requestBody3": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "66eabdb1c8d8f6859997d3f8", "sequence": 1, "hidden": false },
+      { "id": "66eabdc4c8d8f6859997d3fa", "sequence": 2, "hidden": false },
+      { "id": "66eabde7dd31724a800ab45a", "sequence": 3, "hidden": false },
+      { "id": "66fe674b99fdb3e716ebb5f5", "sequence": 4, "hidden": false },
+      { "id": "67162b75447ddd454193363a", "sequence": 5, "hidden": false },
+      { "id": "673b2d7814f92241fdfdb3e2", "sequence": 6, "hidden": false },
+      { "id": "6825ccb2740b477801e119f6", "sequence": 7, "hidden": false },
+      { "id": "6825ccce740b477801e119f7", "sequence": 8, "hidden": false }
+    ]
+  },
+  "requestBody4": {
+    "entityId": ["Risk"],
+    "entityType": "assumptiontype"
+  },
+  "requestSearchBody": {
+    "entityId": ["Risk", "Opportunity"],
+    "entityType": "assumptiontype"
+  }
+}

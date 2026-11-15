@@ -1,0 +1,8 @@
+{
+  "_schema": {
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "GRAVITEE": {
+    "REALM_KEY": "pspoat-test1"
+  }
+}

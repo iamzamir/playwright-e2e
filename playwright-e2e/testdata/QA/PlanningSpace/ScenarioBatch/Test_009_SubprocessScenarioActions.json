@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "SCENARIO_NAME1": "string (required)",
+    "SUBPROCESS_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Automation Sub Process View1",
+  "SCENARIO_NAME1": "PSAutoChidScenario",
+  "SUBPROCESS_NAME": "Demand Review"
+}

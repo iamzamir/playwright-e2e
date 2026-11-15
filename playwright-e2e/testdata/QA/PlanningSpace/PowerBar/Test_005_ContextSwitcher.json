@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "ASSUMPTION_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "Demand Review",
+  "ASSUMPTION_NAME": "Assumption 329"
+}

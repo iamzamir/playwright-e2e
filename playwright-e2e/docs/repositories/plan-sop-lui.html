@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LUI Process Orchestration — Repository Dossier</title><style>
+.shell{width:100%;overflow-x:hidden}
+:root{--ink:#17212b;--muted:#5d6a76;--line:#d7dee5;--wash:#f5f7f8;--navy:#17324d;--green:#18735b;--amber:#b25e09;--red:#a53b3b;--blue:#27618b}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e9eef1;color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}.shell{max-width:1220px;margin:auto;background:#fff;min-height:100vh;box-shadow:0 0 28px #2437461c}.top{padding:30px 42px 22px;border-bottom:5px solid var(--navy);background:#f8fafb}.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;font-size:11px}.top h1{font-size:30px;margin:3px 0;letter-spacing:0}.lede{max-width:940px;color:var(--muted);font-size:15px}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.tag{border:1px solid var(--line);padding:3px 8px;background:#fff;font-size:12px}.tag strong{color:var(--navy)}nav{position:sticky;top:0;z-index:3;background:var(--navy);padding:9px 42px;display:flex;gap:18px;overflow:auto}nav a{color:#fff;text-decoration:none;white-space:nowrap;font-size:12px}main{padding:26px 42px 54px}h2{font-size:21px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:32px 0 13px}h3{font-size:15px;margin:20px 0 8px;color:var(--navy)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{border:1px solid var(--line);border-top:3px solid var(--green);padding:13px;background:var(--wash);border-radius:5px}.card b{display:block;font-size:20px;color:var(--navy)}.card span{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.panel{border:1px solid var(--line);padding:15px;border-radius:5px}.panel h3{margin-top:0}.panel ul{margin:5px 0;padding-left:20px}table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}th{background:var(--wash);color:var(--navy)}tr:nth-child(even) td{background:#fbfcfc}code{font-family:Consolas,monospace;background:#edf1f3;padding:1px 4px}.note{padding:11px 14px;border-left:4px solid var(--amber);background:#fff8e9;margin:12px 0}.risk{border-left-color:var(--red);background:#fff3f3}.good{border-left-color:var(--green);background:#eef8f4}.diagram{border:1px solid var(--line);background:#fcfdfd;padding:12px;overflow:auto;margin:11px 0 22px;border-radius:5px}.mermaid{min-width:700px;text-align:center}.links a{color:var(--blue)}footer{padding:18px 42px;background:var(--wash);border-top:1px solid var(--line);color:var(--muted);font-size:12px}@media(max-width:700px){.top,main,footer{padding-left:20px;padding-right:20px}nav{padding-left:20px}.mermaid{min-width:570px}}@media print{body{background:#fff}.shell{box-shadow:none}nav{display:none}.diagram,.panel,.card,table{break-inside:avoid}}
+</style></head><body><div class="shell"><header class="top"><div class="eyebrow">Plan SOP · React micro-frontend</div><h1>LUI — Process Orchestration UI</h1><p class="lede">The Process Orchestration micro-frontend and administration surface: process/subprocess lifecycle, calendars and cycles, action items, view management, data attributes, node transitions, schedule structure, settings, scenario selection, and context navigation.</p><div class="tags"><span class="tag"><strong>Repo</strong> plan-sop-lui</span><span class="tag"><strong>Version</strong> 0.0.3</span><span class="tag"><strong>Stack</strong> React · TypeScript · Vite</span><span class="tag"><strong>Unit tests</strong> Vitest</span><span class="tag"><strong>Host</strong> Luminate Portal</span></div></header><nav><a href="#purpose">Purpose</a><a href="#functions">Functionality</a><a href="#architecture">Architecture</a><a href="#flows">Interaction flow</a><a href="#automation">Automation</a><a href="#risks">Risks</a><a href="#evidence">Evidence</a></nav><main>
+<section id="purpose"><h2>What this repository does</h2><p>LUI is the user-facing control plane for Process Orchestration. Users create and operate processes and subprocesses, configure calendars and cycles, work with action items, search and navigate contexts, and administer views, attributes, schedules, transitions, and assumption types.</p><p>It is hosted by the Luminate Portal at <code>LUMINATE_PORTAL_URL + POLINK</code>. The repo also contains a legacy WebdriverIO suite under <code>e2e/</code>; new coverage belongs in the central Playwright repository.</p><div class="cards"><div class="card"><b>322</b><span>TSX/JSX source files</span></div><div class="card"><b>13</b><span>feature component folders</span></div><div class="card"><b>910</b><span>unique test IDs</span></div><div class="card"><b>29</b><span>direct Playwright specs</span></div><div class="card"><b>4</b><span>important settings screens uncovered</span></div></div></section>
+<section id="functions"><h2>Functional capabilities</h2><div class="grid"><article class="panel"><h3>Process operations</h3><ul><li>Create, edit, start, stop, close, and delete processes.</li><li>Manage subprocesses and adopt process variants.</li><li>Map procedures and respond to lifecycle triggers.</li><li>Show process, subprocess, and assumption summaries.</li></ul></article><article class="panel"><h3>Calendar and planning structure</h3><ul><li>Manage calendars and nested cycles.</li><li>Assign calendars/cycles to process plans.</li><li>Configure schedule and structure.</li><li>Configure node transition graphs.</li></ul></article><article class="panel"><h3>Views, scope, and navigation</h3><ul><li>Map planning views to view groups.</li><li>Search views and navigate quick links.</li><li>Save scope presets from assumptions and settings.</li><li>Use power bar, recently viewed, and context switcher.</li></ul></article><article class="panel"><h3>Administration and work</h3><ul><li>Action-item create/edit/delete and bulk actions.</li><li>Data and attribute configuration.</li><li>Assumption type settings and scenario selection.</li><li>Lever-based planning and embedded iframe content.</li></ul></article></div>
+<table><thead><tr><th>Component area</th><th>Back-end owner</th><th>Automation</th></tr></thead><tbody><tr><td>ProcessOrchestration</td><td>PO Service</td><td>ProcessBatch</td></tr><tr><td>CalendarManager / calendar and cycle modals</td><td>PO Service</td><td>Calendar specs</td></tr><tr><td>ViewManager</td><td>Link Management</td><td>One setup-critical spec</td></tr><tr><td>DataAndAttributes</td><td>Assumptions service (assumption types)</td><td>Not directly covered</td></tr><tr><td>Settings</td><td>PO + Link Management + assumptions</td><td>Partial</td></tr><tr><td>Listing columns, details, editors</td><td>UI Fields (4 routes)</td><td>Backend contract specs in <code>POBackendUIFieldsBatch</code></td></tr><tr><td>LeverBasedPlanning</td><td>Planning services</td><td>Not covered</td></tr></tbody></table></section>
+<section id="architecture"><h2>Architecture</h2><h3>System context</h3><div class="diagram"><pre class="mermaid">
+graph TB
+  U["User"] --> PORTAL["Luminate Portal"] --> LUI["LUI / Process Orchestration MFE"]
+  LUI --> LIB["@by LUI dashboard, filter, settings libraries"]
+  LUI --> GW{{"API Gateway"}}
+  GW --> PO["Process Orchestration"]
+  GW --> LM["Link Management"]
+  GW --> UF["UI Fields"]
+  GW --> AI["Action Item"]
+  AUTO["Central Playwright suite<br/>29 specs"] --> LUI
+  WDIO["Legacy e2e/ WebdriverIO"] -. "superseded" .-> LUI
+</pre></div><h3>Internal composition</h3><div class="diagram"><pre class="mermaid">
+graph TD
+  NAV["SubNav and app shell"] --> FEAT["13 feature component folders"]
+  FEAT --> PROC["ProcessOrchestration"]
+  FEAT --> CAL["CalendarManager + modals"]
+  FEAT --> VM["ViewManager"]
+  FEAT --> SET["Settings / DataAndAttributes"]
+  FEAT --> OTHER["ScenarioSelector · LeverBasedPlanning · Iframe"]
+  FEAT --> H["Hooks"]
+  H --> A["Actions / reducers"]
+  H --> API["apis.ts · apiInfo.ts · useApi.ts"]
+  API --> CACHE[("API response cache")]
+  CACHE --> GW{{Gateway}}
+  CFG["Runtime config from public/"] --> API
+</pre></div><h3>Settings ownership</h3><div class="diagram"><pre class="mermaid">
+graph LR
+  AT["/assumption-types"] --> ASV
+  DA["/data-attributes"] --> ASV["Assumptions service"]
+  SS["/schedule-structure"] --> PO
+  NT["/node-transitions"] --> TR["PO TransitionController"]
+  VM["View Manager"] --> LM["Link Management"]
+  VM -. "seeds state used by" .-> PS["Planning Space tests"]
+</pre></div></section>
+<section id="flows"><h2>Key interaction flows</h2><h3>Overflow row menu</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant T as Test or user
+  participant R as Table row
+  participant B as Three-dot button
+  participant M as Menu
+  participant I as Named menu item
+  T->>R: locate target row
+  T->>B: click button within row
+  B->>M: open menu
+  T->>M: wait until visible
+  T->>I: select by accessible name
+  I-->>T: action completes
+</pre></div><p>The trigger <code>lui-ccl-threedot-menu-icon-button</code> occurs 63 times. Positional IDs such as <code>action-menu-item-2</code> are fragile: reordering a menu clicks the wrong command without producing a locator failure.</p><h3>API cache behavior</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant T as Test
+  participant API as Backend
+  participant C as src/apis/cache.ts
+  participant UI as LUI
+  T->>API: mutate state directly
+  API-->>T: 2xx
+  T->>UI: inspect new state
+  UI->>C: read cached response
+  C-->>UI: stale value
+  UI-->>T: old value
+  Note over T,UI: Reload or use a fresh browser context
+</pre></div></section>
+<section id="automation"><h2>Automation relevance</h2><table><thead><tr><th>Feature</th><th>Specs</th><th>Primary page object</th></tr></thead><tbody><tr><td>Process lifecycle</td><td>9</td><td><code>process.page.ts</code></td></tr><tr><td>Action items</td><td>4</td><td><code>action-items.page.ts</code></td></tr><tr><td>Power bar</td><td>5</td><td><code>powerbar.page.ts</code></td></tr><tr><td>View search</td><td>3</td><td><code>process.page.ts</code></td></tr><tr><td>Scope</td><td>3</td><td><code>scope.page.ts</code></td></tr><tr><td>Calendars</td><td>2</td><td><code>process.page.ts</code></td></tr><tr><td>View manager</td><td>1</td><td><code>global-settings.page.ts</code></td></tr></tbody></table><div class="note good"><strong>Process status:</strong> after clicking start or stop, poll the PO API and only then assert the UI state. Do not wait on status text with a fixed delay.</div></section>
+<section id="risks"><h2>Risks and gaps</h2><table><thead><tr><th>Risk</th><th>Impact</th><th>Response</th></tr></thead><tbody><tr><td>Four settings screens untested</td><td>They configure state other suites depend on</td><td>Add assumption-type, data-attribute, schedule, and transition specs</td></tr><tr><td>Index-based menu locators</td><td>Wrong action after menu reorder</td><td>Use role + accessible name</td></tr><tr><td>Test-ID spelling drift</td><td>Refresh/cancel/dropdown/search have multiple variants</td><td>Verify live DOM and centralize in POMs</td></tr><tr><td>API response cache</td><td>Stale UI after direct API setup</td><td>Reload or fresh context</td></tr><tr><td>Legacy WDIO duplication</td><td>Two suites diverge and duplicate maintenance</td><td>Migrate remaining value; do not add WDIO tests</td></tr><tr><td>Accessibility absent</td><td>No signal from functional coverage</td><td>Add Axe checks on principal routes</td></tr></tbody></table></section>
+<section id="evidence" class="links"><h2>Detailed evidence</h2><ul><li><a href="plan-sop-lui/overview.md">Overview</a></li><li><a href="plan-sop-lui/architecture.md">Architecture source</a></li><li><a href="plan-sop-lui/ui-inventory.md">Routes, components, and test IDs</a></li><li><a href="plan-sop-lui/data-model.md">Data sources and cache</a></li><li><a href="plan-sop-lui/environments.md">Environment matrix</a></li><li><a href="plan-sop-lui/test-hooks.md">Interaction and wait patterns</a></li><li><a href="plan-sop-lui/automation-coverage.md">Coverage gaps</a></li><li><a href="plan-sop-lui/troubleshooting.md">Troubleshooting</a></li></ul></section></main><footer>Generated from source under C:\Backend\plan-sop-lui · 16 Sep 2026, reviewed 5 Oct 2026 · Mermaid loads through jsDelivr when online.</footer></div><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{fontFamily:'Segoe UI, sans-serif',primaryColor:'#eef6ff',primaryTextColor:'#17212b',primaryBorderColor:'#27618b',lineColor:'#5d6a76',secondaryColor:'#eef8f4',tertiaryColor:'#fff8e9'}});</script></body></html>

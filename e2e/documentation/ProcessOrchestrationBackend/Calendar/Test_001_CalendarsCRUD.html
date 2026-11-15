@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar CRUD Operations - Test Cases</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: -30px -30px 30px -30px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .test-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f8f9ff;
+            border-radius: 6px;
+        }
+        .test-info div {
+            font-weight: bold;
+        }
+        .test-info span {
+            font-weight: normal;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        tr:hover {
+            background-color: #f8f9ff;
+        }
+        .priority-high {
+            background-color: #ff4757;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority-medium {
+            background-color: #ffa502;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .priority-low {
+            background-color: #2ed573;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .severity-critical {
+            background-color: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .severity-major {
+            background-color: #f39c12;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .severity-minor {
+            background-color: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .status-error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .status-warning {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .summary-box {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        .summary-box h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        .count-badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Calendar CRUD Operations - Test Cases</h1>
+        </div>
+
+        <div class="test-info">
+            <div>Test Suite: <span>Process Orchestration Backend - Calendar Management</span></div>
+            <div>Test File: <span>Test_001_CalendarsCRUD.spec.ts</span></div>
+            <div>Total Test Cases: <span>15</span></div>
+            <div>Environments: <span>QA, INTEROP</span></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Test Case Name</th>
+                    <th>Priority</th>
+                    <th>Severity</th>
+                    <th>Description</th>
+                    <th>Expected Result</th>
+                    <th>HTTP Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>TC001</strong></td>
+                    <td>Create Calendar</td>
+                    <td><span class="priority-high">High</span></td>
+                    <td><span class="severity-critical">Critical</span></td>
+                    <td>Verify that a new calendar can be successfully created</td>
+                    <td>Calendar created successfully with all provided details</td>
+                    <td><span class="status-success">201</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC002</strong></td>
+                    <td>Get Created Calendar</td>
+                    <td><span class="priority-high">High</span></td>
+                    <td><span class="severity-critical">Critical</span></td>
+                    <td>Verify that a created calendar can be retrieved using its name</td>
+                    <td>Calendar details returned correctly, Name matches creation input</td>
+                    <td><span class="status-success">200</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC003</strong></td>
+                    <td>Update Created Calendar</td>
+                    <td><span class="priority-high">High</span></td>
+                    <td><span class="severity-critical">Critical</span></td>
+                    <td>Verify that an existing calendar can be updated with new information</td>
+                    <td>Calendar description updated successfully</td>
+                    <td><span class="status-success">200</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC004</strong></td>
+                    <td>Get Updated Calendar Details</td>
+                    <td><span class="priority-high">High</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that updates to calendar are properly saved and retrievable</td>
+                    <td>Retrieved data shows updated description</td>
+                    <td><span class="status-success">200</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC005</strong></td>
+                    <td>Delete Created Calendar</td>
+                    <td><span class="priority-high">High</span></td>
+                    <td><span class="severity-critical">Critical</span></td>
+                    <td>Verify that a calendar can be successfully deleted from the system</td>
+                    <td>Calendar removed successfully</td>
+                    <td><span class="status-success">200</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC006</strong></td>
+                    <td>Get Deleted Calendar</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that deleted calendar cannot be retrieved</td>
+                    <td>Calendar not found after deletion</td>
+                    <td><span class="status-error">404</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC007</strong></td>
+                    <td>Create Calendar with Missing Required Fields</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system rejects calendar creation when required fields are missing</td>
+                    <td>Bad request error for missing required fields</td>
+                    <td><span class="status-error">400</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC008</strong></td>
+                    <td>Duplicate Calendar Creation</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system prevents creation of duplicate calendars</td>
+                    <td>First creation succeeds, Duplicate creation fails with conflict error</td>
+                    <td><span class="status-warning">409</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC009</strong></td>
+                    <td>Unauthorized Calendar Operation</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system rejects operations with invalid authentication</td>
+                    <td>Unauthorized error for invalid token</td>
+                    <td><span class="status-error">401</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC010</strong></td>
+                    <td>Create Calendar With Invalid Date Range</td>
+                    <td><span class="priority-low">Low</span></td>
+                    <td><span class="severity-minor">Minor</span></td>
+                    <td>Verify that system rejects calendar with invalid date ranges (end before start)</td>
+                    <td>Server error for invalid date range logic</td>
+                    <td><span class="status-error">500</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC011</strong></td>
+                    <td>Update Non-Existent Calendar</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system handles updates to non-existent calendars properly</td>
+                    <td>Not found error for non-existent calendar</td>
+                    <td><span class="status-error">404</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC012</strong></td>
+                    <td>Delete Non-Existent Calendar</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system handles deletion of non-existent calendars properly</td>
+                    <td>Not found error for non-existent calendar</td>
+                    <td><span class="status-error">404</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC013</strong></td>
+                    <td>Get Calendar With Invalid Name Format</td>
+                    <td><span class="priority-low">Low</span></td>
+                    <td><span class="severity-minor">Minor</span></td>
+                    <td>Verify that system handles invalid calendar name formats properly</td>
+                    <td>Not found or bad request for invalid name format</td>
+                    <td><span class="status-error">404</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC014</strong></td>
+                    <td>Create Calendar With Duplicate Cycle Names</td>
+                    <td><span class="priority-low">Low</span></td>
+                    <td><span class="severity-minor">Minor</span></td>
+                    <td>Verify that system rejects calendars with duplicate cycle names</td>
+                    <td>Server error for duplicate cycle names within calendar</td>
+                    <td><span class="status-error">500</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TC015</strong></td>
+                    <td>Access Calendar API Without Authorization Header</td>
+                    <td><span class="priority-medium">Medium</span></td>
+                    <td><span class="severity-major">Major</span></td>
+                    <td>Verify that system requires authorization header for calendar operations</td>
+                    <td>Unauthorized error when authorization header is missing</td>
+                    <td><span class="status-error">401</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="summary-grid">
+            <div class="summary-box">
+                <h3>📊 Priority Summary</h3>
+                <p><span class="count-badge">5</span> <strong>High Priority:</strong> TC001, TC002, TC003, TC004, TC005</p>
+                <p><span class="count-badge">7</span> <strong>Medium Priority:</strong> TC006, TC007, TC008, TC009, TC011, TC012, TC015</p>
+                <p><span class="count-badge">3</span> <strong>Low Priority:</strong> TC010, TC013, TC014</p>
+            </div>
+            
+            <div class="summary-box">
+                <h3>🎯 Severity Summary</h3>
+                <p><span class="count-badge">4</span> <strong>Critical:</strong> TC001, TC002, TC003, TC005</p>
+                <p><span class="count-badge">8</span> <strong>Major:</strong> TC004, TC006, TC007, TC008, TC009, TC011, TC012, TC015</p>
+                <p><span class="count-badge">3</span> <strong>Minor:</strong> TC010, TC013, TC014</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

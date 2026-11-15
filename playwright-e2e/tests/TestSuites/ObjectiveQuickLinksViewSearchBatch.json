@@ -1,0 +1,7 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/QuickLinks/Test_001_EasyAccessQuickLinksFromPS.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewSearch/Test_001_ViewSearchForProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewSearch/Test_002_ViewSearchForSubProcess.spec.ts"
+  ]
+}

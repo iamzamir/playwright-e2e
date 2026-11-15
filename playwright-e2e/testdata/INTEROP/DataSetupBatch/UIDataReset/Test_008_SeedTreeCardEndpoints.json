@@ -1,0 +1,16 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "CARD_TITLE": "string (required)",
+    "DATA_ENDPOINT": "string (required) - the URL the mocked Test_014 routes",
+    "COLUMNS_ENDPOINT": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Tree card test view",
+  "CARD_TITLE": "Tree card test",
+  "DATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/TreeTable",
+  "COLUMNS_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/TreeTable/columns"
+}

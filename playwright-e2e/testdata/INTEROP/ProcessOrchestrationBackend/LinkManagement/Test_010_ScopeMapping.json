@@ -1,0 +1,208 @@
+{
+  "_schema": {
+    "scopeQuery": "object (required)",
+    "putScopeRequest": "object (required)",
+    "putNullScopeEnabledRequest": "object (required)",
+    "putNullScopeDisabledRequest": "object (required)",
+    "patchRequest": "object (required)"
+  },
+  "scopeQuery": {
+    "entityType": "subprocess",
+    "entityId": "TestProcNew",
+    "viewId": "68f9fc939d638f45112aa8b4"
+  },
+  "putScopeRequest": {
+    "scope": {
+      "dimensions": [
+        {
+          "name": "CUSTOMER",
+          "hierarchy": {
+            "name": "DEMANDCHANNELHIERARCHY",
+            "levels": [
+              { "name": "ALLCHANNELS" },
+              { "name": "CHANNEL" },
+              { "name": "CUSTOMER" }
+            ]
+          },
+          "propertiesFilter": [
+            {
+              "levelId": "CHANNEL",
+              "label": "Channel",
+              "values": [
+                {
+                  "name": "CHANNELDESCR",
+                  "label": "CHANNELDESCR",
+                  "values": ["RETAIL"],
+                  "data": [{ "id": "RETAIL" }]
+                }
+              ]
+            }
+          ],
+          "levelsFilter": [
+            {
+              "name": "CHANNEL",
+              "label": "Channel",
+              "values": ["CG-01"],
+              "data": [{ "id": "CG-01", "description": "RETAIL" }]
+            }
+          ],
+          "isTimeDimension": false,
+          "isCrossAttributeFilter": true,
+          "selectedProperties": [
+            {
+              "id": "CHANNEL",
+              "label": "Channel",
+              "levelId": "CHANNEL",
+              "levelLabel": "Channel",
+              "values": [
+                { "value": "CG-01", "selected": true, "disabled": false, "description": "RETAIL" }
+              ]
+            },
+            {
+              "id": "CHANNELDESCR",
+              "label": "CHANNELDESCR",
+              "levelId": "CHANNEL",
+              "levelLabel": "Channel",
+              "values": [
+                { "value": "RETAIL", "selected": true, "disabled": false }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ITEM",
+          "hierarchy": {
+            "name": "ITEMHIERARCHY",
+            "levels": [
+              { "name": "ALLPRODUCTS" },
+              { "name": "PRODUCTTYPE" },
+              { "name": "BRAND" },
+              { "name": "ITEM" }
+            ]
+          },
+          "propertiesFilter": [
+            {
+              "levelId": "ALLPRODUCTS",
+              "label": "AllProducts",
+              "values": [
+                {
+                  "name": "ALLPRODUCTSDESCR",
+                  "label": "ALLPRODUCTSDESCR",
+                  "values": ["ALL"],
+                  "data": [{ "id": "ALL" }]
+                }
+              ]
+            }
+          ],
+          "levelsFilter": [
+            {
+              "name": "BRAND",
+              "label": "Brand",
+              "values": ["PF-00", "PF-10"],
+              "data": [
+                { "id": "PF-00", "description": "BEER" },
+                { "id": "PF-10", "description": "SPIRITS" }
+              ]
+            }
+          ],
+          "isTimeDimension": false,
+          "isCrossAttributeFilter": true,
+          "selectedProperties": [
+            {
+              "id": "BRAND",
+              "label": "Brand",
+              "levelId": "BRAND",
+              "levelLabel": "Brand",
+              "values": [
+                { "value": "PF-00", "selected": true, "disabled": false, "description": "BEER" },
+                { "value": "PF-10", "selected": true, "disabled": false, "description": "SPIRITS" }
+              ]
+            },
+            {
+              "id": "ALLPRODUCTSDESCR",
+              "label": "ALLPRODUCTSDESCR",
+              "levelId": "ALLPRODUCTS",
+              "levelLabel": "AllProducts",
+              "values": [
+                { "value": "ALL", "selected": true, "disabled": false }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LOCATION",
+          "hierarchy": {
+            "name": "LOCATIONHIERARCHY",
+            "levels": [
+              { "name": "ALLLOCATIONS" },
+              { "name": "REGION" },
+              { "name": "COUNTRY" },
+              { "name": "LOCATION" }
+            ]
+          },
+          "propertiesFilter": [
+            {
+              "levelId": "COUNTRY",
+              "label": "Country",
+              "values": [
+                {
+                  "name": "COUNTRYDESCR",
+                  "label": "COUNTRYDESCR",
+                  "values": ["CD", "FR"],
+                  "data": [{ "id": "CD" }, { "id": "FR" }]
+                }
+              ]
+            }
+          ],
+          "levelsFilter": [
+            {
+              "name": "REGION",
+              "label": "Region",
+              "values": ["REGION-00", "REGION-10"],
+              "data": [
+                { "id": "REGION-00", "description": "AMERICA" },
+                { "id": "REGION-10", "description": "EMEA" }
+              ]
+            }
+          ],
+          "isTimeDimension": false,
+          "isCrossAttributeFilter": true,
+          "selectedProperties": [
+            {
+              "id": "REGION",
+              "label": "Region",
+              "levelId": "REGION",
+              "levelLabel": "Region",
+              "values": [
+                { "value": "REGION-00", "selected": true, "disabled": false, "description": "AMERICA" },
+                { "value": "REGION-10", "selected": true, "disabled": false, "description": "EMEA" }
+              ]
+            },
+            {
+              "id": "COUNTRYDESCR",
+              "label": "COUNTRYDESCR",
+              "levelId": "COUNTRY",
+              "levelLabel": "Country",
+              "values": [
+                { "value": "CD", "selected": true, "disabled": false },
+                { "value": "FR", "selected": true, "disabled": false }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "quickFilterEnabled": true
+  },
+  "putNullScopeEnabledRequest": {
+    "scope": null,
+    "quickFilterEnabled": true
+  },
+  "putNullScopeDisabledRequest": {
+    "scope": null,
+    "quickFilterEnabled": false
+  },
+  "patchRequest": {
+    "quickFilterConfigId": "string"
+  }
+}

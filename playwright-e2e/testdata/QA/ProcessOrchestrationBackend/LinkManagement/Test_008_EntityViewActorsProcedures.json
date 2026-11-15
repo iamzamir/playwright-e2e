@@ -1,0 +1,81 @@
+{
+    "_schema": {
+        "VIEW_GROUP_NAME": "string (required)",
+        "VIEW_NAME": "string (required)",
+        "VIEW_ID": "string (required)",
+        "combinations": "object[] (required)"
+    },
+    "VIEW_GROUP_NAME": "Alok Test",
+    "VIEW_NAME": "Testing Card Actor",
+    "VIEW_ID": "688793a7a5aa0a96bde5adde",
+    "combinations": [
+        {
+            "actor": "Default",
+            "procedure": "Default",
+            "entityType": "SCP-Launch-Interactive-Planning",
+            "entityId": "DefaultScopeTest_1747307638_IM",
+            "viewId": "688793a7a5aa0a96bde5adde",
+            "mapRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": "DefaultScopeTest_1747307638_IM",
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "SCP-Launch-Interactive-Planning",
+                "entityId": ["DefaultScopeTest_1747307638_IM"],
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "Maas",
+            "procedure": "Default",
+            "entityType": "maasactor",
+            "entityId": "OnDemandMaasActor",
+            "viewId": "688793a7a5aa0a96bde5adde",
+            "mapRequest": {
+                "entityType": "maasactor",
+                "entityId": "OnDemandMaasActor",
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "maasactor",
+                "entityId": ["OnDemandMaasActor"],
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "UI Cache",
+            "procedure": "Default",
+            "entityType": "insightactor",
+            "entityId": "TestBanjoUIcache2",
+            "viewId": "688793a7a5aa0a96bde5adde",
+            "mapRequest": {
+                "entityType": "insightactor",
+                "entityId": "TestBanjoUIcache2",
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "insightactor",
+                "entityId": ["TestBanjoUIcache2"],
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        },
+        {
+            "actor": "Scenario Comparison",
+            "procedure": "Default",
+            "entityType": "scsactor",
+            "entityId": "TestBanjoSCS2",
+            "viewId": "688793a7a5aa0a96bde5adde",
+            "mapRequest": {
+                "entityType": "scsactor",
+                "entityId": "TestBanjoSCS2",
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            },
+            "searchRequest": {
+                "entityType": "scsactor",
+                "entityId": ["TestBanjoSCS2"],
+                "views": [{ "id": "688793a7a5aa0a96bde5adde", "sequence": 0, "hidden": false, "scopeId": null }]
+            }
+        }
+    ]
+}

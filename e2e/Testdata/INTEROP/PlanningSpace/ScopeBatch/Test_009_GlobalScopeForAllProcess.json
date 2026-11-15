@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "GlobaScopeView",
+    "GLOBAL_SCOPE_FILTER_NAME": "GlobalScopeFilter1",
+    "OTHER_PROCESS_NAME": "VerticalFilterTest",
+    "DEFAULT_FILTER_OPTION_NAME":"Default Filter For Process",
+    "DEFAULT_FILTER_NAME_IN_VF":"Default Filter For Process",
+    "ASSUMPTION_VIEW_NAME": "Automation Assumption View 1",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption",
+        "OTHER_ASSUMPTION_NAME": "Test Assumption"
+    } 
+}

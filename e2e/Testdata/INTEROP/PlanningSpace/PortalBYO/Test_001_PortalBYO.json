@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "USER_FULL_NAME": "PS Automation1",
+    "PROCESS_NAME": "PSAutomation",
+    "AGENT_NAME": "Planning Mock Agent",
+    "EVENT_NAME": "refresh the current view"
+}

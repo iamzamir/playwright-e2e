@@ -1,0 +1,55 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+        "TC1_DRILL_THROUGH_VIEW_TO": "string (required)",
+        "TC1_DRILL_THROUGH_CELL": "string (required)",
+        "TC2_DRILL_THROUGH_VIEW_TO": "string (required)",
+        "DIMENSIONS1": "object (required)",
+        "DIMENSIONS2": "object (required)",
+        "SCOPE_TAB": "string (required)",
+        "FILTERCONFIGS": "object[] (required)",
+        "BACKEND_FILTERS": "object (required)",
+        "DRILL_THROUGH_SCOPE": "object[] (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "Source View Without Merge",
+    "TC1_DRILL_THROUGH_VIEW_TO": "Target View Without Backend Filter",
+    "TC1_DRILL_THROUGH_CELL": "45",
+    "TC2_DRILL_THROUGH_VIEW_TO": "Target View With Backend Filter",
+    "DIMENSIONS1": {
+        "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-01",
+        "TIME": "CY-2022",
+        "ITEM": "FG-05"
+    },
+    "DIMENSIONS2": {
+       "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-01",
+        "TIME": "CY-2022",
+        "ITEM": "FG-05"
+    },
+    "SCOPE_TAB" :"Scope",
+    "FILTERCONFIGS" : [
+        { "type": "ITEM", "category": "Brand", "value": ["PL-01"] }
+    ],
+     "BACKEND_FILTERS":{
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-20"]
+    },
+    "DRILL_THROUGH_SCOPE":[
+        {
+            "DIMENSION_NAME": "LOCATION",
+            "ATTRIBUTE_NAME": "Region",
+            "VALUES": ["REGION-00"]
+        },
+        {
+            "DIMENSION_NAME": "ITEM",
+            "ATTRIBUTE_NAME": "Item",
+            "VALUES": ["FG-01"]
+        }
+    ]
+}

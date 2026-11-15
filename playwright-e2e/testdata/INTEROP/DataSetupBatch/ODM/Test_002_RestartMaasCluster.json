@@ -1,0 +1,24 @@
+{
+  "_schema": {
+    "CalcEngineId": "string[] (required)",
+    "requestBody": "object (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "CalcEngineId": [
+    "c4231521-5485-4c19-a0e0-b23e97c69b71",
+    "50fcfd1f-8905-4df3-8fc6-72346b019679",
+    "42e205a8-cfae-41ed-8241-d076525b56fc",
+    "7fae40b8-4ca6-4ac9-9e14-a1d3dbe5648a"
+  ],
+  "requestBody": {
+    "dropExistingJournalSchema": true,
+    "loadFromSerializedCopy": false
+  },
+  "GRAVITEE": {
+    "REALM_KEY": "pspoat-test1",
+    "CalcEngineId": [
+      "029e471a-8a0f-4ab3-aa0f-13f9b012f746",
+      "b0a03947-17ed-436b-b1d5-9f60dfffe5e5"
+    ]
+  }
+}

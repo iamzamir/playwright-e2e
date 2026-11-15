@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "TabbedCardTest",
+    "TC1_DRILL_THROUGH_VIEW_TO": "ViewOne",
+    "TC1_DRILL_THROUGH_CELL": "49"
+}

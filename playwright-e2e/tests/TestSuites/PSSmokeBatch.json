@@ -1,0 +1,18 @@
+{
+  "testFiles": [
+    "tests/PlanningSpace/CardsBatch/Test_001_WhiteListedCards.spec.ts",
+    "tests/PlanningSpace/CardsBatch/Test_002_CardActions.spec.ts",
+    "tests/PlanningSpace/CardsBatch/Test_005_BDECard.spec.ts",
+    "tests/PlanningSpace/DrillThroughBatch/Test_007_MultiLevelDrillThroughMassBdeWithProcess.spec.ts",
+    "tests/PlanningSpace/OnDemandMaas/Test_004_OnDemandMaasStatus.spec.ts",
+    "tests/PlanningSpace/PowerBar/Test_001_PowerBarForProcess.spec.ts",
+    "tests/PlanningSpace/PowerBar/Test_005_ContextSwitcher.spec.ts",
+    "tests/PlanningSpace/QuickLinks/Test_001_EasyAccessQuickLinksFromPS.spec.ts",
+    "tests/PlanningSpace/ScenarioBatch/Test_002_ScenarioActions.spec.ts",
+    "tests/PlanningSpace/ScopeBatch/Test_003_SaveAndDeleteFilter.spec.ts",
+    "tests/PlanningSpace/SupplyChainActionsBatch/Test_002_SCAHistoryAndCreateScenario.spec.ts",
+    "tests/PlanningSpace/ViewsBatch/Test_005_Favourites.spec.ts",
+    "tests/PlanningSpace/ViewsBatch/Test_018_StaleFavouriteFallback.spec.ts",
+    "tests/PlanningSpace/ViewSearch/Test_001_ViewSearchForProcess.spec.ts"
+  ]
+}

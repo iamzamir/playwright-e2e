@@ -1,0 +1,9 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "DemandReview",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "VIEW_NAME": "Move View 1",
+    "TARGET_VIEW_GROUP": "Move View Group 2",
+    "INITIAL_VIEW_GROUP": "Move View Group 1"
+}

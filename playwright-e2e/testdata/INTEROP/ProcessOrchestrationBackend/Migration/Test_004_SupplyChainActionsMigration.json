@@ -1,0 +1,18 @@
+{
+    "_schema": {
+        "FULL_EXPORT_PAYLOAD": "object with supplyChainActions array (required)",
+        "PARTIAL_EXPORT_PAYLOAD": "object with supplyChainActions string array (required)",
+        "CLEANUP_NAME_PREFIX": "string (required)"
+    },
+    "CLEANUP_NAME_PREFIX": "MigrationSCA",
+    "FULL_EXPORT_PAYLOAD": {
+        "supplyChainActions": []
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "supplyChainActions": [
+            "MigrationSCA1",
+            "MigrationSCA2",
+            "MigrationSCA3"
+        ]
+    }
+}

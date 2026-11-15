@@ -1,0 +1,19 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "MAP_VIEWS_TO_PROCESS": ["Maas Pivot Card View", "Maas Chart Card View", "TabbedCard"],
+    "MAP_VIEWS_TO_SUBPROCESS": ["Maas Pivot Card View", "Maas Chart Card View", "TabbedCard"],
+    "MAP_VIEWS_TO_ASSUMPTION": ["Maas Pivot Card View", "Maas Chart Card View", "TabbedCard"],
+    "EXPECTED_VIEWS_IN_PS": ["Maas Chart Card View", "Maas Pivot Card View", "TabbedCardTest"],
+    "PROCESS_CONTEXT": {
+        "PROCESS_NAME": "ProcessVerifyViewMapping"
+    },
+    "SUB_PROCESS_CONTEXT": {
+        "PROCESS_NAME": "ProcessVerifyViewMapping",
+        "SUB_PROCESS_NAME": "Demand Review"
+    },
+    "ASSUMPTION_RISK_CONTEXT": {
+        "ORIGIN":"ProcessVerifyViewMapping",
+        "ASSUMPTION":"PS Assumption Risk",
+        "ASSUMPTION_TYPE": "Risk"
+    }
+}

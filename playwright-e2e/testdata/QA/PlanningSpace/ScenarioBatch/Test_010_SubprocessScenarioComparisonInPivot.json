@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "Sub-process": "object (required)"
+  },
+  "Sub-process": {
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "Maas Pivot Card View",
+    "CARD_NAME": "Maas Pivot Card",
+    "FILTER_NAME": "Maas Pivot Filter",
+    "SCENARIO_NAME": "Scenario_For_MaasPivot"
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "ViewToTest_MaasCluster",
+    "ANOTHER_VIEW_NAME": "ODM - Drill Through - Target",
+    "TC1_DRILL_THROUGH_VIEW_TO" : "ViewToTest_MaasCluster - Copy",
+    "CARD_NAME":"Maas Pivot Card - ODM",
+    "CELL_VALUE" : "42",
+    "HIDDEN_VIEW1" : "ViewToTest_MaasCluster_hidden_view1",
+    "HIDDEN_VIEW2" : "ViewToTest_MaasCluster_hidden_view2",
+    "DIMENSIONS": {
+        "ITEM": {"Brand": "PL-01"},
+        "LOCATION":{"Region": "REGION-00"},
+        "CUSTOMER": {"Customer": "CUST-01"},
+        "TIME": {"CALENDARYEAR": "CY-2022"}
+    },
+    "SCOPE_DIMENSIONS": {
+        "ITEM": {"Brand": "PL-01"},
+        "LOCATION":{"Region": "REGION-00"},
+        "CUSTOMER": {"Customer": "CUST-01"},
+        "TIME": {"CALENDARYEAR": "CY-2022"},
+        "COUNTRY": {"Country": "CNTRY-01"}
+    },
+    "SCOPE_DIMENSIONS_HIDDEN_VIEW": {
+        "ITEM": {"Brand": "PL-01"},
+        "LOCATION":{"Region": "REGION-00"},
+        "CUSTOMER": {"Customer": "CUST-01"},
+        "TIME": {"CALENDARYEAR": "CY-2022"},
+        "COUNTRY": {"Country": "CNTRY-01"},
+        "CHANNEL": {"Channel": "CG-01"}
+    }
+}

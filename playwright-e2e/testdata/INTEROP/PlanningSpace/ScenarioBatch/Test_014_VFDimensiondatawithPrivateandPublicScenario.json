@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PRIVATE_SCENARIONAME": "string (required)",
+    "PUBLIC_SCENARIONAME": "string (required)",
+    "FILTER_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "PRIVATE_SCENARIONAME": "test_private_scenario_do_not_delete",
+  "PUBLIC_SCENARIONAME": "test_scenario_do_not_delete",
+  "FILTER_NAME": "Region OO"
+}

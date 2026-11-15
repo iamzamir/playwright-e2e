@@ -1,0 +1,49 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+        "TC1_DRILL_THROUGH_VIEW_TO": "string (required)",
+        "TC1_DRILL_THROUGH_CELL": "string (required)",
+        "TC2_DRILL_THROUGH_VIEW_TO": "string (required)",
+        "DIMENSIONS1": "object (required)",
+        "DIMENSIONS2": "object (required)",
+        "BACKEND_FILTERS": "object (required)",
+        "DRILL_THROUGH_SCOPE": "object[] (required)"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "Source View With Merge",
+    "TC1_DRILL_THROUGH_VIEW_TO": "Target View Without Backend Filter",
+    "TC1_DRILL_THROUGH_CELL": "42",
+    "TC2_DRILL_THROUGH_VIEW_TO": "Target View With Backend Filter",
+    "DIMENSIONS1": {
+        "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-11",
+        "TIME": "CY-2022",
+         "ITEM": "FG-02"
+    },
+    "DIMENSIONS2": {
+        "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-11",
+        "TIME": "CY-2022",
+        "ITEM": "FG-04"
+    },
+    "BACKEND_FILTERS":{
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-10"]
+    },
+    "DRILL_THROUGH_SCOPE":[
+        {
+            "DIMENSION_NAME": "LOCATION",
+            "ATTRIBUTE_NAME": "Region",
+            "VALUES": ["REGION-00"]
+        },
+        {
+            "DIMENSION_NAME": "CUSTOMER",
+            "ATTRIBUTE_NAME": "Channel",
+            "VALUES": ["CG-01"]
+        }
+    ]
+}

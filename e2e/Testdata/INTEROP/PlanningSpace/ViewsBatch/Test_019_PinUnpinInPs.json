@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-po-ps-1",
+    "PROCESS_NAME": "PSProcess",
+    "SUBPROCESS_NAME": "DemandReview",
+    "FEATURE_FLAG_NAME1": "WITH_SCENARIO_SCOPE_PINNING",
+    "FEATURE_FLAG_NAME2": "WITH_NEW_VIEW_FILTER_UI",
+    "VIEW_NAME": "Automation View Test 2",
+    "TARGET_VIEW_GROUP": "Automation View Group",
+    "INITIAL_VIEW_GROUP": "Automation View Group"
+}

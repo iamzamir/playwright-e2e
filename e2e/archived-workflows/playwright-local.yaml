@@ -1,0 +1,209 @@
+name: playwright-local
+
+on:
+  # schedule:
+  #   - cron: '30 21 * * *'  # 3:00 AM IST daily
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to run workflow on
+        required: false
+        default: "main"
+        type: string
+      test-name:
+        description: 'Test name pattern to run (e.g., "Test_001" or "CreateEditDelete" or "Test_001_CreateEditDeleteActionItem")'
+        required: false
+        type: string
+      folder-name:
+        description: 'Folder path to run tests from (e.g., "tests/ProcessOrchestration/ActionItemsBatch")'
+        required: false
+        type: string
+
+env:
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_PS_1 }}
+
+jobs:
+  playwright-local:
+    name: Run Process Orchestration UI Tests
+    runs-on: ["az-prod-ubuntu-latest-8Core"]
+    outputs:
+      artifact-url: ${{ steps.get-artifact-url.outputs.artifact-url }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Run Tests - PO UI suite
+        if: ${{ github.event.inputs.test-name == '' && github.event.inputs.folder-name == '' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: INTEROP
+          TZ: Australia/Adelaide
+          HEADLESS: 'true'
+        run: |
+          echo "=== Running tests on local VM ==="
+          npm run test:interop
+        continue-on-error: true
+
+      - name: Run Tests - Dynamic Test Selection
+        if: ${{ github.event.inputs.test-name != '' || github.event.inputs.folder-name != '' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: INTEROP
+          TZ: Australia/Adelaide
+          HEADLESS: 'true'
+          TEST_GREP_PATTERN: ${{ github.event.inputs.test-name }}
+        run: |
+          echo "=== Running tests on local VM ==="
+          TEST_CMD="npx playwright test --config=configs/playwright.config.ts"
+
+          if [[ -n "${{ github.event.inputs.folder-name }}" ]]; then
+            echo "Running tests from folder: ${{ github.event.inputs.folder-name }}"
+            TEST_CMD="$TEST_CMD ${{ github.event.inputs.folder-name }}"
+          fi
+
+          if [[ -n "${{ github.event.inputs.test-name }}" ]]; then
+            echo "Running tests matching: ${{ github.event.inputs.test-name }}"
+            TEST_CMD="$TEST_CMD --grep \"${{ github.event.inputs.test-name }}\""
+          fi
+
+          echo "Executing: $TEST_CMD"
+          eval $TEST_CMD
+        continue-on-error: true
+
+      - name: List Available Artifacts
+        working-directory: playwright-e2e
+        run: |
+          echo "Checking for report artifacts..."
+          if [ -d "reports/allure-results" ]; then
+            find reports/allure-results -type f | head -20
+          else
+            echo "No allure results directory found"
+          fi
+
+      - name: Upload Allure Results
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: |
+            playwright-e2e/reports/allure-results/
+          if-no-files-found: ignore
+
+      - name: Get Artifact URL
+        if: always()
+        id: get-artifact-url
+        run: |
+          ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }}"
+          echo "artifact-url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+          echo "Artifact URL: $ARTIFACT_URL"
+
+      - name: Ensure Allure Results Directory
+        working-directory: playwright-e2e
+        run: |
+          mkdir -p reports/allure-results
+
+          echo "Verifying allure results..."
+          if [ "$(ls -A reports/allure-results/ 2>/dev/null)" ]; then
+            echo "Allure results found:"
+            ls -la reports/allure-results/
+          else
+            echo "No allure results found, creating minimal test data for report generation"
+            cat > reports/allure-results/test-result.json << EOF
+          {
+            "uuid": "$(uuidgen)",
+            "name": "No Test Results Found",
+            "status": "broken",
+            "stage": "finished",
+            "description": "No allure results were found from local VM run",
+            "start": $(date +%s)000,
+            "stop": $(date +%s)000
+          }
+          EOF
+          fi
+
+      - name: Checkout gh-pages Branch  
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Upload Processed Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: processed-allure-results
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: ignore
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: playwright-e2e/reports/allure-results
+          gh_pages: gh-pages
+          allure_report: playwright-e2e/reports/allure-report
+          allure_history: playwright-e2e/reports/allure-history
+          keep_reports: 7
+          subfolder: PSAutomationReports/PW-PO-UI-INTEROP
+
+      - name: Deploy report to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Send Report to Microsoft Teams Channel
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        with:
+          webhook_uri: "${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}"
+          title: "UI Automation Test Results - PO-UI-INTEROP - Playwright"
+          summary: "Test Run #${{ github.run_number }}: ${{ job.status }}"
+          theme_color: "${{ job.status == 'success' && 'good' || job.status == 'failure' && 'danger' || 'warning' }}"
+          text: |
+            **UI Automation Test Results - PO-UI-INTEROP - Playwright**
+
+            **Test Configuration:**  
+            • Branch: ${{ github.event.inputs.branch || 'main' }}  
+            • Environment: INTEROP  
+            • Test Type: local-vm  
+            • Run Number: #${{ github.run_number }}  
+            ${{ github.event.inputs.test-name && format('• Test Name: {0}', github.event.inputs.test-name) || '' }}
+            ${{ github.event.inputs.folder-name && format('• Folder: {0}', github.event.inputs.folder-name) || '' }}
+            
+            **Reports:**  
+            [📊 Allure Test Report](https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PW-PO-UI-INTEROP/${{ github.run_number }})
+            [📦 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }})  
+            
+            **Workflow Link:**  
+            [View GitHub Actions Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})

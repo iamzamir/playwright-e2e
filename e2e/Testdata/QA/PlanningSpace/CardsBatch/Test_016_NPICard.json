@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "NPI CARD",
+    "DATA_ENDPOINT_OPTION":"Test NPI MetaData Summary Card API", 
+    "WRONG_ENDPOINT_OPTION": "MetaData Summary Card API with invalid endpoint"
+}

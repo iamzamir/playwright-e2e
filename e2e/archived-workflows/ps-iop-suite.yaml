@@ -1,0 +1,185 @@
+name: ps-iop-suite
+
+on:
+  # schedule:
+  #   - cron: '00 00 * * *'  # 5:30 AM IST daily
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: Choose testing type
+        required: false
+        default: 'saucelabs'
+        type: choice
+        options:
+          - local
+          - saucelabs
+      suite-name:
+        description: Choose suite name to run tests
+        required: true
+        default: 'ps-iop-suite'
+        type: string
+      branch:
+        description: Branch to run workflow on
+        required: true
+        default: 'main'
+        type: string
+      max-instances:
+        description: Choose max instances to run tests
+        required: true
+        default: 10
+        type: number
+
+env:
+  SAUCE_PS_USERNAME: ${{ secrets.SAUCE_PS_USERNAME }}
+  SAUCE_PS_ACCESS_KEY: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  SAUCE_BAIL: ${{ secrets.SAUCE_BAIL }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  SUITENAME: ${{ github.event.inputs.suite-name || 'ps-iop-suite' }}
+  MAX_INSTANCES: ${{ github.event.inputs.max-instances || '10' }}
+
+jobs:
+  # ============================
+  # 1. Run Tests Job
+  # ============================
+  run-tests:
+    name: Run UI Tests
+    runs-on: ["az-prod-ubuntu-latest-8Core"]
+    strategy:
+      matrix:
+        node-version: [ '20.x' ]
+
+    steps:
+      - name: Free up disk space
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache
+          df -h
+
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+          npm install -g saucectl@latest
+          chromedriver --version
+          google-chrome --version
+
+      - name: Run Tests
+        working-directory: e2e
+        run: |
+          if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+            npm run wdio:test:interop
+          else
+            npm run wdio:saucelabs:interop
+          fi
+        continue-on-error: true
+
+      - name: Run Scenario Tests
+        working-directory: e2e
+        run: |
+          export SUITENAME=scenario-suite
+          if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+            npm run wdio:test:interop
+          else
+            npm run wdio:saucelabs:interop
+          fi
+        continue-on-error: true
+
+      - name: Rerunning Failed Tests
+        working-directory: e2e
+        run: |
+          export SUITENAME=failed-iop-suite
+          if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+            npm run wdio:test:interop
+          else
+            npm run wdio:saucelabs:interop
+          fi
+        continue-on-error: true
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: e2e/.e2e/reports/allure-results
+
+  # ============================
+  # 2. Report Generation Job
+  # ============================
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["az-prod-ubuntu-latest-8Core"]
+    needs: run-tests
+    if: always()
+    steps:
+      - name: Free up disk space
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache
+          df -h
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages        
+
+      - name: Download Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: e2e/.e2e/reports/allure-results
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: e2e/.e2e/reports/allure-results
+          gh_pages: gh-pages
+          allure_report: e2e/.e2e/reports/allure-report
+          allure_history: e2e/.e2e/reports/allure-history
+          keep_reports: 7
+          subfolder: PSAutomationReports/PS-UI-INTEROP
+
+      - name: Deploy report to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: e2e/.e2e/reports/allure-history
+          keep_files: true
+
+      - name: Send Report to Microsoft Teams Channel
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        with:
+          webhook_uri: "${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}"
+          title: "UI Automation Test Results - PS-UI-INTEROP"
+          summary: "Test Run #${{ github.run_number }}: ${{ job.status }}"
+          text: |
+            ***Planning UI Automation Report Interop*** \
+            Your UI Automation report for Planning Space is available at the following GitHub Pages URL: \
+            [Report](https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PS-UI-INTEROP/${{ github.run_number }})

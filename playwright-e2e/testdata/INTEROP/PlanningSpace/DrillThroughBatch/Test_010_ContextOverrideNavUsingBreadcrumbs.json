@@ -1,0 +1,24 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SELECT_PROCESS": "string (required)",
+        "DRILL_THROUGH_CELL_VALUE": "string (required)",
+        "SAME_TAB": "object (required)",
+        "NEW_TAB": "object (required)"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SELECT_PROCESS": "PSAutomation",
+    "DRILL_THROUGH_CELL_VALUE": "42",
+    "SAME_TAB": {
+        "NORMAL_VIEW_1": "Pivot Reflects Scope",
+        "NORMAL_VIEW_2": "Normal View 4",
+        "HIDDEN_VIEW_1": "Hidden View 3"
+    },
+    "NEW_TAB": {
+        "NORMAL_VIEW_1": "DR Source",
+        "NORMAL_VIEW_2": "Normal View 2",
+        "HIDDEN_VIEW_1": "Hidden View 1"
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "CARD_NAME": "Maas Pivot Card",
+    "DEFAULT_SCOPE_FOR_VIEWS": [
+        {
+            "VIEW_NAME": "Default Filter View 1",
+            "FILTER_NAME": "Default filter 1",
+            "DIMENSIONS": [
+                {
+                    "LABEL": "TIME",
+                    "SELECTED_PROPERTIES": [
+                        {
+                            "LABEL": "CALENDARYEAR",
+                            "VALUES": [
+                                {
+                                    "VALUE": "CY-2022"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "VIEW_NAME": "Default Filter View 2",
+            "FILTER_NAME": "Default filter 2",
+            "DIMENSIONS": [
+                {
+                    "LABEL": "TIME",
+                    "SELECTED_PROPERTIES": [
+                        {
+                            "LABEL": "CALENDARYEAR",
+                            "VALUES": [
+                                {
+                                    "VALUE": "CY-2022"
+                                },
+                                {
+                                    "VALUE": "CY-2023"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

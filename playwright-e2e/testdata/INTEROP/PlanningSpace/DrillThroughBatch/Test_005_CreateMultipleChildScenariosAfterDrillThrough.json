@@ -1,0 +1,36 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "PROCEDURE_TYPE": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "VIEW_NAME1": "string (required)",
+    "CARD_NAME": "string (required)",
+    "REQUEST_URL": "string (required)",
+    "PARENT_SCENARIO_ID": "string (required)",
+    "IS_DEFAULT_SEARCH": "boolean (required)",
+    "REQUEST_BODY": "object (required)",
+    "PROCEDURE_EXECUTION_URL": "string (required)",
+    "isWizard": "boolean (required)",
+    "isPublic": "boolean (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "PROCEDURE_NAME": "CreateScenarioWizard",
+  "PROCEDURE_TYPE": "CreateScenarioWizard",
+  "VIEW_NAME": "BDE",
+  "VIEW_NAME1": "Maas Pivot Card View",
+  "CARD_NAME": "BDE Card",
+  "REQUEST_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/",
+  "PARENT_SCENARIO_ID": "9faba47b-3fa4-4fdd-9698-e888bc131e2c",
+  "IS_DEFAULT_SEARCH": true,
+  "REQUEST_BODY": {
+    "sourceIds": [
+      "PSAutomation"
+    ]
+  },
+  "PROCEDURE_EXECUTION_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/v1ioptst/procedureExecutions",
+  "isWizard": true,
+  "isPublic": true
+}

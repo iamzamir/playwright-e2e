@@ -1,0 +1,9 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_002_ScenarioActions.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_003_ScenarioVisibilityFilter.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_004_ScenarioCreationUsingAPI.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_006_ScenarioUsersFilter.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScenarioBatch/Test_007_BasescenarioShouldBeDefaultIfNoDefaultScenario.spec.ts"
+  ]
+}

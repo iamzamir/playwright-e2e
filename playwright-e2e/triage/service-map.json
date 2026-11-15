@@ -1,0 +1,21 @@
+{
+  "_schema": {
+    "purpose": "Maps an endpoint or a spec folder to the service under test, so a failure says which service (and repo) to raise a defect against. Used by the triage groups, defect drafts and test history. See docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md §5.4.",
+    "services": "First entry whose endpointRegex matches the causal endpoint (path without host) wins; otherwise the spec folder (specPrefixes, relative to tests/) decides.",
+    "key": "Short service id.",
+    "name": "Name shown in drafts and on the dashboard.",
+    "repo": "Repository that owns the service.",
+    "team": "Optional owning team."
+  },
+  "services": [
+    { "key": "actionitem", "name": "Action Item service", "repo": "plan-sop-actionitem", "endpointRegex": "/ai/api/", "specPrefixes": ["ProcessOrchestrationBackend/ActionItem/"] },
+    { "key": "link-management", "name": "Link Management service", "repo": "plan-sop-link-management", "endpointRegex": "/lm/api/|/ibp/links", "specPrefixes": ["ProcessOrchestrationBackend/LinkManagement/"] },
+    { "key": "ui-fields", "name": "UI Fields service", "repo": "plan-sop-ui-fields-service", "endpointRegex": "ui-fields", "specPrefixes": ["ProcessOrchestrationBackend/UIFields/"] },
+    { "key": "process-orchestration", "name": "Process Orchestration service", "repo": "plan-sop-process-orchestration-service", "endpointRegex": "/po/api/|/ibp/process-orchestration", "specPrefixes": ["ProcessOrchestrationBackend/"] },
+    { "key": "lui", "name": "PO UI (lui)", "repo": "plan-sop-lui", "endpointRegex": "/lui/", "specPrefixes": ["ProcessOrchestration/"] },
+    { "key": "maas", "name": "MaaS", "repo": null, "endpointRegex": "/maas/", "specPrefixes": [] },
+    { "key": "foundation", "name": "Foundation", "repo": null, "endpointRegex": "/foundation[-/]", "specPrefixes": [] },
+    { "key": "planning-mfe", "name": "Planning Space UI", "repo": "plan-sop-planning-mfe", "endpointRegex": null, "specPrefixes": ["PlanningSpace/"] },
+    { "key": "data-setup", "name": "Test data setup", "repo": null, "endpointRegex": null, "specPrefixes": ["DataSetupBatch/"] }
+  ]
+}

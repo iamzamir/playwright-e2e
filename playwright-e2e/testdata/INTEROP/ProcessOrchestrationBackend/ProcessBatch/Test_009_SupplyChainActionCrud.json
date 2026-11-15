@@ -1,0 +1,28 @@
+{
+  "_schema": {
+    "SCA_NAME_PREFIX": "string (required) - prefix of the supply chain actions this spec creates; a run id is appended",
+    "TYPE": "string (required) - supply chain action type sent on create",
+    "PROCEDURE_NAME": "string (required) - procedureName sent on create",
+    "DESCRIPTION": "string (required) - description sent on create",
+    "UPDATED_DESCRIPTION": "string (required) - description sent on update",
+    "UI_CONFIG": "string (required) - uiConfig sent on create; planning-mfe JSON.parses it",
+    "UNKNOWN_ID": "string (required) - well-formed UUID that is not a supply chain action",
+    "CLIENT_SUPPLIED_ID": "string (required) - id a client sends on create, which the server must replace",
+    "CONSTRAINT_ERROR_CODE": "string (required) - errorCode for a database constraint violation (duplicate name, missing NOT NULL column)",
+    "NOT_FOUND_ERROR_CODE": "string (required) - errorCode for PUT or DELETE of an unknown id",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a malformed body",
+    "DELETE_MESSAGE": "string (required) - DELETE success body; {id} is replaced with the deleted id"
+  },
+  "SCA_NAME_PREFIX": "PWAutoSCA_",
+  "TYPE": "CHANGE_MEASURE",
+  "PROCEDURE_NAME": "PWAutoProcedure",
+  "DESCRIPTION": "Playwright SCA",
+  "UPDATED_DESCRIPTION": "Playwright SCA - Updated",
+  "UI_CONFIG": "{}",
+  "UNKNOWN_ID": "7d6c1b3e-0000-4000-8000-000000000000",
+  "CLIENT_SUPPLIED_ID": "11111111-1111-4111-8111-111111111111",
+  "CONSTRAINT_ERROR_CODE": "IBP_40_1031",
+  "NOT_FOUND_ERROR_CODE": "IBP_40_1020",
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022",
+  "DELETE_MESSAGE": "Supply Chain Action with id [{id}] deleted successfully."
+}

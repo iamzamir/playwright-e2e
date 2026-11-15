@@ -1,0 +1,17 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "ASSUMPTION": "object (required)",
+    "ASSUMPTION_VIEW_NAME": "string (required)",
+    "ASSUMPTION_HIDDEN_VIEW_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION": {
+      "ASSUMPTION_NAME": "PS Auto Assumption 5",
+      "ASSUMPTION_TYPE": "Opportunity"
+  },
+  "ASSUMPTION_VIEW_NAME": "arrange Views view1",
+  "ASSUMPTION_HIDDEN_VIEW_NAME": "qwerty view"
+}

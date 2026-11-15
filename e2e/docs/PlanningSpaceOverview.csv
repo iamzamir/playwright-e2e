@@ -1,0 +1,342 @@
+Batch,Suites,Test Cases,Description
+Add Lane Popup Batch,Test_011_AddLaneSCA.spec.ts,"1. Start SPARQ Engine if it is down then open Add Lane SCA popup modal
+2. Is Add Lane SCA form saved successfully",Checks complete CRUD operations of Add Lane SCA feature across Process entities. And Verifies creation and form submission feature along with UI interactions and data validation.
+,Test_014_AddLaneThroughCardCell.spec.ts,"1. Start SPARQ Engine if it is down then open Add Lane popup modal through Piechart card cell
+2. Verify if Add Lane form saved successfully through Piechart card cell","Verifies Add Lane feature using card cell interactions. Checks that users can create lanes via card cell more actions, ensuring proper UI navigation and successful form submission along with proper user interaction flow."
+Cards Batch,Test_001_WhiteListedCards.spec.ts,1. Verify White Listed Cards Present,Checks that all needed card types are available in the card gallery. Verifies the white-listed cards feature to ensure proper card creation options are available to users.
+,Test_002_CardActions.spec.ts,"1. Should create card
+2. Should edit card
+3. Should config card
+4. Should delete card","Checks complete CRUD operations for card actions to verify card handling. Verifies card creation along with MaaS Pivot type, editing card descriptions, configuring card settings along with API endpoints, and proper card deletion feature."
+,Test_003_MaasPivotCard.spec.ts,"1. Select scenario from scenarios vertical filter
+2. Apply filter under scope
+3. Verify selected scenario is appeared in popup of scenario pivot
+4. Selected scenario column reflects in table
+5. Verify selected filters reflects as columns
+6. Reset","Verifies MaaS Pivot Card feature along with scenario and scope filtering. Checks scenario selection, scope filtering, pivot popup display, column reflection, and proper reset feature."
+,Test_004_MaasChartCard.spec.ts,"1. Fetch initial X axis labels from card before filter applied
+2. Apply filter under scope
+3. Verify X axis labels from card after filter applied
+4. Select scenario from scenarios vertical filter
+5. Validating Scenario Map
+6. Verify selected scenario is appeared in popup of scenario live icon
+7. Reset","Verifies MaaS Chart Card feature along with dynamic data visualization. Checks chart label changes along with filters, scenario mapping, scenario live icon feature, and proper data reflection in charts."
+,Test_005_BDECard.spec.ts,"1. Verify actions in BDE card
+2. Is filter input available for each column in table","Verifies BDE (Bulk Data Entry) Card feature. Checks all card actions including refresh, minimize, download, upload, status, settings, filter options, pagination, and column-level filtering capabilities."
+,Test_006_DonutChart.spec.ts,1. Donut Chart functionality tests,Checks Donut Chart card visualization and interaction capabilities.
+,Test_007_LineChart.spec.ts,1. Line Chart functionality tests,"Checks Line Chart card visualization, data plotting, and interactive features."
+,Test_008_MultiKPICard.spec.ts,1. Multi KPI Card functionality tests,Verifies Multi-KPI Card display and data aggregation capabilities.
+,Test_009_CombinationChart.spec.ts,1. Combination Chart functionality tests,Checks Combination Chart card along with multiple chart type combinations.
+,Test_010_BulletChart.spec.ts,1. Bullet Chart functionality tests,Verifies Bullet Chart card visualization and performance indicator display.
+,Test_011_ColumnChart.spec.ts,1. Column Chart functionality tests,Checks Column Chart card data visualization and interaction features.
+,Test_012_NetworkCard.spec.ts,1. Network Card functionality tests,Verifies Network Card visualization and network topology display capabilities.
+,Test_013_MyTask.spec.ts,1. My Task functionality tests,Checks My Task card feature to verify task handling and tracking.
+,Test_014_TreeCard.spec.ts,1. Tree Card functionality tests,Verifies Tree Card hierarchical data display and navigation capabilities.
+,Test_015_TableCard.spec.ts,1. Table Card functionality tests,"Checks Table Card data display, sorting, filtering, and pagination features."
+,Test_016_NPICard.spec.ts,1. NPI Card functionality tests,Verifies New Product Introduction (NPI) Card specific feature.
+,Test_017_HeatmapChart.spec.ts,1. Heatmap Chart functionality tests,Checks Heatmap Chart visualization and data intensity display.
+,Test_018_ScenarioComparisionWithActor.spec.ts,1. Scenario Comparison with Actor functionality tests,Verifies scenario comparison feature along with actor-based filtering and analysis.
+,Test_019_ScenarioComparision.spec.ts,1. Scenario Comparison functionality tests,Checks scenario comparison capabilities and comparative analysis features.
+,Test_020_TabbedCard.spec.ts,1. Tabbed Card functionality tests,Verifies Tabbed Card multi-view feature and tab navigation features.
+,Test_021_VerifycardsResize.spec.ts,1. Verify cards resize functionality tests,Checks card resizing capabilities and responsive layout adjustments.
+Collaboration Batch,Test_001_CollaborationPanel.spec.ts,"1. Validate the context data of collaboration room from Process
+2. Validate the Entity data of collaboration room from SubProcess
+3. Validate the Entity data of collaboration room from Process Orchestration
+4. Validate the context data from Assumptions with viewId","Verifies collaboration panel feature across different entity contexts. Checks context data extraction and validation to verify Process, SubProcess, Process Orchestration, and Assumptions entities. Makes sure proper collaboration room creation and data consistency between UI and URL contexts."
+Dirty State Batch,Test_001_DirtyState.spec.ts,"1. Should be appended for view name when data is modified in the card
+2. Should get popup when we try to switch from one view to another view
+3. Should get popup when we try to switch from one module to another module
+4. Should get popup when we click on refresh button and data should get lost when 'Continue Without Saving' is clicked
+5. Revert Maas pivot card to original state
+6. Disable the feature toggle for dirty state","Verifies dirty state feature to prevent data loss during navigation. Checks view name asterisk indication, popup warnings during navigation between views and modules, refresh button behavior along with unsaved changes, and proper state handling along with feature toggle controls."
+Draft Filter Batch,Test_001_DraftFilterForProcess.spec.ts,"1. New filter should be created for global scope
+2. Check newly Created Scope is applied globally for other views
+3. Draft filter should be created for default scope
+4. Should get original values of default filter when revert is clicked
+5. Delete Created Vertical Filter","Verifies draft filter feature to verify Process entities. Checks creation of new filters along with global scope application, scope consistency across multiple views, default scope filter creation and modification, revert feature to restore original values, and proper filter cleanup."
+,Test_002_DraftFilterForSubProcess.spec.ts,"1. New filter should be created for global scope
+2. Check newly Created Scope is applied globally for other views
+3. Draft filter should be created for default scope
+4. Should get original values of default filter when revert is clicked
+5. Delete Created Vertical Filter","Verifies draft filter feature to verify SubProcess entities. Checks creation of new filters along with global scope application, scope consistency across multiple views within subprocess context, default scope filter creation and modification, revert feature to restore original values, and proper filter cleanup."
+Drill Through Batch,DrillThroughSerialBatch.spec.ts,Serial drill through functionality tests,"Verifies duplicate view feature to verify Process entities. Checks view duplication, mapping to process, configuration copying including quick filters, cards, workflow filters, procedures, actors, and proper cleanup using deletion."
+,Test_001_EndToEndDrillThrough.spec.ts,First Level Drill Through From Source to Target,Checks view duplication feature specifically to verify Subprocess entities along with proper configuration inheritance and mapping.
+,Test_001_EndToEndDrillThrough.spec.ts,Second Level Drill Through From Target to Source,Verifies view duplication capabilities to verify Assumption entities ensuring proper configuration copying and entity-specific settings preservation.
+,Test_002_TargetViewsShouldBeVisibleAsOptions.spec.ts,Selected target views should be visible as options,"Verifies last accessed context feature to verify Process entities. Checks process persistence across sessions, module switching, logout/login cycles, authorization handling along with policy handling, and proper context restoration."
+,Test_004_DTShouldShowsEmittedContextScenarioAndScope.spec.ts,Drill Through From Reporting to Reporting,Checks last accessed context preservation to verify Subprocess entities ensuring proper subprocess context restoration across user sessions and navigation scenarios.
+,Test_004_DTShouldShowsEmittedContextScenarioAndScope.spec.ts,Drill through from Maas Pivot Card View to Maas Chart Card View to check scope after applying draft filter,"Verifies real-time collaboration feature using Live Blocks. Checks multi-user comment operations including adding, editing, and deleting comments along with real-time synchronization between users, user tagging, thread handling, and subscription/unsubscription capabilities."
+,Test_004_DTShouldShowsEmittedContextScenarioAndScope.spec.ts,Existing scope should be persisted for target view after clearing the context on drill through,"Verifies New Product Introduction (NPI) feature along with flyout interface. Checks dimension validation against API responses, member creation in different modes (reference assortment and custom choose), intersection creation along with custom values, and proper NPI workflow execution along with success notifications."
+,Test_005_DTWithContextMapper.spec.ts,Target views should be visible as options,Verifies Objective Bar feature to verify Process entities. Checks objective bar display along with proper data visualization and handles scenarios along with no configured data appropriately.
+,Test_006_HiddenViewTransitionInSameTab.spec.ts,Hidden view transition in same tab functionality tests,Checks Objective Bar feature specifically to verify SubProcess entities. Verifies objective bar visualization in subprocess contexts and proper handling of no-data scenarios.
+,Test_007_HiddenViewTransitionInNewTab.spec.ts,Hidden view transition in new tab functionality tests,Verifies Objective Bar capabilities to verify Assumption entities ensuring proper objective visualization and data display in assumption contexts.
+,Test_008_OnRowDrillThrough.spec.ts,Arrow should be displayed for the row with matching cell name,Verifies On-Demand MaaS interactive data status icon visibility. Checks proper icon display based on view type (interactive vs non-interactive) ensuring correct status indication to verify MaaS data presence.
+,Test_008_OnRowDrillThrough.spec.ts,Arrow should not be displayed for row when condition not equals,"Checks Interactive Planning UI components and feature. Verifies session handling, related scenario display, status validation, and proper UI element visibility along with session link restrictions."
+,Test_008_OnRowDrillThrough.spec.ts,Clicking on Arrow button user should navigate to drill through target view,Verifies On-Demand MaaS behavior when no filters are configured. Checks proper handling and display when filter configurations are absent.
+,Test_008_OnRowDrillThrough.spec.ts,After disabling conditions toggle row not matching with condition data should displayed with arrow,"Comprehensive testing of On-Demand MaaS data synchronization status. Checks error, in-progress, and completed sync states, detailed status information display, hierarchy filtering, cross-view consistency, planning instance handling, and troubleshooting workflows."
+,Test_009_CreateScenarioAfterDrillThrough.spec.ts,Perform Drill Through to Target View,Verifies drill using feature specifically to verify BDE (Bulk Data Entry) cards within On-Demand MaaS context along with proper data flow and navigation.
+,Test_009_CreateScenarioAfterDrillThrough.spec.ts,Create Scenario in Target View,Checks On-Demand MaaS integration along with SPARQ engine including proper execution and data processing workflows.
+,Test_009_CreateScenarioAfterDrillThrough.spec.ts,Delete the Created Scenario,Verifies On-Demand MaaS status feature specifically within SubProcess contexts ensuring proper status tracking and display.
+,Test_010_AssumptionsEndToEndDrillThrough.spec.ts,Assumptions end-to-end drill through functionality tests,"Verifies Portal BYO (Bring Your Own) feature. Checks Portal BYO icon presence and visibility, agent event execution workflow, and proper integration along with external systems using BYO agent events along with success notifications and change application."
+,Test_010_MultiLevelDrillThroughMassBdeWithAssumption.spec.ts,Multi-level drill through with MaaS BDE and Assumption functionality tests,"Verifies Power Bar feature to verify Process entities. Checks power bar detail display, scope and scenario chip navigation, tooltip information accuracy, and proper Process-specific UI element interactions."
+,Test_011_MultiLevelDrillThroughMassBdewithSubprocess.spec.ts,Multi-level drill through with MaaS BDE and Subprocess functionality tests,Checks Power Bar feature specifically to verify SubProcess entities ensuring proper context display and navigation within subprocess environments.
+,Test_011_SubprocessDrillThrough.spec.ts,Subprocess drill through functionality tests,Verifies Power Bar capabilities to verify Assumption entities along with proper assumption-specific context display and navigation feature.
+,Test_012_MultiLevelDrillThroughMassBdeWithProcess.spec.ts,Multi-level drill through with MaaS BDE and Process functionality tests,Checks recently viewed entity tracking and display feature within the Power Bar ensuring proper entity history handling and quick access.
+,Test_013_CreateScenarioAfterDrillThroughFromBDECard.spec.ts,Create scenario after drill through from BDE card functionality tests,Verifies context switching capabilities within the Power Bar allowing users to navigate between different entity contexts efficiently.
+,Test_015_DefaultScenarioDTCreateChildScenarioAsDefault.spec.ts,Default scenario drill through and create child scenario as default functionality tests,Checks Power Bar feature to verify SubProcess entities using updated UI components and design patterns in Planning Space.
+,Test_016_NonDefaultScenarioDTCreateChildScenarioAsDefault.spec.ts,Non-default scenario drill through and create child scenario as default functionality tests,Verifies Power Bar capabilities specifically to verify Assumption entities within Planning Space context along with proper assumption-specific features.
+,Test_017_DrillThroughNonDefaultSceanrioToCheckDefaultScenario.spec.ts,Drill through non-default scenario to check default scenario functionality tests,"Verifies Quick Links navigation feature from Planning Space. Checks proper URL navigation, page title verification, new tab handling to verify external links, and cleanup procedures to verify multiple quick link destinations including system administration and monitoring tools."
+,Test_018_DrillThroughSceanrioDefaultAndCheckDefaultInTarget.spec.ts,Drill through scenario default and check default in target functionality tests,Checks link integrity and accessibility within Planning Space ensuring all quick links are functional and properly configured to verify reliable navigation.
+,Test_019_DrillThroughDefaultScenarioAndcreateDefaultSceanrioInTargetView.spec.ts,Drill through default scenario and create default scenario in target view functionality tests,"Verifies new scenario filter UI improvements along with enhanced user experience. Checks scope and scenario chip interactions, default scenario handling, scenario selection/deselection workflows, external link feature, and feature toggle handling to verify the new filter interface."
+,Test_020_DrillThroughNonDefaultScenarioAndcreateDefaultSceanrioInTargetView.spec.ts,Drill through non-default scenario and create default scenario in target view functionality tests,"Verifies scenario creation hierarchy along with subset and incremental scenarios. Checks child scenario creation from base scenarios, incremental scenario creation from child scenarios, and proper cleanup across Process, SubProcess, and Assumption entities."
+,Test_021_CreateMultipleChildScenariosAfterDrillThrough.spec.ts,Create multiple child scenarios after drill through functionality tests,"Comprehensive testing of scenario Create, Read, Update, and Delete actions. Checks scenario name editing to verify base and child scenarios, scenario creation workflows, editing capabilities in both table and detail views, name propagation across different interfaces, and deletion from multiple locations."
+,Test_022_CreateMultipleChildScenariosAfterDrillThroughPopup.spec.ts,Create multiple child scenarios after drill through popup functionality tests,"Verifies scenario visibility filtering feature across multiple entities (Subprocess and Assumption). Checks private and public scenario creation, and proper filtering behavior to verify Private, Public, and All visibility options along with accurate column data validation."
+,Test_023_DrillThroughSourceWithoutMerge.spec.ts,Drill through source without merge functionality tests,"Verifies scenario selection and mapping feature. Checks public child scenario creation, scenario selection in Planning Space scenario tab, and proper scenario mapping validation to ensure scenarios are correctly applied to views."
+,Test_024_DrillThroughSourceWithMerge.spec.ts,Drill through source with merge functionality tests,Verifies scenario filtering based on user assignments and permissions ensuring proper user-based scenario visibility and access control.
+,Test_025_DrillThroughUsingNewViewUI.spec.ts,Drill through using new view UI functionality tests,"Comprehensive testing of default scenario feature. Checks default scenario setting from table actions and scenario filters, default scenario propagation across different views, scenario mapping along with default settings, and proper default scenario handling workflows."
+,Test_026_DrillThroughInNewViews.spec.ts,Drill through in new views functionality tests,"Verifies scenario pinning feature to verify Process and Subprocess contexts. Checks scenario pin/unpin operations, pinned scenario visibility in different tabs, and interaction between default and pinned scenario states."
+,Test_027_ContextOverrideNavUsingBreadcrumnbs.spec.ts,Context override navigation using breadcrumbs functionality tests,Verifies scenario actions specifically within Assumption entity contexts ensuring proper scenario handling capabilities to verify assumption-based scenarios.
+Duplicate View Batch,Test_001_DuplicateViewProcess.spec.ts,"1. Duplicate View
+
+2. Verify the duplicated view is created and mapped to the process
+
+3. Verify the duplicated view has copied quick filter configuration
+
+4. Verify the duplicated view has copied the cards in the dashboard
+
+5. Verify the duplicated view has copied workfilter configuration
+
+6. Verify the duplicated view has copied the procedure configuration
+
+7. Verify the duplicated view has copied actors and default procedure configuration
+
+8. Delete Duplicated view",Checks default scenario feature specifically to verify Subprocess entities ensuring proper default scenario behavior within subprocess contexts.
+,Test_002_DuplicateViewSubprocess.spec.ts,1. Duplicate View for Subprocess functionality tests,Verifies fallback behavior ensuring base scenarios automatically become default when no explicit default scenario is configured.
+,Test_003_DuplicateViewAssumption.spec.ts,1. Duplicate View for Assumption functionality tests,Checks scenario comparison capabilities within pivot tables to verify Subprocess entities ensuring proper comparative analysis feature.
+Last Accessed Context Batch,Test_001_LastAccessedProcess.spec.ts,"1. Verify process should be launched from the App catalog's planning module
+2. Verify process should be launched after launching and logging out
+3. Verify process should be launched after switching to the process orchestration
+4. Verify unauthorized page is shown after removing Policy
+5. Reassign policy back to the user",Verifies scenario selection capabilities within side navigation interface ensuring proper scenario switching and navigation workflows.
+,Test_002_LastAccessesSubprocess.spec.ts,1. Last accessed Subprocess functionality tests,"Checks scenario action capabilities specifically to verify Subprocess entities including creation, editing, deletion, and handling operations."
+Live Blocks Batch,Test_001_LiveBlocks.spec.ts,"1. Add comment and verify in Comment panel for user1 & user2
+2. Edit comment and verify in Comments panel for user1 & user2
+3. Delete comment and verify in Comments panel for user1 & user2
+4. Unsubscribe and verify for user1 & user2",Verifies application behavior when no base scenarios exist ensuring proper UI rendering and error handling in scenario-less environments.
+NPI Batch,Test_001_CreatePlaceholderWithNPIFlyout.spec.ts,"1. Validate dimensions in UI with API response
+2. Create Member in reference's assortment mode
+3. Create Member with custom values in Choose mode
+4. Create Intersection with custom values",Checks custom header feature along with scenario badge display ensuring proper scenario identification and status indication in UI headers.
+Objective Bar Batch,Test_001_ObjectiveBarForProcess.spec.ts,"1. Verify objective bar details
+2. Verify objective bar if there is no data",Verifies base scenario default setting capabilities ensuring proper default scenario establishment and handling to verify base scenarios.
+,Test_002_ObjectiveBarForSubProcess.spec.ts,"1. Verify objective bar details for sub process
+2. Verify objective bar if there is no data for sub process",Checks vertical filter dimension data behavior along with both private and public scenarios ensuring proper data visibility and filtering based on scenario visibility settings.
+,Test_003_ObjectiveBarForAssumption.spec.ts,1. Objective Bar for Assumption functionality tests,Verifies basic scope tab feature and accessibility. Checks that the Scope tab is properly enabled and accessible within Process page context ensuring proper scope handling interface presence.
+On Demand MaaS Batch,Test_001_OnDemandInteractiveDataStatusIcon.spec.ts,"1. Non Interactive View - Interactive Data Status Icon should not be Visible
+2. Interactive View - Interactive Data Status Icon should be Visible","Comprehensive testing of vertical filter lifecycle handling to verify Subprocess entities. Checks filter creation along with multiple dimensions (ITEM, LOCATION, CUSTOMER), filter overwriting capabilities, filter disabling feature, and proper cleanup using deletion."
+,Test_002_InteractivePlanning.spec.ts,1. Interactive Planning UI Validations,"Verifies scope integration along with pivot table visualization. Checks view navigation, scope tab accessibility, filter configuration along with dimension hierarchy levels, and proper scope reflection in pivot data display along with empty state handling."
+,Test_003_OnDemandNoFilterConfigured.spec.ts,1. On-Demand with no filter configured functionality tests,"Verifies scope preset mapping feature to verify Process entities. Checks scope filter configuration detection, needed filter application verification, scope persistence across process revisits, and powerbar/VF title consistency."
+,Test_004_OnDemandMaasStatus.spec.ts,"1. Verify Error Data Sync status
+2. Verify Inprogress Data Sync status
+3. Verify Started Data Sync status
+4. Verify show more details in Data Sync Status
+5. Close Data Sync Status more details popup
+6. Apply Hierarchy level filter
+7. Verify Started Data Sync status in Hierarchy level filter
+8. Navigate to another interactive view with same filter
+9. Verify Started Data Sync status in another view
+10. Verify show more details in Data Sync Status
+11. Verify planning instanceId and run ID in both views
+12. Verify Procedure details navigation",Checks scope preset mapping capabilities specifically to verify SubProcess entities ensuring proper filter mapping and persistence within subprocess contexts.
+,Test_005_OndemadMaasDrillThroughForBDE.spec.ts,1. On-Demand MaaS drill through for BDE functionality tests,Verifies scope preset mapping feature to verify Assumption entities along with proper filter configuration and mapping validation in assumption contexts.
+,Test_006_OnDemandMaasSparq.spec.ts,1. On-Demand MaaS SPARQ functionality tests,"Comprehensive testing of vertical filter lifecycle handling to verify Process entities. Checks filter creation, overwriting, disabling, and deletion along with multi-dimensional filter configurations and proper state handling."
+,Test_007_OnDemandMaasStatusSubProcess.spec.ts,1. On-Demand MaaS status for SubProcess functionality tests,Verifies scope feature within interactive procedure contexts ensuring proper scope handling and data filtering during interactive procedure execution.
+Portal BYO Batch,Test_001_PortalBYO.spec.ts,"1. Verify Portal BYO icon exists
+2. Verify selected event from the agent is executed","Verifies global scope feature across all Process entities. Checks global filter setting, filter reflection verification, global filter removal along with default restoration, and proper default filter behavior across process contexts."
+PowerBar,Test_001_PowerBarForProcess.spec.ts,"1. Verify powerbar details
+2. Verify scope chip click opens scope tab
+3. Verify scenario chip click opens scope tab
+4. Verify process details in power tooltip","Checks filter lifecycle handling specifically to verify Assumption entities including creation, modification, and deletion operations along with assumption-specific scope handling."
+,Test_002_PowerBarForSubProcess.spec.ts,1. Power Bar for SubProcess functionality tests,Verifies global scope capabilities across all Assumption entities ensuring proper global filter application and handling in assumption contexts.
+,Test_003_PowerBarForAssumption.spec.ts,1. Power Bar for Assumption functionality tests,Checks global scope feature across all SubProcess entities along with proper global filter setting and application within subprocess environments.
+,Test_004_RecentlyViewedEntity.spec.ts,1. Recently Viewed Entity functionality tests,Verifies default scope behavior and configuration to verify Process entities ensuring proper default filter assignment and application within process contexts.
+,Test_005_ContextSwitcher.spec.ts,1. Context Switcher functionality tests,"Verifies Supply Chain Procedures (SCP) history and monitoring feature. Checks SCP execution tracking, powerbar history display, procedure details navigation, filtering capabilities, scenario cleanup, and cross-module history presence along with proper status and procedure-based filtering."
+Quick Links Batch,Test_001_EasyAccessQuickLinksFromPS.spec.ts,"1. Validate Navigation for Semantic Network Architect
+2. Validate Navigation for Identity & Access
+3. Validate Navigation for Process Settings
+4. Validate Navigation for CBP Observability
+5. Validate Navigation for BYDM Workbench
+6. Validate Navigation for MaaS Command Center
+7. Validate Navigation for additional quick links","Verifies role-based access control (RBAC) to verify Supply Chain Actions procedures. Checks policy creation to verify procedure execution, procedure visibility based on permissions, policy deletion, and proper access restriction when permissions are removed."
+,Test_002_LinkValidationPS.spec.ts,1. Link validation functionality tests,"Verifies Publish Scenario RBAC feature to verify base and child scenarios. Checks policy creation to verify publish operations, base scenario publishing capabilities, child scenario access restrictions, and proper policy cleanup along with permission verification."
+Scenario Scope New Filter Batch,Test_001_ScenarioFilterUI.spec.ts,"1. Verify that clicking on the scope chip opens the scope tab
+2. Verify that clicking on the scenario chip opens the scenario filter and sets the default scenario
+3. Verify that clicking on the scenario chip opens the scenario filter and unselects scenarios
+4. Verify that clicking on the scenario chip opens the scenario filter and selects scenarios
+5. Verify that an external link opens from the scenario filter
+6. Disable new scenario UI feature flag",Verifies Supply Chain Procedures popup layout interface ensuring proper UI rendering and interaction capabilities within popup modal contexts.
+Scenario Batch,Test_001_ScenarioSubsetIncremental.spec.ts,"1. Create Child Scenario, subset Scenario & Delete Scenarios - Process
+2. Create Child Scenario, subset Scenario & Delete Scenarios - SubProcess
+3. Create Child Scenario, subset Scenario & Delete Scenarios - Assumption",Checks Supply Chain Procedures inline layout feature ensuring proper integration and display within embedded interface contexts.
+,Test_002_ScenarioActions.spec.ts,"1. Edit Base Scenario name
+2. Create Child Scenario 1
+3. Edit Child Scenario
+4. Edit Child Scenario in Scenario Detail Page
+5. Verify the scenario names are updated in Planning page
+6. Verify the scenario names are updated in childOf tree
+7. Delete Child Scenarios
+8. Create Child Scenario 2
+9. Delete Scenario 2 From Scenario Details Page",Verifies scenario creation workflow along with default scenario selection within popup layout interface ensuring proper default handling and UI consistency.
+,Test_003_ScenarioVisibilityFilter.spec.ts,"1. Create a private child scenario
+2. Create a public child scenario
+3. Filter With Private Visibility
+4. Filter With Public Visibility
+5. Filter With All Visibility",Checks scenario creation along with default scenario handling within wizard layout interface ensuring proper workflow progression and default selection behavior.
+,Test_005_ScenarioSelection.spec.ts,"1. Create a public child scenario
+2. Mapping Scenario in the Scenario Tab
+3. Validating Scenario Map","Comprehensive testing of Supply Chain Actions configuration handling. Checks view group creation, planning view setup, process mapping, procedure enablement, alphabetical ordering, primary/secondary action configuration, access control based on entity assignments, SCA button visibility, dropdown feature, action disabling, and proper cleanup."
+,Test_006_ScenarioUsersFilter.spec.ts,1. Scenario Users Filter functionality tests,Verifies Process Model UI configuration capabilities ensuring proper UI setup and configuration handling to verify process-specific interfaces.
+,Test_007_ScenarioDefault.spec.ts,"1. Create a public child scenario
+2. Verify set as default action in 3 dots menu of scenarios table in scenarios
+3. Check Scenario in the scenario filter
+4. Validating Scenario Map
+5. Set default scenario from scenarios filters
+6. Uncheck the Scenario in the scenario filter
+7. Make a child scenario default in the ALL Tab, then navigate to the Pinned Tab and make base scenario default
+8. Delete the Created Scenario",Checks Process Model procedure configuration and handling ensuring proper procedure assignment and execution within process model contexts.
+,Test_009_ScenarioPinnedInProcess.spec.ts,"1. Create a public child scenario and determine initial state
+2. Pin Scenario
+3. Unpin Scenario
+4. Make scenario default, then pin it and verify in ALL and PINNED tabs",Verifies clone member feature within Supply Chain Actions ensuring proper member duplication and data integrity during cloning operations.
+,Test_011_AssumptionScenarioAction.spec.ts,1. Assumption Scenario Action functionality tests,Checks Supply Chain Actions button behavior based on toggle settings ensuring proper button state handling and visibility control using configuration toggles.
+,Test_013_SubprocessScenarioDefault.spec.ts,1. Subprocess Scenario Default functionality tests,"Comprehensive testing of view type access control across different user roles and entity types. Checks admin and user role permissions to verify Process, SubProcess, and Assumption entities, ensuring proper view type presence (All Views, Hidden Views, Favourites) based on user privileges and role-based access control."
+,Test_014_BasescenarioShouldBeDefaultIfNoDefaultScenario.spec.ts,1. Base scenario should be default if no default scenario functionality tests,"Verifies view editing restrictions to verify users without edit permissions. Checks that refresh feature remains available while edit button is properly disabled, ensuring proper access control and permission enforcement to verify view modification capabilities."
+,Test_015_SubprocessScenarioComparisonInPivot.spec.ts,1. Subprocess scenario comparison in pivot functionality tests,Checks view handling feature to verify users along with proper edit permissions. Verifies that both refresh and edit buttons are accessible and functional in the view manager interface to verify authorized users.
+,Test_018_SelectScenarioinSidenav.spec.ts,1. Select scenario in side navigation functionality tests,"Verifies favourites feature to verify view handling. Checks adding views to favourites, proper display under favourites section, view selection state handling, and removing views from favourites along with proper state updates."
+,Test_021_SubprocessScenarioActions.spec.ts,1. Subprocess scenario actions functionality tests,"Verifies role-based access control (RBAC) to verify view visibility. Checks unauthorized access restrictions, policy assignment effects on view accessibility, proper view rendering after permission grant, and policy removal along with access restriction restoration."
+,Test_029_ScreensShouldRenderWithNoBaseScenarios.spec.ts,1. Screens should render with no base scenarios functionality tests,Verifies view configuration and mapping to specific entities ensuring proper view-entity associations and configuration handling.
+,Test_030_CustomHeaderWithScenarioBudge.spec.ts,1. Custom header with scenario badge functionality tests,"Comprehensive testing of view arrangement and organization feature. Checks process mapping, view selection display, view ordering, drag-and-drop capabilities to verify both individual views and view groups, and proper arrangement persistence across Planning Space interface."
+,Test_031_BaseScenarioSetAsDefault.spec.ts,1. Base scenario set as default functionality tests,Verifies view arrangement capabilities specifically to verify Assumption entities ensuring proper view organization and handling within assumption contexts.
+,Test_032_VFDimensiondatawithPrivateandPublicScenario.spec.ts,1. VF dimension data with private and public scenario functionality tests,"Checks hidden view feature to verify Process entities including view hiding, visibility control, and proper access handling to verify hidden views."
+Scope Batch,Test_001_ScopeAsAttribute.spec.ts,1. Verify Scope tab in Process page,Verifies hidden view capabilities to verify SubProcess entities ensuring proper view visibility control and handling within subprocess contexts.
+,Test_002_SaveOverwriteAndDeleteFilterSubprocess.spec.ts,"1. Create Vertical Filter
+2. Overwrite Vertical Filter
+3. Disable Created Filter
+4. Delete Created Vertical Filter",Checks hidden view feature to verify Assumption entities along with proper visibility control and access handling to verify assumption-specific hidden views.
+,Test_003_ScopePivot.spec.ts,"1. Click on view in planning space
+2. Verify Scope tab in planning space
+3. Configure filter in scope
+4. Verify pivot reflects correct scope",Verifies mapping between views and procedures ensuring proper association and configuration handling to verify view-specific procedure assignments.
+,Test_004_ScopePresetMappingInProcess.spec.ts,"1. Verify Scope defined or not in Planning Space
+2. Verify if required Filter is applied or not
+3. Verify applied filters are available after revisit to process",Checks view settings configuration and handling capabilities ensuring proper view customization and settings persistence.
+,Test_005_ScopePresetMappingInSubProcess.spec.ts,1. Scope preset mapping for SubProcess functionality tests,Verifies view settings capabilities specifically to verify SubProcess entities ensuring proper configuration handling within subprocess contexts.
+,Test_006_ScopePresetMappingInAssumption.spec.ts,1. Scope preset mapping for Assumption functionality tests,Checks view settings feature to verify Assumption entities along with proper configuration and handling capabilities in assumption contexts.
+,Test_007_SaveAndDeleteFilter.spec.ts,"1. Create Vertical Filter
+2. Overwrite Vertical Filter
+3. Disable Created Filter
+4. Delete Created Vertical Filter",Verifies view group expansion and collapse feature ensuring proper navigation and organization of views within grouped structures.
+,Test_008_ScopeInInteractiveProcedure.spec.ts,1. Scope in Interactive Procedure functionality tests,Checks view pinning and unpinning capabilities within Planning Space ensuring proper view state handling and quick access feature.
+,Test_009_GlobalScopeForAllProcess.spec.ts,"1. Set filter globally for all process
+2. Is filter reflected in view of process
+3. Remove filter globally for all process and set to default filter
+4. Is default filter reflected in view of process",Verifies linked view feature along with filtering capabilities ensuring proper view relationships and filtered data consistency across linked views.
+,Test_010_SaveOverwriteAndDeleteFilterAssumption.spec.ts,"1. Save, overwrite, and delete filter for Assumption functionality tests",Checks new view UI modal feature and view rendering capabilities ensuring proper view creation and display within modal interfaces.
+,Test_011_GlobalScopeForAllAssumptions.spec.ts,1. Global scope for all Assumptions functionality tests,Verifies that view search feature works correctly to verify Process context by searching to verify a specific view and successfully navigating to it.
+,Test_012_GlobalScopeForAllSubProcess.spec.ts,1. Global scope for all SubProcess functionality tests,Checks that hidden views cannot be found using search and navigation is properly restricted when views are marked as hidden in Process context.
+,Test_013_DefaultScopeForProcess.spec.ts,1. Default scope for Process functionality tests,Verifies view search feature in Sub-process context to ensure users can search to verify and navigate to specific subprocess views.
+Supply Chain Actions Batch,Test_001_SupplyChainActions.spec.ts,"1. Run SCP and verify last async run in power bar and list
+2. Verify latest running SCP in SCP list
+3. Verify latest running procedure from Procedure details page
+4. Verify status filter & procedure filters
+5. Delete new child scenario
+6. Verify history exists for Process Orchestration",Makes sure that hidden views in Sub-process context are not searchable and navigation to them is properly prevented.
+,Test_002_SCAHistoryFilters.spec.ts,"1. Verify Base scenario name in Supply Chain Procedures - History page
+2. Filter With Status
+3. Filter With Procedure Type",Checks view search and navigation feature specifically within Assumption context to ensure proper view filtering and access.
+,Test_003_SCPWizardLayout.spec.ts,"1. Validate default scenario name in create scenario
+2. Create a public scenario through SCP and verify alert messages
+3. Delete a public scenario",Confirms that hidden views in Assumption context cannot be accessed using search and navigation restrictions are properly enforced.
+,Test_004_SCAProcedures.spec.ts,"1. Add Procedure Publish Scenario Execute Policy
+2. Should Display Publish Scenario Procedure in the Supply Chain Procedure Dropdown
+3. Delete Procedure Publish Scenario Policy
+4. Should Not Display Publish Scenario Procedure in the Supply Chain Procedure Dropdown",Verifies the configuration of workflow filters to verify views that already have a default scope defined to ensure proper filter setup and application.
+,Test_005_PublishScenario.spec.ts,"1. Add Publish Scenario, Publish Base Scenario Policies
+2. Verify publish base scenario
+3. Data Reset - Delete created Policies",Verifies the configuration of workflow filters to verify views that already have a default scope defined to ensure proper filter setup and application.
+,Test_006_SCPPopupLayout.spec.ts,1. SCP Popup Layout functionality tests,Checks workflow filter configuration to verify views without default scope to ensure filters can be properly applied to empty scope views.
+,Test_007_SCPInlineLayout.spec.ts,1. SCP Inline Layout functionality tests,Verifies that views along with default scope display correctly in scope tab and workflow filter details are accessible using context override popup along with proper filter name validation.
+,Test_008_ScenarioCreationWithDefaultCheck_PopupLayout.spec.ts,1. Scenario creation with default check in popup layout functionality tests,Verifies that views without default scope show empty scope tab while still displaying workflow filter options and context override feature.
+,Test_009_ScenarioCreationWithDefaultCheck_WizardLayout.spec.ts,1. Scenario creation with default check in wizard layout functionality tests,Checks the ability to edit existing workflow filters to verify views along with default scope and Makes sure changes are properly applied and reflected.
+,Test_010_ConfigurePrimaryAndSecondarySCA.spec.ts,"1. Create a View Group
+2. Create a planning view
+3. Map view to process
+4. Verify all procedures are enabled to view
+5. Verify all SCAs are appeared in alphabetical order in procedures dropdown
+6. Should be able to configure primary and secondary actions
+7. Configure Supply Chain Procedures should be disabled if the entity has no assigned views and procedures
+8. Verify primary SCA available in view
+9. Verify secondary SCA available in view
+10. Verify SCA procedures dropdown available with other SCA actions in arranged order
+11. Should disable all SCA actions to view
+12. Verify SCA dropdown disabled in Planning Space
+13. Delete view group",Verifies editing feature to verify workflow filters on views without default scope to ensure modifications are correctly processed and saved.
+,Test_011_ProcessModelUIConfig.spec.ts,1. Process Model UI Configuration functionality tests,Confirms that edited workflow filters are properly reflected in the UI along with correct filter names scope validation and merge logic verification to verify default scope views.
+,Test_012_ProcessModelProcedures.spec.ts,1. Process Model Procedures functionality tests,Verifies scenario where user manually changes scope settings and Checks that workflow filters still function correctly along with proper merge logic and revert capabilities.
+,Test_013_CloneMember.spec.ts,1. Clone Member functionality tests,Verifies that edited workflow filters are correctly displayed and functional to verify views without default scope ensuring proper filter details and merge logic.
+,Test_014_SCAButtonVerifyByEnablingToggle.spec.ts,1. SCA Button verify by enabling toggle functionality tests,Verifies the deletion of workflow filters to verify views along with default scope to ensure filters can be properly removed and system returns to expected state.
+Views Batch,Test_001_ViewTypesAccessCheck.spec.ts,"1. Verify View Types for Process - Admin Role
+2. Verify All Views - Admin Role
+3. Verify Hidden views - Admin Role
+4. Verify Favourites views - Admin Role
+5. Verify View Types for Sub Process - Admin Role
+6. Verify View Types for Assumption - Admin Role
+7. Verify View Types for Process - User Role
+8. Verify All Views - User Role
+9. Verify Favourites views - User Role
+10. Verify View Types for Sub Process - User Role
+11. Verify View Types for Assumption - User Role",Checks workflow filter deletion feature to verify views without default scope to confirm proper filter removal and cleanup.
+,Test_002_EditViewWithoutPermission.spec.ts,1. Edit Should be Disabled,Confirms that after deleting workflow filters from default scope views the scope properly resets to initial state along with correct UI elements and behavior.
+,Test_003_RefreshAndEditView.spec.ts,1. Edit & Refresh Button In View Manager exists,Verifies that scope resets correctly to verify views without default scope after workflow filter deletion ensuring proper cleanup and UI state restoration.
+,Test_004_Favourites.spec.ts,"1. Add Favorites
+2. Remove From Favorites",
+,Test_005_ViewsAreRenderedBasedOnRBAC.spec.ts,"1. Planning Views should Not be Visible
+2. Planning Views should be Visible
+3. Removing Policy",
+,Test_006_ConfigureViewToEntity.spec.ts,1. Configure View to Entity functionality tests,
+,Test_007_SettingsArrangeViews.spec.ts,"1. Map with 1 process
+2. Display selected Views
+3. Selected views order
+4. Should test drag and drop of views
+5. Should test drag and drop of view groups",
+,Test_009_ArrangeViewsForAssumption.spec.ts,1. Arrange Views for Assumption functionality tests,
+,Test_011_HiddenViewsForProcess.spec.ts,1. Hidden Views for Process functionality tests,
+,Test_012_HiddenViewsForSubProcess.spec.ts,1. Hidden Views for SubProcess functionality tests,
+,Test_013_HiddenViewsForAssumptions.spec.ts,1. Hidden Views for Assumptions functionality tests,
+,Test_014_ViewProcedureMapping.spec.ts,1. View Procedure Mapping functionality tests,
+,Test_015_ViewSettings.spec.ts,1. View Settings functionality tests,
+,Test_016_ViewSettingsForSubProcess.spec.ts,1. View Settings for SubProcess functionality tests,
+,Test_017_ViewSettingsForAssumption.spec.ts,1. View Settings for Assumption functionality tests,
+,Test_018_ViewGroupExpand.spec.ts,1. View Group Expand functionality tests,
+,Test_019_PinUnpinInPs.spec.ts,1. Pin Unpin in Planning Space functionality tests,
+,Test_020_LinkedViewsForFiltered.spec.ts,1. Linked Views for Filtered functionality tests,
+,Test_021_NewViewUiModalViewsRender.spec.ts,1. New View UI Modal Views Render functionality tests,
+ViewSearch,View Search for Process,Should navigate to the filtered view,
+,View Search for Process,Should not Navigate for hidden View,
+,View Search for Sub Process,Should navigate to the filtered view,
+,View Search for Sub Process,Should not Navigate for hidden View,
+,View Search for Assumption,Should navigate to the filtered view in ASSUMPTION context,
+,View Search for Assumption,Should not Navigate for hidden View in ASSUMPTION context,
+,Workflow filter tests,Should configure workflow filter for view which has default scope for view,
+WorkFlowFilter,Workflow filter tests,Should configure workflow filter for view which has default scope for view,
+,Workflow filter tests,Should configure workflow filter for view which has no default scope for view,
+,Workflow filter tests,Should show default scope in scope tab and workflow filter in context override popup for view,
+,Workflow filter tests,Should show empty scope in scope tab and workflow filter in context override popup for view,
+,Workflow filter tests,Should edit workflow filter reflecting for view,
+,Workflow filter tests,Should edit workflow filter reflecting for view,
+,Workflow filter tests,Does edited workflow filter reflected for view,
+,Workflow filter tests,user changed the scope for view,
+,Workflow filter tests,Does edited workflow filter reflected for view,
+,Workflow filter tests,Should delete workflow filter for view,
+,Workflow filter tests,Should delete workflow filter for view,
+,Workflow filter tests,Does scope reset to initial after workflow filter deleted for view,
+,Workflow filter tests,Does scope reset to initial after workflow filter deleted for view,

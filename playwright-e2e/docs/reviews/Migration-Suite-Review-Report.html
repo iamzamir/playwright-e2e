@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Migration Suite — Review Report</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --panel2: #172033; --text: #e2e8f0;
+    --muted: #94a3b8; --accent: #38bdf8; --good: #22c55e; --warn: #f59e0b;
+    --bad: #ef4444; --border: #334155; --chip: #0b3b53;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.55; }
+  header { padding: 32px 40px; background: linear-gradient(135deg, #0b3b53, #0f172a);
+    border-bottom: 1px solid var(--border); }
+  header h1 { margin: 0 0 6px; font-size: 26px; }
+  header p { margin: 2px 0; color: var(--muted); font-size: 14px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 80px; }
+  section { margin-bottom: 34px; }
+  h2 { font-size: 20px; border-left: 4px solid var(--accent); padding-left: 12px; margin: 30px 0 14px; }
+  h3 { font-size: 16px; margin: 18px 0 8px; color: #cbd5e1; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .card .n { font-size: 26px; font-weight: 700; }
+  .card .l { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 10px; overflow: hidden; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: top; }
+  th { background: var(--panel2); color: #cbd5e1; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .t-bug { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.4); }
+  .t-warn { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.4); }
+  .t-good { background: rgba(34,197,94,.15); color: #86efac; border: 1px solid rgba(34,197,94,.4); }
+  .t-gap { background: rgba(56,189,248,.15); color: #7dd3fc; border: 1px solid rgba(56,189,248,.4); }
+  .spec { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+  .spec h3 { margin: 0 0 8px; display: flex; align-items: center; gap: 10px; }
+  .spec ul { margin: 6px 0 0; padding-left: 20px; }
+  .spec li { margin: 4px 0; font-size: 14px; }
+  code { background: #0b1220; border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; font-size: 12.5px; color: #e2e8f0; }
+  .phase { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .phase-h { background: var(--panel2); padding: 12px 16px; font-weight: 600; display: flex; justify-content: space-between; }
+  .phase-b { padding: 12px 16px; background: var(--panel); }
+  .phase-b ol { margin: 0; padding-left: 20px; }
+  .phase-b li { margin: 5px 0; font-size: 14px; }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 0; }
+  .muted { color: var(--muted); font-size: 13px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>ProcessOrchestration Migration Suite — Review Report</h1>
+  <p>Scope: <code>tests/ProcessOrchestrationBackend/Migration/Test_001 → Test_009</code> + <code>util/alm-migration.util.ts</code></p>
+  <p>Generated: 2026-08-01 · Reviewer: GitHub Copilot</p>
+</header>
+<main>
+
+  <section>
+    <h2>Summary</h2>
+    <div class="cards">
+      <div class="card"><div class="n">9</div><div class="l">Specs reviewed</div></div>
+      <div class="card"><div class="n" style="color:var(--bad)">7</div><div class="l">Bugs / defects</div></div>
+      <div class="card"><div class="n" style="color:var(--warn)">18</div><div class="l">Improvements</div></div>
+      <div class="card"><div class="n" style="color:var(--accent)">15+</div><div class="l">New test cases</div></div>
+      <div class="card"><div class="n" style="color:var(--good)">2</div><div class="l">Reference-quality specs</div></div>
+    </div>
+    <p class="muted" style="margin-top:14px;">Test_008 and Test_009 set the quality bar (helpers, negative + boundary + idempotency, best-effort teardown, path sanitization). The other specs need serial-mode fixes, de-brittling of magic-number/string assertions, removal of masked failures, and safety-net teardown.</p>
+    <div class="legend">
+      <span class="tag t-bug">BUG</span>
+      <span class="tag t-warn">IMPROVEMENT</span>
+      <span class="tag t-gap">COVERAGE GAP</span>
+      <span class="tag t-good">STRENGTH</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Per-spec findings</h2>
+
+    <div class="spec">
+      <h3>Test_001 — Calendar Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Added a unique calendar name per run to prevent cross-run collisions.</li>
+        <li><span class="tag t-good">DONE</span> Moved cleanup exclusively to <code>afterAll</code>; both realms are always attempted with <code>Promise.allSettled</code>, and cleanup failures fail the suite.</li>
+        <li><span class="tag t-good">DONE</span> Moved the update-cycle payload into INTEROP and QA test data.</li>
+        <li><span class="tag t-good">DONE</span> Cycle verification now validates the expected subset instead of exact count equality.</li>
+        <li><span class="tag t-good">VERIFIED</span> QA isolated run: <strong>10 passed (10.7s)</strong> on 2026-08-01, followed by successful source and target cleanup.</li>
+        <li><span class="tag t-warn">ENV</span> INTEROP remains blocked by an Azure B2C <code>invalid_client</code> response for the configured source secret; implementation is unaffected.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_002 — Process Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Converted the dependent flow to <code>test.describe.serial</code> and standardized realm auth with <code>buildAuthHeaders</code>.</li>
+        <li><span class="tag t-good">DONE</span> Moved cleanup exclusively to asserted <code>afterAll</code>; both realms are always attempted with <code>Promise.allSettled</code>.</li>
+        <li><span class="tag t-good">DONE</span> Added idempotent cleanup for processes, procedures, actors, role assignments, and roles.</li>
+        <li><span class="tag t-good">DONE</span> Removed the masked cleanup assertion and changed <code>subProcessName</code> to <code>const</code>.</li>
+        <li><span class="tag t-good">VERIFIED</span> QA isolated run: <strong>10 passed (1.3m)</strong> on 2026-08-01, including successful two-realm cleanup.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_003 — Full &amp; Partial Export <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Replaced fragile array-length comparisons with explicit per-environment expected counts and exact sorted identity-set validation.</li>
+        <li><span class="tag t-good">DONE</span> Standardized authentication setup with <code>buildAuthHeaders</code>.</li>
+        <li><span class="tag t-good">DONE</span> Added negative coverage for missing authorization, unknown process names, and malformed payloads.</li>
+        <li><span class="tag t-good">DONE</span> Asserted the observed malformed-payload contract: HTTP <code>500</code>, unsuccessful process export, and a populated <code>errorReason</code>.</li>
+        <li><span class="tag t-good">VERIFIED</span> INTEROP isolated run: <strong>5 passed (1.1m)</strong> on 2026-08-01.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_004 — Supply Chain Actions Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Centralized QA/INTEROP source and target realm resolution in one local realm-config helper.</li>
+        <li><span class="tag t-good">DONE</span> Moved cleanup exclusively to asserted <code>afterAll</code>, with a fresh target query and <code>Promise.allSettled</code> deletion.</li>
+        <li><span class="tag t-good">DONE</span> Centralized the cleanup namespace as <code>CLEANUP_NAME_PREFIX</code> in per-environment test data and documented both JSON schemas.</li>
+        <li><span class="tag t-good">VERIFIED</span> INTEROP isolated run: <strong>4 passed (17.7s)</strong> on 2026-08-01, including successful cleanup of five migrated SCA fixtures.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_005 — Assumption &amp; Action Item KPI Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Replaced runtime mutation of cached test data with locally cloned export payloads containing only the current run's KPI IDs.</li>
+        <li><span class="tag t-good">DONE</span> Added unique Assumption and Action Item KPI names per run to prevent collisions and support cleanup fallback lookup.</li>
+        <li><span class="tag t-good">DONE</span> Moved deletion exclusively to asserted <code>afterAll</code>; source and target cleanup always run via <code>Promise.allSettled</code> and validate status rather than brittle response text.</li>
+        <li><span class="tag t-good">DONE</span> Added <code>_schema</code> documentation to INTEROP and QA test data.</li>
+        <li><span class="tag t-good">VERIFIED</span> INTEROP isolated run: <strong>6 passed (57.3s)</strong> on 2026-08-01, including successful deletion of both KPI types from both realms.</li>
+        <li><span class="tag t-good">SCOPE</span> Broader non-KPI assumption sections remain outside this KPI-focused spec and are exercised by Test_009.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_006 — Entity View Mapping Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Replaced hardcoded mapping/import counts with values derived from entity and view arrays in each mapping payload.</li>
+        <li><span class="tag t-good">DONE</span> Search validation now asserts the complete entity set from the search request and requires every requested view, including sequence and hidden state, for each returned entity.</li>
+        <li><span class="tag t-good">DONE</span> Moved source and target clear operations exclusively to asserted <code>afterAll</code>, using <code>Promise.allSettled</code> and response-shape validation.</li>
+        <li><span class="tag t-good">DONE</span> Added <code>_schema</code> documentation to INTEROP and QA test data.</li>
+        <li><span class="tag t-good">VERIFIED</span> INTEROP isolated run: <strong>11 passed (30.7s)</strong> on 2026-08-01; teardown cleared 55 source mappings and 110 target mappings.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_007 — Link Management ALM Validation</h3>
+      <ul>
+        <li><span class="tag t-bug">BUG</span> TC2 asserts the service is <code>FAILED</code> as the happy path — on a clean realm where validation SUCCEEDS the test fails. Assert shape and accept both terminal states, or seed a known-broken link.</li>
+        <li><span class="tag t-warn">IMPROVEMENT</span> Hand-rolled <code>setTimeout</code> polling — reuse shared <code>pollUntil</code>.</li>
+        <li><span class="tag t-good">STRENGTH</span> Good 401 negatives (TC4/TC5) and deep envelope validation (TC6).</li>
+        <li><span class="tag t-gap">COVERAGE GAP</span> Missing 403, abort-when-not-in-progress, invalid payload, concurrent validation.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_008 — Entity View Procedure Mapping Migration <span class="tag t-good">COMPLETED</span></h3>
+      <ul>
+        <li><span class="tag t-good">DONE</span> Standardized all three unauthorized contracts on <code>isStatus(status, 401)</code>.</li>
+        <li><span class="tag t-good">DONE</span> Replaced the empty full-export selector with a partial selector and filtered exported data to the exact configured entity/view/procedure subset before import.</li>
+        <li><span class="tag t-good">DONE</span> Preserved strict per-view fidelity validation for procedure name, primary/secondary flags, and sequence.</li>
+        <li><span class="tag t-good">DONE</span> Corrected the empty-mapping boundary contract to assert INTEROP's structured <code>500</code> / <code>IBP_PO_50_2059</code> rejection.</li>
+        <li><span class="tag t-good">DONE</span> Strengthened <code>afterAll</code> to assert cleanup of all configured pairs in both source and target realms via <code>Promise.allSettled</code>.</li>
+        <li><span class="tag t-good">DONE</span> Added <code>_schema</code> documentation to INTEROP and QA test data.</li>
+        <li><span class="tag t-good">VERIFIED</span> INTEROP isolated run: <strong>13 passed (18.0s)</strong> on 2026-08-01.</li>
+      </ul>
+    </div>
+
+    <div class="spec">
+      <h3>Test_009 — ALM Deploy Resource Migration <span class="tag t-good">reference quality</span></h3>
+      <ul>
+        <li><span class="tag t-good">STRENGTH</span> Serial, shared util, <code>pollUntil</code>, path sanitization (security-aware), best-effort <code>afterAll</code> cleanup, timeout tiers.</li>
+        <li><span class="tag t-warn">IMPROVEMENT</span> Parses <code>resourceId</code>/<code>version</code> from a human-readable job message via regex — fragile if the message format changes.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cross-cutting improvements</h2>
+    <table>
+      <tr><th>#</th><th>Improvement</th><th>Affected</th></tr>
+      <tr><td>1</td><td>Standardize auth setup — one path via a <code>migrationFixtures</code> fixture</td><td>001–009</td></tr>
+      <tr><td>2</td><td>Extract realm-config helper to remove PSENV branching &amp; duplicated env blocks</td><td>004; 001–009</td></tr>
+      <tr><td>3</td><td>Enforce <code>describe.serial</code> on dependent specs</td><td>002</td></tr>
+      <tr><td>4</td><td>Remove masked/commented-out assertions</td><td>002</td></tr>
+      <tr><td>5</td><td>Derive expected counts from payloads instead of magic numbers</td><td>003, 006</td></tr>
+      <tr><td>6</td><td>Never mutate <code>require</code>d test data — clone locally</td><td>005</td></tr>
+      <tr><td>7</td><td>Standardize status assertions on numeric <code>isStatus</code></td><td>008</td></tr>
+      <tr><td>8</td><td>Add best-effort <code>afterAll</code> teardown</td><td>001, 002, 004, 005, 006</td></tr>
+      <tr><td>9</td><td>Reuse <code>pollUntil</code> for validation polling</td><td>007</td></tr>
+      <tr><td>10</td><td>Tolerant terminal-state assertions (SUCCESS/FAILED)</td><td>007</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Additional test cases to create</h2>
+    <table>
+      <tr><th>Category</th><th>Proposed case</th></tr>
+      <tr><td><span class="tag t-gap">GAP</span></td><td>Feature Toggle migration (tenant + process level) — migrate &amp; verify</td></tr>
+      <tr><td><span class="tag t-gap">GAP</span></td><td>Action Item attributes &amp; ui_fields migration (only KPIs covered today)</td></tr>
+      <tr><td><span class="tag t-gap">GAP</span></td><td>Assumption attributes / assumption_types / insight configs migration</td></tr>
+      <tr><td><span class="tag t-gap">GAP</span></td><td>Cross-environment matrix (INTEROP / QA / PSR source→target)</td></tr>
+      <tr><td><span class="tag t-bug">NEG</span></td><td>401 (missing token) &amp; 403 (wrong-realm token) for every resource type</td></tr>
+      <tr><td><span class="tag t-bug">NEG</span></td><td>Malformed / empty payload import → graceful 4xx/no-op</td></tr>
+      <tr><td><span class="tag t-bug">NEG</span></td><td>Unknown entity name export → empty result, not error</td></tr>
+      <tr><td><span class="tag t-bug">NEG</span></td><td>Deploy non-existent resource → 404; older/duplicate version → conflict</td></tr>
+      <tr><td><span class="tag t-warn">EDGE</span></td><td>Idempotent re-import for Calendars, SCA, KPIs</td></tr>
+      <tr><td><span class="tag t-warn">EDGE</span></td><td>Large-volume / pagination export integrity</td></tr>
+      <tr><td><span class="tag t-warn">EDGE</span></td><td>Concurrent export + import on the same resource</td></tr>
+      <tr><td><span class="tag t-warn">EDGE</span></td><td>Source == target realm import behavior</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Phased delivery plan</h2>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 0 — Baseline &amp; triage</span><span class="muted">~0.5 day</span></div>
+      <div class="phase-b"><ol>
+        <li>Run full Migration suite on INTEROP; capture pass/fail and the FAILED-status dependency in Test_007.</li>
+        <li>Confirm <code>compareTwoValues</code> equality semantics (numeric vs string status) to validate the Test_008 finding.</li>
+        <li>Snapshot orphaned-data risk (specs lacking teardown).</li>
+      </ol></div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 1 — Bug fixes · <code>bugfix/migration-suite-hardening</code></span><span class="muted">1–2 days</span></div>
+      <div class="phase-b"><ol>
+        <li>Test_002 → <code>describe.serial</code>; re-enable TC11 with tolerant status handling; <code>subProcessName</code> → <code>const</code>.</li>
+        <li>Test_005 → stop mutating <code>require</code>d data; build export payload locally.</li>
+        <li>Test_008 → replace string <code>'401'</code> with <code>isStatus(status, 401)</code>.</li>
+        <li>Test_007 TC2 → accept SUCCESS/FAILED; assert shape not fixed FAILED.</li>
+        <li>Validate: <code>read/problems</code> clean; each edited spec runs in isolation.</li>
+      </ol></div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 2 — Robustness &amp; de-brittling · <code>refactor/migration-assertions</code></span><span class="muted">~2 days</span></div>
+      <div class="phase-b"><ol>
+        <li>Test_006 → derive expected insert/clear counts from request payloads (drop 55/110/&gt;=30).</li>
+        <li>Test_003 → replace entity-view length comparison with explicit expected counts.</li>
+        <li>Replace brittle exact-message assertions (005, 006) with pattern/<code>includes</code>.</li>
+        <li>Test_007 → swap bespoke polling for <code>pollUntil</code>.</li>
+      </ol></div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 3 — Shared infra &amp; teardown · <code>refactor/migration-fixtures</code></span><span class="muted">~2 days</span></div>
+      <div class="phase-b"><ol>
+        <li>Add <code>migrationFixtures</code> (auth + realm config) and <code>getMigrationRealms()</code> to remove PSENV branching (004) and duplicated env blocks (001–009).</li>
+        <li>Add reusable best-effort <code>afterAll</code> teardown; wire into 001, 002, 004, 005, 006.</li>
+        <li>Standardize all specs on <code>buildAuthHeaders</code>.</li>
+      </ol></div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 4 — New coverage · <code>test/migration-coverage</code></span><span class="muted">3–4 days</span></div>
+      <div class="phase-b"><ol>
+        <li><code>Test_010_FeatureToggleMigration</code>.</li>
+        <li><code>Test_011_ActionItemAttributesMigration</code>.</li>
+        <li><code>Test_012_AssumptionConfigMigration</code>.</li>
+        <li>Negative/security matrix (401/403/malformed) across resource types.</li>
+        <li>Register in <code>tests/TestSuites/*.json</code>; add per-env test data; <code>npm run docs:testcases</code>.</li>
+      </ol></div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-h"><span>Phase 5 — Cross-env &amp; CI · <code>test/migration-cross-env</code></span><span class="muted">1–2 days</span></div>
+      <div class="phase-b"><ol>
+        <li>Parameterize source→target realm matrix; verify QA/PSR data files exist.</li>
+        <li>Confirm CI workflow includes new specs; stabilize (retries/timeouts via <code>getTimeout</code>).</li>
+      </ol></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Definition of Done (per phase)</h2>
+    <ul>
+      <li>All dependent specs use <code>describe.serial</code>; fixtures injected.</li>
+      <li>No inline selectors/URLs; no static sleeps; timeouts via <code>getTimeout(tier)</code>.</li>
+      <li>No masked/commented-out assertions; failures surface in reports.</li>
+      <li>Best-effort <code>afterAll</code> teardown on every stateful spec.</li>
+      <li>Per-env test data present; specs registered in <code>TestSuites/*.json</code>.</li>
+      <li><code>npm run docs:testcases</code> regenerated; <code>read/problems</code> clean; targeted specs pass in isolation.</li>
+    </ul>
+  </section>
+
+</main>
+</body>
+</html>

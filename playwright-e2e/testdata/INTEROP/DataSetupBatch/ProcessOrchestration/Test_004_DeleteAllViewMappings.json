@@ -1,0 +1,11 @@
+{
+  "_schema": {
+    "EXPORT_PAYLOAD": "object (required) - exportData request body to fetch all entity view and entity view procedure mappings"
+  },
+  "EXPORT_PAYLOAD": {
+    "links": {
+      "entityViews": [],
+      "entityViewsProcedure": []
+    }
+  }
+}

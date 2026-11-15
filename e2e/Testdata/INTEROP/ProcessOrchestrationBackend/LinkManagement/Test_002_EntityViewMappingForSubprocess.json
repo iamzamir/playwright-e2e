@@ -1,0 +1,76 @@
+{
+    "requestBody": {
+        "entities": [
+            {
+                "type": "subprocess",
+                "entityId": [
+                    "09234411-C320-43A7-B20E-721EEAEA17D0",
+                    "APILinkManagementTestDemandReview"
+                ]
+            }
+        ],
+        "views": [
+            { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": false },
+            { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false },
+            { "id": "67f0c4876ccd7b90b205229b", "sequence": 3, "hidden": false },
+            { "id": "67f0c4eead4d35626071193c", "sequence": 4, "hidden": false }
+        ]
+    },
+    "requestBody2": {
+        "entities": [
+            {
+                "type": "subprocess",
+                "entityId": [
+                    "09234411-C320-43A7-B20E-721EEAEA17D0",
+                    "APILinkManagementTestDemandReview"
+                ]
+            }
+        ],
+        "views": [
+            { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": false },
+            { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false }
+        ]
+    },
+    "requestBody3": {
+        "entities": [
+            {
+                "type": "subprocess",
+                "entityId": [
+                    "09234411-C320-43A7-B20E-721EEAEA17D0",
+                    "APILinkManagementTestDemandReview"
+                ]
+            }
+        ],
+        "views": [
+            { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": false },
+            { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false },
+            { "id": "67f0c4eead4d35626071193c", "sequence": 3, "hidden": true },
+            { "id": "67f0c4876ccd7b90b205229b", "sequence": 4, "hidden": true },
+            { "id": "682331ff625a1a6ea4470433", "sequence": 5, "hidden": false },
+            { "id": "68233219aadb6a093338dc2a", "sequence": 6, "hidden": false }
+        ]
+    },
+    "requestBody4": {
+        "entityId": [
+            "09234411-C320-43A7-B20E-721EEAEA17D0",
+            "APILinkManagementTestDemandReview"
+        ],
+        "entityType": "subprocess"
+    },
+    "requestSearchBody": {
+        "entityId": [
+            "APILinkManagementTest",
+            "302AC5C7-EC32-49B2-8F0D-1C17826909D3",
+            "09234411-C320-43A7-B20E-721EEAEA17D0",
+            "DB45EA23-9D52-4555-84C2-737D037920B6",
+            "E788B803-D33D-4032-B819-DD9004E482FA",
+            "1BA78EBB-2690-494C-8C7B-E9BC35E359B8",
+            "APILinkManagementTestInitiativesAndAssumptionsReview",
+            "APILinkManagementTestDemandReview",
+            "APILinkManagementTestSupplyReview",
+            "APILinkManagementTestIntegratedReconcillation",
+            "APILinkManagementTestExecutiveBusinessReview"
+        ],
+        "entityType": "subprocess"
+    }
+}

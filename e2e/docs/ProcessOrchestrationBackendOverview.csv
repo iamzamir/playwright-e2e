@@ -1,0 +1,203 @@
+Batch,Suites,Test Cases,Description
+Action Item,Test_001_ActionItemCRUDWithProcess.spec.ts,"1. Create Action Item
+2. Get Action Item created
+3. Update Created Calendar
+4. Get Updated action item Details
+5. Update Process Action Item with status as null value and expect Invalid argument cases
+6. Update Process Action Item with priority as null value and expect Invalid argument cases
+7. Update Process Action Item with Action Type as null value and expect Invalid argument cases
+8. Delete Created Action Item","Tests complete CRUD operations for Action Items within Process context including creation, retrieval, updates, validation of null values, and deletion through backend API endpoints."
+,Test_002_ActionItemCRUDWithSubProcess.spec.ts,"1. Create Sub process Action Item
+2. Get subprocess Action Item created
+3. Update sub process Created Action Item
+4. Get Sub Process Updated action item Details
+5. Update Sub Process Action Item with status as null value and expect Invalid argument cases
+6. Update Sub Process Action Item with priority as null value and expect Invalid argument cases
+7. Update Sub Process Action Item with Action Type as null value and expect Invalid argument cases
+8. Delete Sub Process Created Action Item","Tests complete CRUD operations for Action Items within SubProcess context including creation, retrieval, updates, null value validation, and deletion through backend API endpoints."
+,Test_003_ActionItemCRUDWithAssumptions.spec.ts,"1. Create Assumptions Action Item
+2. Get Assumptions Action Item created
+3. Update Assumptions Created Action Item
+4. Get Assumptions Updated action item Details
+5. Update Assumptions Action Item with status as null value and expect Invalid argument cases
+6. Update Assumptions Action Item with priority as null value and expect Invalid argument cases
+7. Update Assumptions Action Item with Action Type as null value and expect Invalid argument cases
+8. Delete Assumptions Created Action Item","Tests complete CRUD operations for Action Items within Assumptions context including creation, retrieval, updates, null value validation, and deletion through backend API endpoints."
+Calendar,Test_001_CalendarsCRUD.spec.ts,"1. Create Calendar
+2. Get Created Calendar
+3. Update Created Calendar
+4. Get Updated Created Calendar Details
+5. Delete Created Calendar
+6. Get Deleted Calendar
+7. Create Calendar with Missing Required Fields
+8. Duplicate Calendar Creation
+9. Unauthorized Calendar Operation
+10. Create Calendar With Invalid Date Range
+11. Update Non-Existent Calendar
+12. Delete Non-Existent Calendar
+13. Get Calendar With Invalid Name Format
+14. Create Calendar With Duplicate Cycle Names
+15. Access Calendar API Without Authorization Header","Tests comprehensive Calendar management including CRUD operations, error handling for missing fields, duplicate prevention, authorization validation, and edge cases through backend API endpoints."
+,Test_002_CyclesCRUD.spec.ts,"1. Create Calendar to create a calendar cycle
+2. Get Created Calendar to validate whether the calendar is created
+3. Create a cycle in calendar
+4. Get create calendar cycle
+5. Update existing Calendar Cycle
+6. Get updated Calendar Cycle and validate
+7. Delete Created Calendar Cycle
+8. Create Cycle With End Date Before Start Date
+9. Create Duplicate Cycle Name
+10. Update Non-Existent Cycle
+11. Delete Non-Existent Cycle
+12. Create Cycle With Missing Required Fields
+13. Unauthorized Cycle Operation
+14. Delete Created Calendar
+15. Get Deleted Calendar Cycle","Tests complete Calendar Cycles management including CRUD operations, validation of date ranges, duplicate name prevention, error handling for non-existent cycles, and authorization through backend API endpoints."
+Link Management,Test_001_EntityViewMappingForProcess.spec.ts,"1. Map Views to Process
+2. Search and Verify Mapped Views are Available for the process
+3. Remove 2 Mapped Views from Process
+4. Search and Verify Mapped Views are Available for the process after removing 2 views
+5. Add 2 New and 2 Restored Views to Mapping
+6. Search and Verify Mapped Views after adding new views
+7. Remove All Mapped Views from Process
+8. Search and Verify all the mappings are removed from the Process
+9. Map Views with Different Sequence Orders
+10. Map Views with Hidden Flag Variations
+11. Attempt to Map Non-Existent Views
+12. Map Views with Empty Views Array
+13. Map Views with Duplicate View IDs
+14. Search Views with Different Filter Criteria
+15. Map Views with Maximum Sequence Numbers
+16. Map Views with Negative Sequence Numbers
+17. Bulk Map Views to Multiple Processes
+18. Performance Test - Map Large Number of Views
+19. Verify Response Schema and Data Types
+20. Remove All Mapped Views from Process","Tests comprehensive Entity-View mapping for Process including mapping operations, search verification, view removal/addition, sequence ordering, error handling, and edge cases through backend API endpoints."
+,Test_002_EntityViewMappingForSubProcess.spec.ts,"1. Map Views to Subprocess
+2. Search and Verify Mapped Views are Available for the Subprocess
+3. Remove 2 Mapped Views from Subprocess
+4. Search and Verify Mapped Views are Available for the Subprocess after removing 2 views
+5. Add 2 New and 2 Restored Views to Mapping
+6. Search and Verify Mapped Views after adding new views
+7. Remove All Mapped Views from Subprocess
+8. Search and Verify all the mappings are removed from the Subprocess","Tests comprehensive Entity-View mapping for Subprocess including mapping operations, search verification, view removal/addition, and mapping cleanup through backend API endpoints."
+,Test_003_EntityViewMappingForAssumption.spec.ts,"1. Map Views to Assumption
+2. Search and Verify Mapped Views are Available for the Assumption
+3. Remove 2 Mapped Views from Assumption
+4. Search and Verify Mapped Views are Available for the Assumption after removing 2 views
+5. Add 2 New and 2 Restored Views to Mapping
+6. Search and Verify Mapped Views after adding new views
+7. Remove All Mapped Views from Assumption
+8. Search and Verify all the mappings are removed from the Assumption","Tests comprehensive Entity-View mapping for Assumption including mapping operations, search verification, view removal/addition, and mapping cleanup through backend API endpoints."
+,Test_004_EntityViewProcedureMappingWithSingleViewForProcess.spec.ts,"1. Map 4 Procedures to a Single View, 1 Primary, 1 Secondary
+2. Search and Verify Mapped Procedures are Available for the View
+3. Map 4 Procedures to a Single View, 1 Primary, No Secondary
+4. Search and Verify Mapped Procedures are Available for the View (No Secondary)
+5. Map 4 Procedures to a Single View, No Primary, 1 Secondary
+6. Search and Verify Mapped Procedures are Available for the View (No Primary)
+7. Map 4 Procedures to a Single View, No Primary, No Secondary
+8. Search and Verify Mapped Procedures are Available for the View (No Primary No Secondary)
+9. Map 3 Procedures to a Single View, No Primary, No Secondary
+10. Search and Verify 3 Mapped Procedures are Available for the View
+11. Map 5 Procedures to a Single View, No Primary, No Secondary
+12. Search and Verify 5 Mapped Procedures are Available for the View
+13. Remove All Procedures Mapping to the View
+14. Search View Map and Verify No Mapped Procedures are Available","Tests Entity-View-Procedure mapping for single view in Process context including primary/secondary procedure configurations, mapping variations, and cleanup through backend API endpoints."
+,Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess.spec.ts,"1. Map 4 Procedures to All Views, 1 Primary, 1 Secondary
+2. Search and Verify Mapped Procedures are Available for All Views
+3. Map 4 Procedures to All Views, 1 Primary, No Secondary
+4. Search and Verify Mapped Procedures are Available for All Views (No Secondary)
+5. Map 4 Procedures to All Views, No Primary, 1 Secondary
+6. Search and Verify Mapped Procedures are Available for All Views (No Primary)
+7. Map 4 Procedures to All Views, No Primary, No Secondary
+8. Search and Verify Mapped Procedures are Available for All Views (No Primary No Secondary)
+9. Map 3 Procedures to All Views, No Primary, No Secondary
+10. Search and Verify 3 Mapped Procedures are Available for All Views
+11. Map 5 Procedures to All Views, No Primary, No Secondary
+12. Search and Verify 5 Mapped Procedures are Available for All Views
+13. Remove All Procedures Mapping to All Views
+14. Search All Views and Verify No Mapped Procedures are Available","Tests Entity-View-Procedure mapping for multiple views in Process context including primary/secondary procedure configurations, bulk mapping operations, and comprehensive cleanup through backend API endpoints."
+,Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess.spec.ts,"1. Map 4 Procedures to SubProcess View, 1 Primary, 1 Secondary
+2. Search and Verify Mapped Procedures are Available for the SubProcess View
+3. Map 4 Procedures to SubProcess View, 1 Primary, No Secondary
+4. Search and Verify Mapped Procedures are Available for SubProcess View (No Secondary)
+5. Map 4 Procedures to SubProcess View, No Primary, 1 Secondary
+6. Search and Verify Mapped Procedures are Available for SubProcess View (No Primary)
+7. Map 4 Procedures to SubProcess View, No Primary, No Secondary
+8. Search and Verify Mapped Procedures are Available for SubProcess View (No Primary No Secondary)
+9. Map 3 Procedures to SubProcess View, No Primary, No Secondary
+10. Search and Verify 3 Mapped Procedures are Available for SubProcess View
+11. Map 5 Procedures to SubProcess View, No Primary, No Secondary
+12. Search and Verify 5 Mapped Procedures are Available for SubProcess View
+13. Remove All Procedures Mapping to SubProcess View
+14. Search SubProcess View and Verify No Mapped Procedures are Available","Tests Entity-View-Procedure mapping for single view in SubProcess context including primary/secondary procedure configurations, mapping variations, and cleanup through backend API endpoints."
+,Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess.spec.ts,"1. Map 4 Procedures to All SubProcess Views, 1 Primary, 1 Secondary
+2. Search and Verify Mapped Procedures are Available for All SubProcess Views
+3. Map 4 Procedures to All SubProcess Views, 1 Primary, No Secondary
+4. Search and Verify Mapped Procedures are Available for All SubProcess Views (No Secondary)
+5. Map 4 Procedures to All SubProcess Views, No Primary, 1 Secondary
+6. Search and Verify Mapped Procedures are Available for All SubProcess Views (No Primary)
+7. Map 4 Procedures to All SubProcess Views, No Primary, No Secondary
+8. Search and Verify Mapped Procedures are Available for All SubProcess Views (No Primary No Secondary)
+9. Map 3 Procedures to All SubProcess Views, No Primary, No Secondary
+10. Search and Verify 3 Mapped Procedures are Available for All SubProcess Views
+11. Map 5 Procedures to All SubProcess Views, No Primary, No Secondary
+12. Search and Verify 5 Mapped Procedures are Available for All SubProcess Views
+13. Remove All Procedures Mapping to All SubProcess Views
+14. Search All SubProcess Views and Verify No Mapped Procedures are Available","Tests Entity-View-Procedure mapping for multiple views in SubProcess context including primary/secondary procedure configurations, bulk mapping operations, and comprehensive cleanup through backend API endpoints."
+,Test_008_EntityViewActorsProcedures.spec.ts,"1. Map, verify, search, delete, and confirm mapping for actor: Default, procedure: Default
+2. Map, verify, search, delete, and confirm mapping for actor: Maas, procedure: Default
+3. Map, verify, search, delete, and confirm mapping for actor: UI Cache, procedure: Default
+4. Map, verify, search, delete, and confirm mapping for actor: Scenario Comparison, procedure: Default","Tests Entity-View mapping with different actors and procedures including Default, MaaS, UI Cache, and Scenario Comparison actors with comprehensive CRUD operations through backend API endpoints."
+Migration,Test_001_CalendarMigration.spec.ts,"1. Create calendar data from source realm
+2. Verify calendar data via API in source realm
+3. Export calendar data from source realm
+4. Import calendar data to target realm
+5. Verify calendar data via API in target realm
+6. Update calendar cycle data from source realm
+7. Verify updated calendar data via API in source realm
+8. Export calendar data from source realm
+9. Import calendar data to target realm
+10. Verify updated calendar data via API in target realm
+11. Delete calendar data from source realm & target realm","Tests complete Calendar data migration workflow including creation, export/import between realms, verification, updates, and cleanup through backend API endpoints for cross-realm data migration."
+,Test_002_ProcessMigration.spec.ts,"1. Create process in source realm
+2. Verify created process reflected in source realm
+3. Export process from source realm
+4. Import process to target realm
+5. Verify imported process reflected in target realm
+6. Add subprocess in process in source realm
+7. Verify created subprocess reflected in source realm
+8. Export process from source realm
+9. Import process to target realm
+10. Verify created subprocess reflected in target realm
+11. Delete process from source realm & target realm","Tests complete Process migration workflow including process creation, subprocess addition, export/import between realms, verification, and cleanup through backend API endpoints for cross-realm process migration."
+,Test_003_FullAndPartialExport.spec.ts,"1. Should export full data
+2. Should export partial data",Tests data export functionality including both full data export and partial data export capabilities through backend API endpoints for migration scenarios.
+,Test_004_SupplyChainActionsMigration.spec.ts,"1. Export and import SCA partially to target realm
+2. Verify SCA reflected in target realm
+3. Export and import SCA fully to target realm
+4. Verify all SCA reflected in target realm
+5. Delete all migrated SCA from target realm","Tests Supply Chain Actions migration including partial and full export/import operations, verification of migrated SCA data, and cleanup through backend API endpoints."
+,Test_005_AssumptionAndActionItemKPIMigration.spec.ts,"1. Create assumption KPI definition in source realm
+2. Export Assumption KPI definition from source realm
+3. Import Assumption KPI definition in target realm
+4. Remove Assumption KPI definition from target realm
+5. Remove Assumption KPI definition from source realm
+6. Create action item KPI definition in source realm
+7. Export Action Item KPI definition from source realm
+8. Import Action Item KPI definition in target realm
+9. Remove Action Item KPI definition from target realm
+10. Remove Action Item KPI definition from source realm","Tests KPI definition migration for both Assumption and Action Item entities including creation, export/import between realms, verification, and cleanup through backend API endpoints."
+,Test_006_EntitViewMappingMigration.spec.ts,"1. Map 5 Views to Process & Subprocesses in the Source Realm
+2. Verify Mapped Views in the Source Realm
+3. Export Entity View Mapping from Source Realm
+4. Import Entity View Mapping to Target Realm
+5. Verify Mapped Views in the Target Realm
+6. Map another 5 Views to Process & Subprocesses in the Source Realm
+7. Verify Mapped Views in the Source Realm
+8. Export Entity View Mapping from Source Realm
+9. Import Entity View Mapping to Target Realm
+10. Verify Newly Mapped 5 Views in the Target Realm
+11. Verify old Mapped 5 Views in the Target Realm
+12. Clear Entity View Mapping in Source Realm
+13. Clear Entity View Mapping in Target Realm","Tests Entity-View mapping migration including bulk mapping operations, incremental updates, export/import between realms, verification of mapping persistence, and comprehensive cleanup through backend API endpoints."

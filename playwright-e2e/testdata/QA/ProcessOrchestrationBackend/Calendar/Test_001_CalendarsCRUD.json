@@ -1,0 +1,19 @@
+{
+  "_schema": {
+    "CycleDescriptionUpdate": "string (required)",
+    "requestBody": "object (required)"
+  },
+  "CycleDescriptionUpdate": "Calendar Cycle qa Desciption Update",
+  "requestBody": {
+    "calendarName": "Monthly Calendar Sample 1",
+    "description": "Monthly Calendar Sample 1",
+    "cycles": [
+      {
+        "cycleName": "Sample Cycle 1",
+        "description": "Sample Cycle 1",
+        "startDate": "2024-01-22T06:57:33.967Z",
+        "endDate": "2024-02-22T06:57:33.967Z"
+      }
+    ]
+  }
+}

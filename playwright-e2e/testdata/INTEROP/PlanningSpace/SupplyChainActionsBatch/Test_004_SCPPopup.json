@@ -1,0 +1,20 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "IS_PUBLIC": "boolean (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "PROCEDURE_NAME": "CreateScenarioPopup",
+  "VIEW_NAME": "Maas Pivot Card View",
+  "IS_PUBLIC": true,
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "PROCEDURE_NAME": "CreateScenarioPopup2"
+  }
+}

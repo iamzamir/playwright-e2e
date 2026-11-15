@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCESS_NAME_NO_SCENARIO": "string (required)",
+    "PROCESS_NAME_BASE_SCENARIO": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "IDSPAutomationProcess",
+  "PROCESS_NAME_NO_SCENARIO": "IDSPProcessWithNoScenario",
+  "PROCESS_NAME_BASE_SCENARIO": "ProcessInteractive"
+}

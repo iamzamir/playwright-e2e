@@ -1,0 +1,6 @@
+{
+  "_schema": {
+    "USER_ALIASES": "string[] (required) - functional test users whose Scenarios/Scope drawer pin is reset to unpinned"
+  },
+  "USER_ALIASES": ["user1", "user2"]
+}

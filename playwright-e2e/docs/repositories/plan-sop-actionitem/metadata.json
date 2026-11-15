@@ -1,0 +1,62 @@
+{
+  "name": "plan-sop-actionitem",
+  "displayName": "Action Item Service",
+  "org": "BY-Product-Development",
+  "type": "backend-service",
+  "language": "java",
+  "runtime": "Java 21",
+  "framework": "Spring Boot 3.5.16",
+  "buildTool": "gradle",
+  "artifactGroup": "com.blueyonder.actionitem",
+  "artifactVersion": "0.0.1-SNAPSHOT",
+  "localPort": 8080,
+  "swaggerPath": "/swagger-ui/index.html",
+  "database": {
+    "engine": "azure-sql-server",
+    "name": "actionitem",
+    "migrations": "liquibase",
+    "maxPoolSize": 50
+  },
+  "controllers": 14,
+  "entities": 32,
+  "gatewayPrefix": {
+    "QA": { "old": "cbp/qa/ibp/actionitems/v1", "new": "qa/ai/api/v1" },
+    "INTEROP": { "old": "cbp/interop/ibp/actionitems/v1", "new": "ai/api/v1" },
+    "PSR": { "old": "cbp/psr/ibp/actionitems/v1", "new": "ai/api/v1" }
+  },
+  "envVars": ["ACTIONITEM", "ACTIONITEM2", "DELETE_ACTIONITEM"],
+  "dependsOn": ["liam-rbac", "collaboration-service"],
+  "consumedBy": [
+    "plan-sop-process-orchestration-service",
+    "plan-sop-lui",
+    "plan-sop-planning-mfe",
+    "plan-sop-ui-automation"
+  ],
+  "automation": {
+    "specGlobs": [
+      "tests/ProcessOrchestrationBackend/ActionItem/**",
+      "tests/ProcessOrchestration/ActionItemsBatch/**"
+    ],
+    "backendSpecs": 8,
+    "endpointCoverage": { "exercised": 13, "setupOrViaPO": 8, "active": 73, "asOf": "2026-10-05" },
+    "pageObjects": ["action-items.page.ts"],
+    "fixtures": ["actionItemsPage"],
+    "utilities": ["util/action-item.util.ts"],
+    "testSuites": ["POBackendActionItemBatch.json", "POBackendSmokeBatch.json"],
+    "testDataAreas": [
+      "testdata/INTEROP/ProcessOrchestrationBackend/ActionItem",
+      "testdata/QA/ProcessOrchestrationBackend/ActionItem",
+      "testdata/PSR/ProcessOrchestrationBackend/ActionItem (Test_001-003 only)"
+    ],
+    "untestedAreas": [
+      "playbooks",
+      "bulk-operations-backend",
+      "comments",
+      "kpi-entity-mapping",
+      "attribute-configuration",
+      "direct-searchActionItems"
+    ]
+  },
+  "lastReviewed": "2026-10-05",
+  "qualityGates": ["CodeQL", "Codacy", "42Crunch", "BlackDuck", "SonarQube", "Spotless"]
+}

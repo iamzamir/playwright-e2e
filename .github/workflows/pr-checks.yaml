@@ -1,0 +1,174 @@
+name: pr-checks
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Quality Checks
+    runs-on: [az-dev-ubuntu-latest-8Core]
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: playwright-e2e
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+          cache: npm
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install dependencies
+        run: |
+          trap 'rm -f ~/.npmrc' EXIT
+          npm ci --ignore-scripts
+
+      - name: TypeScript typecheck
+        id: typecheck
+        run: npm run typecheck
+
+      - name: ESLint (with baseline)
+        id: lint
+        run: npm run lint
+
+      - name: Validate test suites
+        id: validate_suites
+        run: npm run validate:suites
+
+      - name: Check testcase catalog drift
+        id: docs_testcases
+        run: npm run docs:testcases:check
+
+      - name: Testcase catalog unit tests
+        id: test_docs
+        run: npm run test:docs
+
+      - name: Triage unit tests
+        id: test_triage
+        run: npm run test:triage
+
+      - name: Environment config unit tests
+        id: test_config
+        run: npm run test:config
+
+      - name: Framework self-tests
+        id: test_framework
+        run: npx playwright test tests/_framework --config=configs/playwright.config.ts --workers=2
+        env:
+          PW_ENABLE_GLOBAL_SETUP: 'false'
+          USE_SPECIFIC_TESTS: 'false'
+          ENVIRONMENT: INTEROP
+
+      - name: List tests (functional config, no suite)
+        id: list_functional
+        run: npx playwright test --config=configs/playwright.config.ts --list > /dev/null
+        env:
+          PW_ENABLE_GLOBAL_SETUP: 'false'
+          USE_SPECIFIC_TESTS: 'false'
+          ENVIRONMENT: INTEROP
+          # --list runs nothing; the flag keeps DataSetupBatch specs in the load check (T1.2).
+          ALLOW_DESTRUCTIVE: 'true'
+
+      # Fails if a config change (for example a project-level testIgnore) stops excluding DataSetupBatch (T1.2).
+      - name: Destructive guard (no DataSetupBatch without ALLOW_DESTRUCTIVE)
+        id: list_destructive_guard
+        run: |
+          list_file="${RUNNER_TEMP}/list-no-destructive.txt"
+          npx playwright test --config=configs/playwright.config.ts --list > "$list_file"
+          if grep -qE 'DataSetupBatch[/\\]' "$list_file"; then
+            echo "::error::DataSetupBatch specs were listed without ALLOW_DESTRUCTIVE=true; the T1.2 guard is not applied."
+            grep -E 'DataSetupBatch[/\\]' "$list_file" | head -20
+            exit 1
+          fi
+          echo "OK: $(grep -cE '\.spec\.ts:[0-9]+' "$list_file") tests listed, none from DataSetupBatch."
+        env:
+          PW_ENABLE_GLOBAL_SETUP: 'false'
+          USE_SPECIFIC_TESTS: 'false'
+          ENVIRONMENT: INTEROP
+          ALLOW_DESTRUCTIVE: 'false'
+
+      - name: List tests (visual config)
+        id: list_visual
+        run: npx playwright test --config=configs/playwright.visual.config.ts --list > /dev/null
+        env:
+          VISUAL_SUITE: CompleteSmokeVisual
+          PW_ENABLE_GLOBAL_SETUP: 'false'
+          ENVIRONMENT: INTEROP
+
+      - name: Checks Step Summary
+        if: always()
+        run: |
+          echo "## PR Quality Gate Checks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| TypeScript Typecheck | ${{ steps.typecheck.outcome == 'success' && '✅ Pass' || (steps.typecheck.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ESLint (Baseline Aware) | ${{ steps.lint.outcome == 'success' && '✅ Pass' || (steps.lint.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite Validator | ${{ steps.validate_suites.outcome == 'success' && '✅ Pass' || (steps.validate_suites.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Testcase Catalog Drift | ${{ steps.docs_testcases.outcome == 'success' && '✅ Pass' || (steps.docs_testcases.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Testcase Catalog Unit Tests | ${{ steps.test_docs.outcome == 'success' && '✅ Pass' || (steps.test_docs.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Triage Unit Tests | ${{ steps.test_triage.outcome == 'success' && '✅ Pass' || (steps.test_triage.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment Config Unit Tests | ${{ steps.test_config.outcome == 'success' && '✅ Pass' || (steps.test_config.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Framework Self-Tests | ${{ steps.test_framework.outcome == 'success' && '✅ Pass' || (steps.test_framework.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Playwright List (Functional) | ${{ steps.list_functional.outcome == 'success' && '✅ Pass' || (steps.list_functional.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Destructive Guard (DataSetupBatch excluded) | ${{ steps.list_destructive_guard.outcome == 'success' && '✅ Pass' || (steps.list_destructive_guard.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Playwright List (Visual) | ${{ steps.list_visual.outcome == 'success' && '✅ Pass' || (steps.list_visual.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+
+  secrets-scan:
+    name: Secrets Scan
+    runs-on: [az-dev-ubuntu-latest-8Core]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        run: |
+          GITLEAKS_VERSION="8.24.0"
+          GITLEAKS_SHA256="cb49b7de5ee986510fe8666ca0273a6cc15eb82571f2f14832c9e8920751f3a4"
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" -o /tmp/gitleaks.tar.gz
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          rm -f /tmp/gitleaks.tar.gz
+          sudo mv /tmp/gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Run Gitleaks Secret Detection
+        id: gitleaks
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "Scanning PR commits: origin/${{ github.base_ref }}...HEAD"
+            gitleaks git --log-opts="origin/${{ github.base_ref }}...HEAD" --verbose --redact
+          else
+            echo "Scanning repository"
+            gitleaks detect --verbose --redact
+          fi
+
+      - name: Secrets Scan Summary
+        if: always()
+        run: |
+          echo "## Secret Detection" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Gitleaks Scan | ${{ steps.gitleaks.outcome == 'success' && '✅ Pass' || (steps.gitleaks.outcome == 'failure' && '❌ Fail' || '⏭️ Skipped') }} |" >> $GITHUB_STEP_SUMMARY
+

@@ -1,0 +1,18 @@
+{
+    "REALM_NAME_SOURCE": "cbp-qa-ps-automation",
+    "REALM_NAME_TARGET": "cbp-qa-ps-automation-2",
+    "REALM_ID_SOURCE": "17bb0864-af86-4b08-a96d-885985507d82",
+    "REALM_ID_TARGET": "b620f3f2-9403-4ae7-ae16-2090366d6e67",
+    "REALM_CLIENT_ID_SOURCE" : "40d3dc4c-1316-4b92-9bbf-567f47e27a41",
+    "REALM_CLIENT_ID_TARGET" : "5a560714-5ea1-488c-b4e7-064ad40c6ee9",
+    "FULL_EXPORT_PAYLOAD": {
+        "supplyChainActions": []
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "supplyChainActions": [
+            "MigrationSCA1",
+            "MigrationSCA2",
+            "MigrationSCA3"
+        ]
+    }
+}

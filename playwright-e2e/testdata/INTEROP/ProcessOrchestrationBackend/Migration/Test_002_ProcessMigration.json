@@ -1,0 +1,27 @@
+{
+    "_schema": {
+        "USER_ID_IN_SOURCE_REALM": "string (required)",
+        "USER_ID_IN_TARGET_REALM": "string (required)",
+        "USER_ID_IN_SOURCE_REALM_GVT": "string (required)",
+        "USER_ID_IN_TARGET_REALM_GVT": "string (required)",
+        "PAYLOAD": "object (required)",
+        "CUSTOM_ATTRIBUTE": "object (required)"
+    },
+    "USER_ID_IN_SOURCE_REALM": "dfd0c8df-9e43-45f3-9815-0a9b54aeaef3",
+    "USER_ID_IN_TARGET_REALM": "a93520f3-f07b-4c4e-945d-b5c8615fdd13",
+    "USER_ID_IN_SOURCE_REALM_GVT": "26dc89e2-bd83-4f8b-9898-6ff3e40ace3d",
+    "USER_ID_IN_TARGET_REALM_GVT": "5faf5e86-fdef-41c5-b54b-1fca436f9470",
+    "PAYLOAD": {
+        "attributes": [],
+        "templateName": "BY-Template",
+        "displayName": "testprocessforMig",
+        "calendarName": "Monthly Calendar",
+        "cycleName": "2025 MAY",
+        "description": "this process is used for migration"
+    },
+    "CUSTOM_ATTRIBUTE": {
+        "name": "Risk2",
+        "value": "Medium",
+        "isActive": true
+    }
+}

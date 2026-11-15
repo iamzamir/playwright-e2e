@@ -1,0 +1,10 @@
+{
+  "_schema": {
+    "requestBody.processNames": "string[] (required)"
+  },
+  "requestBody": {
+    "processNames": [
+      "ProcessStartStop"
+    ]
+  }
+}

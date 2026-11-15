@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "HiddenViewsProcess",
+    "NON_HIDDEN_VIEWS":["View1","View2"],
+    "HIDDEN_VIEWS":["View3","View4"],
+    "DRILL_THOROUGH_ON_CELLS":["52","47","51","51"]
+}

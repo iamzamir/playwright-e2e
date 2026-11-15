@@ -1,0 +1,107 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "CARD_NAME": "string (required)",
+    "DEFAULT_SCOPE_FOR_VIEWS": "object[] (required)",
+    "ADDED_VALUE": "string (required) - TIME member added to the second view's default scope in Test Case 2",
+    "CHECK_CARD_FACETS": "boolean (required) - false where CARD_NAME is published but has no data, so its facet/column checks are skipped",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "CARD_NAME": "Maas Pivot Card",
+  "DEFAULT_SCOPE_FOR_VIEWS": [
+    {
+      "VIEW_NAME": "Default Filter View 1",
+      "FILTER_NAME": "Default filter 1",
+      "DIMENSIONS": [
+        {
+          "LABEL": "TIME",
+          "SELECTED_PROPERTIES": [
+            {
+              "LABEL": "CALENDARYEAR",
+              "VALUES": [
+                {
+                  "VALUE": "CY-2022"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "VIEW_NAME": "Default Filter View 2",
+      "FILTER_NAME": "Default filter 2",
+      "DIMENSIONS": [
+        {
+          "LABEL": "TIME",
+          "SELECTED_PROPERTIES": [
+            {
+              "LABEL": "CALENDARYEAR",
+              "VALUES": [
+                {
+                  "VALUE": "CY-2022"
+                },
+                {
+                  "VALUE": "CY-2023"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ADDED_VALUE": "CY-2024",
+  "CHECK_CARD_FACETS": true,
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "DEFAULT_SCOPE_FOR_VIEWS": [
+      {
+        "VIEW_NAME": "Default Filter View 1",
+        "FILTER_NAME": "Default filter 1",
+        "DIMENSIONS": [
+          {
+            "LABEL": "Time",
+            "SELECTED_PROPERTIES": [
+              {
+                "LABEL": "CALENDARYEAR",
+                "VALUES": [
+                  {
+                    "VALUE": "CY-2022"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "VIEW_NAME": "Default Filter View 2",
+        "FILTER_NAME": "Default filter 2",
+        "DIMENSIONS": [
+          {
+            "LABEL": "Time",
+            "SELECTED_PROPERTIES": [
+              {
+                "LABEL": "CALENDARYEAR",
+                "VALUES": [
+                  {
+                    "VALUE": "CY-2022"
+                  },
+                  {
+                    "VALUE": "CY-2023"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "CHECK_CARD_FACETS": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "_schema": {
+    "SEEDED_PROCESS_NAME": "string (required) - existing process read by the context and scope tests; never written to",
+    "PROCESS_NAME_PREFIX": "string (required) - prefix of the dedicated process the scope writes target; a run id is appended",
+    "TEMPLATE_NAME": "string (required) - template the dedicated process is created from",
+    "CALENDAR_NAME": "string (required) - calendar of the dedicated process; its first cycle is used",
+    "DESCRIPTION": "string (required) - description of the dedicated process",
+    "SUMMARY_KEYS": "string[] (required) - process keys the context summary (no all=true) copies",
+    "ALL_ONLY_KEYS": "string[] (required) - keys only the all=true context returns",
+    "DEFAULT_HORIZON_DAYS": "number (required) - pastDays/futureDays the context uses when the scope has no horizon",
+    "SCOPE_FULL": "object (required) - scope with dimensions and a horizon",
+    "SCOPE_PARTIAL": "object (required) - scope with only a horizon, used to prove a PUT replaces the whole scope",
+    "SCOPE_SPECIAL_CHARACTERS": "object (required) - scope whose values hold unicode and JSON special characters",
+    "LARGE_SCOPE_VALUE_COUNT": "number (required) - number of dimension values in the large scope",
+    "SCOPE_UPDATED_MESSAGE": "string (required) - PUT scope success body",
+    "UNKNOWN_PROCESS_NAME": "string (required) - process name that does not exist",
+    "RBAC_DENIED_ERROR_CODE": "string (required) - errorCode when the RBAC check rejects a process name"
+  },
+  "SEEDED_PROCESS_NAME": "IntegratedBusinessPlanning",
+  "PROCESS_NAME_PREFIX": "PWScope",
+  "TEMPLATE_NAME": "BY-Template",
+  "CALENDAR_NAME": "Monthly Calendar",
+  "DESCRIPTION": "Playwright process context and scope API test",
+  "SUMMARY_KEYS": ["id", "name", "description", "displayName", "isActive", "calendarName", "cycleName", "status", "startDate", "endDate", "actualStartDate", "actualEndDate", "attributes", "progress", "planStartDate", "variant"],
+  "ALL_ONLY_KEYS": ["templateId", "cycleStartDate", "cycleId"],
+  "DEFAULT_HORIZON_DAYS": 30,
+  "SCOPE_FULL": {
+    "dimensions": [
+      { "name": "Product", "values": ["PWProductA", "PWProductB"] },
+      { "name": "Location", "values": ["PWLocation1"] }
+    ],
+    "horizon": { "pastDays": "10", "futureDays": "20" }
+  },
+  "SCOPE_PARTIAL": {
+    "horizon": { "pastDays": "5", "futureDays": "7" }
+  },
+  "SCOPE_SPECIAL_CHARACTERS": {
+    "dimensions": [
+      { "name": "Prodüct \"Grüße\" & <Co>", "values": ["Café", "東京", "50% off", "a\\b"] }
+    ]
+  },
+  "LARGE_SCOPE_VALUE_COUNT": 200,
+  "SCOPE_UPDATED_MESSAGE": "Scope updated successfully",
+  "UNKNOWN_PROCESS_NAME": "PWNoSuchProcess",
+  "RBAC_DENIED_ERROR_CODE": "IBP_40_1032"
+}

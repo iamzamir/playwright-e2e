@@ -1,0 +1,10 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/PowerBar/Test_001_PowerBarForProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/PowerBar/Test_002_PowerBarForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/PowerBar/Test_004_RecentlyViewedEntity.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/PowerBar/Test_005_ContextSwitcher.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/LastAccessedContext/Test_001_LastAccessedProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/LastAccessedContext/Test_002_LastAccessesSubprocess.spec.ts"
+  ]
+}

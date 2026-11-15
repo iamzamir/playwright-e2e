@@ -1,0 +1,17 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required)",
+    "RESET_SCOPE_PAYLOAD": "object (required)",
+    "RESET_SCOPE_SUCCESS_MESSAGE": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "PROCESS_NAME": "PSAutomation",
+  "RESET_SCOPE_PAYLOAD": {
+    "dimensions": [],
+    "horizon": {}
+  },
+  "RESET_SCOPE_SUCCESS_MESSAGE": "Scope updated successfully",
+  "GRAVITEE": {
+    "REALM_KEY": "pspoat-test1"
+  }
+}

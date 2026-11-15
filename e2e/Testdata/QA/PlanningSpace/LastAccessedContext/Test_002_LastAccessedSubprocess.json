@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-qa-ps-automation",
+    "PROCESS1": "PSProcess",
+    "PROCESS2": "PSAutomationOne",
+    "SUBPROCESS": "Initiatives And Assumptions Review"
+}

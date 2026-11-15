@@ -1,0 +1,61 @@
+{
+    "_schema": {
+        "EXPORT_PAYLOAD_FOR_ASSUMPTION_KPI": "object with processes and assumptions.kpi_configs arrays (required)",
+        "PAYLOAD_FOR_ASSUMPTION_KPI_DEFINITION": "assumption KPI definition object (required)",
+        "PAYLOAD_FOR_ACTION_ITEM_KPI_DEFINITION": "action item KPI definition object (required; entityId is Azure, entityIdGravitee is used when GATEWAY_TYPE=GRAVITEE)",
+        "EXPORT_PAYLOAD_FOR_ACTION_ITEM_KPI": "object with actionItems.kpis array (required)"
+    },
+    "EXPORT_PAYLOAD_FOR_ASSUMPTION_KPI": {
+        "processes": [
+            "KPI"
+        ],
+        "assumptions": {
+            "kpi_configs": []
+        }
+    },
+    "PAYLOAD_FOR_ASSUMPTION_KPI_DEFINITION": {
+        "name": "Open Risks Migration to Target",
+        "displayName": "Open Risks Migration to Target",
+        "description": "Using in migration",
+        "origin": "2378E43E-F610-4CFB-9719-65A34E070A80",
+        "rules": [
+            {
+                "id": "0a2225df-983b-1598-8198-3c60e16e112c",
+                "attrName": "status",
+                "attrValue": "1"
+            },
+            {
+                "id": "0a2225df-983b-1598-8198-3c60e17c112d",
+                "attrName": "type",
+                "attrValue": "0a223680-9759-1d7a-8197-694c67570147"
+            }
+        ]
+    },
+    "PAYLOAD_FOR_ACTION_ITEM_KPI_DEFINITION": {
+        "attrName": "Overdue Action Items",
+        "displayName": "Overdue Action Items Migration",
+        "description": "Overdue Action Items",
+        "isActive": true,
+        "isEnabled": true,
+        "entityId": "7b8c42f9-cd4e-442d-a0ba-f2e0a080e913",
+        "kpiConfigAttributes": [
+            {
+                "kpiAttrName": "status",
+                "attrValue": "1",
+                "isActive": true,
+                "isEnabled": true
+            },
+            {
+                "kpiAttrName": "dueDate",
+                "attrValue": "1",
+                "isActive": true,
+                "isEnabled": true
+            }
+        ]
+    },
+    "EXPORT_PAYLOAD_FOR_ACTION_ITEM_KPI": {
+        "actionItems": {
+            "kpis": []
+        }
+    }
+}

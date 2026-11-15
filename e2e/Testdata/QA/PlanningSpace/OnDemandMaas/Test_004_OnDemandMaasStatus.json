@@ -1,0 +1,11 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "REALM_ID": "ca7623d3-b234-431c-a445-4a1d5444668e",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "ViewToTestMaas",
+    "ANOTHER_VIEW_NAME": "ViewToTestMaas2",
+    "CARD_NAME":"On-demand v2 Pivot card",
+    "LoGGEDIN_USER_NAME":"PS Automation1",
+    "SCENARIOS" : "Base_Scenario_698",
+    "SCENARIO_NAME": "test_scenario_do_not_delete"
+}

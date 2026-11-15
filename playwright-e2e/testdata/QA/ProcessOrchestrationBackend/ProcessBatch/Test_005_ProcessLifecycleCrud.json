@@ -1,0 +1,106 @@
+{
+  "_schema": {
+    "PROCESS_NAME_PREFIX": "string (required)",
+    "TEMPLATE_NAME": "string (required)",
+    "CALENDAR_NAME": "string (required)",
+    "CYCLE_NAME": "string (required)",
+    "DESCRIPTION": "string (required)",
+    "PLAN_START_DATE": "string (required, YYYY-MM-DD)",
+    "TEMPLATE_CHILDREN": "array (required)",
+    "LEVEL_ONE": "object (required)",
+    "LEVEL_TWO": "object (required)",
+    "EXPECTED_STATUS": "object (required)"
+  },
+  "PROCESS_NAME_PREFIX": "ParentProcess",
+  "TEMPLATE_NAME": "BY-Template",
+  "CALENDAR_NAME": "Monthly Calendar",
+  "CYCLE_NAME": "2025 MAY",
+  "DESCRIPTION": "Parent Process lifecycle API test",
+  "PLAN_START_DATE": "2026-08-18",
+  "TEMPLATE_CHILDREN": [
+    {
+      "name": "InitiativesAndAssumptionsReview",
+      "displayName": "Initiatives And Assumptions Review",
+      "referenceNodeName": "ParentProcess",
+      "startOffsetReference": "START",
+      "startOffset": 0,
+      "duration": 5,
+      "sequence": 1
+    },
+    {
+      "name": "DemandReview",
+      "displayName": "Demand Review",
+      "referenceNodeName": "InitiativesAndAssumptionsReview",
+      "startOffsetReference": "END",
+      "startOffset": 1,
+      "duration": 5,
+      "sequence": 2
+    },
+    {
+      "name": "SupplyReview",
+      "displayName": "Supply Review",
+      "referenceNodeName": "DemandReview",
+      "startOffsetReference": "END",
+      "startOffset": 1,
+      "duration": 5,
+      "sequence": 3
+    },
+    {
+      "name": "IntegratedReconcillation",
+      "displayName": "Integrated Reconcillation",
+      "referenceNodeName": "SupplyReview",
+      "startOffsetReference": "END",
+      "startOffset": 1,
+      "duration": 5,
+      "sequence": 4
+    },
+    {
+      "name": "ExecutiveBusinessReview",
+      "displayName": "Executive Business Review",
+      "referenceNodeName": "IntegratedReconcillation",
+      "startOffsetReference": "END",
+      "startOffset": 1,
+      "duration": 5,
+      "sequence": 5
+    }
+  ],
+  "LEVEL_ONE": {
+    "name": "LevelOneSubprocess",
+    "create": {
+      "attributes": [],
+      "startOffsetReference": "END",
+      "startOffset": "1",
+      "duration": 1,
+      "displayName": "LevelOneSubprocess",
+      "referenceNodeName": "ExecutiveBusinessReview",
+      "description": "",
+      "transition": {
+        "reference": "END",
+        "referenceNodeNames": ["ExecutiveBusinessReview"]
+      }
+    },
+    "updateReferenceNodeName": "SupplyReview"
+  },
+  "LEVEL_TWO": {
+    "name": "SecondLevelProcess",
+    "create": {
+      "attributes": [],
+      "startOffsetReference": "START",
+      "startOffset": "0",
+      "duration": 1,
+      "displayName": "SecondLevelProcess",
+      "referenceNodeName": "LevelOneSubprocess",
+      "description": "",
+      "transition": {
+        "reference": "START",
+        "referenceNodeNames": ["LevelOneSubprocess"]
+      }
+    },
+    "updatedStartOffset": "1"
+  },
+  "EXPECTED_STATUS": {
+    "notStarted": "Not started",
+    "inProgress": "In Progress",
+    "completed": "Completed"
+  }
+}

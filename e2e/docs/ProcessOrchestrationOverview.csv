@@ -1,0 +1,132 @@
+Batch,Suites,Test Cases,Description,
+Action Items Batch,Test_001_CreateEditDeleteActionItem.spec.ts,"1. Create Action Item - Process
+2. Edit Action Item - Process
+3. Delete Action Item - Process
+4. Create Action Item - Sub Process
+5. Edit Action Item - Sub Process
+6. Delete Action Item - Sub Process
+7. Create Action Item - Assumption
+8. Edit Action Item - Assumption
+9. Delete Action Item - Assumption","Validates complete CRUD operations for Action Items across Process, SubProcess, and Assumption entities. Tests creation, modification, and deletion functionality with UI interactions and data validation.",
+,Test_002_EditAndDeleteActionItemsWithUnAuthorizedUsers.spec.ts,"1. Create Action Item - Process
+2. Edit Action Item with unauthorized user - Process
+3. Delete Action Item with unauthorized user - Process
+4. Create Action Item - Sub Process
+5. Edit Action Item with unauthorized user - Sub Process
+6. Delete Action Item with unauthorized user - Sub Process
+7. Create Action Item - Assumption
+8. Edit Action Item with unauthorized user - Assumption
+9. Delete Action Item with unauthorized user - Assumption","Tests security and authorization controls for Action Items. Validates that unauthorized users cannot edit or delete Action Items across different entity types, ensuring proper access control.",
+,Test_003_BulkEditAndDeleteActionItems.spec.ts,"1. Create Action Item - Process
+2. Create Action Item - Sub Process
+3. Create Action Item - Assumption
+4. Signout and Login With Second User
+5. Create Action Item - Process - User 2
+6. Verify Bulk Edit - Process
+7. Verify Bulk Delete - Process
+8. Create Action Item - Sub Process - User 2
+9. Verify Bulk Edit - Subprocess
+10. Verify Bulk Delete - Subprocess
+11. Create Action Item - Assumption - User 2
+12. Verify Bulk Edit - Assumption
+13. Verify Bulk Delete - Assumption","Validates bulk operations functionality for Action Items. Tests multi-user scenarios, bulk editing and deletion capabilities across different entity types with proper user session management.",
+,Test_004_BulkEditAndDeleteActionItemsWithAssignedUser.spec.ts,"1. Create Action Item
+2. Signout and Login With Second User
+3. Verify Bulk Edit - With Assigned User
+4. Verify Bulk Delete - With Assigned User
+5. Verify Bulk Actions enabled and edit, try delete disabled post bulk action",Tests bulk operations with assigned users and validates UI state changes. Ensures proper behavior when Action Items are assigned to specific users and verifies UI element states after bulk operations.,
+Objective Bar,Test001_ObjectiveBarInPO.spec.ts,1. Verify objective bar details,"Validates the Objective Bar component in Process Orchestration. Tests display, content accuracy, and UI behavior of the objective bar across different pages and contexts.",
+Power Bar,Test_001_PowerBarForProcessInPO.spec.ts,"1. Verify powerbar details in process details page
+2. Verify process details in powerbar tooltip
+3. Verify powerbar details in all pages from process context","Validates Power Bar functionality for Process entities. Tests display accuracy, tooltip behavior, and consistency across different pages within the Process context.",
+,Test_002_PowerBarForSubProcessInPO.spec.ts,"1. Verify powerbar details in sub process details page
+2. Verify process details in powerbar tooltip
+3. Verify powerbar details in all pages from subprocess context","Validates Power Bar functionality for SubProcess entities. Tests display accuracy, tooltip behavior, and consistency across different pages within the SubProcess context.",
+,Test_003_PowerBarForAssumptionInPO.spec.ts,"1. Verify powerbar details in assumption details page
+2. Verify process details in powerbar tooltip
+3. Verify powerbar details in all pages from assumption context","Validates Power Bar functionality for Assumption entities. Tests display accuracy, tooltip behavior, and consistency across different pages within the Assumption context.",
+,Test_004_RecentlyViewedEntityInPO.spec.ts,1. To test the recently viewed tabs for power bar,"Tests the Recently Viewed functionality in the Power Bar. Validates that recently accessed entities are properly tracked, displayed, and navigable through the power bar interface.",
+,Test_005_ContextSwitcherInPO.spec.ts,"1. Verify context switching to a subprocess in the same tab
+2. Verify context switching to an assumption in the same tab
+3. Verify context switching to a process in the same tab
+4. Verify context switching to a subprocess in a new tab
+5. Verify context switching to an assumption in a new tab
+6. Verify context switching to a process in a new tab","Validates Context Switching functionality across different entity types. Tests both same-tab and new-tab navigation scenarios for Process, SubProcess, and Assumption entities through the Power Bar.",
+,Test_006_PowerBarForSubProcessForNewUi.spec.ts,"1. Verify process tooltip details in sub process details page for powerbar
+2. Verify navigating to process summary page on click of process if context is sub process
+3. Disable the feature toggle for new views ui modal","Tests Power Bar functionality with new UI modal features for SubProcess. Validates tooltip details, navigation behavior, and feature toggle management for the new UI components.",
+,Test_007_PowerBarForAssumptionForNewUi.spec.ts,"1. Verify process tooltip details in assumption details page for powerbar
+2. Verify navigating to process summary page on click of process if context is assumption
+3. Disable the feature toggle for new views ui modal","Tests Power Bar functionality with new UI modal features for Assumption. Validates tooltip details, navigation behavior, and feature toggle management for the new UI components.",
+Process Batch,Test_001_ProcessActions.spec.ts,"1. Create a process
+2. Create a sub process
+3. Edit sub process
+4. Delete the created sub process
+5. Edit a process
+6. Delete the created process
+7. Delete procedure, actor, roles associated with process","Comprehensive Process lifecycle testing with CRUD operations. Validates process creation, subprocess management, editing capabilities, and cleanup of associated entities including procedures, actors, and roles.",
+,Test_002_SubProcessActionsInProcess.spec.ts,"1. Create a sub process
+2. Edit sub process
+3. Delete the created sub process","Tests SubProcess management within the main Process interface. Validates subprocess creation, modification, and deletion functionality through the primary process management workflow.","This needs to  be removed, covered in 1st suite"
+,Test_003_SubProcessActionsFromSettings.spec.ts,"1. Create a sub process
+2. Edit sub process
+3. Delete the sub process
+4. Validate error message when offset is zero
+5. Create and delete sub process","Tests SubProcess management through Process Settings interface. Validates subprocess operations via settings page, error handling for invalid inputs, and multi-window navigation scenarios.",
+,Test_004_ValidateSubProcessCreation.spec.ts,1. Validate Lookup Field for Sub Process Creation,"Validates business rules and field restrictions for SubProcess creation. Tests lookup field behavior, date validation, and ensures proper constraints are enforced during subprocess creation.",
+,Test_005_ProcedureTriggersOnProcessStart.spec.ts,"1. Start Process
+2. Stop Process","Start Process, verify procedure triggered on process start. Verify process status changed to Inprogress.
+Stop Process, verify process status changed to Completed",
+,Test_006_ProcessStartCloseCases.spec.ts,"1. Start process, verify sub-processes
+2. Close process, verify sub-processes
+3. Repeat process lifecycle - Start process again
+4. Repeat process lifecycle - close process again","Process contains 2 subprocess. Each subprocess contains 3 child processes.
+Validating start stop transitions and verifying the respective entities status getting changed",
+,Test_007_CloseSubprocessProcess.spec.ts,"1. Start process and validate subprocess status
+2. Close subprocess and validate process status
+3. Restart process and validate subprocess status","With same setup as above, but here we are closing the subprocess and validating the process status gets updated when all the subprocess gets closed.",
+,Test_008_ProcedureMappingToProcess.spec.ts,"1. Configure procedures in process settings and validate the creation
+2. Validate procedures sequence in planning space
+3. Remove the created procedures in process settings
+4. Validate SCA procedures button is removed from planning space after deletion","Tests Supply Chain Actions (SCA) procedure mapping to processes. Validates procedure configuration, sequence validation in planning space, cleanup operations, and UI state consistency across multi-window workflows.",
+,Test_009_AssumptionsFilter.spec.ts,"1. To test assumptions data on applying filter
+2. Disable the feature toggle for new views ui modal","Tests filtering functionality for Assumptions data. Validates filter application, data accuracy, and feature toggle management for new UI modal components in the assumptions context.",
+Quick Links,Test_001_EasyAccessQuickLinksFromPO.spec.ts,1. Validate Navigation for Quick Links,"Tests Quick Links navigation functionality in Process Orchestration. Validates that all quick links are accessible, functional, and navigate to the correct destinations within the application.",
+Scope Batch,Test_001_SaveAndDeleteFilterInAssumption.spec.ts,"1. Create Vertical Filter
+2. Overwrite Vertical Filter
+3. Disable Created Filter
+4. Delete Created Vertical Filter","Tests scope filtering functionality within Assumption context. Validates filter creation, modification, disable/enable operations, and cleanup for vertical filters in assumption pages.",
+,Test_002_ScopePresetMappingInAssumption.spec.ts,"1. Verify Scope tab in Assumption and filter verification
+2. Config Filter
+3. Selecting Filter
+4. Verifying applied filters are available after revisit to assumption","Tests scope preset mapping and persistence in Assumption context. Validates filter configuration, selection behavior, and ensures filter settings persist across page navigation and user sessions.",
+,Test_003_SaveAndDeleteFilterInSettings.spec.ts,"1. Create Vertical Filter
+2. Verify Scope Restrictions Applied for Preselected Filter
+3. Verify Scope Restrictions Applied for Default Filter
+4. Filters with a Different Dimension Hierarchy from Scope Restrictions Should Not Be Displayed
+5. Overwrite Vertical Filter
+6. Disable Created Filter
+7. Delete Created Vertical Filter","Tests comprehensive scope filtering through Settings interface. Validates filter creation, scope restrictions, dimension hierarchy validation, filter lifecycle management, and complex filtering scenarios.",
+,Test_004_ScopePresetMappingInSettings.spec.ts,"1. Verify Scope tab in Assumption and filter verification
+2. Config Filter
+3. Selecting Filter
+4. Verifying applied filters are available after revisit to Scope in settings
+5. Navigate to planning space and validate the scope
+6. Remove the Process level scope
+7. Validate in Planning Space","Tests scope preset mapping across Settings and Planning interfaces. Validates filter configuration persistence, cross-page scope validation, process-level scope management, and integration between settings and planning spaces.",
+,Test_005_ScopeRelevantFilterInSettings.spec.ts,"1. Create Vertical Filter and enable relevant filters option
+2. Test Relevant Filters functionality",Tests relevant filters functionality within scope management. Validates creation of filters with relevant option enabled and ensures the relevant filter logic works correctly in filtering scenarios.,"Depricated, we can ignore this"
+,Test_006_VFScopeDimensiondata.spec.ts,"1. Select the scope filter from process settings
+2. Reset the Created Filter",Tests vertical filter scope dimension data management. Validates scope filter selection from process settings and reset functionality to ensure proper data state management.,
+View Manager Batch,Test_001_MapPlanningViewToViewGroup.spec.ts,"1. Create a View Group
+2. Create a planning view
+3. Edit a planning view
+4. Map view to process
+5. Delete planning view
+6. Delete view group","Tests View Manager functionality for planning view organization. Validates view group creation, planning view management, view-to-process mapping, and complete lifecycle management of views and view groups.",
+View Search,Test_001_ViewSearchForProcessInPO.spec.ts,"1. Should able to search and navigate to View
+2. Should allow searching but prevent navigation to hidden views","Tests View Search functionality within Process context. Validates search capabilities, navigation to accessible views, and proper access control for hidden views in the process environment.",
+,Test_002_ViewSearchForSubProcessInPO.spec.ts,"1. Should able to search and navigate to View
+2. Should allow searching but prevent navigation to hidden views","Tests View Search functionality within SubProcess context. Validates search capabilities, navigation to accessible views, and proper access control for hidden views in the subprocess environment.",
+,Test_003_ViewSearchForAssumptionInPO.spec.ts,"1. Should able to search and navigate to Assumption View
+2. Should allow searching but prevent navigation to hidden views","Tests View Search functionality within Assumption context. Validates search capabilities, navigation to accessible assumption views, and proper access control for hidden views in the assumption environment.",

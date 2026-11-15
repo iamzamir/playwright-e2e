@@ -1,0 +1,18 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUB_PROCESS_NAME": "string (required)",
+    "PROCESS_VIEW_NAME": "string (required)",
+    "SUB_PROCESS_VIEW_NAME": "string (required)",
+    "ADMIN_FILTER_NAME": "string (required)",
+    "RESET_DEFAULT_FILTER": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "SUB_PROCESS_NAME": "Demand Review",
+  "PROCESS_VIEW_NAME": "ViewOne",
+  "SUB_PROCESS_VIEW_NAME": "Edit View Disabled",
+  "ADMIN_FILTER_NAME": "AdminFilterCheck",
+  "RESET_DEFAULT_FILTER": "No Filter Override"
+}

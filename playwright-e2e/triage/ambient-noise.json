@@ -1,0 +1,40 @@
+{
+  "_schema": {
+    "purpose": "HTTP errors confirmed to be harmless background noise. They are never used to explain a failed test. Errors that are widespread in one night (many unrelated failures) are detected automatically and do not need an entry; add one here only after confirming an error is harmless. See docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md §7.2.",
+    "method": "Optional HTTP method, e.g. GET.",
+    "status": "Optional HTTP status, e.g. 404.",
+    "endpointRegex": "Regex on the templated path (ids shown as {id}), e.g. /procedureExecutions/latest$",
+    "reason": "Why it is harmless and who confirmed it.",
+    "owner": "Who confirmed it."
+  },
+  "noise": [
+    {
+      "method": "GET",
+      "status": 404,
+      "endpointRegex": "/procedure-orchestration/v1/procedureExecutions/latest$",
+      "reason": "Background call made by the planning page, not tied to any test step. Confirmed harmless by the automation team (2026-10-07).",
+      "owner": "Automation team"
+    },
+    {
+      "method": "GET",
+      "status": 404,
+      "endpointRegex": "/dp/logicalmodeldata/v2/data/dimension/VARIANTMASTERs$",
+      "reason": "Background dimension lookup seen around many unrelated UI failures. Confirmed harmless by the automation team (2026-10-07).",
+      "owner": "Automation team"
+    },
+    {
+      "method": "GET",
+      "status": 500,
+      "endpointRegex": "/ibp/assumptions/v1/assumption/editor$",
+      "reason": "IBP_ASMP_50_1029 \"Failed to retrieve feature toggle configuration\" from the assumption editor. On 2026-11-04 it was in 145 of 368 passing UI tests (39%) as well as 37 failing ones across 21 unrelated groups, so it is background noise, not a failure cause. Confirmed by the automation team (2026-11-05).",
+      "owner": "Automation team"
+    },
+    {
+      "method": "POST",
+      "status": 429,
+      "endpointRegex": "^/api/{id}/envelope/$",
+      "reason": "Sentry rate limit on o404500.ingest.us.sentry.io (error telemetry upload from the app). In 92 passing UI tests on 2026-11-04; never affects the page under test. Confirmed by the automation team (2026-11-05).",
+      "owner": "Automation team"
+    }
+  ]
+}

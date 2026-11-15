@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME_1": "FaultTolerance",
+    "ERROR_STATE_SCENARIO": "Fault_Tolerance_Scenario",
+    "PROCESS_NAME_2": "Fault Tolerance Empty State",
+    "EMPTY_STATE_SCENARIO": "Fault_Tolerance_Empty_Scenario",
+    "ERROR_VIEW_NAME": "Error State",
+    "EMPTY_VIEW_NAME": "Empty State",
+    "DATA_SYNC_ERROR_MESSAGE": "Data couldn’t be synced"
+}

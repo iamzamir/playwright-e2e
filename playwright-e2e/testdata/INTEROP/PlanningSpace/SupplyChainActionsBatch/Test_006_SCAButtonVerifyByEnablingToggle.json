@@ -1,0 +1,60 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCESS_NAME2": "string (required)",
+    "PROCESS_DISPLAY_NAME": "string (required)",
+    "ATTRIBUTE_VALUE": "string (required)",
+    "PROCEDURE": "object (required)",
+    "MAP_VIEWS_TO_PROCESS": "string[] (required)",
+    "CHILD_VIEWS": "object (required)",
+    "PRIMARY_BUTTON": "string (required)",
+    "SECONDARY_BUTTON": "string (required)",
+    "PROCEDURE_DROPDOWN": "object (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ArrangeViewsTesting",
+  "PROCESS_NAME2": "SCAtoapplyallviews",
+  "PROCESS_DISPLAY_NAME": "SCAtoapplyallviews",
+  "ATTRIBUTE_VALUE": "SCP-Reporting",
+  "PROCEDURE": {
+    "PROCEDURENAME1": "Clone Member",
+    "PROCEDURENAME2": "Create Scenario",
+    "PROCEDURENAME3": "CreateScenarioPopup",
+    "PROCEDURENAME4": "InteractiveDemand"
+  },
+  "MAP_VIEWS_TO_PROCESS": [
+    "Automation Process View1",
+    "Automation Sub Process View1",
+    "Automation Assumption View 1",
+    "Card Actions"
+  ],
+  "CHILD_VIEWS": {
+    "VIEW1": "Automation Process View1",
+    "VIEW2": "Automation Sub Process View1",
+    "VIEW3": "Automation Assumption View 1",
+    "VIEW4": "Card Actions"
+  },
+  "PRIMARY_BUTTON": "CreateScenarioPopup",
+  "SECONDARY_BUTTON": "Clone Member",
+  "PROCEDURE_DROPDOWN": {
+    "PROCEDURENAME1": "Create Scenario",
+    "PROCEDURENAME2": "InteractiveDemand"
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "PRIMARY_BUTTON": "CreateScenarioPopup2",
+    "PROCEDURE": {
+      "PROCEDURENAME1": "Clone Member",
+      "PROCEDURENAME2": "CreateScenarioWizard",
+      "PROCEDURENAME3": "CreateScenarioPopup2",
+      "PROCEDURENAME4": "Interactivedemand"
+    },
+    "PROCEDURE_DROPDOWN": {
+      "PROCEDURENAME1": "CreateScenarioWizard",
+      "PROCEDURENAME2": "Interactivedemand"
+    }
+  }
+}

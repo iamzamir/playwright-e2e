@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "DEFAULT_VIEW_NAME": "Default Filter View 2",
+    "PRESELECT_VIEW_NAME": "Automation Assumption View 1",
+    "DEFAULT_FILTER_NAME": "Default filter 2"
+}

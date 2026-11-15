@@ -1,0 +1,5 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "ArrangeViewsTesting",
+    "FEATURE_FLAG_NAME" : ["AUTOMATED_ASSUMPTION_LIFECYCLE"]
+}

@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "DRILL_THROUGH_VIEW_FROM": "Pivot- Source view",
+    "DRILL_THROUGH_CELL": "41",
+    "TARGET_VIEW": "Pivot-Target view,Test 1"
+}

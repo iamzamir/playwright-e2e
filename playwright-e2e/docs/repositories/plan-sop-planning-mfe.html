@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Planning Space Micro-Frontend — Repository Dossier</title><style>
+.shell{width:100%;overflow-x:hidden}
+:root{--ink:#17212b;--muted:#5d6a76;--line:#d7dee5;--wash:#f5f7f8;--navy:#17324d;--green:#18735b;--amber:#b25e09;--red:#a53b3b;--blue:#27618b}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e9eef1;color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}.shell{max-width:1220px;margin:auto;background:#fff;min-height:100vh;box-shadow:0 0 28px #2437461c}.top{padding:30px 42px 22px;border-bottom:5px solid var(--navy);background:#f8fafb}.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;font-size:11px}.top h1{font-size:30px;margin:3px 0;letter-spacing:0}.lede{max-width:940px;color:var(--muted);font-size:15px}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.tag{border:1px solid var(--line);padding:3px 8px;background:#fff;font-size:12px}.tag strong{color:var(--navy)}nav{position:sticky;top:0;z-index:3;background:var(--navy);padding:9px 42px;display:flex;gap:18px;overflow:auto}nav a{color:#fff;text-decoration:none;white-space:nowrap;font-size:12px}main{padding:26px 42px 54px}h2{font-size:21px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:32px 0 13px}h3{font-size:15px;margin:20px 0 8px;color:var(--navy)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{border:1px solid var(--line);border-top:3px solid var(--green);padding:13px;background:var(--wash);border-radius:5px}.card b{display:block;font-size:20px;color:var(--navy)}.card span{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.panel{border:1px solid var(--line);padding:15px;border-radius:5px}.panel h3{margin-top:0}.panel ul{margin:5px 0;padding-left:20px}table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}th{background:var(--wash);color:var(--navy)}tr:nth-child(even) td{background:#fbfcfc}code{font-family:Consolas,monospace;background:#edf1f3;padding:1px 4px}.note{padding:11px 14px;border-left:4px solid var(--amber);background:#fff8e9;margin:12px 0}.risk{border-left-color:var(--red);background:#fff3f3}.good{border-left-color:var(--green);background:#eef8f4}.diagram{border:1px solid var(--line);background:#fcfdfd;padding:12px;overflow:auto;margin:11px 0 22px;border-radius:5px}.mermaid{min-width:700px;text-align:center}.links a{color:var(--blue)}footer{padding:18px 42px;background:var(--wash);border-top:1px solid var(--line);color:var(--muted);font-size:12px}@media(max-width:700px){.top,main,footer{padding-left:20px;padding-right:20px}nav{padding-left:20px}.mermaid{min-width:570px}}@media print{body{background:#fff}.shell{box-shadow:none}nav{display:none}.diagram,.panel,.card,table{break-inside:avoid}}
+</style></head><body><div class="shell"><header class="top"><div class="eyebrow">Plan SOP · React micro-frontend</div><h1>Planning Space Micro-Frontend</h1><p class="lede">The operational planning workspace: configurable dashboards and cards, scenarios, scope and filters, drill-through, interactive planning, supply-chain actions, guided workflows, power bar, and context-aware navigation.</p><div class="tags"><span class="tag"><strong>Repo</strong> plan-sop-planning-mfe</span><span class="tag"><strong>Runtime</strong> Node 22.13.1</span><span class="tag"><strong>Stack</strong> React · TypeScript · Vite</span><span class="tag"><strong>Unit tests</strong> Vitest</span><span class="tag"><strong>Host</strong> Luminate Portal</span></div></header><nav><a href="#purpose">Purpose</a><a href="#functions">Functionality</a><a href="#architecture">Architecture</a><a href="#flows">Runtime flow</a><a href="#automation">Automation</a><a href="#risks">Risks</a><a href="#evidence">Evidence</a></nav><main>
+<section id="purpose"><h2>What this repository does</h2><p>Planning Space is where planners inspect and manipulate business data in the context of a process, subprocess, assumption, scenario, and scope. It builds pages dynamically from Link Management view mappings, portal UI configuration (<code>lui/uiConfiguration/v1</code>, cached in IndexedDB), Process Orchestration context, and planning/simulation services. It does not call UI Fields.</p><p>It is not a standalone portal. The Luminate Portal hosts it at <code>LUMINATE_PORTAL_URL + PSLINK</code>, provides login and shell navigation, and loads a runtime configuration generated into <code>public/</code> before startup.</p><div class="cards"><div class="card"><b>504</b><span>TSX/JSX source files</span></div><div class="card"><b>14</b><span>route-level page folders</span></div><div class="card"><b>24</b><span>feature component folders</span></div><div class="card"><b>1,083</b><span>unique test IDs</span></div><div class="card"><b>126</b><span>direct Playwright specs</span></div></div></section>
+<section id="functions"><h2>Functional capabilities</h2><div class="grid"><article class="panel"><h3>Dashboard and cards</h3><ul><li>Render configurable LUI dashboards and view groups.</li><li>Display pivot, table, chart, KPI, network, heatmap, tree, tabbed, and task cards.</li><li>Support card actions, resizing, drill-through, and row actions.</li><li>Load card types from shared <code>@by/lui-*</code> libraries.</li></ul></article><article class="panel"><h3>Scenario planning</h3><ul><li>Create, select, compare, publish, and filter scenarios.</li><li>Support base/default, private/public, and child scenarios.</li><li>Propagate scenario context into cards and planning instances.</li><li>Expose scenario menus, side navigation, and headers.</li></ul></article><article class="panel"><h3>Scope and navigation</h3><ul><li>Save, overwrite, delete, and map scope presets.</li><li>Apply quick filters, admin filters, draft filters, and defaults.</li><li>Navigate across process, subprocess, assumption, view, and supply-chain-action contexts.</li><li>Maintain breadcrumbs, last-accessed context, and power-bar history.</li></ul></article><article class="panel"><h3>Planning workflows</h3><ul><li>Interactive planning, live blocks, dynamic constraints, and NPI.</li><li>On-demand MaaS execution and status tracking.</li><li>Supply-chain action wizard, popup, history, and scenario creation.</li><li>Guided workflows, collaboration, dirty-state protection, and alerts.</li></ul></article></div>
+<table><thead><tr><th>Page area</th><th>Responsibility</th><th>Primary automation area</th></tr></thead><tbody><tr><td>PortalDashboardRenderer / DynamicDashboardLoader</td><td>Resolve and render mapped dashboard views</td><td>CardsBatch, ViewsBatch</td></tr><tr><td>InteractivePlanning</td><td>Planning grid, live blocks, constraints</td><td>LiveBlocks, DynConstraints</td></tr><tr><td>ScenarioTable / ScenarioDetails</td><td>Scenario management and selection</td><td>ScenarioBatch</td></tr><tr><td>SCADetails / SCAListTable</td><td>Supply-chain actions</td><td>SupplyChainActionsBatch</td></tr><tr><td>QuickFilter / scope pages</td><td>Scope, presets, filter state</td><td>ScopeBatch</td></tr><tr><td>ActionPlanner / GuidedWorkflow</td><td>Planning workflow orchestration</td><td>Partially covered</td></tr></tbody></table></section>
+<section id="architecture"><h2>Architecture</h2><h3>System context</h3><div class="diagram"><pre class="mermaid">
+graph TB
+  U["User"] --> PORTAL["Luminate Portal"] --> PS["Planning Space MFE"]
+  PS --> LIB["@by LUI dashboard and card libraries"]
+  PS --> GW{{"API Gateway"}}
+  GW --> PO["Process Orchestration"]
+  GW --> LM["Link Management"]
+  GW --> UC["lui uiConfiguration / verticalFilterBff"]
+  GW --> AI["Action Item"]
+  GW --> MAAS["MaaS / Simulation / Interactive Planning"]
+  AUTO["Playwright Automation<br/>126 specs"] --> PS
+</pre></div><h3>Internal composition</h3><div class="diagram"><pre class="mermaid">
+graph TD
+  SHELL["Page / Modal / Flyout wrappers"] --> PAGES["14 route-level pages"]
+  PAGES --> COMP["23 feature component folders"]
+  COMP --> HOOKS["Hooks"]
+  HOOKS --> API["apis.ts · apiInfo.ts · useApi.tsx"]
+  API --> GW{{Gateway}}
+  API --> STATE["Reducers / state"]
+  API --> CACHE[("IndexedDB config cache")]
+  CFG["Runtime config from public/"] --> API
+  CACHE -. "stale state" .-> BANNER["ConfigCacheStaleBanner"]
+  COMP --> LUI["@by/lui-* components"]
+</pre></div><h3>Context model</h3><div class="diagram"><pre class="mermaid">
+graph TD
+  P["Process"] --> SP["Subprocess"]
+  P --> A["Assumption"]
+  SP --> A
+  P --> V["View"]
+  SP --> V
+  A --> V
+  V --> C["Card"]
+  SC["Scenario"] -. "applies to" .-> V
+  S["Scope / filters"] -. "constrains" .-> V
+  PI["Planning instance"] --> SC
+</pre></div></section>
+<section id="flows"><h2>Key runtime flows</h2><h3>Runtime configuration</h3><div class="diagram"><pre class="mermaid">
+graph LR
+  ENV[".github/envs/&lt;env&gt;.env<br/>16 files"] --> SCRIPT["setRuntimeEnv.js"] --> PUB["public/ generated config"] --> APP["MFE startup"] --> API["Backend endpoints"]
+  STALE["Switch env without rerunning script"] -. "leaves old config" .-> PUB
+</pre></div><h3>Planning page load</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant B as Browser
+  participant PS as Planning Space
+  participant C as IndexedDB
+  participant UC as lui uiConfiguration
+  participant PO as PO Service
+  participant LM as Link Management
+  participant AI as Action Item
+  B->>PS: /process/{name}/plan
+  PS->>C: read config cache
+  alt cache miss
+    PS->>UC: dashboard/card configuration
+    UC-->>PS: configuration
+    PS->>C: store
+  else cache hit
+    C-->>PS: cached metadata
+  end
+  PS->>PO: context and scope
+  PS->>LM: mapped views and ordering
+  PS->>AI: My Task data
+  PS-->>B: skeletons then content or empty state
+</pre></div><h3>UI loading contract</h3><div class="diagram"><pre class="mermaid">
+stateDiagram-v2
+  [*] --> Skeleton: navigate or context change
+  Skeleton --> Rendered: data available
+  Skeleton --> Empty: valid empty result
+  Rendered --> Skeleton: scenario or scope changes
+  Empty --> Skeleton: filter changes
+  Rendered --> [*]
+  Empty --> [*]
+</pre></div><div class="note good"><strong>Deterministic wait:</strong> wait for <code>skeleton-text</code> or <code>text-skeleton</code> to detach, then accept either real content or <code>lui-empty-state</code> as the valid terminal result.</div></section>
+<section id="automation"><h2>Automation relevance</h2><table><thead><tr><th>Feature</th><th>Spec count</th><th>Suite</th></tr></thead><tbody><tr><td>Cards</td><td>20</td><td>CardsBatchA/B</td></tr><tr><td>Views</td><td>17</td><td>ViewsBatch</td></tr><tr><td>Scope</td><td>16</td><td>ScopeBatch</td></tr><tr><td>Scenarios</td><td>15</td><td>ScenarioBatchA/B</td></tr><tr><td>Drill-through</td><td>10</td><td>DrillThroughBatch</td></tr><tr><td>On-demand MaaS</td><td>9</td><td>OnDemandMaasBatch</td></tr><tr><td>Supply-chain actions</td><td>6</td><td>SupplyChainActionsBatch</td></tr><tr><td>Power bar</td><td>7</td><td>PowerBarBatch</td></tr></tbody></table><p>Page objects include planning, cards, scenario, scope, drill-through, ODM, SCA, constraints, power bar, assumptions, pages-and-blocks, portal, and login.</p></section>
+<section id="risks"><h2>Risks and gaps</h2><table><thead><tr><th>Risk</th><th>Impact</th><th>Response</th></tr></thead><tbody><tr><td>IndexedDB configuration cache</td><td>Stale columns and filters after backend change</td><td>Fresh context or explicit cache refresh</td></tr><tr><td><code>@by/lui-*</code> dependency bump</td><td>Library-owned <code>lui-*</code> DOM/test IDs change</td><td>Centralize locators and compare dependency versions</td></tr><tr><td>On-demand MaaS infrastructure</td><td>Long, variable execution</td><td>Data-setup restart plus API polling with EXTENDED timeout</td></tr><tr><td>Shared scenario/scope state</td><td>Parallel tests interfere</td><td>Serial suites and run-scoped process names</td></tr><tr><td>Accessibility absent</td><td>126 functional specs provide no a11y signal</td><td>Add Axe scans to smoke routes</td></tr><tr><td>Partial page coverage</td><td>GuidedWorkflow, ActionPlanner, shortcuts, i18n, stale banner undercovered</td><td>Dedicated functional and negative-path specs</td></tr></tbody></table><div class="note"><strong>Test-ID caution:</strong> scan hits such as <code>dataTestId</code>, <code>getTestId</code>, <code>testId</code>, and <code>props</code> are variable names, not literal DOM IDs.</div></section>
+<section id="evidence" class="links"><h2>Detailed evidence</h2><ul><li><a href="plan-sop-planning-mfe/overview.md">Overview</a></li><li><a href="plan-sop-planning-mfe/architecture.md">Architecture source</a></li><li><a href="plan-sop-planning-mfe/ui-inventory.md">Routes, pages, components, test IDs</a></li><li><a href="plan-sop-planning-mfe/data-model.md">Data sources and cache</a></li><li><a href="plan-sop-planning-mfe/environments.md">Environment matrix</a></li><li><a href="plan-sop-planning-mfe/test-hooks.md">Setup and deterministic waits</a></li><li><a href="plan-sop-planning-mfe/automation-coverage.md">Coverage gaps</a></li><li><a href="plan-sop-planning-mfe/troubleshooting.md">Troubleshooting</a></li></ul></section></main><footer>Generated from source under C:\Backend\plan-sop-planning-mfe · 16 Sep 2026, reviewed 5 Oct 2026 · Mermaid loads through jsDelivr when online.</footer></div><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{fontFamily:'Segoe UI, sans-serif',primaryColor:'#eef6ff',primaryTextColor:'#17212b',primaryBorderColor:'#27618b',lineColor:'#5d6a76',secondaryColor:'#eef8f4',tertiaryColor:'#fff8e9'}});</script></body></html>

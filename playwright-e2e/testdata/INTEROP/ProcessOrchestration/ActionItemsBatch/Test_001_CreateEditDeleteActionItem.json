@@ -1,0 +1,31 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "ACTION_ITEM_NAME": "string (required)",
+        "SUB_PROCESS_NAME": "string (required)",
+        "STATUS": "string (required)",
+        "ACTION_TYPE": "string (required)",
+        "PRIORITY": "string (required)",
+        "PRIORITY_UPDATED": "string (required)",
+        "CREATE_SUCCESS": "string (required)",
+        "EDIT_SUCCESS": "string (required)",
+        "DELETE_SUCCESS": "string (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE. Optional REALM_KEY (string) pins the Gravitee tenant (portal/API/auth hosts) for this spec"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "ACTION_ITEM_NAME": "ACTION_ITEM_NAME",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "STATUS": "In Progress",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "EDIT_SUCCESS": "Your changes have been saved successfully.",
+    "DELETE_SUCCESS": "Action Item has been deleted successfully",
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1"
+    }
+}

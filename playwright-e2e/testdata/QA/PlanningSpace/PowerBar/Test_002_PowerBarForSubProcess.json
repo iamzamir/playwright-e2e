@@ -1,0 +1,12 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SUBPROCESS_NAME": "string (required)",
+        "SUBPROCESS_DISPLAY_NAME": "string (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Initiatives And Assumptions Review",
+    "SUBPROCESS_DISPLAY_NAME":"Initiatives And Assumptions Review"
+}

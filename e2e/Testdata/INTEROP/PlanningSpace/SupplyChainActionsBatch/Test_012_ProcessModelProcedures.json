@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "TestNoProcessModel",
+    "PROCESS_NAME_WITH_UI_CONFIG": "TestProcessModel",
+    "PROCEDURE_NAME" : "CreateScenarioTestProcessModel"
+}   

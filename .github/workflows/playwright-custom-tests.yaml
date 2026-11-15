@@ -1,0 +1,589 @@
+name: Playwright Custom Tests
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      branch:
+        description: Branch to run workflow on
+        required: false
+        default: 'main'
+        type: string
+      test_selection:
+        description: Test selection mode
+        required: false
+        default: 'folder'
+        type: choice
+        options:
+          - file
+          - folder
+          - glob
+          - multiple
+      test_path:
+        description: |
+          Test path or glob pattern:
+          • file mode: playwright-e2e/tests/PlanningSpace/PowerBar/Test_001_PowerBarForProcess.spec.ts
+          • folder mode: playwright-e2e/tests/PlanningSpace/PowerBar
+          • glob mode: playwright-e2e/tests/ProcessOrchestration/**/Test_*.spec.ts
+          • multiple mode: (comma-separated) playwright-e2e/tests/PlanningSpace/PowerBar,playwright-e2e/tests/ProcessOrchestration/ActionItemsBatch
+        required: true
+        type: string
+      environment:
+        description: Test environment
+        required: false
+        default: 'INTEROP'
+        type: choice
+        options:
+          - INTEROP
+          - QA
+          - PSR
+      headless:
+        description: Browser mode
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      workers:
+        description: Number of parallel workers
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '4'
+          - '8'
+      enable-html-report:
+        description: 'Generate and upload Playwright HTML Report (default: false)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      retries:
+        description: 'Number of retries for failed tests (default: 1)'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '0'
+          - '2'
+          - '3'
+      allow-destructive:
+        description: Allow DataSetupBatch specs (they modify or delete shared data)
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: playwright-custom-tests-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+env:
+  TEST_ENV: ${{ github.event.inputs.environment || 'INTEROP' }}
+  HEADLESS_MODE: ${{ github.event.inputs.headless || 'true' }}
+  TEST_WORKERS: ${{ github.event.inputs.workers || '1' }}
+  TEST_SELECTION: ${{ github.event.inputs.test_selection || 'folder' }}
+  TEST_PATH: ${{ github.event.inputs.test_path }}
+  TEST_CONFIG: configs/playwright.config.ts
+  PW_ENABLE_HTML_REPORT: ${{ github.event.inputs['enable-html-report'] || 'false' }}
+  PW_RETRIES: ${{ github.event.inputs.retries || '1' }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_PS_1 }}
+
+jobs:
+  run-custom-tests:
+    name: Run Custom Tests
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    outputs:
+      test-failed: ${{ steps.check_outcome.outputs.test-failed }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        working-directory: playwright-e2e
+        run: |
+          # The Azure/GitHub-hosted Ubuntu runner ships Microsoft apt repos
+          # (packages.microsoft.com azure-cli + prod) that intermittently fail
+          # with "Clearsigned file isn't valid, got 'NOSPLIT'", breaking
+          # `apt-get update` and therefore `playwright install --with-deps`.
+          # Disable those flaky repos so the system-dependency install succeeds.
+          sudo rm -f /etc/apt/sources.list.d/*microsoft* \
+                     /etc/apt/sources.list.d/*azure-cli* \
+                     /etc/apt/sources.list.d/*msprod* 2>/dev/null || true
+          # Install browser + OS deps; fall back to browser-only if the deps
+          # step still fails (deps are preinstalled on these runners).
+          npx playwright install --with-deps chrome || npx playwright install chrome
+
+      - name: Install Xvfb (for headed mode)
+        if: ${{ env.HEADLESS_MODE == 'false' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Validate Test Path
+        run: |
+          echo "Test Selection: ${{ env.TEST_SELECTION }}"
+          echo "Test Path: ${{ env.TEST_PATH }}"
+          echo "Config: ${{ env.TEST_CONFIG }}"
+          echo "Environment: ${{ env.TEST_ENV }}"
+          echo "Workers: ${{ env.TEST_WORKERS }}"
+          echo "Headless: ${{ env.HEADLESS_MODE }}"
+          echo "Retries: ${{ env.PW_RETRIES }}"
+          echo "HTML Report: ${{ env.PW_ENABLE_HTML_REPORT }}"
+          echo "Allow destructive (DataSetupBatch): ${{ github.event.inputs['allow-destructive'] == 'true' && 'true' || 'false' }}"
+
+          NORMALIZED_TEST_PATH="${{ env.TEST_PATH }}"
+          NORMALIZED_TEST_PATH="${NORMALIZED_TEST_PATH#playwright-e2e/}"
+          echo "Normalized Test Path: ${NORMALIZED_TEST_PATH}"
+          echo "NORMALIZED_TEST_PATH=${NORMALIZED_TEST_PATH}" >> "$GITHUB_ENV"
+
+      - name: Run Tests - Single File
+        id: tests_file
+        if: ${{ env.TEST_SELECTION == 'file' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          TZ: Australia/Adelaide
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          ALLOW_DESTRUCTIVE: ${{ github.event.inputs['allow-destructive'] == 'true' && 'true' || 'false' }}
+          TEST_PATH: ${{ env.TEST_PATH }}
+        run: |
+          normalized_test_path="${TEST_PATH#playwright-e2e/}"
+          if [[ "${HEADLESS}" == "false" ]]; then
+            xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          else
+            npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          fi
+        continue-on-error: true
+
+      - name: Run Tests - Folder
+        id: tests_folder
+        if: ${{ env.TEST_SELECTION == 'folder' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          TZ: Australia/Adelaide
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          ALLOW_DESTRUCTIVE: ${{ github.event.inputs['allow-destructive'] == 'true' && 'true' || 'false' }}
+          TEST_PATH: ${{ env.TEST_PATH }}
+        run: |
+          normalized_test_path="${TEST_PATH#playwright-e2e/}"
+          if [[ "${HEADLESS}" == "false" ]]; then
+            xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          else
+            npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          fi
+        continue-on-error: true
+
+      - name: Run Tests - Glob Pattern
+        id: tests_glob
+        if: ${{ env.TEST_SELECTION == 'glob' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          TZ: Australia/Adelaide
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          ALLOW_DESTRUCTIVE: ${{ github.event.inputs['allow-destructive'] == 'true' && 'true' || 'false' }}
+          TEST_PATH: ${{ env.TEST_PATH }}
+        run: |
+          normalized_test_path="${TEST_PATH#playwright-e2e/}"
+          if [[ "${HEADLESS}" == "false" ]]; then
+            xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          else
+            npx playwright test "${normalized_test_path}" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+          fi
+        continue-on-error: true
+
+      - name: Run Tests - Multiple Paths
+        id: tests_multiple
+        if: ${{ env.TEST_SELECTION == 'multiple' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: ${{ env.TEST_ENV }}
+          TZ: Australia/Adelaide
+          HEADLESS: ${{ env.HEADLESS_MODE }}
+          ALLOW_DESTRUCTIVE: ${{ github.event.inputs['allow-destructive'] == 'true' && 'true' || 'false' }}
+        run: |
+          IFS=',' read -ra PATHS <<< "${{ env.TEST_PATH }}"
+          for path in "${PATHS[@]}"; do
+            path=$(echo "$path" | xargs)  # trim whitespace
+            normalized_path="${path#playwright-e2e/}"
+            echo "Running tests for: $normalized_path"
+            if [[ "${HEADLESS}" == "false" ]]; then
+              xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npx playwright test "$normalized_path" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+            else
+              npx playwright test "$normalized_path" --config="${{ env.TEST_CONFIG }}" --workers=${{ env.TEST_WORKERS }}
+            fi
+          done
+        continue-on-error: true
+
+      - name: Check Test Outcome
+        id: check_outcome
+        if: always()
+        run: |
+          if [[ "${{ steps.tests_file.outcome }}" == "failure" || \
+                "${{ steps.tests_folder.outcome }}" == "failure" || \
+                "${{ steps.tests_glob.outcome }}" == "failure" || \
+                "${{ steps.tests_multiple.outcome }}" == "failure" ]]; then
+            echo "test-failed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "test-failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: allure-results-custom
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: warn
+
+      - name: Upload Playwright Assets (videos, traces)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-assets-custom
+          path: playwright-e2e/test-results
+          if-no-files-found: warn
+
+      - name: Upload Playwright HTML Report
+        if: always() && (github.event.inputs['enable-html-report'] == 'true')
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-html-report-custom
+          path: playwright-e2e/reports/html-report
+          if-no-files-found: warn
+
+      - name: Upload Monocart Report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: monocart-report-custom
+          path: playwright-e2e/reports/monocart-report
+          if-no-files-found: warn
+
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: run-custom-tests
+    if: always()
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+
+      - name: Download Allure Results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: allure-results-*
+          merge-multiple: true
+          path: playwright-e2e/reports/allure-results
+        continue-on-error: true
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Setup Java (Allure dependency)
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies for Allure CLI
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Generate Allure Report (No Docker)
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RESULTS_DIR="playwright-e2e/reports/allure-results"
+          HISTORY_ROOT="playwright-e2e/reports/allure-history/PSAutomationReports/PW-Custom-Tests"
+          CURRENT_REPORT_DIR="${HISTORY_ROOT}/${{ github.run_number }}"
+          LATEST_REPORT_DIR="${HISTORY_ROOT}/latest"
+          PREV_ROOT="gh-pages/PSAutomationReports/PW-Custom-Tests"
+          PREV_HISTORY_DIR="${PREV_ROOT}/latest/history"
+
+          mkdir -p "$RESULTS_DIR" "$HISTORY_ROOT"
+
+          # Restore previously published numbered report folders from gh-pages so the
+          # "keep last 7" retention operates over the full history, not just this run.
+          if [ -d "$PREV_ROOT" ]; then
+            for prev in "$PREV_ROOT"/[0-9]*; do
+              [ -d "$prev" ] || continue
+              cp -R "$prev" "$HISTORY_ROOT/"
+            done
+          fi
+
+          if [ -d "$PREV_HISTORY_DIR" ]; then
+            cp -R "$PREV_HISTORY_DIR" "$RESULTS_DIR/history"
+          fi
+
+          # Safety check: clean trace and video attachments from Allure result JSONs and remove binary files
+          node playwright-e2e/scripts/strip-allure-traces.js "$RESULTS_DIR"
+
+          cd playwright-e2e
+          npx allure generate reports/allure-results --clean -o "reports/allure-history/PSAutomationReports/PW-Custom-Tests/${{ github.run_number }}"
+          cd - >/dev/null
+
+          rm -rf "$LATEST_REPORT_DIR"
+          cp -R "$CURRENT_REPORT_DIR" "$LATEST_REPORT_DIR"
+
+          cd "$HISTORY_ROOT"
+          ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf
+          cd - >/dev/null
+
+      - name: Sanitize Allure History for gh-pages Deploy
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          HISTORY_DIR="playwright-e2e/reports/allure-history"
+
+          if [ -d "$HISTORY_DIR" ]; then
+            sudo chown -R "$USER":"$USER" "$HISTORY_DIR" || true
+            find "$HISTORY_DIR" -type d -name ".git" -prune -exec sudo rm -rf {} + || true
+            chmod -R u+rwX "$HISTORY_DIR" || true
+          fi
+
+      - name: Deploy report to Github Pages
+        id: deploy-gh-pages
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      # Suites that finish together all push to gh-pages, so a push can land between this action's clone and its push
+      # and get it rejected ("fetch first", or the server's "fatal error in commit_refs"). Each attempt clones gh-pages
+      # afresh, so a retry after a random wait publishes on top of the other run instead of losing this run's report.
+      - name: Wait before retrying the Github Pages deploy
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        shell: bash
+        run: sleep $((20 + RANDOM % 41))
+
+      - name: Deploy report to Github Pages (retry 1)
+        id: deploy-gh-pages-retry
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Wait before the last Github Pages deploy
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        shell: bash
+        run: sleep $((40 + RANDOM % 61))
+
+      - name: Deploy report to Github Pages (retry 2)
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PW-Custom-Tests/${{ github.run_number }}
+          ARTIFACTS_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TEAMS_WEBHOOK_URL)) {
+            Write-Host "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          }
+
+          $title = "UI Automation Test Results - Custom Tests - Playwright"
+          $summary = "Test Run #${{ github.run_number }}: ${{ job.status }}"
+
+          function Send-TeamsPayload {
+            param(
+              [string]$JsonBody
+            )
+
+            $invokeWebRequestParams = @{
+              Method = 'Post'
+              Uri = $env:TEAMS_WEBHOOK_URL
+              Body = $JsonBody
+              ContentType = 'application/json'
+              SkipHttpErrorCheck = $true
+            }
+            $response = Invoke-WebRequest @invokeWebRequestParams
+
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+              return $true
+            }
+
+            Write-Host "Teams webhook returned status: $($response.StatusCode)"
+            return $false
+          }
+
+          # Teams Workflows webhooks only render an Adaptive Card envelope. Simpler payloads
+          # return 202 (accepted) but post nothing, so send the Adaptive Card directly.
+          $adaptivePayload = @{
+            type = 'message'
+            attachments = @(
+              @{
+                contentType = 'application/vnd.microsoft.card.adaptive'
+                content = @{
+                  '$schema' = 'http://adaptivecards.io/schemas/adaptive-card.json'
+                  type = 'AdaptiveCard'
+                  version = '1.4'
+                  body = @(
+                    @{
+                      type = 'TextBlock'
+                      size = 'Medium'
+                      weight = 'Bolder'
+                      text = $title
+                      wrap = $true
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $summary
+                      wrap = $true
+                      spacing = 'Small'
+                    }
+                  )
+                  actions = @(
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Allure Report'
+                      url = $env:REPORT_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Download Artifacts'
+                      url = $env:ARTIFACTS_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Workflow Run'
+                      url = $env:WORKFLOW_URL
+                    }
+                  )
+                }
+              }
+            )
+          } | ConvertTo-Json -Depth 20
+
+          if (Send-TeamsPayload -JsonBody $adaptivePayload) {
+            Write-Host "Teams notification sent using Adaptive Card payload format."
+            exit 0
+          }
+
+          Write-Host "Unable to send Teams notification with available payload formats."
+          exit 0
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: generate-report
+    if: always() && needs.generate-report.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit
+
+  # Final gate so reports and Pages still deploy even when tests fail.
+  outcome-gate:
+    name: Outcome Gate
+    needs: [run-custom-tests, deploy-pages]
+    if: always()
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    steps:
+      - name: Enforce test outcome
+        env:
+          TEST_FAILED: ${{ needs.run-custom-tests.outputs.test-failed }}
+          UPSTREAM_RESULT: ${{ needs.run-custom-tests.result }}
+        run: |
+          echo "Test failed flag: ${TEST_FAILED:-unknown}"
+          echo "Run custom tests job result: ${UPSTREAM_RESULT}"
+          echo "Outcome gate mode: ${{ vars.PW_OUTCOME_GATE || 'enforce (default for custom tests)' }}"
+          if [[ "${{ vars.PW_OUTCOME_GATE }}" != "report" ]]; then
+            if [[ "${TEST_FAILED}" == "true" || "${UPSTREAM_RESULT}" != "success" ]]; then
+              echo "::error title=Tests failed::See the Allure report for this run."
+              exit 1
+            fi
+          fi

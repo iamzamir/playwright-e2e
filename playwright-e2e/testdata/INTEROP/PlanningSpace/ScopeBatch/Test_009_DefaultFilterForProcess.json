@@ -1,0 +1,53 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "GLOBAL_SCOPE_FILTER_NAME": "string (required)",
+    "OTHER_PROCESS_NAME": "string (required)",
+    "RESET_DEFAULT_FILTER": "string (required)",
+    "DEFAULT_FILTER_OPTION_NAME": "string (required)",
+    "DEFAULT_FILTER_NAME_IN_VF": "string (required)",
+    "ASSUMPTION_VIEW_NAME": "string (required)",
+    "ASSUMPTION": "object (required)",
+    "GLOBAL_SCOPE_FILTER_VALUES": "object[] (required) - { HIERARCHY (level key), VALUE } members saved in GLOBAL_SCOPE_FILTER_NAME",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "GlobaScopeView",
+  "GLOBAL_SCOPE_FILTER_NAME": "GlobalScopeFilter",
+  "OTHER_PROCESS_NAME": "VerticalFilterTest",
+  "RESET_DEFAULT_FILTER": "No Filter Override",
+  "DEFAULT_FILTER_OPTION_NAME": "Default Filter For Process",
+  "DEFAULT_FILTER_NAME_IN_VF": "Default Filter For Process",
+  "ASSUMPTION_VIEW_NAME": "Automation Assumption View 1",
+  "ASSUMPTION": {
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "OTHER_ASSUMPTION_NAME": "Test Assumption"
+  },
+  "GLOBAL_SCOPE_FILTER_VALUES": [
+    {
+      "HIERARCHY": "Region",
+      "VALUE": "REGION-00"
+    },
+    {
+      "HIERARCHY": "Customer",
+      "VALUE": "CUST-01"
+    }
+  ],
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "GLOBAL_SCOPE_FILTER_VALUES": [
+      {
+        "HIERARCHY": "Region",
+        "VALUE": "REGION-01"
+      },
+      {
+        "HIERARCHY": "Customer",
+        "VALUE": "CUST-01"
+      }
+    ]
+  }
+}

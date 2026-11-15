@@ -1,0 +1,203 @@
+name: nightly-triage
+
+# Builds the nightly triage dashboard (playwright-e2e/docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md, Phase 1).
+# Each functional suite workflow publishes its run data to gh-pages (dashboard/data/runs/<date>/). This workflow
+# classifies and groups that night's failures, writes dashboard/data/days/<date>.json and index.json, publishes the
+# static dashboard (playwright-e2e/dashboard/), redeploys Pages, and posts one Teams digest.
+# When a UI suite finishes after the night was built (late cron start or a long run), the night is rebuilt and an
+# updated digest is posted. Suites that finish before the scheduled build are skipped here and picked up by it.
+
+on:
+  schedule:
+    - cron: '45 23 * * *'  # 05:15 IST, after the last functional suite (PS UI, 22:00 UTC) has published
+  workflow_run:
+    workflows:
+      - playwright-po-iop-ui-local-suite
+      - playwright-ps-iop-ui-sharded-suite
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Night to build (YYYY-MM-DD, UTC). Leave empty for the latest night (suites start 19:30 UTC).'
+        required: false
+        default: ''
+      send-teams:
+        description: 'Post the Teams digest'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      chosen-os:
+        description: Choose runner
+        required: false
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-latest-8Core
+
+permissions:
+  contents: write
+  actions: read
+  issues: write
+
+concurrency:
+  group: nightly-triage
+  cancel-in-progress: false
+
+env:
+  DASHBOARD_URL: https://supreme-adventure-mr9k94p.pages.github.io/dashboard/
+
+jobs:
+  build:
+    name: Build Triage Dashboard
+    # Only scheduled suite runs feed the nightly dashboard.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.event == 'schedule'
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-dev-ubuntu-latest-8Core' }}"]
+    outputs:
+      date: ${{ steps.day.outputs.date }}
+      built: ${{ steps.day.outputs.built }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      # Only the dashboard folder: the report tree on gh-pages is large and not needed here.
+      - name: Checkout gh-pages (dashboard folder only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 1
+          sparse-checkout: |
+            dashboard
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Build Day Data
+        id: day
+        working-directory: playwright-e2e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAY_DATE: ${{ github.event.inputs.date }}
+          SUITE_CREATED_AT: ${{ github.event.workflow_run.created_at }}
+          SUITE_WORKFLOW_PATH: ${{ github.event.workflow_run.path }}
+          SUITE_RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          SUITE_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          mkdir -p ../gh-pages/dashboard/data
+          args=(--data-dir ../gh-pages/dashboard/data)
+          if [ -n "$SUITE_RUN_NUMBER" ]; then
+            args+=(--night-of "$SUITE_CREATED_AT" --rebuild-for-run "${SUITE_WORKFLOW_PATH##*/}:${SUITE_RUN_NUMBER}:${SUITE_RUN_ATTEMPT:-1}")
+          elif [ -n "$DAY_DATE" ]; then
+            args+=(--date "$DAY_DATE")
+          fi
+          node scripts/triage/build-day.js "${args[@]}"
+
+      # Opt-in (repository variable TRIAGE_ISSUE_SYNC=true): one GitHub issue per failure group; labels set on the
+      # issues are read back as decisions. TRIAGE_ISSUE_MAX_CREATE caps new issues per night (default 10).
+      - name: Sync Triage Issues
+        if: steps.day.outputs.built == 'true' && vars.TRIAGE_ISSUE_SYNC == 'true'
+        continue-on-error: true
+        working-directory: playwright-e2e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILT_DATE: ${{ steps.day.outputs.date }}
+          MAX_CREATE: ${{ vars.TRIAGE_ISSUE_MAX_CREATE || '10' }}
+        run: node scripts/triage/sync-issues.js --data-dir ../gh-pages/dashboard/data --date "${BUILT_DATE}" --dashboard-url "${DASHBOARD_URL}" --max-create "${MAX_CREATE}"
+
+      - name: Publish Dashboard App
+        if: steps.day.outputs.built == 'true'
+        env:
+          DAY_SUMMARY: ${{ steps.day.outputs.summary }}
+          BUILT_DATE: ${{ steps.day.outputs.date }}
+        run: |
+          cp playwright-e2e/dashboard/index.html playwright-e2e/dashboard/app.js playwright-e2e/dashboard/triage-view.js playwright-e2e/dashboard/app.css gh-pages/dashboard/
+          {
+            echo "## Nightly triage"
+            echo "${DAY_SUMMARY}"
+            echo ""
+            echo "Dashboard: ${DASHBOARD_URL}#/day/${BUILT_DATE}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Day Data
+        if: steps.day.outputs.built == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: triage-day
+          path: gh-pages/dashboard/data/days/${{ steps.day.outputs.date }}.json
+          retention-days: 30
+
+      - name: Commit and Push to gh-pages
+        if: steps.day.outputs.built == 'true'
+        working-directory: gh-pages
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A dashboard
+          if git diff --cached --quiet; then
+            echo "No dashboard changes to publish."
+            exit 0
+          fi
+          git commit -m "Nightly triage dashboard ${{ steps.day.outputs.date }}"
+          # Suite workflows also push to gh-pages; rebase and retry if one landed first.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:gh-pages; then
+              exit 0
+            fi
+            sleep $((attempt * 10))
+            git pull --rebase origin gh-pages
+          done
+          echo "::error title=Nightly triage::Could not push the dashboard to gh-pages after 5 attempts."
+          exit 1
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: build
+    if: needs.build.outputs.built == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit
+
+  digest:
+    name: Send Teams Digest
+    needs: [build, deploy-pages]
+    if: always() && needs.build.result == 'success' && needs.build.outputs.built == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_run' || github.event.inputs.send-teams == 'true')
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-dev-ubuntu-latest-8Core' }}"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Download Day Data
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: triage-day
+          path: triage-day
+
+      - name: Post Digest
+        working-directory: playwright-e2e
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          UPDATED: ${{ github.event_name == 'workflow_run' }}
+        run: node scripts/triage/teams-digest.js --day "../triage-day/${{ needs.build.outputs.date }}.json" --dashboard-url "${DASHBOARD_URL}" --updated "${UPDATED}"

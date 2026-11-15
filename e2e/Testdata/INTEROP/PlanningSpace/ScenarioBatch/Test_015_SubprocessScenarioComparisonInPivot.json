@@ -1,0 +1,20 @@
+{
+  "Sub-process": {
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "Maas Pivot Card View",
+    "CARD_NAME": "Maas Pivot Card",
+    "FILTER_NAME": "Maas Pivot Filter",
+    "SCENARIO_NAME": "Scenario_For_MaasPivot"
+  },
+  "Assumption": {
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "ORIGIN_NAME": "PSAutomation",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "VIEW_NAME": "Maas Pivot Card View",
+    "CARD_NAME": "Maas Pivot Card",
+    "FILTER_NAME": "Filter Shows Data",
+    "SCENARIO_NAME": "AssumptionScn3"
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "_schema": {
+        "CycleDescriptionUpdate": "string (required)",
+        "requestBody": "object (required)"
+    },
+    "CycleDescriptionUpdate": "Calendar Cycle Interop Desciption Update",
+    "requestBody": {
+      "calendarName": "Monthly Calendar Sample 1",
+      "description": "Monthly Calendar Sample 1",
+      "cycles": [
+        {
+          "cycleName": "Sample Cycle 1",
+          "description": "Sample Cycle 1",
+          "startDate": "2024-01-22T06:57:33.967Z",
+          "endDate": "2024-02-22T06:57:33.967Z"
+        }
+      ],
+      "Cycle": {
+        "cycleName": "Sample Cycle 2",
+        "description": "Sample Cycle 2",
+        "startDate": "2024-03-22T06:59:33.967Z",
+        "endDate": "2024-04-22T06:59:33.967Z"
+      },
+      "UpdateCycle": {
+        "cycleName": "Sample Cycle 2",
+        "description": "Updated Description",
+        "startDate": "2023-01-01T12:22:15.521Z",
+        "endDate": "2023-01-31T12:22:15.521Z"
+      }
+    }
+}

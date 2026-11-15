@@ -1,0 +1,10 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_005_CreateMultipleChildScenariosAfterDrillThrough.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_006_CreateMultipleChildScenariosAfterDrillThroughPopup.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_007_MultiLevelDrillThroughMassBdeWithProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_008_MultiLevelDrillThroughMassBdeWithSubprocess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_010_ContextOverrideNavUsingBreadcrumbs.spec.ts"
+  ]
+}
+

@@ -1,0 +1,21 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "ASSUMPTION": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DUPLICATED_VIEW_NAME": "string (required)",
+    "CARDS": "string[] (required)",
+    "ACTORS_AND_DEFAULT_PROCEDURE": "object[] (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION": "PS Auto Assumption 5",
+  "VIEW_NAME": "duplicate view automation assumption",
+  "DUPLICATED_VIEW_NAME": "copy of duplicate view automation assumption",
+  "CARDS": ["Maas Pivot Card", "BDE Card", "Maas Chart", "Demand Chart"],
+  "ACTORS_AND_DEFAULT_PROCEDURE": [
+    { "label": "Insight", "value": "Insight_actor" },
+    { "label": "Default Procedure", "value": "OnDemandMaasCluster" }
+  ]
+}

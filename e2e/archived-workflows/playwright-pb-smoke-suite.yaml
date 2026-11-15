@@ -1,0 +1,262 @@
+name: Page and Blocks Smoke Suite - Playwright - Sauce Labs
+
+on:
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: Choose testing type
+        required: false
+        default: "saucelabs"
+        type: choice
+        options:
+          - local
+          - saucelabs
+      instance-type:
+        description: Choose instance type
+        required: false
+        default: 'Portal PS Instance'
+        type: choice
+        options:
+          - Portal PS Instance
+          - Planning
+
+env:
+  SAUCE_USERNAME: ${{ secrets.SAUCE_PS_USERNAME }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  TEST_TYPE: "saucelabs"
+  INSTANCE_TYPE: "Portal PS Instance"
+
+jobs:
+  playwright-saucelabs:
+    name: Run Pages and Blocks UI Tests
+    runs-on: ["az-prod-ubuntu-latest-8Core"]
+    outputs:
+      artifact-url: ${{ steps.get-artifact-url.outputs.artifact-url }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install saucectl
+        run: |
+          if [[ "${{ (github.event.inputs.test-type || env.TEST_TYPE) }}" == "saucelabs" || "${{ github.event_name }}" == "schedule" ]]; then
+            npm install -g saucectl
+          fi
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Run Tests
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: INTEROP
+          TZ: Australia/Adelaide
+        run: |
+          if [[ "${{ (github.event.inputs.test-type || env.TEST_TYPE) }}" == "saucelabs" || "${{ github.event_name }}" == "schedule" ]]; then
+            echo "=== Running tests on Sauce Labs ==="
+           APP_INSTANCE='${{ github.event.inputs.instance-type || env.INSTANCE_TYPE }}' npm run test:interop:saucelabs:pagesAndBlocks
+          else
+            echo "=== Running tests locally ==="
+            APP_INSTANCE='${{ github.event.inputs.instance-type || env.INSTANCE_TYPE }}' npm run test:interop:pagesAndBlocks
+          fi
+        continue-on-error: true
+
+      - name: List Available Artifacts
+        working-directory: playwright-e2e
+        run: |
+          echo "Checking for artifacts..."
+          if [ -d "artifacts" ]; then
+            find artifacts -type f -name "*.zip" -o -name "*.json" | head -20
+          else
+            echo "No artifacts directory found"
+          fi
+
+      - name: Upload Raw Artifacts
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sauce-labs-artifacts
+          path: |
+            playwright-e2e/artifacts/
+          if-no-files-found: ignore
+
+      - name: Get Artifact URL
+        if: always()
+        id: get-artifact-url
+        run: |
+          ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }}"
+          echo "artifact-url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+          echo "Artifact URL: $ARTIFACT_URL"
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Download GitHub Artifacts
+        if: always()
+        uses: actions/download-artifact@v4
+        with:
+          name: sauce-labs-artifacts
+          path: playwright-e2e/artifacts-backup/
+        continue-on-error: true
+
+      - name: Merge Artifact Sources
+        working-directory: playwright-e2e
+        run: |
+          echo "Merging artifact sources..."
+
+          # If primary artifacts exist, use them
+          if [ -d "artifacts" ] && [ "$(ls -A artifacts 2>/dev/null)" ]; then
+            echo "Using primary Sauce Labs artifacts"
+            ls -la artifacts/
+          # Otherwise, use backup GitHub artifacts
+          elif [ -d "artifacts-backup" ] && [ "$(ls -A artifacts-backup 2>/dev/null)" ]; then
+            echo "Using backup GitHub artifacts"
+            mv artifacts-backup artifacts
+            ls -la artifacts/
+          else
+            echo "No artifacts found from either source"
+            mkdir -p artifacts
+          fi
+
+      - name: Extract and Prepare Allure Results
+        working-directory: playwright-e2e
+        run: |
+          # Create directories
+          mkdir -p reports/allure-results
+
+          echo "Looking for artifacts..."
+          find . -name "*allure*" -type f 2>/dev/null || echo "No allure files found with find"
+
+          # Try multiple approaches to find allure results
+          ALLURE_FOUND=false
+
+          # Approach 1: Look for allure-results.zip
+          if [ -f "artifacts/allure-results.zip" ]; then
+            echo "Found allure-results.zip, extracting..."
+            unzip -o artifacts/allure-results.zip -d reports/allure-results/
+            ALLURE_FOUND=true
+          fi
+
+          # Approach 2: Look for allure-results directory
+          if [ -d "artifacts/allure-results" ] && [ "$ALLURE_FOUND" = false ]; then
+            echo "Found allure-results directory, copying..."
+            cp -r artifacts/allure-results/* reports/allure-results/ 2>/dev/null || echo "Copy failed"
+            ALLURE_FOUND=true
+          fi
+
+          # Approach 3: Search recursively for allure JSON files
+          if [ "$ALLURE_FOUND" = false ]; then
+            echo "Searching recursively for allure files..."
+            find artifacts -name "*.json" -exec grep -l "allure" {} \; 2>/dev/null | while read file; do
+              echo "Copying allure file: $file"
+              cp "$file" reports/allure-results/
+              ALLURE_FOUND=true
+            done
+          fi
+
+          # Approach 4: Look for any zip files and extract them
+          if [ "$ALLURE_FOUND" = false ]; then
+            echo "Looking for any zip files..."
+            find artifacts -name "*.zip" -exec unzip -o {} -d reports/allure-results/ \; 2>/dev/null || echo "No zip files found"
+          fi
+
+          # Verify allure results exist
+          if [ "$(ls -A reports/allure-results/ 2>/dev/null)" ]; then
+            echo "Allure results found:"
+            ls -la reports/allure-results/
+          else
+            echo "No allure results found, creating minimal test data for report generation"
+            cat > reports/allure-results/test-result.json << EOF
+          {
+            "uuid": "$(uuidgen)",
+            "name": "No Test Results Found",
+            "status": "broken",
+            "stage": "finished",
+            "description": "No allure results were found in Sauce Labs artifacts",
+            "start": $(date +%s)000,
+            "stop": $(date +%s)000
+          }
+          EOF
+          fi
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Upload Processed Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: processed-allure-results
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: ignore
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: playwright-e2e/reports/allure-results/allure-results
+          gh_pages: gh-pages
+          allure_report: playwright-e2e/reports/allure-report
+          allure_history: playwright-e2e/reports/allure-history
+          keep_reports: 7
+          subfolder: PSPortalInstance
+
+      - name: Deploy report to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+    #   - name: Send Report to Microsoft Teams Channel
+    #     uses: aliencube/microsoft-teams-actions@v0.8.0
+    #     with:
+    #       webhook_uri: "${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}"
+    #       title: "UI Automation Test Results - PO-UI-INTEROP - Playwright"
+    #       summary: "Test Run #${{ github.run_number }}: ${{ job.status }}"
+    #       theme_color: "${{ job.status == 'success' && 'good' || job.status == 'failure' && 'danger' || 'warning' }}"
+    #       text: |
+    #         **UI Automation Test Results - PO-UI-INTEROP - Playwright**
+
+    #         **Test Configuration:**
+    #         • Branch: ${{ github.event.inputs.branch || 'main' }}
+    #         • Environment: INTEROP
+    #         • Run Number: #${{ github.run_number }}
+
+    #         **Reports:**
+    #         [📊 Allure Test Report](https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PLAYWRIGHT-SAUCELABS/${{ github.run_number }})
+    #         [📦 Download Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.upload-artifact.outputs.artifact-id }})
+
+    #         **Workflow Link:**
+    #         [View GitHub Actions Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})

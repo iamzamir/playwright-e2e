@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Link Management Service — Repository Dossier</title><style>
+.shell{width:100%;overflow-x:hidden}
+:root{--ink:#17212b;--muted:#5d6a76;--line:#d7dee5;--paper:#fff;--wash:#f5f7f8;--navy:#17324d;--green:#18735b;--amber:#b25e09;--red:#a53b3b;--blue:#27618b}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e9eef1;color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}.shell{max-width:1220px;margin:auto;background:#fff;min-height:100vh;box-shadow:0 0 28px #2437461c}.top{padding:30px 42px 22px;border-bottom:5px solid var(--navy);background:#f8fafb}.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;font-size:11px}.top h1{font-size:30px;margin:3px 0;letter-spacing:0}.lede{max-width:940px;color:var(--muted);font-size:15px}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.tag{border:1px solid var(--line);padding:3px 8px;background:#fff;font-size:12px}.tag strong{color:var(--navy)}nav{position:sticky;top:0;z-index:3;background:var(--navy);padding:9px 42px;display:flex;gap:18px;overflow:auto}nav a{color:#fff;text-decoration:none;white-space:nowrap;font-size:12px}main{padding:26px 42px 54px}h2{font-size:21px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:32px 0 13px}h3{font-size:15px;margin:20px 0 8px;color:var(--navy)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.card{border:1px solid var(--line);border-top:3px solid var(--green);padding:13px;background:var(--wash);border-radius:5px}.card b{display:block;font-size:20px;color:var(--navy)}.card span{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.panel{border:1px solid var(--line);padding:15px;border-radius:5px}.panel h3{margin-top:0}.panel ul{margin:5px 0;padding-left:20px}table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}th{background:var(--wash);color:var(--navy)}tr:nth-child(even) td{background:#fbfcfc}code{font-family:Consolas,monospace;background:#edf1f3;padding:1px 4px}.note{padding:11px 14px;border-left:4px solid var(--amber);background:#fff8e9;margin:12px 0}.risk{border-left-color:var(--red);background:#fff3f3}.good{border-left-color:var(--green);background:#eef8f4}.diagram{border:1px solid var(--line);background:#fcfdfd;padding:12px;overflow:auto;margin:11px 0 22px;border-radius:5px}.mermaid{min-width:700px;text-align:center}.links a{color:var(--blue)}footer{padding:18px 42px;background:var(--wash);border-top:1px solid var(--line);color:var(--muted);font-size:12px}@media(max-width:700px){.top,main,footer{padding-left:20px;padding-right:20px}nav{padding-left:20px}.mermaid{min-width:570px}}@media print{body{background:#fff}.shell{box-shadow:none}nav{display:none}.diagram,.panel,.card,table{break-inside:avoid}}
+</style></head><body><div class="shell"><header class="top"><div class="eyebrow">Plan SOP · Backend repository</div><h1>Link Management Service</h1><p class="lede">Owns the relationship layer between business entities and their UI: view-to-entity and procedure mappings, user favourites, scope, presets, admin filters, import/export, and asynchronous entity validation.</p><div class="tags"><span class="tag"><strong>Repo</strong> plan-sop-link-management</span><span class="tag"><strong>Runtime</strong> Java 21</span><span class="tag"><strong>Framework</strong> Spring Boot 3.5.16</span><span class="tag"><strong>Database</strong> Azure SQL / linkMgr</span><span class="tag"><strong>Messaging</strong> Kafka</span></div></header><nav><a href="#purpose">Purpose</a><a href="#functions">Functionality</a><a href="#architecture">Architecture</a><a href="#flows">Runtime flows</a><a href="#automation">Automation</a><a href="#risks">Risks</a><a href="#evidence">Evidence</a></nav><main>
+<section id="purpose"><h2>What this repository does</h2><p>Link Management answers a deceptively important question: <strong>which views should this process, subprocess, or assumption show, in what order, for this user?</strong> It stores the mapping between entity context and dashboards, optional procedure bindings, scope/filter presets, and user favourites.</p><p>Most failures do not produce a visible API error. A wrong mapping returns successfully and the frontend renders the wrong views. That makes this service an invisible dependency behind Planning Space view, scope, search, duplicate-view, and drill-through suites.</p><div class="cards"><div class="card"><b>10</b><span>REST controllers</span></div><div class="card"><b>15</b><span>domain entities</span></div><div class="card"><b>14 + 3</b><span>direct backend + migration specs</span></div><div class="card"><b>70%</b><span>active routes exercised (21 / 30)</span></div><div class="card"><b>100</b><span>maximum DB pool size</span></div><div class="card"><b>2</b><span>architectures: v1 and v2 refactor</span></div></div></section>
+<section id="functions"><h2>Functional capabilities</h2><div class="grid"><article class="panel"><h3>View catalog and mapping</h3><ul><li>Register dashboard views and query the catalog.</li><li>Map one or many views to process, subprocess, or assumption entities.</li><li>Search mappings for one entity or use projection-backed bulk search.</li><li>Update, remove one, or clear all mappings for an entity.</li></ul></article><article class="panel"><h3>Procedures and scope</h3><ul><li>Bind procedures to mapped views.</li><li>Persist scope and quick-filter configuration for a view context.</li><li>Create, search, and clear user/admin filter presets.</li><li>Schedule procedure-to-view remapping under ShedLock.</li></ul></article><article class="panel"><h3>User personalization</h3><ul><li>Add and remove favourite views per entity and user.</li><li>Support both ID-based and typed entity routes.</li><li>Filter view results by user visibility and LIAM permissions.</li><li>Maintain ordering via user-entity dashboard records.</li></ul></article><article class="panel"><h3>Validation and migration</h3><ul><li>Validate an entity asynchronously and poll a job record.</li><li>Import/export view, procedure, and scope mappings.</li><li>Soft-delete and archive records.</li><li>Publish EFS audit-log events through Kafka.</li></ul></article></div>
+<table><thead><tr><th>API group</th><th>Paths</th><th>Role</th></tr></thead><tbody><tr><td>View mapping</td><td><code>/view-entity-map/**</code></td><td>Core mapping and bulk projection search</td></tr><tr><td>Procedure mapping</td><td><code>/entity-view-procedure-map/**</code></td><td>Procedures available from a view</td></tr><tr><td>View catalog / favourites</td><td><code>/views</code>, <code>/entity/{id}/views</code></td><td>Catalog and user personalization</td></tr><tr><td>Filters / scope</td><td><code>/preset/**</code>, <code>/scope</code></td><td>Saved filter and quick-filter state</td></tr><tr><td>Validation</td><td><code>/validate</code>, <code>/job/validation/{task_id}</code></td><td>Async ALM validation</td></tr><tr><td>Migration</td><td><code>/exportData</code>, <code>/importData</code></td><td>Configuration round-trip</td></tr></tbody></table></section>
+<section id="architecture"><h2>Architecture</h2><h3>System context</h3><div class="diagram"><pre class="mermaid">
+graph TB
+  PS["Planning Space"] --> GW{{"API Gateway"}}
+  LUI["LUI / View Manager"] --> GW
+  PO["PO Service"] --> GW
+  AUTO["Playwright Automation"] --> GW
+  GW --> LM["Link Management Service"]
+  LM --> DB[("Azure SQL<br/>linkMgr")]
+  LM --> LIAM["LIAM / RBAC"]
+  LM --> PROC["Procedure Service"]
+  LM --> K{{"Kafka / EFS audit"}}
+  LM --> LOCK[("ShedLock")]
+</pre></div><h3>Two architectures in one repository</h3><div class="diagram"><pre class="mermaid">
+graph TB
+  subgraph V1["Legacy layered packages"]
+    C1["Controllers 5<br/>Links · Preset · Entity · Tenant · User"] --> S1["Services 7"] --> R1["Repositories 6"] --> E1["Entities 9"]
+  end
+  subgraph V2["v2.refactor vertical slices"]
+    VTE["viewtoentity"]
+    PTV["proceduretoview"]
+    SCP["scope"]
+    VAL["validation 21 files"]
+    EI["exportimport"]
+  end
+  subgraph SH["v2 shared"]
+    DAL["DAL<br/>JDBC + JPA + projections"]
+    ERR["Error codes / exceptions"]
+    LOG["MDC logging"]
+    EFS["AuditLogService"]
+    ASY["AsyncConfig"]
+  end
+  VTE --> DAL
+  PTV --> DAL
+  SCP --> DAL
+  VAL --> DAL
+  EI --> DAL
+  DAL --> DB[("linkMgr")]
+  VTE --> ERR
+  VAL --> ASY
+  VTE --> EFS
+</pre></div><h3>Domain model</h3><div class="diagram"><pre class="mermaid">
+erDiagram
+  EntityTypes ||--o{ SourceEntity : types
+  DashboardViews ||--o{ EntityView : maps
+  SourceEntity ||--o{ EntityView : owns
+  EntityView ||--o{ EntityViewProcedureMapping : runs
+  EntityView ||--o{ EntityViewScopeMapping : scopes
+  DashboardViews ||--o{ ViewFilterMapping : filters
+  SourceEntity ||--o{ UserEntityDashboard : favourites
+  Job ||--|| SourceEntity : validates
+</pre></div></section>
+<section id="flows"><h2>Key runtime flows</h2><h3>View resolution during page load</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant P as Planning Space
+  participant C as ViewEntityMapController
+  participant S as viewtoentity slice
+  participant D as JDBC DAL
+  participant DB as linkMgr
+  P->>C: POST /view-entity-map/lm-search/v2
+  C->>S: get views for entities
+  S->>D: projection query
+  D->>DB: SELECT mappings and ordering
+  DB-->>D: projection rows
+  D-->>S: mapped results
+  S->>S: apply user visibility
+  S-->>P: views to render
+</pre></div><h3>Async entity validation</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant T as Test
+  participant C as ValidationController
+  participant A as Async pool
+  participant V as Validation slice
+  participant J as Job table
+  T->>C: POST /validate
+  C->>J: create task
+  C->>A: submit validation
+  C-->>T: task_id
+  A->>V: execute validators
+  V->>J: update status
+  loop poll
+    T->>C: GET /job/validation/{task_id}
+    C-->>T: current state
+  end
+</pre></div><div class="note"><strong>Triage rule:</strong> mapping, scope, validation, procedure-map, and import/export controllers live in <code>v2/refactor/**</code>. Do not begin in the legacy <code>controllers/</code> package for those endpoints.</div></section>
+<section id="automation"><h2>Automation relevance</h2><table><thead><tr><th>Coverage</th><th>Specs</th><th>Surface</th></tr></thead><tbody><tr><td>View-to-entity</td><td><code>Test_001..003</code></td><td>Process, subprocess, assumption mappings</td></tr><tr><td>Procedure-to-view</td><td><code>Test_004..008</code></td><td>Single/multiple views and actors</td></tr><tr><td>Presets / scope</td><td><code>Test_009..011</code>, <code>Test_014</code></td><td>Preset, scope, admin filters, global (*) preset</td></tr><tr><td>Bulk view resolution</td><td><code>Test_012</code></td><td><code>lm-search/v2</code> actors and procedures</td></tr><tr><td>Favourites</td><td><code>Test_013</code></td><td>Untyped and typed favourite views</td></tr><tr><td>Migration</td><td><code>Migration/Test_006..008</code></td><td>Export, validation, procedure mapping (with per-view reason codes since SM-33313)</td></tr><tr><td>Indirect UI</td><td>Views, scope, search, duplicate view, drill-through</td><td>Most Planning Space navigation</td></tr></tbody></table></section>
+<section id="risks"><h2>Risks and gaps</h2><table><thead><tr><th>Risk</th><th>Effect</th><th>Recommended check</th></tr></thead><tbody><tr><td>Validation slice untested</td><td>Largest v2 slice at 21 files</td><td>Submit → poll → terminal payload contract</td></tr><tr><td>Export/import reason semantics changed (SM-33313)</td><td>A view with no active procedures now round-trips as <code>PLANNER_WANTS_NO_PROCEDURES</code></td><td>Assert the reason survives export → import</td></tr><tr><td>Typed favourite DELETE on Gravitee</td><td>planning-mfe sends <code>links/v1//type/...</code>; Gravitee returns 400 (LM-D01)</td><td>Tracked in the defect report, not asserted</td></tr><tr><td>Destructive clear</td><td><code>/view-entity-map/clear</code> removes all entity mappings</td><td>Dedicated run-scoped entity only</td></tr><tr><td>45-minute Liquibase lock wait</td><td>Deployment can appear hung</td><td>Inspect <code>DATABASECHANGELOGLOCK</code></td></tr><tr><td>Scheduled remapping</td><td>State can change between assertions</td><td>Re-read and scope by entity</td></tr></tbody></table></section>
+<section id="evidence" class="links"><h2>Detailed evidence</h2><ul><li><a href="plan-sop-link-management/overview.md">Overview</a></li><li><a href="plan-sop-link-management/architecture.md">Architecture source</a></li><li><a href="plan-sop-link-management/api-contract.md">Complete API contract</a></li><li><a href="plan-sop-link-management/data-model.md">Data model</a></li><li><a href="plan-sop-link-management/environments.md">Environment routing</a></li><li><a href="plan-sop-link-management/automation-coverage.md">Coverage gaps</a></li><li><a href="plan-sop-link-management/troubleshooting.md">Troubleshooting</a></li></ul></section></main><footer>Generated from source under C:\Backend\plan-sop-link-management · 16 Sep 2026, reviewed 5 Oct 2026 · Mermaid loads through jsDelivr when online.</footer></div><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{fontFamily:'Segoe UI, sans-serif',primaryColor:'#eef6ff',primaryTextColor:'#17212b',primaryBorderColor:'#27618b',lineColor:'#5d6a76',secondaryColor:'#eef8f4',tertiaryColor:'#fff8e9'}});</script></body></html>

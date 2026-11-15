@@ -1,0 +1,59 @@
+{
+  "_schema": {
+    "requestBody": "object (required)",
+    "requestBody2": "object (required)",
+    "requestBody3": "object (required)",
+    "requestBody4": "object (required)",
+    "requestSearchBody": "object (required)"
+  },
+  "requestBody": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": false },
+      { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false },
+      { "id": "67f0c4876ccd7b90b205229b", "sequence": 3, "hidden": false },
+      { "id": "67f0c4eead4d35626071193c", "sequence": 4, "hidden": false }
+    ]
+  },
+  "requestBody2": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": false },
+      { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false }
+    ]
+  },
+  "requestBody3": {
+    "entities": [
+      {
+        "type": "assumptiontype",
+        "entityId": ["Risk"]
+      }
+    ],
+    "views": [
+      { "id": "67d80da8f2967ca960ced3af", "sequence": 1, "hidden": true },
+      { "id": "67ed381b14186d498984099a", "sequence": 2, "hidden": false },
+      { "id": "67f0c4eead4d35626071193c", "sequence": 3, "hidden": false },
+      { "id": "67f0c4876ccd7b90b205229b", "sequence": 4, "hidden": true },
+      { "id": "682331ff625a1a6ea4470433", "sequence": 5, "hidden": false },
+      { "id": "68233219aadb6a093338dc2a", "sequence": 6, "hidden": false }
+    ]
+  },
+  "requestBody4": {
+    "entityId": ["Risk"],
+    "entityType": "assumptiontype"
+  },
+  "requestSearchBody": {
+    "entityId": ["Risk", "Opportunity"],
+    "entityType": "assumptiontype"
+  }
+}

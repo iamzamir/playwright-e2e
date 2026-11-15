@@ -1,0 +1,26 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - seeded process with subprocesses; read only",
+    "SUBPROCESS_NAME": "string (required) - level-1 subprocess of PROCESS_NAME used for the PSR KPI and children samplers",
+    "ENTITY_TYPES": "string[] (required) - entity types whose template limits are read",
+    "PAGE_SIZES": "number[] (required) - PSR page sizes for the subprocess children",
+    "DEFAULT_PAGE_SIZE": "number (required) - page size the subprocess children route uses when pageSize is omitted or not positive",
+    "UNKNOWN_PROCESS_NAME": "string (required) - process name that does not exist",
+    "UNKNOWN_ENTITY_TYPE": "string (required) - entity type that has no template limits",
+    "RBAC_DENIED_ERROR_CODE": "string (required) - errorCode when the RBAC check rejects a process name",
+    "LIAM_RESOURCE_NOT_FOUND_ERROR_CODE": "string (required) - errorCode of /users when LIAM has no resource for the process",
+    "PROCESS_NOT_FOUND_ERROR_CODE": "string (required) - errorCode for an unknown process on routes without RBAC",
+    "ENTITY_NOT_FOUND_ERROR_CODE": "string (required) - errorCode for an unknown entity type"
+  },
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "ENTITY_TYPES": ["ACTION_ITEM", "PROCESS"],
+  "PAGE_SIZES": [5, 10, 20],
+  "DEFAULT_PAGE_SIZE": 20,
+  "UNKNOWN_PROCESS_NAME": "PWNoSuchProcess",
+  "UNKNOWN_ENTITY_TYPE": "FOO",
+  "RBAC_DENIED_ERROR_CODE": "IBP_40_1032",
+  "LIAM_RESOURCE_NOT_FOUND_ERROR_CODE": "IBP_40_1005",
+  "PROCESS_NOT_FOUND_ERROR_CODE": "IBP_PO_40_2002",
+  "ENTITY_NOT_FOUND_ERROR_CODE": "IBP_PO_40_1020"
+}

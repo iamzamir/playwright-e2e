@@ -1,0 +1,473 @@
+{
+  "_schema": {
+    "purpose": "Flaky tests that are being stabilised. Their failures do not turn the nightly run verdict red; the tests still run and stay visible in reports. See docs/strategy/Test-Report-Dashboard-and-Triage-Plan.md §4.1.",
+    "id": "Unique id, Q-<number>.",
+    "reason": "Why the test is flaky and what is being done.",
+    "match": "spec (glob relative to tests/) and optionally test (substring of the title) or testRegex (regex on the title, use ^ when the title is a substring of another, e.g. Process - vs Sub-process -); environment / gateway lists are optional. The error message is ignored.",
+    "owner": "Person fixing it.",
+    "since": "Date added, YYYY-MM-DD.",
+    "expires": "At most 30 days after since. Expired entries stop applying and are listed in the verdict."
+  },
+  "tests": [
+    {
+      "id": "Q-1",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 85.7% (12 flaky, 2 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/Migration/Test_004_SupplyChainActionsMigration.spec.ts",
+        "test": "Test Case 4: Verify all migrated SCA reflected in target realm: cbpf-test23",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-3",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 64.3% (9 flaky, 0 failed of 14 runs); PW-PO-BACKEND-QA-GRAVITEE 35.7% (5 flaky, 1 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_011_AdminFilterManagement.spec.ts",
+        "test": "Test Case 1: Set Admin Filter for Process",
+        "environment": [
+          "INTEROP",
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-4",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 66.7% (8 flaky, 1 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_013_UserFavouriteViews.spec.ts",
+        "test": "Test Case 4: LM-02-E03 a user token does not see the machine favourites",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-5",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 57.1% (8 flaky, 4 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/Migration/Test_007_LinkManagementALMValidation.spec.ts",
+        "test": "TC6: Validate GET envelope and LINK_MANAGEMENT_SERVICE deep fields in realm cbpf-test23",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-6",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 58.3% (7 flaky, 1 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/ScenarioBatch/Test_011_SelectScenarioinSidenav.spec.ts",
+        "testRegex": "^Process - Test Case 2: Verify selected scenario is appeared",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-7",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 42.9% (6 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_008_EntityViewActorsProcedures.spec.ts",
+        "test": "Test Case 4: Map, verify, search, delete, and confirm mapping for actor: Scenario Comparison, procedure: Default",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-8",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 42.9% (6 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_008_EntityViewActorsProcedures.spec.ts",
+        "test": "Test Case 2: Map, verify, search, delete, and confirm mapping for actor: Maas, procedure: Default",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-9",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 42.9% (6 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_009_PresetFilterManagement.spec.ts",
+        "test": "Test Case 6: Overwrite existing preset updates filterId for same entity and view",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-10",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 42.9% (6 flaky, 4 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/ScenarioBatch/Test_004_ScenarioCreationUsingAPI.spec.ts",
+        "test": "Test Case 1: Create a child scenario Using \"+\" icon from the Scenario layout.",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-11",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 38.5% (5 flaky, 1 failed of 13 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/LastAccessedContext/Test_001_LastAccessedProcess.spec.ts",
+        "test": "Test Case 2: Verify process2 should be launched after launching and logging out",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-12",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 35.7% (5 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/ActionItem/Test_001_ActionItemCRUDWithProcess.spec.ts",
+        "test": "Test Case 2: Get Action Item created",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-13",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 35.7% (5 flaky, 2 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/ScenarioBatch/Test_011_SelectScenarioinSidenav.spec.ts",
+        "testRegex": "^Process - Test Case 1: Check scenarios in the scenario filter",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-14",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 35.7% (5 flaky, 3 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/DuplicateView/Test_003_DuplicateViewAssumption.spec.ts",
+        "test": "Test Case 01: Duplicate View",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-15",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 57.1% (4 flaky, 0 failed of 7 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/DrillThroughBatch/Test_004_OnRowDrillThrough.spec.ts",
+        "test": "Test Case 3: Clicking on arrow button should navigate to drill through target view",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-16",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 33.3% (4 flaky, 2 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/ScopeBatch/Test_006_ScopePresetMappingInAssumption.spec.ts",
+        "test": "Test Case 2: Does preselected scope from assumption override with new scope in Planning",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-17",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 30.8% (4 flaky, 0 failed of 13 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/ScenarioBatch/Test_013_ScenariosDefault.spec.ts",
+        "test": "Test Case 2: Set private scenario as default and verify in Manage Scenarios",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-18",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PO-UI-INTEROP-AZURE 27.3% (3 flaky, 0 failed of 11 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestration/PowerBar/Test_002_PowerBarForSubProcessInPO.spec.ts",
+        "test": "Test Case 2: Verify sub process details in powerbar tooltip",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PO UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-19",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-AZURE 25% (3 flaky, 0 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/Migration/Test_009_ALMDeployResourceMigration.spec.ts",
+        "test": "Test Case 9: Re-export from target realm and verify migrated content removed",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-20",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 25% (3 flaky, 0 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/WorkFlowFilter/Test_001_WorkFlowFilter.spec.ts",
+        "test": "Test Case 2: Should configure workflow filter for view which has no default scope for view",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-21",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 25% (3 flaky, 0 failed of 12 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/LastAccessedContext/Test_002_LastAccessesSubprocess.spec.ts",
+        "test": "Test Case 2: Verify subprocess from process2 should be launched in Planning Space after launching from power bar",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-22",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 23.1% (3 flaky, 9 failed of 13 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/SupplyChainActionsBatch/Test_003_SCPWizardLayout.spec.ts",
+        "test": "Test Case 2: Create a public scenario through SCP and verify alert messages",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-23",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-INTEROP-GRAVITEE 21.4% (3 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/ActionItem/Test_001_ActionItemCRUDWithProcess.spec.ts",
+        "test": "Test Case 1: Create Action Item",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-24",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 21.4% (3 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess.spec.ts",
+        "test": "Test Case 2: Search and Verify Mapped Procedures are Available for All SubProcess Views",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-25",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 21.4% (3 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess.spec.ts",
+        "test": "Test Case 14: Search All Views and Verify No Mapped Procedures are Available",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-26",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 21.4% (3 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess.spec.ts",
+        "test": "Test Case 1: Map 4 Procedures to All SubProcess Views, 1 Primary, 1 Secondary",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-27",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PO-BACKEND-QA-GRAVITEE 21.4% (3 flaky, 0 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "ProcessOrchestrationBackend/LinkManagement/Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess.spec.ts",
+        "test": "Test Case 5: Map 4 Procedures to SubProcess View, No Primary, 1 Secondary",
+        "environment": [
+          "QA"
+        ],
+        "gateway": [
+          "GRAVITEE"
+        ]
+      },
+      "owner": "PO backend automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    },
+    {
+      "id": "Q-28",
+      "reason": "Flaky over the 14 nights to 2026-11-04: PW-PS-UI-INTEROP-LOCAL 21.4% (3 flaky, 5 failed of 14 runs). Quarantined while it is stabilised.",
+      "match": {
+        "spec": "PlanningSpace/SupplyChainActionsBatch/Test_002_SCAHistoryAndCreateScenario.spec.ts",
+        "test": "Test Case 1: Validate SCA history and scenario lifecycle end-to-end",
+        "environment": [
+          "INTEROP"
+        ],
+        "gateway": [
+          "AZURE"
+        ]
+      },
+      "owner": "PS UI automation",
+      "since": "2026-11-05",
+      "expires": "2026-12-05"
+    }
+  ]
+}

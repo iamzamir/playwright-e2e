@@ -1,0 +1,27 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "PO_PROCESS_NAME": "string (required)",
+        "ATTRIBUTE_VALUE": "string (required)",
+        "PROCEDURE": "object (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE. Optional REALM_KEY (string) pins the Gravitee tenant (portal/API/auth hosts) for this spec"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "ProcedureMappingCheck",
+    "PO_PROCESS_NAME": "ProcedureMappingCheck",
+    "ATTRIBUTE_VALUE": "SCP-Reporting",
+    "PROCEDURE": {
+        "PROCEDURENAME1": "Clone Member",
+        "PROCEDURENAME2": "Create Scenario",
+        "PROCEDURENAME3": "CreateScenarioPopup"
+        
+    },
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1",
+        "PROCEDURE": {
+            "PROCEDURENAME2": "Create Scenario ODM"
+        }
+    }
+}

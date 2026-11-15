@@ -1,0 +1,11 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_001_ActionItemCRUDWithProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_002_ActionItemCRUDWithSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_004_ActionItemSearchForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_005_ActionItemSearchForSubprocess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_006_ActionItemEditorAndFilterConfig.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_007_ActionItemTemplates.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/ActionItem/Test_008_ActionItemKpiConfigCrud.spec.ts"
+  ]
+}

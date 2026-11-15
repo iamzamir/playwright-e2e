@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gravitee & Azure Dual-Gateway Migration Plan</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel2: #172033;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --good: #22c55e;
+    --warn: #f59e0b;
+    --bad: #ef4444;
+    --border: #334155;
+    --chip: #0b3b53;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    padding: 36px 40px;
+    background: linear-gradient(135deg, #0f2744, #0f172a);
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+  }
+  header p {
+    margin: 4px 0;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--chip);
+    color: var(--accent);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    margin-top: 10px;
+  }
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  section {
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 22px;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+    margin: 36px 0 18px;
+    color: #f1f5f9;
+  }
+  h3 {
+    font-size: 17px;
+    margin: 22px 0 10px;
+    color: #cbd5e1;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .card .n {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .card .l {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 16px 0;
+    border: 1px solid var(--border);
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  th {
+    background: var(--panel2);
+    color: #cbd5e1;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255, 255, 255, 0.02); }
+  code {
+    background: #0b1220;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 13px;
+    color: #e2e8f0;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  }
+  pre {
+    background: #0b1220;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    color: #e2e8f0;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 1.5;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .t-azure { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .t-gravitee { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); }
+  .t-warn { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+  .t-step { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+  .t-done { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.5); }
+  .t-partial { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.5); }
+  .t-todo { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.5); }
+
+  .status-done { border-left: 4px solid var(--good); }
+  .status-partial { border-left: 4px solid var(--warn); }
+  .status-todo { border-left: 4px solid var(--bad); }
+
+  ul.check { list-style: none; padding-left: 0; }
+  ul.check li { padding: 6px 0 6px 28px; position: relative; }
+  ul.check li::before { content: ''; position: absolute; left: 4px; top: 12px; width: 12px; height: 12px; border-radius: 3px; }
+  ul.check li.done::before { background: var(--good); }
+  ul.check li.todo::before { background: var(--bad); }
+  ul.check li.partial::before { background: var(--warn); }
+  
+  .step-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .step-number {
+    background: var(--accent);
+    color: #0f172a;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .step-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f8fafc;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Playwright E2E Framework — Azure APIM to Gravitee Gateway Migration Architecture & Implementation Plan</h1>
+  <p>Scope: <code>playwright-e2e</code> Setup Files, ProcessOrchestrationBackend Tests, Utility Helpers, & GitHub Actions Workflows</p>
+  <span class="badge">Architecture & Migration Blueprint</span>
+</header>
+
+<main>
+
+  <section>
+    <h2>1. Executive Summary</h2>
+    <p>This plan defines the technical strategy to update the Playwright E2E automation framework to seamlessly support <strong>both Azure APIM Gateway and Gravitee Gateway</strong>. By introducing a clean parameterization model driven by a <code>GATEWAY_TYPE</code> parameter (<code>AZURE</code> vs <code>GRAVITEE</code>) and <code>REALM_KEY</code> (e.g. <code>cbpf-test23</code>), the framework can execute backend and UI tests against either gateway without code modifications in test specs.</p>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="n">2</div>
+        <div class="l">Supported Gateways</div>
+      </div>
+      <div class="card">
+        <div class="n">REALM_KEY</div>
+        <div class="l">Subdomain Dynamic Binding (e.g. cbpf-test23)</div>
+      </div>
+      <div class="card">
+        <div class="n">100%</div>
+        <div class="l">Backwards Compatibility</div>
+      </div>
+      <div class="card">
+        <div class="n">5</div>
+        <div class="l">Core Suites Refactored</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Implementation Status (Review Update)</h2>
+    <p>Review of the current <code>playwright-e2e</code> codebase confirms the core dual-gateway plumbing is <strong>already implemented and merged</strong>. Remaining work is functional hardening for Gravitee route coverage, environment coupling, and fail-fast safety. Legend: <span class="tag t-done">DONE</span> <span class="tag t-partial">PARTIAL</span> <span class="tag t-todo">TODO</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GATEWAY_TYPE</code> / <code>REALM_KEY</code> parsing &amp; Gravitee URL construction</td>
+          <td><code>configs/setup.js</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Builds <code>API_BASE_URL</code>, <code>AUTH_URL</code>, <code>LUMINATE_PORTAL_URL</code>; overrides <code>CLIENT_ID</code>/<code>CLIENT_SECRET</code> from <code>GRAVITEE_*</code>. QA default realm <code>cbpf-qa23</code>, else <code>cbpf-test23</code>.</td>
+        </tr>
+        <tr>
+          <td><code>getBearerToken()</code> gateway-aware token request</td>
+          <td><code>util/api.util.ts</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Skips <code>?realmId=</code> and <code>scope</code> for Gravitee; keeps Azure behavior. Token redaction honored.</td>
+        </tr>
+        <tr>
+          <td>Specs consume <code>process.env.API_BASE_URL</code> + env path segments</td>
+          <td><code>tests/ProcessOrchestrationBackend/**</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Audit found <strong>zero hardcoded gateway URLs</strong> in backend specs — no per-spec changes required.</td>
+        </tr>
+        <tr>
+          <td>Workflow inputs <code>gateway-type</code> / <code>realm-key</code> + secrets wiring</td>
+          <td><code>playwright-po-backend-suite.yaml</code>, <code>playwright-po-backend-sharded-suite.yaml</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Inputs, <code>env</code> exports, and <code>GRAVITEE_CLIENT_ID/SECRET</code> secrets are wired into every test step.</td>
+        </tr>
+        <tr>
+          <td>Reporting metadata (Gateway / RealmKey in Allure)</td>
+          <td><code>configs/playwright.config.ts</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Allure environment captures active gateway + realm for traceability.</td>
+        </tr>
+        <tr>
+          <td>URL_MODE is gateway-independent (OLD default valid for both gateways)</td>
+          <td><code>configs/setup.js</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>Existing <code>useOldUrls</code> logic already handles both gateways; Gravitee runs with <code>URL_MODE=OLD</code>. No coercion. See Phase 1.</td>
+        </tr>
+        <tr>
+          <td>Endpoint routes gateway-independent (only base URL changes)</td>
+          <td><code>configs/setup.js</code></td>
+          <td><span class="tag t-done">DONE</span></td>
+          <td>All endpoints are relative paths appended to <code>API_BASE_URL</code>; only the base URL differs for Gravitee. No per-endpoint override needed. See Phase 2.</td>
+        </tr>
+        <tr>
+          <td>Fail-fast validation for Gravitee (missing creds / realm)</td>
+          <td><code>configs/setup.js</code></td>
+          <td><span class="tag t-todo">TODO</span></td>
+          <td>Silent fallback today. See Phase 3.</td>
+        </tr>
+        <tr>
+          <td>QA + Gravitee realm-key coupling in workflows</td>
+          <td>Workflow <code>env</code> blocks</td>
+          <td><span class="tag t-partial">PARTIAL</span></td>
+          <td>Workflow injects <code>cbpf-test23</code> unconditionally, overriding QA default <code>cbpf-qa23</code>. See Phase 3.</td>
+        </tr>
+        <tr>
+          <td>Token lifetime / refresh under Gravitee</td>
+          <td><code>util/api.util.ts</code> + specs</td>
+          <td><span class="tag t-todo">TODO</span></td>
+          <td>Known mid-suite token expiry (Migration suite). See Phase 4.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>3. Gateway Architectural Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th>Azure APIM Gateway <span class="tag t-azure">AZURE</span></th>
+          <th>Gravitee Gateway <span class="tag t-gravitee">GRAVITEE</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Gateway Input Flag</strong></td>
+          <td><code>GATEWAY_TYPE=AZURE</code> (Default)</td>
+          <td><code>GATEWAY_TYPE=GRAVITEE</code></td>
+        </tr>
+        <tr>
+          <td><strong>Realm Identifier</strong></td>
+          <td>Uses <code>REALM_NAME</code> & <code>REALM_ID</code></td>
+          <td>Uses <code>REALM_KEY</code> (e.g. <code>cbpf-test23</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>API Base URL Pattern</strong></td>
+          <td><code>https://api-tst.jdadelivers.com/</code></td>
+          <td><code>https://{realmKey}.api.interop.na.blueyonder.dev/</code></td>
+        </tr>
+        <tr>
+          <td><strong>OAuth Token Endpoint</strong></td>
+          <td><code>https://blueyonderinteroptestus.b2clogin.com/.../token?realmId={realmId}</code></td>
+          <td><code>https://{realmKey}.auth.interop.na.blueyonder.dev/oauth/token</code></td>
+        </tr>
+        <tr>
+          <td><strong>Portal Login URL</strong></td>
+          <td><code>https://bylumuiportalpltna.azureedge.net/</code></td>
+          <td><code>https://{realmKey}.portal.interop.na.blueyonder.dev/</code></td>
+        </tr>
+        <tr>
+          <td><strong>OAuth Request Body</strong></td>
+          <td><code>grant_type=client_credentials</code><br><code>client_id={id}</code><br><code>client_secret={secret}</code><br><code>scope={scope}</code></td>
+          <td><code>grant_type=client_credentials</code><br><code>client_id={id}</code><br><code>client_secret={secret}</code></td>
+        </tr>
+        <tr>
+          <td><strong>URL Query Parameters</strong></td>
+          <td>Requires <code>?realmId={realmId}</code> query string</td>
+          <td>No <code>realmId</code> query string required</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>4. Token Request Comparison (cURL Specifications)</h2>
+    
+    <h3>Azure APIM Bearer Token Request</h3>
+    <pre>curl -X POST 'https://blueyonderinteroptestus.b2clogin.com/blueyonderinteroptestus.onmicrosoft.com/B2C_1A_ClientCredential/oauth2/v2.0/token?realmId=b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'grant_type=client_credentials' \
+-d 'client_id=bcaa9b9c-d391-4d24-9c37-e3822cd45d8a' \
+-d 'client_secret=&lt;client-secret&gt;' \
+-d 'scope=https://blueyonderinteroptestus.onmicrosoft.com/6ad21424-b4b2-462e-80df-252ec22dd6a9/.default'</pre>
+
+    <h3>Gravitee Bearer Token Request (using REALM_KEY = cbpf-test23)</h3>
+    <pre>curl -X POST 'https://cbpf-test23.auth.interop.na.blueyonder.dev/oauth/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'grant_type=client_credentials' \
+-d 'client_id=035d89a2-53b1-4f59-b7e9-22c9933b44e0' \
+-d 'client_secret=&lt;My-generated-client-secret&gt;'</pre>
+  </section>
+
+  <section>
+    <h2>5. Step-by-Step Implementation Strategy (Baseline — Delivered)</h2>
+    <p>The four steps below form the delivered baseline and are retained for reference. Each is now marked with its verified status against the codebase.</p>
+
+    <div class="step-box status-done">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <div class="step-title">Enhance Environment Setup Configuration (<code>configs/setup.js</code>) <span class="tag t-done">DONE</span></div>
+      </div>
+      <p>Add <code>GATEWAY_TYPE</code> and <code>REALM_KEY</code> processing. When <code>GATEWAY_TYPE === 'GRAVITEE'</code>, dynamically construct Base URL, Auth URL, and Portal URL based on active <code>REALM_KEY</code> (e.g. <code>cbpf-test23</code>).</p>
+      <pre>const gatewayType = (process.env.GATEWAY_TYPE || 'AZURE').toUpperCase();
+process.env.GATEWAY_TYPE = gatewayType;
+
+if (gatewayType === 'GRAVITEE') {
+  const realmKey = process.env.REALM_KEY || 'cbpf-test23';
+  const domainSuffix = process.env.GRAVITEE_DOMAIN_SUFFIX || 'interop.na.blueyonder.dev';
+  
+  process.env.API_BASE_URL = process.env.GRAVITEE_API_BASE_URL || `https://${realmKey}.api.${domainSuffix}/`;
+  process.env.AUTH_URL = process.env.GRAVITEE_AUTH_URL || `https://${realmKey}.auth.${domainSuffix}/oauth/token`;
+  process.env.LUMINATE_PORTAL_URL = process.env.GRAVITEE_PORTAL_URL || `https://${realmKey}.portal.${domainSuffix}/`;
+}</pre>
+    </div>
+
+    <div class="step-box status-done">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <div class="step-title">Update API Utility Helper (<code>util/api.util.ts</code>) <span class="tag t-done">DONE</span></div>
+      </div>
+      <p>Refactor <code>getBearerToken()</code> to handle token requests targeting Gravitee's <code>https://${realmKey}.auth.interop.na.blueyonder.dev/oauth/token</code> endpoint.</p>
+      <pre>public async getBearerToken(
+  authUrl: string = process.env.AUTH_URL as string,
+  clientId: string = process.env.CLIENT_ID as string,
+  clientSecret: string = process.env.CLIENT_SECRET as string,
+  scope: string = process.env.SCOPE as string,
+  realmId: string = process.env.REALM_ID as string
+): Promise&lt;string&gt; {
+  const isGravitee = (process.env.GATEWAY_TYPE || 'AZURE').toUpperCase() === 'GRAVITEE';
+  
+  const url = isGravitee ? authUrl : `${authUrl}?realmId=${realmId}`;
+  
+  const params: Record&lt;string, string&gt; = {
+    grant_type: "client_credentials",
+    client_id: clientId,
+    client_secret: clientSecret,
+  };
+  
+  if (!isGravitee &amp;&amp; scope) {
+    params.scope = scope;
+  }
+
+  const requestData = new URLSearchParams(params);
+  const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+
+  const response = await this.processAPIRequest("POST", url, requestData, headers, "Fetching Bearer Token");
+  return response.access_token;
+}</pre>
+    </div>
+
+    <div class="step-box status-partial">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <div class="step-title">ProcessOrchestrationBackend Test Suite Audits <span class="tag t-partial">STRUCTURALLY DONE</span></div>
+      </div>
+      <p>Audit confirms specs in <code>Calendar</code>, <code>ActionItem</code>, <code>LinkManagement</code>, <code>ProcessBatch</code>, and <code>Migration</code> already build every request from <code>process.env.API_BASE_URL</code> + centralized env path segments and call the parameterized <code>apiUtil.getBearerToken()</code> — <strong>no hardcoded gateway URLs remain</strong>. Residual work is route-mapping verification (Phase 1 &amp; 2), not spec edits.</p>
+    </div>
+
+    <div class="step-box status-done">
+      <div class="step-header">
+        <div class="step-number">4</div>
+        <div class="step-title">Update GitHub Actions Workflow (<code>playwright-po-backend-suite.yaml</code>) <span class="tag t-done">DONE</span></div>
+      </div>
+      <p>Delivered in both <code>playwright-po-backend-suite.yaml</code> and <code>playwright-po-backend-sharded-suite.yaml</code>. Inputs, <code>env</code> exports, and <code>GRAVITEE_CLIENT_ID</code>/<code>GRAVITEE_CLIENT_SECRET</code> secrets are propagated to every test step.</p>
+      <pre>workflow_dispatch:
+  inputs:
+    gateway-type:
+      description: 'Choose Gateway (AZURE or GRAVITEE)'
+      required: false
+      default: 'AZURE'
+      type: choice
+      options:
+        - AZURE
+        - GRAVITEE
+    realm-key:
+      description: 'Realm Key for Gravitee (e.g. cbpf-test23)'
+      required: false
+      default: 'cbpf-test23'
+      type: string
+
+env:
+  GATEWAY_TYPE: ${{ github.event.inputs['gateway-type'] || 'AZURE' }}
+  REALM_KEY: ${{ github.event.inputs['realm-key'] || 'cbpf-test23' }}</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Gap Analysis &amp; Phased Enhancement Plan</h2>
+    <p>The baseline enables Gravitee token acquisition and base-URL routing. The following phases close functional and safety gaps discovered during review. Phases are ordered by risk/impact and can be delivered as independent branches.</p>
+
+    <div class="step-box status-done">
+      <div class="step-header">
+        <div class="step-number">P1</div>
+        <div class="step-title">Phase 1 — Confirm <code>URL_MODE</code> is gateway-independent <span class="tag t-done">CLARIFIED — NO CODE CHANGE</span></div>
+      </div>
+      <p><strong>Clarification:</strong> <code>URL_MODE</code> and <code>GATEWAY_TYPE</code> are <strong>orthogonal axes</strong>. <code>URL_MODE=OLD</code> (the default) is the correct and expected mode for <em>both</em> Azure and Gravitee — Gravitee serves the same <code>cbp/{env}/ibp/...</code> OLD-style route shape behind its own base URL. <code>URL_MODE=NEW</code> (<code>po/api/v1/...</code>, <code>ai/api/v1/...</code>, <code>lm/api/v1/...</code>) is a separate migration axis that <em>also</em> applies to both gateways. There is therefore <strong>no coupling and no coercion required</strong>: any of the four combinations (<code>AZURE+OLD</code>, <code>AZURE+NEW</code>, <code>GRAVITEE+OLD</code>, <code>GRAVITEE+NEW</code>) is valid.</p>
+      <table>
+        <thead><tr><th>GATEWAY_TYPE</th><th>URL_MODE</th><th>Resolved Calendar path</th><th>Valid?</th></tr></thead>
+        <tbody>
+          <tr><td>AZURE</td><td>OLD (default)</td><td><code>cbp/interop/ibp/process-orchestration/v1/calendar</code></td><td><span class="tag t-done">YES</span></td></tr>
+          <tr><td>AZURE</td><td>NEW</td><td><code>po/api/v1/calendar</code></td><td><span class="tag t-done">YES</span></td></tr>
+          <tr><td>GRAVITEE</td><td>OLD (default)</td><td><code>cbp/interop/ibp/process-orchestration/v1/calendar</code></td><td><span class="tag t-done">YES</span></td></tr>
+          <tr><td>GRAVITEE</td><td>NEW</td><td><code>po/api/v1/calendar</code></td><td><span class="tag t-done">YES</span></td></tr>
+        </tbody>
+      </table>
+      <p><strong>Action:</strong> No <code>setup.js</code> change is needed for URL mode — the existing <code>useOldUrls</code> logic already handles both gateways. Do <strong>not</strong> force <code>URL_MODE=NEW</code> for Gravitee. This phase is documentation-only; it exists to prevent the incorrect assumption that Gravitee mandates NEW routes.</p>
+      <p><strong>Acceptance:</strong> <code>GATEWAY_TYPE=GRAVITEE</code> with the default <code>URL_MODE=OLD</code> resolves against <code>cbp/{env}/ibp/...</code> routes and runs successfully.</p>
+    </div>
+
+
+    <div class="step-box status-done">
+      <div class="step-header">
+        <div class="step-number">P2</div>
+        <div class="step-title">Phase 2 — Endpoint routes are gateway-independent (only base URL changes) <span class="tag t-done">CLARIFIED — NO CODE CHANGE</span></div>
+      </div>
+      <p><strong>Clarification:</strong> Every endpoint (including ALM, IAM, foundation-bff, MaaS, simulation, assumptions, and feature-toggle) is a <strong>relative path appended to <code>process.env.API_BASE_URL</code></strong>. Gravitee changes <em>only</em> the base URL (<code>https://{realmKey}.api.interop.na.blueyonder.dev/</code>); all relative path segments are identical to Azure. Because the base URL swap already routes those same paths through the Gravitee gateway, <strong>no per-endpoint mapping or override is required</strong>.</p>
+      <table>
+        <thead><tr><th>Component</th><th>Azure</th><th>Gravitee</th></tr></thead>
+        <tbody>
+          <tr><td>Base URL</td><td><code>https://api-tst.jdadelivers.com/</code></td><td><code>https://{realmKey}.api.interop.na.blueyonder.dev/</code></td></tr>
+          <tr><td>Relative path (ALM / IAM / BFF / MaaS / assumptions / feature-toggle / PO / AI / LM)</td><td colspan="2" style="text-align:center;"><strong>Identical</strong> — unchanged by gateway</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Action:</strong> None. The existing <code>API_BASE_URL + &lt;env path segment&gt;</code> composition in every spec already works for Gravitee. Do not add gateway-specific endpoint overrides.</p>
+      <p><strong>Acceptance:</strong> A Gravitee run exercising an ALM/IAM/BFF endpoint resolves against the Gravitee base URL with the same relative path used for Azure.</p>
+    </div>
+
+    <div class="step-box status-todo">
+      <div class="step-header">
+        <div class="step-number">P3</div>
+        <div class="step-title">Phase 3 — Fail-fast validation &amp; QA realm coupling <span class="tag t-partial">MEDIUM</span></div>
+      </div>
+      <p><strong>Gap A (validation):</strong> Selecting Gravitee with missing <code>GRAVITEE_CLIENT_ID</code>/<code>GRAVITEE_CLIENT_SECRET</code> silently falls back to Azure credentials and produces confusing 401s.</p>
+      <pre>if (gatewayType === 'GRAVITEE') {
+  const missing = ['GRAVITEE_CLIENT_ID', 'GRAVITEE_CLIENT_SECRET']
+    .filter((k) => !process.env[k]);
+  if (missing.length) {
+    throw new Error(`[setup] GATEWAY_TYPE=GRAVITEE requires: ${missing.join(', ')}`);
+  }
+}</pre>
+      <p><strong>Gap B (QA realm):</strong> Both workflows inject <code>REALM_KEY: 'cbpf-test23'</code> unconditionally, overriding the setup default of <code>cbpf-qa23</code> for QA. On the scheduled QA run this points Gravitee at the wrong realm.</p>
+      <pre>REALM_KEY: ${{ github.event.inputs['realm-key']
+  || (env.TEST_ENV == 'QA' &amp;&amp; 'cbpf-qa23' || 'cbpf-test23') }}</pre>
+      <p>Alternatively, only inject <code>REALM_KEY</code> when the caller supplies it, and let <code>setup.js</code> derive the environment-correct default.</p>
+      <p><strong>Acceptance:</strong> Gravitee run without secrets fails immediately with a clear message; scheduled QA Gravitee run resolves <code>cbpf-qa23</code>.</p>
+    </div>
+
+    <div class="step-box status-todo">
+      <div class="step-header">
+        <div class="step-number">P4</div>
+        <div class="step-title">Phase 4 — Token lifetime resilience <span class="tag t-partial">MEDIUM</span></div>
+      </div>
+      <p><strong>Gap:</strong> Long suites (notably Migration) fetch the bearer token once in <code>beforeAll</code>; Gravitee token TTL may differ from Azure, causing cascading 401s mid-run (already observed on Azure).</p>
+      <p><strong>Fix:</strong> Add a lightweight cached-token helper in <code>api.util.ts</code> that re-fetches when the token is near expiry (decode <code>exp</code> or track issue time), and have suites call <code>getAuthHeaders()</code> per test rather than caching a single header set.</p>
+      <pre>private tokenCache?: { token: string; expiresAt: number };
+
+public async getValidToken(): Promise&lt;string&gt; {
+  const skewMs = 60_000; // refresh 60s before expiry
+  if (this.tokenCache &amp;&amp; Date.now() &lt; this.tokenCache.expiresAt - skewMs) {
+    return this.tokenCache.token;
+  }
+  const token = await this.getBearerToken();
+  const ttlMs = 15 * 60_000; // conservative default; override from expires_in if returned
+  this.tokenCache = { token, expiresAt: Date.now() + ttlMs };
+  return token;
+}</pre>
+      <p><strong>Acceptance:</strong> Full Migration batch completes without token-expiry 401s on both gateways.</p>
+    </div>
+
+    <div class="step-box status-partial">
+      <div class="step-header">
+        <div class="step-number">P5</div>
+        <div class="step-title">Phase 5 — Scope, docs &amp; regression guardrails <span class="tag t-partial">LOW</span></div>
+      </div>
+      <ul class="check">
+        <li class="todo"><strong>UI scope:</strong> Gravitee overrides <code>LUMINATE_PORTAL_URL</code>, which also affects UI suites. Confirm portal login works under Gravitee, or restrict Gravitee to backend suites and document it.</li>
+        <li class="todo"><strong>Regression matrix:</strong> Add a CI job that runs a Gravitee smoke batch (Calendar + one spec per family) on a schedule so Azure/Gravitee parity is continuously verified.</li>
+        <li class="todo"><strong>README:</strong> Document <code>GATEWAY_TYPE</code>/<code>REALM_KEY</code>/<code>GRAVITEE_*</code> variables and local run commands in <code>playwright-e2e/README.md</code>.</li>
+        <li class="done"><strong>Reporting:</strong> Gateway + RealmKey already surfaced in Allure environment metadata.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>7. Verification &amp; Test Execution Strategy</h2>
+    <p>To verify the migration, execute the test suite against both gateways locally and in CI:</p>
+    <pre># Run Calendar CRUD test on Azure APIM Gateway
+$env:GATEWAY_TYPE="AZURE"; npx playwright test tests/ProcessOrchestrationBackend/Calendar/Test_001_CalendarsCRUD.spec.ts
+
+# Run Calendar CRUD test on Gravitee Gateway with Realm Key
+$env:GATEWAY_TYPE="GRAVITEE"; $env:REALM_KEY="cbpf-test23"; npx playwright test tests/ProcessOrchestrationBackend/Calendar/Test_001_CalendarsCRUD.spec.ts</pre>
+    <p>Recommended verification sequence once Phase 3 lands:</p>
+    <ul class="check">
+      <li class="done">Azure baseline (default) — full PO Backend suite unchanged, proving backwards compatibility.</li>
+      <li class="todo">Gravitee smoke — one spec per family (Calendar, ActionItem, LinkManagement, ProcessBatch, Migration) to validate route mapping.</li>
+      <li class="todo">Gravitee negative — run with missing <code>GRAVITEE_*</code> secrets to confirm fail-fast.</li>
+      <li class="todo">Gravitee QA — scheduled QA run resolves <code>cbpf-qa23</code> with the default <code>URL_MODE=OLD</code> routes.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>8. Risk &amp; Security Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Risk</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Secrets handling</td>
+          <td>Gravitee client secret must never be committed. Local <code>playwright-e2e/.env</code> holds real values.</td>
+          <td><code>.env</code> is git-ignored (verified). CI reads <code>GRAVITEE_CLIENT_ID/SECRET</code> from GitHub secrets. Rotate any secret that was ever shared in chat/docs. Bearer-token redaction (<code>REDACT_BEARER_TOKEN</code>) is on by default.</td>
+        </tr>
+        <tr>
+          <td>Route drift</td>
+          <td>Gravitee gateway may not expose a specific relative path served by Azure.</td>
+          <td>All relative paths are identical across gateways (only the base URL changes); a Gravitee smoke job per family catches any gateway-side routing regression.</td>
+        </tr>
+        <tr>
+          <td>Silent misconfiguration</td>
+          <td>Wrong gateway/realm produces confusing 401/404 rather than a clear failure.</td>
+          <td>Phase 3 fail-fast validation and setup logging of the active gateway/realm.</td>
+        </tr>
+        <tr>
+          <td>Token expiry</td>
+          <td>Cascading 401s on long suites if Gravitee TTL is shorter than Azure.</td>
+          <td>Phase 4 cached-token refresh helper.</td>
+        </tr>
+        <tr>
+          <td>Backwards compatibility</td>
+          <td>Existing Azure runs must be unaffected.</td>
+          <td><code>GATEWAY_TYPE</code> defaults to <code>AZURE</code>; all Gravitee logic is behind the flag. Azure baseline is the regression gate.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>9. Definition of Done</h2>
+    <ul class="check">
+      <li class="done">Phase 1 URL_MODE independence confirmed; Gravitee runs with default <code>URL_MODE=OLD</code> (no coercion, documentation-only).</li>
+      <li class="done">Phase 2 confirmed: endpoint routes are gateway-independent (only base URL changes); no per-endpoint mapping required.</li>
+      <li class="todo">Phase 3 fail-fast validation + QA realm-key coupling fixed in both workflows.</li>
+      <li class="todo">Phase 4 token-refresh helper in place; Migration batch runs clean on both gateways.</li>
+      <li class="todo">Gravitee smoke job added to CI and green; Azure baseline still green.</li>
+      <li class="todo"><code>playwright-e2e/README.md</code> documents the gateway variables and run commands.</li>
+      <li class="todo">No TypeScript errors; changed files, commands, and results reported.</li>
+    </ul>
+  </section>
+
+</main>
+</body>
+</html>

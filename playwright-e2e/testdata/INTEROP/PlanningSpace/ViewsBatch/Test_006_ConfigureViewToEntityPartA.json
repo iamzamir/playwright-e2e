@@ -1,0 +1,34 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "MAP_VIEWS_TO_PROCESS": "string[] (required)",
+    "MAP_VIEWS_TO_SUBPROCESS": "string[] (required)",
+    "MAP_VIEWS_TO_ASSUMPTION": "string[] (required)",
+    "EXPECTED_VIEWS_IN_PS": "string[] (required)",
+    "PROCESS_CONTEXT": "object (required)",
+    "SUB_PROCESS_CONTEXT": "object (required)",
+    "ASSUMPTION_RISK_CONTEXT": "object (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "MAP_VIEWS_TO_PROCESS": ["Automation Process View1", "Automation Sub Process View1", "Automation Assumption View 1"],
+  "MAP_VIEWS_TO_SUBPROCESS": ["Automation Process View1", "Automation Sub Process View1", "Automation Assumption View 1"],
+  "MAP_VIEWS_TO_ASSUMPTION": ["Automation Process View1", "Automation Sub Process View1", "Automation Assumption View 1"],
+  "EXPECTED_VIEWS_IN_PS": ["Automation Process View1", "Automation Sub Process View1", "Automation Assumption View 1"],
+  "PROCESS_CONTEXT": {
+    "PROCESS_NAME": "ProcessVerifyViewMapping"
+  },
+  "SUB_PROCESS_CONTEXT": {
+    "PROCESS_NAME": "ProcessVerifyViewMapping",
+    "SUB_PROCESS_NAME": "Demand Review"
+  },
+  "ASSUMPTION_RISK_CONTEXT": {
+    "ORIGIN": "ProcessVerifyViewMapping",
+    "ASSUMPTION": "PS Assumption Risk",
+    "ASSUMPTION_TYPE": "Risk"
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

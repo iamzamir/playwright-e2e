@@ -1,0 +1,28 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PROCESS_NAME_NO_VIEWS_MAPPED": "string (required)",
+    "SUB_PROCESS_NAME_NO_VIEWS_MAPPED": "string (required)",
+    "ADMIN_USER": "string (required)",
+    "PLANNER_USER": "string (required)",
+    "ADMIN_USER_TITLE_TEXT": "string (required)",
+    "ADMIN_USER_ACTION_LINKS": "object (required)",
+    "PLANNER_USER_TITLE_TEXT": "string (required)",
+    "PLANNER_USER_ACTION_BUTTON": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "Fault Tolerance with No Base Scenario",
+  "PROCESS_NAME_NO_VIEWS_MAPPED": "Fault Tolerance with Scenario and No Views",
+  "SUB_PROCESS_NAME_NO_VIEWS_MAPPED": "Demand Review",
+  "ADMIN_USER": "PSAutomation1@jdadelivers.com",
+  "PLANNER_USER": "PSAutomation2@jdadelivers.com",
+  "ADMIN_USER_TITLE_TEXT": "Waiting for baseline scenario",
+  "ADMIN_USER_ACTION_LINKS": {
+    "OPTION_NAME_1": "API Catalog",
+    "OPTION_NAME_2": "SNA",
+    "OPTION_NAME_3": "Process Settings"
+  },
+  "PLANNER_USER_TITLE_TEXT": "Preparing planning data",
+  "PLANNER_USER_ACTION_BUTTON": "Go to Process List"
+}

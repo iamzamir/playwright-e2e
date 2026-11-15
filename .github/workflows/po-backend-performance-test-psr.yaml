@@ -1,0 +1,715 @@
+name: po-backend-performance-test-psr
+
+permissions:
+  contents: read
+
+on:
+  # schedule:
+  #   - cron: "30 18 * * 3"  # Run every Thursday at 12:00 AM IST (Wednesday 6:30 PM UTC)
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-prod-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'PSR'
+        type: choice
+        options:
+          - 'PSR'
+          - 'INTEROP'
+      branch:
+        description: 'Branch to check out for the JMeter plan. Leave empty to use the branch this workflow was dispatched from.'
+        required: false
+        default: ''
+        type: string
+      test_name:
+        description: 'Test plan to run. PSRGatewayTest uses gateway_type; *Gravitee* plans always use Gravitee; all others use Azure.'
+        required: true
+        default: 'PSRSmokeAPITest'
+        type: choice
+        options:
+          - 'PSRWorkflowTest'
+          - 'PSRTest'
+          - 'PSRGraviteeTest'
+          - 'PSRGatewayTest'
+          - 'PerfTestInterop'
+          - 'PSRSmokeAPITest'
+      gateway_type:
+        description: 'Gateway for PSRGatewayTest (ignored for *Gravitee* plans and other Azure-only plans)'
+        required: false
+        default: 'AZURE'
+        type: choice
+        options:
+          - 'AZURE'
+          - 'GRAVITEE'
+      realm_key:
+        description: 'Gravitee realm key (ignored for Azure plans)'
+        required: false
+        default: 'popspsr-psr'
+        type: string
+      gravitee_domain_suffix:
+        description: 'Gravitee domain suffix (ignored for Azure plans)'
+        required: false
+        default: 'psr.na.blueyonder.dev'
+        type: string
+      thread_count:
+        description: 'Number of threads for load test'
+        required: true
+        default: '1'
+        type: string
+      iterations:
+        description: 'Number of iterations for load test'
+        required: true
+        default: '25'
+        type: string
+
+env:
+  JMETER_VERSION: "5.6.3"
+
+jobs:
+  run-performance-test:
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    timeout-minutes: 120
+    
+    outputs:
+      test_status: ${{ steps.parse-results.outputs.test_status }}
+      status_color: ${{ steps.parse-results.outputs.status_color }}
+      total_samples: ${{ steps.parse-results.outputs.total_samples }}
+      failed_samples: ${{ steps.parse-results.outputs.failed_samples }}
+      success_rate: ${{ steps.parse-results.outputs.success_rate }}
+      avg_response_time: ${{ steps.parse-results.outputs.avg_response_time }}
+      gateway_type: ${{ steps.resolve-secret.outputs.gateway_type }}
+      cpu_model: ${{ steps.system-info.outputs.cpu_model }}
+      cpu_cores: ${{ steps.system-info.outputs.cpu_cores }}
+      total_ram_gb: ${{ steps.system-info.outputs.total_ram_gb }}
+    
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || github.ref_name }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+          fetch-depth: 1
+
+      - name: Setup Java 11
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Download and Setup JMeter
+        run: |
+          # Download and extract JMeter
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${{ env.JMETER_VERSION }}.tgz
+          tar -xzf apache-jmeter-${{ env.JMETER_VERSION }}.tgz
+          sudo mv apache-jmeter-${{ env.JMETER_VERSION }} /opt/jmeter
+          sudo chmod +x /opt/jmeter/bin/jmeter
+          echo "/opt/jmeter/bin" >> $GITHUB_PATH
+          
+          # Install BlazeMeter Parallel Controller plugin (required for PSRTest.jmx)
+          echo "Installing BlazeMeter Parallel Controller plugin..."
+          
+          # Create required directories
+          sudo mkdir -p /opt/jmeter/lib/ext
+          
+          # Install required plugin jars directly from Maven Central.
+          # This avoids PluginManager failures caused by legacy HTTP transitive links.
+          cd /opt/jmeter/lib/ext
+          sudo curl --retry 3 --retry-delay 2 --retry-connrefused -fL -o jmeter-parallel-0.12.jar "https://repo.maven.apache.org/maven2/com/blazemeter/jmeter-parallel/0.12/jmeter-parallel-0.12.jar"
+          sudo curl --retry 3 --retry-delay 2 --retry-connrefused -fL -o jmeter-plugins-cmn-jmeter-0.8.jar "https://repo.maven.apache.org/maven2/kg/apc/jmeter-plugins-cmn-jmeter/0.8/jmeter-plugins-cmn-jmeter-0.8.jar"
+          sudo curl --retry 3 --retry-delay 2 --retry-connrefused -fL -o jmeter-plugins-charts-0.1.jar "https://repo.maven.apache.org/maven2/kg/apc/jmeter-plugins-charts/0.1/jmeter-plugins-charts-0.1.jar"
+
+          # Verify required jars exist before continuing
+          test -f /opt/jmeter/lib/ext/jmeter-parallel-0.12.jar
+          test -f /opt/jmeter/lib/ext/jmeter-plugins-cmn-jmeter-0.8.jar
+          test -f /opt/jmeter/lib/ext/jmeter-plugins-charts-0.1.jar
+          
+          # Set proper permissions
+          sudo chmod 644 /opt/jmeter/lib/ext/*.jar
+          
+          # Verify installation
+          echo "Verifying BlazeMeter plugin installation..."
+          ls -la /opt/jmeter/lib/ext/ | grep -E "(parallel|cmn|charts)" || echo "No required plugins found"
+          
+          # Test that JMeter can start with plugins
+          echo "Testing JMeter startup with plugins..."
+          timeout 10 jmeter -v || echo "JMeter version check completed"
+
+      - name: Verify JMeter Installation
+        run: |
+          jmeter --version
+          ls -la /opt/jmeter/bin/
+
+      - name: System and Network Diagnostics
+        id: system-info
+        run: |
+          echo "==================== SYSTEM DIAGNOSTICS ===================="
+          
+          # CPU Information
+          echo "🖥️  PROCESSOR INFORMATION:"
+          echo "CPU Model: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)"
+          echo "CPU Cores: $(nproc --all)"
+          echo "CPU Threads: $(grep 'processor' /proc/cpuinfo | wc -l)"
+          echo "CPU Architecture: $(uname -m)"
+          echo "CPU MHz: $(grep 'cpu MHz' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)"
+          echo ""
+          
+          # Memory Information
+          echo "💾 MEMORY (RAM) INFORMATION:"
+          TOTAL_RAM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+          TOTAL_RAM_GB=$(awk -v mem="$TOTAL_RAM_KB" 'BEGIN {printf "%.2f", mem/1024/1024}')
+          AVAILABLE_RAM_KB=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+          AVAILABLE_RAM_GB=$(awk -v mem="$AVAILABLE_RAM_KB" 'BEGIN {printf "%.2f", mem/1024/1024}')
+          
+          echo "Total Physical Memory: ${TOTAL_RAM_GB} GB"
+          echo "Available Memory: ${AVAILABLE_RAM_GB} GB"
+          echo "Memory Usage: $(free -h | grep '^Mem:' | awk '{print $3}') used of $(free -h | grep '^Mem:' | awk '{print $2}')"
+          echo ""
+          
+          # Disk Information
+          echo "💿 DISK SPACE:"
+          df -h / | tail -1 | awk '{printf "Root Disk: %s used of %s (%s utilization)\n", $3, $2, $5}'
+          echo ""
+          
+          # Network Interface Information
+          echo "🌐 NETWORK INTERFACES:"
+          ip addr show | grep -E '^[0-9]+:|inet ' | sed 's/^[[:space:]]*/  /'
+          echo ""
+          
+          echo ""
+          echo "🖥️  GITHUB RUNNER INFORMATION:"
+          echo "Runner OS: $(uname -s)"
+          echo "Kernel: $(uname -r)"
+          echo "Hostname: $(hostname)"
+          echo "Uptime: $(uptime -p 2>/dev/null || uptime | awk '{print $3,$4}' | sed 's/,//')"
+          echo ""
+          
+          # Set outputs for use in other steps
+          echo "total_ram_gb=$TOTAL_RAM_GB" >> $GITHUB_OUTPUT
+          echo "cpu_model=$(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | xargs)" >> $GITHUB_OUTPUT
+          echo "cpu_cores=$(nproc --all)" >> $GITHUB_OUTPUT
+          
+          echo "=========================================================="
+
+
+      - name: Prepare Test Data
+        run: |
+          echo "Preparing CSV test data..."
+          ls -la jmeter/Testdata/
+          # Ensure LinksData.csv exists
+          if [ ! -f "jmeter/Testdata/LinksData.csv" ]; then
+            echo "LinksData.csv not found, creating sample data..."
+            echo "link_id,link_name,link_url" > jmeter/Testdata/LinksData.csv
+            echo "1,Sample Link 1,https://example.com/link1" >> jmeter/Testdata/LinksData.csv
+            echo "2,Sample Link 2,https://example.com/link2" >> jmeter/Testdata/LinksData.csv
+          fi
+
+      - name: Create Results Directory
+        run: |
+          mkdir -p jmeter/results
+          mkdir -p jmeter/reports
+
+      - name: Resolve Gateway
+        id: resolve-secret
+        shell: bash
+        env:
+          TEST_NAME: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}
+          GATEWAY_TYPE_INPUT: ${{ github.event.inputs.gateway_type || 'AZURE' }}
+          GRAVITEE_CLIENT_ID: ${{ secrets.PSR_GRAVITEE_CLIENT_ID }}
+          GRAVITEE_CLIENT_SECRET: ${{ secrets.PSR_GRAVITEE_CLIENT_SECRET }}
+        run: |
+          # *Gravitee* plans always use Gravitee. PSRGatewayTest uses gateway_type.
+          # All other plans stay on Azure.
+          case "$TEST_NAME" in
+            *Gravitee*) GATEWAY_TYPE="GRAVITEE" ;;
+            PSRGatewayTest) GATEWAY_TYPE="$GATEWAY_TYPE_INPUT" ;;
+            *) GATEWAY_TYPE="AZURE" ;;
+          esac
+          echo "GATEWAY_TYPE=$GATEWAY_TYPE" >> "$GITHUB_ENV"
+          echo "gateway_type=$GATEWAY_TYPE" >> "$GITHUB_OUTPUT"
+          echo "Selected plan '$TEST_NAME' resolves to gateway '$GATEWAY_TYPE'."
+
+          if [ "$GATEWAY_TYPE" = "GRAVITEE" ] && { [ -z "$GRAVITEE_CLIENT_ID" ] || [ -z "$GRAVITEE_CLIENT_SECRET" ]; }; then
+            echo "::error::Plan '$TEST_NAME' targets Gravitee but PSR_GRAVITEE_CLIENT_ID / PSR_GRAVITEE_CLIENT_SECRET repository secrets are not configured."
+            exit 1
+          fi
+
+      - name: Run PSR Links Performance Test
+        id: run-test
+        shell: bash
+        env:
+          THREAD_COUNT: ${{ github.event.inputs.thread_count || '1' }}
+          ITERATIONS: ${{ github.event.inputs.iterations || '25' }}
+          TEST_NAME: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}
+          ENVIRONMENT_NAME: ${{ github.event.inputs.environment || 'PSR' }}
+          REALM_KEY: ${{ github.event.inputs.realm_key || 'popspsr-psr' }}
+          GRAVITEE_DOMAIN_SUFFIX: ${{ github.event.inputs.gravitee_domain_suffix || 'psr.na.blueyonder.dev' }}
+          GRAVITEE_CLIENT_ID: ${{ secrets.PSR_GRAVITEE_CLIENT_ID }}
+          GRAVITEE_CLIENT_SECRET: ${{ secrets.PSR_GRAVITEE_CLIENT_SECRET }}
+          AZURE_IOP_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+          AZURE_PSR_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_PSR_CBP_PSR_PO_PS_01 }}
+        run: |
+          # JMeter does not expand nested variables, so compose Gravitee hosts here.
+          GRAVITEE_API_HOST="$REALM_KEY.api.$GRAVITEE_DOMAIN_SUFFIX"
+          GRAVITEE_AUTH_HOST="$REALM_KEY.auth.$GRAVITEE_DOMAIN_SUFFIX"
+
+          if [ "$GATEWAY_TYPE" = "GRAVITEE" ]; then
+            CLIENT_ID="$GRAVITEE_CLIENT_ID"
+            CLIENT_SECRET="$GRAVITEE_CLIENT_SECRET"
+            API_HOST="$GRAVITEE_API_HOST"
+            AUTH_HOST="$GRAVITEE_AUTH_HOST"
+          elif [ "$TEST_NAME" = "PSRGatewayTest" ]; then
+            # Empty -JCLIENT_ID would override the Azure UDV default in PSRGatewayTest.jmx.
+            CLIENT_ID="4b075cd1-c1e2-4ab2-bef0-77ead8310484"
+            CLIENT_SECRET="$AZURE_PSR_CLIENT_SECRET"
+            API_HOST="api-psrtest.jdadelivers.com"
+            AUTH_HOST="blueyonderpsrtestus.b2clogin.com"
+          elif [ "$TEST_NAME" = "PerfTestInterop" ]; then
+            CLIENT_ID=""
+            CLIENT_SECRET="$AZURE_IOP_CLIENT_SECRET"
+            API_HOST="$GRAVITEE_API_HOST"
+            AUTH_HOST="$GRAVITEE_AUTH_HOST"
+          else
+            CLIENT_ID=""
+            CLIENT_SECRET="$AZURE_PSR_CLIENT_SECRET"
+            API_HOST="$GRAVITEE_API_HOST"
+            AUTH_HOST="$GRAVITEE_AUTH_HOST"
+          fi
+
+          echo "Gateway: $GATEWAY_TYPE"
+          echo "Hosts: api=$API_HOST auth=$AUTH_HOST"
+
+          cd jmeter
+          if [ ! -f "Tests/$TEST_NAME.jmx" ]; then
+            echo "::error::Test plan Tests/$TEST_NAME.jmx was not found after checkout. Set the branch input to the branch that contains this plan (or leave it empty to use the dispatch branch)."
+            ls -la Tests/ || true
+            exit 1
+          fi
+
+          jmeter -n -t "Tests/$TEST_NAME.jmx" \
+            -l "results/$TEST_NAME-results.jtl" \
+            -e -o "reports/$TEST_NAME-report" \
+            -JGATEWAY_TYPE="$GATEWAY_TYPE" \
+            -JCLIENT_ID="$CLIENT_ID" \
+            -JCLIENT_SECRET="$CLIENT_SECRET" \
+            -JAPI_HOST="$API_HOST" \
+            -JAUTH_HOST="$AUTH_HOST" \
+            -Jenvironment="$ENVIRONMENT_NAME" \
+            -JTHREAD_COUNT="$THREAD_COUNT" \
+            -JITERATIONS="$ITERATIONS"
+
+      - name: Upload JTL Results
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: jmeter-results
+          path: jmeter/results/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: jmeter-html-report
+          path: jmeter/reports/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Parse Test Results
+        id: parse-results
+        run: |
+          cd jmeter/results
+          RESULT_FILE="${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}-results.jtl"
+          
+          if [ -f "$RESULT_FILE" ]; then
+            # Extract basic metrics from JTL file
+            TOTAL_SAMPLES=$(tail -n +2 "$RESULT_FILE" | wc -l)
+            FAILED_SAMPLES=$(tail -n +2 "$RESULT_FILE" | awk -F',' '$8=="false" {count++} END {print count+0}')
+            SUCCESS_RATE=$(awk -v total="$TOTAL_SAMPLES" -v failed="$FAILED_SAMPLES" 'BEGIN {printf "%.2f", ((total - failed) * 100) / total}')
+            
+            # Calculate average response time
+            AVG_RESPONSE_TIME=$(tail -n +2 "$RESULT_FILE" | awk -F',' '{sum+=$2; count++} END {printf "%.0f", sum/count}')
+            
+            echo "total_samples=$TOTAL_SAMPLES" >> $GITHUB_OUTPUT
+            echo "failed_samples=$FAILED_SAMPLES" >> $GITHUB_OUTPUT
+            echo "success_rate=$SUCCESS_RATE" >> $GITHUB_OUTPUT
+            echo "avg_response_time=$AVG_RESPONSE_TIME" >> $GITHUB_OUTPUT
+            
+            # Determine overall status
+            if (( $(awk -v rate="$SUCCESS_RATE" 'BEGIN {print (rate >= 95)}') )); then
+              echo "test_status=PASSED" >> $GITHUB_OUTPUT
+              echo "status_color=good" >> $GITHUB_OUTPUT
+            elif (( $(awk -v rate="$SUCCESS_RATE" 'BEGIN {print (rate >= 90)}') )); then
+              echo "test_status=WARNING" >> $GITHUB_OUTPUT
+              echo "status_color=warning" >> $GITHUB_OUTPUT
+            else
+              echo "test_status=FAILED" >> $GITHUB_OUTPUT
+              echo "status_color=danger" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "Results file not found: $RESULT_FILE"
+            echo "test_status=ERROR" >> $GITHUB_OUTPUT
+            echo "status_color=danger" >> $GITHUB_OUTPUT
+            echo "total_samples=0" >> $GITHUB_OUTPUT
+            echo "failed_samples=0" >> $GITHUB_OUTPUT
+            echo "success_rate=0" >> $GITHUB_OUTPUT
+            echo "avg_response_time=0" >> $GITHUB_OUTPUT
+          fi
+
+  publish-report:
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: run-performance-test
+    if: always()
+    outputs:
+      gh-pages-pushed: ${{ steps.deploy-pages.outcome }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Download HTML Report
+        id: download-report
+        if: needs.run-performance-test.result == 'success'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: jmeter-html-report
+          path: jmeter-reports
+
+      - name: Prepare GitHub Pages Report
+        if: steps.download-report.outcome == 'success'
+        run: |
+          # Create the directory structure first
+          mkdir -p gh-pages/PSRPerformanceReports/${{ github.run_number }}
+          
+          # Copy the report files (use dynamic test name)
+          REPORT_DIR="${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}-report"
+          cp -r jmeter-reports/$REPORT_DIR/* gh-pages/PSRPerformanceReports/${{ github.run_number }}/
+
+          # Keep only the latest 7 numbered report folders; delete older ones.
+          ( cd gh-pages/PSRPerformanceReports && ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf )
+
+          # Create or update index.html with all available reports
+          cat > gh-pages/PSRPerformanceReports/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>PSR Performance Test Reports</title>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                  body { 
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                      margin: 0; 
+                      padding: 20px; 
+                      background-color: #f5f5f5;
+                      line-height: 1.6;
+                  }
+                  .container {
+                      max-width: 1200px;
+                      margin: 0 auto;
+                      background: white;
+                      padding: 30px;
+                      border-radius: 10px;
+                      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                  }
+                  h1 { 
+                      color: #333; 
+                      border-bottom: 3px solid #007acc;
+                      padding-bottom: 10px;
+                      margin-bottom: 30px;
+                  }
+                  .report-list {
+                      display: grid;
+                      gap: 15px;
+                  }
+                  .report-link { 
+                      display: block; 
+                      padding: 20px; 
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      color: white;
+                      text-decoration: none; 
+                      border-radius: 8px;
+                      transition: transform 0.2s, box-shadow 0.2s;
+                      border: none;
+                  }
+                  .report-link:hover { 
+                      transform: translateY(-2px);
+                      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                      color: white;
+                  }
+                  .report-title {
+                      font-size: 1.2em;
+                      font-weight: 600;
+                      margin-bottom: 5px;
+                  }
+                  .timestamp { 
+                      color: rgba(255,255,255,0.8); 
+                      font-size: 0.9em; 
+                  }
+                  .latest-badge {
+                      display: inline-block;
+                      background: #28a745;
+                      color: white;
+                      padding: 3px 8px;
+                      border-radius: 12px;
+                      font-size: 0.8em;
+                      margin-left: 10px;
+                  }
+                  .footer {
+                      margin-top: 30px;
+                      text-align: center;
+                      color: #666;
+                      font-size: 0.9em;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>🚀 PSR Performance Test Reports</h1>
+                  <div class="report-list">
+          EOF
+          
+          # Add the current report
+          cat >> gh-pages/PSRPerformanceReports/index.html << EOF
+                      <a href="${{ github.run_number }}/" class="report-link">
+                          <div class="report-title">
+                              ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }} Performance Test - Run #${{ github.run_number }}
+                              <span class="latest-badge">Latest</span>
+                          </div>
+                          <div class="timestamp">Generated: $(date '+%Y-%m-%d %H:%M:%S UTC')</div>
+                          <div class="timestamp">Test: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }} | Gateway: ${{ needs.run-performance-test.outputs.gateway_type || github.event.inputs.gateway_type || 'AZURE' }} | Environment: ${{ github.event.inputs.environment || 'PSR' }} | Threads: ${{ github.event.inputs.thread_count || '1' }} | Iterations: ${{ github.event.inputs.iterations || '25' }}</div>
+                      </a>
+          EOF
+          
+          # List other existing reports (if any)
+          if [ -d "gh-pages/PSRPerformanceReports" ]; then
+              for dir in gh-pages/PSRPerformanceReports/*/; do
+                  if [ -d "$dir" ] && [ "$(basename "$dir")" != "${{ github.run_number }}" ]; then
+                      run_num=$(basename "$dir")
+                      if [ -f "$dir/index.html" ]; then
+                          cat >> gh-pages/PSRPerformanceReports/index.html << EOF
+                      <a href="$run_num/" class="report-link" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">
+                          <div class="report-title">Performance Test Report - Run #$run_num</div>
+                          <div class="timestamp">Previous Report</div>
+                      </a>
+          EOF
+                      fi
+                  fi
+              done
+          fi
+          
+          # Close the HTML
+          cat >> gh-pages/PSRPerformanceReports/index.html << 'EOF'
+                  </div>
+                  <div class="footer">
+                      <p>📊 Automated Performance Testing | 🔄 Updated automatically via GitHub Actions</p>
+                      <p>🔗 <a href="https://github.com/BY-Product-Development/plan-sop-ui-automation">View Source Repository</a></p>
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy Report to GitHub Pages
+        id: deploy-pages
+        if: steps.download-report.outcome == 'success'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        continue-on-error: true
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: gh-pages
+          keep_files: false
+          force_orphan: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy performance test report #${{ github.run_number }}'
+
+      - name: Upload Report as Artifact (Fallback)
+        if: steps.download-report.outcome == 'success' && steps.deploy-pages.outcome == 'failure'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: performance-report-html
+          path: gh-pages/PSRPerformanceReports/${{ github.run_number }}/
+          retention-days: 30
+
+      - name: Publish Run Summary
+        if: always()
+        run: |
+          cat <<EOF >> "$GITHUB_STEP_SUMMARY"
+          # ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }} Performance Test Report - ${{ github.event.inputs.environment || 'PSR' }}
+
+          ## Notification Summary
+
+          - Title: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }} Performance Test Results
+          - Summary: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }} Test Run #${{ github.run_number }}: ${{ needs.run-performance-test.outputs.test_status || 'COMPLETED' }}
+          - Theme Color: ${{ needs.run-performance-test.outputs.status_color || 'good' }}
+
+          ## System Information
+
+          - Processor: ${{ needs.run-performance-test.outputs.cpu_model || 'N/A' }}
+          - CPU Cores: ${{ needs.run-performance-test.outputs.cpu_cores || 'N/A' }}
+          - Physical Memory: ${{ needs.run-performance-test.outputs.total_ram_gb || 'N/A' }} GB
+
+          ## Test Configuration
+
+          - Test Name: ${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}
+          - Gateway: ${{ needs.run-performance-test.outputs.gateway_type || github.event.inputs.gateway_type || 'AZURE' }}
+          - Environment: ${{ github.event.inputs.environment || 'PSR' }}
+          - Threads: ${{ github.event.inputs.thread_count || '1' }}
+          - Iterations: ${{ github.event.inputs.iterations || '25' }}
+          - Run Number: #${{ github.run_number }}
+
+          ## Test Results
+
+          - Total Samples: ${{ needs.run-performance-test.outputs.total_samples || 'N/A' }}
+          - Failed Samples: ${{ needs.run-performance-test.outputs.failed_samples || 'N/A' }}
+          - Success Rate: ${{ needs.run-performance-test.outputs.success_rate || 'N/A' }}%
+          - Avg Response Time: ${{ needs.run-performance-test.outputs.avg_response_time || 'N/A' }}ms
+          - Status: ${{ needs.run-performance-test.outputs.test_status || 'COMPLETED' }}
+
+          ## Reports
+
+          ${{ steps.deploy-pages.outcome == 'success' && format('- Detailed Performance Report: https://supreme-adventure-mr9k94p.pages.github.io/PSRPerformanceReports/{0}', github.run_number) || '- Detailed Performance Report: Report available as workflow artifact' }}
+          ${{ steps.deploy-pages.outcome == 'success' && '- All Performance Reports: https://supreme-adventure-mr9k94p.pages.github.io/PSRPerformanceReports' || '' }}
+
+          ## Workflow
+
+          - GitHub Actions Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSRPerformanceReports/${{ github.run_number }}
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TEAMS_WEBHOOK_URL)) {
+            Write-Host "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          }
+
+          $testName = "${{ github.event.inputs.test_name || 'PSRSmokeAPITest' }}"
+          $environment = "${{ github.event.inputs.environment || 'PSR' }}"
+          $title = "$testName Performance Test Results - $environment"
+          $summary = "$testName Test Run #${{ github.run_number }}: ${{ needs.run-performance-test.outputs.test_status || 'COMPLETED' }}"
+          $details = "Total Samples: ${{ needs.run-performance-test.outputs.total_samples || 'N/A' }} | Failed: ${{ needs.run-performance-test.outputs.failed_samples || 'N/A' }} | Success Rate: ${{ needs.run-performance-test.outputs.success_rate || 'N/A' }}% | Avg Response: ${{ needs.run-performance-test.outputs.avg_response_time || 'N/A' }}ms"
+
+          function Send-TeamsPayload {
+            param(
+              [string]$JsonBody
+            )
+
+            $invokeWebRequestParams = @{
+              Method = 'Post'
+              Uri = $env:TEAMS_WEBHOOK_URL
+              Body = $JsonBody
+              ContentType = 'application/json'
+              SkipHttpErrorCheck = $true
+            }
+            $response = Invoke-WebRequest @invokeWebRequestParams
+
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+              return $true
+            }
+
+            Write-Host "Teams webhook returned status: $($response.StatusCode)"
+            return $false
+          }
+
+          # Teams Workflows webhooks only render an Adaptive Card envelope. Simpler payloads
+          # return 202 (accepted) but post nothing, so send the Adaptive Card directly.
+          $adaptivePayload = @{
+            type = 'message'
+            attachments = @(
+              @{
+                contentType = 'application/vnd.microsoft.card.adaptive'
+                content = @{
+                  '$schema' = 'http://adaptivecards.io/schemas/adaptive-card.json'
+                  type = 'AdaptiveCard'
+                  version = '1.4'
+                  body = @(
+                    @{
+                      type = 'TextBlock'
+                      size = 'Medium'
+                      weight = 'Bolder'
+                      text = $title
+                      wrap = $true
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $summary
+                      wrap = $true
+                      spacing = 'Small'
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $details
+                      wrap = $true
+                      spacing = 'Small'
+                    }
+                  )
+                  actions = @(
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Performance Report'
+                      url = $env:REPORT_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Workflow Run'
+                      url = $env:WORKFLOW_URL
+                    }
+                  )
+                }
+              }
+            )
+          } | ConvertTo-Json -Depth 20
+
+          if (Send-TeamsPayload -JsonBody $adaptivePayload) {
+            Write-Host "Teams notification sent using Adaptive Card payload format."
+            exit 0
+          }
+
+          Write-Host "Unable to send Teams notification with available payload formats."
+          exit 0
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: publish-report
+    if: always() && needs.publish-report.result == 'success' && needs.publish-report.outputs.gh-pages-pushed == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit

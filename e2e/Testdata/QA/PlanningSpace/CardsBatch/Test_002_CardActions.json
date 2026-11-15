@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Card Actions",
+    "CONFIG_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/qa/maas/config/v1",
+    "CONTROLLER_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/qa/maas/controller/v1",
+    "CALC_ENGINE_ID": "41177914-0731-4122-afb6-435f30106ea9"
+}

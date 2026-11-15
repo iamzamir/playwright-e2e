@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "SECOND_USER": "PS Automation2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Live Blocks Test",
+    "CARD_NAME": "Maas Pivot",
+    "CARD_TYPE": "PivotCard",
+    "CELL_VALUE_1": "200",
+    "CELL_VALUE_2": "1,000"
+}

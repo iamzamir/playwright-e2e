@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Link Management Service &mdash; API Automation Coverage Gap Report</title>
+<style>
+  :root{
+    --ink:#16202c; --muted:#5b6b7c; --line:#d8e0e8; --bg:#ffffff; --soft:#f4f7fa;
+    --p0:#b3001b; --p1:#c2560a; --p2:#0b6b8f; --p3:#5b6b7c;
+    --sev-crit:#b3001b; --sev-high:#d4610a; --sev-med:#b58900; --sev-low:#3d7a4b;
+    --ok:#1f7a4d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg); margin:0; padding:0 32px 64px;
+    font-size:12.5px; line-height:1.5;
+  }
+  header.cover{
+    border-bottom:4px solid var(--ink); padding:36px 0 20px; margin-bottom:24px;
+  }
+  header.cover h1{font-size:26px; margin:0 0 6px;}
+  header.cover .sub{font-size:14px; color:var(--muted); margin:0 0 14px;}
+  .meta{display:flex; flex-wrap:wrap; gap:10px 34px; font-size:11.5px; color:var(--muted);}
+  .meta b{color:var(--ink); font-weight:600;}
+  h2{
+    font-size:17px; margin:34px 0 10px; padding-bottom:6px;
+    border-bottom:2px solid var(--line); page-break-after:avoid;
+  }
+  h3{font-size:13.5px; margin:20px 0 8px; page-break-after:avoid;}
+  h4{font-size:12px; margin:14px 0 6px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+  p{margin:8px 0;}
+  table{border-collapse:collapse; width:100%; margin:10px 0 16px; font-size:11.5px;}
+  th,td{border:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top;}
+  th{background:var(--soft); font-weight:600;}
+  tbody tr:nth-child(even){background:#fbfcfd;}
+  code,pre{font-family:Consolas,"Courier New",monospace;}
+  code{background:var(--soft); padding:1px 4px; border-radius:3px; font-size:11px;}
+  pre{
+    background:#0f1720; color:#e6edf3; padding:10px 12px; border-radius:5px;
+    overflow-x:auto; font-size:10.5px; line-height:1.45; margin:6px 0 10px;
+    white-space:pre-wrap; word-break:break-word;
+  }
+  pre .k{color:#79c0ff;} pre .s{color:#a5d6ff;} pre .n{color:#f0883e;}
+  .pill{
+    display:inline-block; padding:1px 7px; border-radius:10px; font-size:10px;
+    font-weight:700; color:#fff; letter-spacing:.03em; white-space:nowrap;
+  }
+  .p0{background:var(--p0);} .p1{background:var(--p1);} .p2{background:var(--p2);} .p3{background:var(--p3);}
+  .sc{background:var(--sev-crit);} .sh{background:var(--sev-high);} .sm{background:var(--sev-med);} .sl{background:var(--sev-low);}
+  .ok{color:var(--ok); font-weight:600;}
+  .no{color:var(--p0); font-weight:600;}
+  .cards{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0 4px;}
+  .card{
+    flex:1 1 150px; border:1px solid var(--line); border-radius:6px;
+    padding:12px 14px; background:var(--soft);
+  }
+  .card .v{font-size:24px; font-weight:700; line-height:1.1;}
+  .card .l{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-top:4px;}
+  .gap{
+    border:1px solid var(--line); border-left:4px solid var(--p1); border-radius:5px;
+    padding:12px 14px; margin:14px 0; page-break-inside:avoid;
+  }
+  .gap.prio0{border-left-color:var(--p0);}
+  .gap.prio1{border-left-color:var(--p1);}
+  .gap.prio2{border-left-color:var(--p2);}
+  .gap.prio3{border-left-color:var(--p3);}
+  .gap h3{margin-top:0; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .gap .ep{font-family:Consolas,monospace; font-size:12px;}
+  .kv{display:flex; flex-wrap:wrap; gap:6px 20px; font-size:11px; color:var(--muted); margin:2px 0 8px;}
+  .kv b{color:var(--ink);}
+  .note{
+    background:#fff8e1; border:1px solid #ffe08a; border-radius:5px;
+    padding:9px 12px; font-size:11.5px; margin:12px 0;
+  }
+  .cols2{display:flex; gap:14px; flex-wrap:wrap;}
+  .cols2>div{flex:1 1 320px; min-width:280px;}
+  footer{margin-top:40px; padding-top:12px; border-top:1px solid var(--line); font-size:10.5px; color:var(--muted);}
+  @media print{
+    body{padding:0 10mm 10mm; font-size:10.5px;}
+    h2{page-break-after:avoid;}
+    table, .gap, .cards{page-break-inside:avoid;}
+    pre{white-space:pre-wrap;}
+    @page{size:A4; margin:14mm 10mm;}
+  }
+.upd-b{display:inline-block;margin:3px 3px 0 0;padding:0 6px;border-radius:8px;font:600 9.5px/1.7 "Segoe UI",Arial,sans-serif;color:#fff;white-space:nowrap;letter-spacing:0;text-transform:none}.upd-ok{background:#1a7f45}.upd-po{background:#5a6876}.upd-setup{background:#8a6d00}.upd-gone{background:#7a2e8a}.upd-dep{background:#6b7785}.upd-banner{border:1px solid #1a7f45;border-left:5px solid #1a7f45;background:#f1faf4;padding:10px 14px;margin:16px 0;border-radius:6px;font-size:12px;line-height:1.5}.upd-banner ul{margin:6px 0 0 18px;padding:0}.upd-old{color:#8a96a3;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <h1>Link Management Service &mdash; API Automation Coverage Gap Report</h1>
+  <p class="sub">Uncovered endpoints, risk rating, effort estimate and proposed test-case backlog</p>
+  <div class="meta">
+    <span><b>Service repo:</b> plan-sop-link-management @ a81f252f (2026-09-24)</span>
+    <span><b>Automation repo:</b> plan-sop-ui-automation</span>
+    <span><b>Automation scope reviewed:</b> playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement (Test_001 &ndash; Test_014) + Migration suites</span>
+    <span><b>API base path:</b> <code>{{API_BASE_URL}}/cbp/interop/ibp/links/v1</code></span>
+    <span><b>Evidence:</b> 2026-10-04 nightly runs on INTEROP and QA, Azure and Gravitee</span>
+    <span><b>Report date:</b> 31 Aug 2026 &middot; <b>Updated:</b> 05 Oct 2026</span>
+  </div>
+</header>
+
+<div class="upd-banner">
+  <b>Update 05-Oct-2026.</b> Coverage was re-measured from the service source and the request logs of the four nightly backend runs.
+  <ul>
+    <li><b>21 of 30</b> active endpoints (70%) are now exercised in a test, up from 13 (43% of active). <code>Test_012</code> (lm-search/v2), <code>Test_013</code> (favourites) and <code>Test_014</code> (global preset), added 2026-10-01, closed G-01 and G-11&ndash;G-16; <code>Migration/Test_008</code> and <code>Test_009</code> closed G-02.</li>
+    <li>G-18 is resolved: <code>GET /ops/db/state</code> is served by <code>OperationsAPI</code> in plan-sop-po-be-commons for every service, so it is out of scope here.</li>
+    <li><code>/exportData</code>, <code>/importData</code> and <code>POST /entity</code> run only indirectly, when PO calls LM during migration or process creation. Since SM-33313 (2026-09-24) the export carries reason codes for entity-view-procedure rows; no test asserts them.</li>
+    <li>Every endpoint row carries a status badge: <span class="upd-b upd-ok">&#10003; Covered</span>, <span class="upd-b upd-po">Via PO only</span> or <span class="upd-b upd-dep">@Deprecated</span>. Rows without a badge are still open. Suite names proposed in sections 5&ndash;6 (<code>Test_011</code>&ndash;<code>Test_019</code>) clash with the specs that now exist; renumber from <code>Test_015</code>.</li>
+    <li>Full endpoint matrix: <a href="link-management-api-coverage-matrix.html">link-management-api-coverage-matrix.html</a> and the <a href="backend-api-coverage-dashboard.html">dashboard</a>. Verified contracts: <a href="PSR-Gap-Plans/02-LinkManagement-PSR-Gap-Plan.md">LM PSR gap plan</a>.</li>
+  </ul>
+</div>
+
+<h2>1. Executive summary</h2>
+
+<div class="cards">
+  <div class="card"><div class="v">38</div><div class="l">Endpoints implemented</div></div>
+  <div class="card"><div class="v ok">21</div><div class="l">Automated today <span class="upd-old">13</span></div></div>
+  <div class="card"><div class="v no">17</div><div class="l">Not automated <span class="upd-old">25</span></div></div>
+  <div class="card"><div class="v">55%</div><div class="l">Overall coverage <span class="upd-old">34%</span></div></div>
+  <div class="card"><div class="v">70%</div><div class="l">Coverage of active (non-deprecated) APIs <span class="upd-old">43%</span></div></div>
+  <div class="card"><div class="v">76 h</div><div class="l">Remaining effort (&asymp;9.5 person-days) <span class="upd-old">113 h</span></div></div>
+</div>
+
+<p>
+The Link Management automation is now both deep and broad on the surfaces the UIs use. Fourteen suites (Test_001 &ndash; Test_014) cover
+view&#8209;to&#8209;entity mapping including <code>lm-search/v2</code>, procedure&#8209;to&#8209;view mapping, preset filters, scope and user favourites,
+with negative, boundary and schema assertions. Every LM route that planning-mfe or lui calls is now exercised. The remaining gaps are the
+<b>view catalogue</b>, the <b>source-entity lifecycle</b>, <b>entity validation / job</b> and the LM-native <b>export / import</b> contract.
+</p>
+
+<p>
+Three gaps still carry the highest business risk and should be closed first:
+<b>POST /importData</b> (no direct proof that an exported tenant can be re-hydrated, now including SM-33313 reason codes),
+<b>DELETE /entity/{id}</b> (a cascading delete with no regression net), and
+<b>POST /validate</b> + <b>GET /job/validation/{task_id}</b> (the asynchronous ALM validation contract; <code>Migration/Test_007</code> targets the ALM platform API, not these routes).
+</p>
+
+<div class="note">
+<b>Spec-vs-implementation drift found during review (resolved 05-Oct-2026).</b>
+<code>GET /ops/db/state</code> is published in <code>links-oas-spec.yaml</code> and is served by the shared
+<code>OperationsAPI</code> controller in plan-sop-po-be-commons, not by a controller in this repo. <b>G-18</b> is closed as out of scope.
+</div>
+
+<h2>2. What is already covered (updated 05-Oct-2026)</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:6%">#</th><th style="width:9%">Method</th><th style="width:38%">Path</th><th style="width:24%">Controller</th><th>Covering suite(s)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>C-01</td><td>POST</td><td><code>/entity-view-procedure-map</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_004, LinkManagement/Test_005, LinkManagement/Test_006, LinkManagement/Test_007">&#10003; Covered &middot; LinkManagement/Test_004, LinkManagement/Test_005 +2</span></td><td>EntityViewProcedureMapController</td><td>LinkManagement/Test_004_EntityViewProcedureMappingWithSingleViewForProcess, LinkManagement/Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess, LinkManagement/Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess, LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess</td></tr>
+    <tr><td>C-02</td><td>POST</td><td><code>/entity-view-procedure-map/search</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_004, LinkManagement/Test_005, LinkManagement/Test_006, LinkManagement/Test_007">&#10003; Covered &middot; LinkManagement/Test_004, LinkManagement/Test_005 +2</span></td><td>EntityViewProcedureMapController</td><td>LinkManagement/Test_004_EntityViewProcedureMappingWithSingleViewForProcess, LinkManagement/Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess, LinkManagement/Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess, LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess</td></tr>
+    <tr><td>C-03</td><td>DELETE</td><td><code>/entity-view-procedure-map/type/{entityType}/entity/{entityId}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_008, Migration/Test_009">&#10003; Covered &middot; Migration/Test_008, Migration/Test_009</span></td><td>EntityViewProcedureMapController</td><td>Migration/Test_008_EntityViewProcedureMappingMigration, Migration/Test_009_ALMDeployResourceMigration</td></tr>
+    <tr><td>C-04</td><td>GET</td><td><code>/entity/{entityId}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-05</td><td>POST</td><td><code>/entity/{entityId}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-06</td><td>DELETE</td><td><code>/entity/{entityId}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-07</td><td>POST</td><td><code>/preset</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_009, LinkManagement/Test_011, LinkManagement/Test_014">&#10003; Covered &middot; LinkManagement/Test_009, LinkManagement/Test_011 +1</span></td><td>FilterPresetController</td><td>LinkManagement/Test_009_PresetFilterManagement, LinkManagement/Test_011_AdminFilterManagement, LinkManagement/Test_014_GlobalPresetFilter</td></tr>
+    <tr><td>C-08</td><td>POST</td><td><code>/preset/clear</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_009, LinkManagement/Test_011, LinkManagement/Test_014">&#10003; Covered &middot; LinkManagement/Test_009, LinkManagement/Test_011 +1</span></td><td>FilterPresetController</td><td>LinkManagement/Test_009_PresetFilterManagement, LinkManagement/Test_011_AdminFilterManagement, LinkManagement/Test_014_GlobalPresetFilter</td></tr>
+    <tr><td>C-09</td><td>GET</td><td><code>/scope</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_010">&#10003; Covered &middot; LinkManagement/Test_010</span></td><td>ScopeController</td><td>LinkManagement/Test_010_ScopeMapping</td></tr>
+    <tr><td>C-10</td><td>PATCH</td><td><code>/scope</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_010">&#10003; Covered &middot; LinkManagement/Test_010</span></td><td>ScopeController</td><td>LinkManagement/Test_010_ScopeMapping</td></tr>
+    <tr><td>C-11</td><td>PUT</td><td><code>/scope</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_010, LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_010, LinkManagement/Test_012</span></td><td>ScopeController</td><td>LinkManagement/Test_010_ScopeMapping, LinkManagement/Test_012_LmSearchV2ActorsAndProcedures</td></tr>
+    <tr><td>C-12</td><td>POST</td><td><code>/search-preset</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_009, LinkManagement/Test_011, LinkManagement/Test_014">&#10003; Covered &middot; LinkManagement/Test_009, LinkManagement/Test_011 +1</span></td><td>FilterPresetController</td><td>LinkManagement/Test_009_PresetFilterManagement, LinkManagement/Test_011_AdminFilterManagement, LinkManagement/Test_014_GlobalPresetFilter</td></tr>
+    <tr><td>C-13</td><td>GET</td><td><code>/type/{type}/entity/{entity}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-14</td><td>POST</td><td><code>/type/{type}/entity/{entity}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-15</td><td>DELETE</td><td><code>/type/{type}/entity/{entity}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>LinksController</td><td>LinkManagement/Test_013_UserFavouriteViews</td></tr>
+    <tr><td>C-16</td><td>POST</td><td><code>/view-entity-map</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, Migration/Test_006">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +2</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_001_EntityViewMappingForProcess, LinkManagement/Test_002_EntityViewMappingForSubprocess, LinkManagement/Test_003_EntityViewMappingForAssumption, Migration/Test_006_EntityViewMappingMigration</td></tr>
+    <tr><td>C-17</td><td>POST</td><td><code>/view-entity-map/clear</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, Migration/Test_006, Migration/Test_009">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +3</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_001_EntityViewMappingForProcess, LinkManagement/Test_002_EntityViewMappingForSubprocess, LinkManagement/Test_003_EntityViewMappingForAssumption, Migration/Test_006_EntityViewMappingMigration, Migration/Test_009_ALMDeployResourceMigration</td></tr>
+    <tr><td>C-18</td><td>POST</td><td><code>/view-entity-map/lm-search/v2</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_012</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_012_LmSearchV2ActorsAndProcedures</td></tr>
+    <tr><td>C-19</td><td>POST</td><td><code>/view-entity-map/search</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, LinkManagement/Test_008, LinkManagement/Test_012, Migration/Test_006">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +4</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_001_EntityViewMappingForProcess, LinkManagement/Test_002_EntityViewMappingForSubprocess, LinkManagement/Test_003_EntityViewMappingForAssumption, LinkManagement/Test_008_EntityViewActorsProcedures, LinkManagement/Test_012_LmSearchV2ActorsAndProcedures, Migration/Test_006_EntityViewMappingMigration</td></tr>
+    <tr><td>C-20</td><td>DELETE</td><td><code>/view-entity-map/views/{view}/type/{type}/entity/{entity}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_008, LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_008, LinkManagement/Test_012</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_008_EntityViewActorsProcedures, LinkManagement/Test_012_LmSearchV2ActorsAndProcedures</td></tr>
+    <tr><td>C-21</td><td>PUT</td><td><code>/view-entity-map/views/{view}/type/{type}/entity/{entity}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_008, LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_008, LinkManagement/Test_012</span></td><td>ViewEntityMapController</td><td>LinkManagement/Test_008_EntityViewActorsProcedures, LinkManagement/Test_012_LmSearchV2ActorsAndProcedures</td></tr>
+</tbody>
+</table>
+
+<p class="kv">
+<b>Partial:</b> <code>POST /exportData</code> and <code>POST /importData</code> run when PO <code>/exportData</code> and <code>/importData</code> fan out to LM in
+<code>Migration/Test_003</code>, <code>Test_006</code>, <code>Test_008</code> and <code>Test_009</code>. The Link Management&#8209;native
+export contract (full vs. selective payload shape, <code>entityViewsProcedure</code> block with SM-33313 reason codes, scope round-trip) is <b>not</b>
+asserted. Treated as a gap &mdash; see <b>G-05</b> and <b>G-06</b>. Likewise <code>POST /entity</code> runs when PO creates a process or subprocess (<b>G-09</b>).
+</p>
+
+<h2>3. Gap register</h2>
+
+<p>
+Priority = <b>when</b> to build it. Severity = <b>blast radius if the endpoint silently breaks in production</b>.
+Effort is Playwright API-test build effort for one engineer, inclusive of test data JSON, helper/util changes and one
+green run in INTEROP.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:5%">ID</th><th style="width:7%">Method</th><th style="width:31%">Path</th>
+      <th style="width:16%">Area</th><th style="width:8%">Priority</th><th style="width:8%">Severity</th>
+      <th style="width:7%">Effort</th><th>Proposed suite</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>G-01</td><td>POST</td><td><code>/view-entity-map/lm-search/v2</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_012</span></td><td>View&ndash;entity map</td><td><span class="pill p0">P0</span></td><td><span class="pill sh">High</span></td><td>8 h</td><td>Test_014</td></tr>
+    <tr><td>G-02</td><td>DELETE</td><td><code>/entity-view-procedure-map/type/{entityType}/entity/{entityId}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_008, Migration/Test_009">&#10003; Covered &middot; Migration/Test_008, Migration/Test_009</span></td><td>Procedure map</td><td><span class="pill p0">P0</span></td><td><span class="pill sh">High</span></td><td>6 h</td><td>Test_015</td></tr>
+    <tr><td>G-03</td><td>POST</td><td><code>/validate</code></td><td>Entity validation</td><td><span class="pill p0">P0</span></td><td><span class="pill sc">Critical</span></td><td>12 h</td><td>Test_016</td></tr>
+    <tr><td>G-04</td><td>GET</td><td><code>/job/validation/{task_id}</code></td><td>Entity validation</td><td><span class="pill p0">P0</span></td><td><span class="pill sh">High</span></td><td>6 h</td><td>Test_016</td></tr>
+    <tr><td>G-05</td><td>POST</td><td><code>/importData</code><br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>Export / Import</td><td><span class="pill p0">P0</span></td><td><span class="pill sc">Critical</span></td><td>16 h</td><td>Test_017</td></tr>
+    <tr><td>G-06</td><td>POST</td><td><code>/exportData</code> (LM-native contract)<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>Export / Import</td><td><span class="pill p1">P1</span></td><td><span class="pill sh">High</span></td><td>8 h</td><td>Test_017</td></tr>
+    <tr><td>G-07</td><td>POST</td><td><code>/views</code></td><td>View catalogue</td><td><span class="pill p1">P1</span></td><td><span class="pill sh">High</span></td><td>6 h</td><td>Test_011</td></tr>
+    <tr><td>G-08</td><td>GET</td><td><code>/views</code></td><td>View catalogue</td><td><span class="pill p1">P1</span></td><td><span class="pill sm">Medium</span></td><td>3 h</td><td>Test_011</td></tr>
+    <tr><td>G-09</td><td>POST</td><td><code>/entity</code><br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">Via PO only</span></td><td>Source entity</td><td><span class="pill p1">P1</span></td><td><span class="pill sm">Medium</span></td><td>4 h</td><td>Test_012</td></tr>
+    <tr><td>G-10</td><td>DELETE</td><td><code>/entity/{id}</code></td><td>Source entity</td><td><span class="pill p0">P0</span></td><td><span class="pill sc">Critical</span></td><td>8 h</td><td>Test_012</td></tr>
+    <tr><td>G-11</td><td>GET</td><td><code>/type/{type}/entity/{entity}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites</td><td><span class="pill p1">P1</span></td><td><span class="pill sm">Medium</span></td><td>4 h</td><td>Test_013</td></tr>
+    <tr><td>G-12</td><td>POST</td><td><code>/type/{type}/entity/{entity}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites</td><td><span class="pill p1">P1</span></td><td><span class="pill sm">Medium</span></td><td>4 h</td><td>Test_013</td></tr>
+    <tr><td>G-13</td><td>DELETE</td><td><code>/type/{type}/entity/{entity}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites</td><td><span class="pill p1">P1</span></td><td><span class="pill sm">Medium</span></td><td>3 h</td><td>Test_013</td></tr>
+    <tr><td>G-14</td><td>GET</td><td><code>/entity/{entityId}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites (GLOBAL)</td><td><span class="pill p2">P2</span></td><td><span class="pill sl">Low</span></td><td>3 h</td><td>Test_013</td></tr>
+    <tr><td>G-15</td><td>POST</td><td><code>/entity/{entityId}/views</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites (GLOBAL)</td><td><span class="pill p2">P2</span></td><td><span class="pill sl">Low</span></td><td>3 h</td><td>Test_013</td></tr>
+    <tr><td>G-16</td><td>DELETE</td><td><code>/entity/{entityId}/views/{viewId}</code><br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>User favourites (GLOBAL)</td><td><span class="pill p2">P2</span></td><td><span class="pill sl">Low</span></td><td>2 h</td><td>Test_013</td></tr>
+    <tr><td>G-17</td><td>GET</td><td><code>/tenant</code></td><td>Tenant</td><td><span class="pill p2">P2</span></td><td><span class="pill sm">Medium</span></td><td>3 h</td><td>Test_018</td></tr>
+    <tr><td>G-18</td><td>GET</td><td><code>/ops/db/state</code> <em>(served by plan-sop-po-be-commons)</em><br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>Ops</td><td><span class="pill p2">P2</span></td><td><span class="pill sm">Medium</span></td><td>4 h</td><td>Test_018</td></tr>
+    <tr><td>G-19</td><td>POST/GET/PUT/DELETE<br/><span class="upd-b upd-dep">POST /tenants &middot; @Deprecated</span> <span class="upd-b upd-dep">GET /tenants &middot; @Deprecated</span> <span class="upd-b upd-dep">PUT /tenants &middot; @Deprecated</span> <span class="upd-b upd-dep">DELETE /tenants &middot; @Deprecated</span></td><td><code>/tenants</code>, <code>/tenants/{tenantId}</code> <em>(5 ops, @Deprecated)</em></td><td>Tenant admin</td><td><span class="pill p3">P3</span></td><td><span class="pill sl">Low</span></td><td>6 h</td><td>Test_019</td></tr>
+    <tr><td>G-20</td><td>GET</td><td><code>/users</code>, <code>/users/me</code>, <code>/users/{user_id}</code> <em>(3 ops, @Deprecated)</em><br/><span class="upd-b upd-dep">@Deprecated</span></td><td>User admin</td><td><span class="pill p3">P3</span></td><td><span class="pill sl">Low</span></td><td>4 h</td><td>Test_019</td></tr>
+  </tbody>
+</table>
+
+<h3>Effort roll-up (status 05-Oct-2026)</h3>
+<table>
+  <thead><tr><th>Priority</th><th>Gaps</th><th>Endpoints</th><th>Effort (h)</th><th>Effort (person-days @8h)</th><th>Suggested window</th><th>Status 05-Oct-2026</th></tr></thead>
+  <tbody>
+    <tr><td><span class="pill p0">P0</span></td><td>G-01, G-02, G-03, G-04, G-05, G-10</td><td>6</td><td>56</td><td>7.0</td><td>Sprint N</td><td>G-01, G-02 done. <b>42 h</b> remain (G-03, G-04, G-05, G-10).</td></tr>
+    <tr><td><span class="pill p1">P1</span></td><td>G-06, G-07, G-08, G-09, G-11, G-12, G-13</td><td>7</td><td>32</td><td>4.0</td><td>Sprint N+1</td><td>G-11&ndash;G-13 done. <b>21 h</b> remain (G-06&ndash;G-09).</td></tr>
+    <tr><td><span class="pill p2">P2</span></td><td>G-14, G-15, G-16, G-17, G-18</td><td>5</td><td>15</td><td>1.9</td><td>Sprint N+1</td><td>G-14&ndash;G-16 done, G-18 out of scope. <b>3 h</b> remain (G-17).</td></tr>
+    <tr><td><span class="pill p3">P3</span></td><td>G-19, G-20</td><td>8</td><td>10</td><td>1.3</td><td>Backlog / drop if APIs are retired</td><td>Open (<b>10 h</b>).</td></tr>
+    <tr><th>Total</th><th>20</th><th>26</th><th>113</th><th>14.1</th><th>&asymp;3 engineer-weeks</th><th>10 closed; <b>76 h (&asymp;9.5 person-days)</b> remain</th></tr>
+  </tbody>
+</table>
+
+<h2>4. Gap detail &mdash; payloads and expected responses</h2>
+
+<p>All samples assume <code>Authorization: Bearer &lt;token&gt;</code> and <code>Content-Type: application/json</code>
+unless stated. Paths are relative to <code>{{API_BASE_URL}}/cbp/interop/ibp/links/v1</code>.</p>
+
+<!-- G-01 -->
+<div class="gap prio0">
+  <h3><span class="pill p0">P0</span><span class="pill sh">High</span><span class="ep">POST /view-entity-map/lm-search/v2</span></h3>
+  <div class="kv"><span><b>Gap:</b> G-01</span><span><b>Effort:</b> 8 h</span><span><b>Controller:</b> ViewEntityMapController.getViewsForEntities</span></div>
+  <p><b>Why it matters:</b> This is the batched replacement for <code>/view-entity-map/search</code> and is what the MFE
+  calls when a workspace loads several processes at once. A regression here degrades page load for every planner, yet the
+  only search path under test is the single-entity v1 endpoint. Also the only endpoint with a <code>maxItems: 100</code>
+  cap on the outer <code>requests</code> array &mdash; boundary behaviour is entirely unverified.</p>
+  <div class="cols2">
+    <div>
+      <h4>Sample request</h4>
+<pre>{
+  "requests": [
+    { "entityType": "process",    "entityId": ["APILinkManagementTest"] },
+    { "entityType": "subprocess", "entityId": ["APILinkManagementSubTest1",
+                                              "APILinkManagementSubTest2"] },
+    { "entityType": "assumption", "entityId": ["APILinkManagementAssumption"] }
+  ]
+}</pre>
+    </div>
+    <div>
+      <h4>Expected response &mdash; 200</h4>
+<pre>{
+  "views": [
+    {
+      "entityType": "process",
+      "entityId": "APILinkManagementTest",
+      "views": ["67d80da8f2967ca960ced3af",
+                "67ed381b14186d498984099a"],
+      "quick_filter_enabled": true,
+      "quick_filter_config_id": "qf-cfg-001"
+    },
+    {
+      "entityType": "subprocess",
+      "entityId": "APILinkManagementSubTest1",
+      "views": ["67f0c4876ccd7b90b205229b"],
+      "quick_filter_enabled": false,
+      "quick_filter_config_id": null
+    }
+  ]
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-02 -->
+<div class="gap prio0">
+  <h3><span class="pill p0">P0</span><span class="pill sh">High</span><span class="ep">DELETE /entity-view-procedure-map/type/{entityType}/entity/{entityId}/views/{viewId}</span></h3>
+  <div class="kv"><span><b>Gap:</b> G-02</span><span><b>Effort:</b> 6 h</span><span><b>Controller:</b> EntityViewProcedureMapController.deleteEntityViewProcedureMapping</span></div>
+  <p><b>Why it matters:</b> Test_004 &ldquo;removes all procedures&rdquo; by POSTing an empty <code>procedures</code> array,
+  which leaves a <code>PLANNER_WANTS_NO_PROCEDURES</code> tombstone row. The genuine DELETE endpoint removes the row
+  entirely and should flip the search reason code back to <code>PROCEDURES_NEVER_MAPPED_TO_VIEW</code>. That semantic
+  difference is business-visible and completely untested.</p>
+  <div class="cols2">
+    <div>
+      <h4>Sample request</h4>
+<pre>DELETE /entity-view-procedure-map/type/process
+       /entity/APILinkManagementTest
+       /views/67d80da8f2967ca960ced3af
+
+(no request body)</pre>
+    </div>
+    <div>
+      <h4>Expected response &mdash; 200</h4>
+<pre>"Procedure mapping deleted for entity
+ [APILinkManagementTest] of type [process]
+ and view [67d80da8f2967ca960ced3af]"</pre>
+      <h4>Follow-up search must return</h4>
+<pre>{
+  "entityType": "process",
+  "entityId": "APILinkManagementTest",
+  "viewId": "67d80da8f2967ca960ced3af",
+  "procedures": [],
+  "reason": "PROCEDURES_NEVER_MAPPED_TO_VIEW"
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-03 / G-04 -->
+<div class="gap prio0">
+  <h3><span class="pill p0">P0</span><span class="pill sc">Critical</span><span class="ep">POST /validate</span> &nbsp;+&nbsp; <span class="ep">GET /job/validation/{task_id}</span></h3>
+  <div class="kv"><span><b>Gaps:</b> G-03, G-04</span><span><b>Effort:</b> 12 h + 6 h</span><span><b>Controller:</b> EntityValidationController</span></div>
+  <p><b>Why it matters:</b> <code>Migration/Test_007_LinkManagementALMValidation.spec.ts</code> polls an
+  <em>orchestrator</em> validation endpoint (<code>ALM_VALIDATION</code>) and only asserts that a
+  <code>LINK_MANAGEMENT_SERVICE</code> entry eventually appears. The Link Management service&rsquo;s own
+  <code>/validate</code> contract &mdash; the <code>Source</code> header enum, the <code>entityType</code> query enum,
+  <code>callBack=false</code> synchronous mode, and idempotent job reuse via <code>startOrReturnExistingJob</code> &mdash;
+  has no direct test. A break here silently corrupts ALM validation reporting.</p>
+  <div class="cols2">
+    <div>
+      <h4>Sample request</h4>
+<pre>POST /validate?entityType=PROCESS_SUBPROCESS&amp;callBack=false
+Source: UI
+
+{
+  "taskId": "lm-validate-20260831-001"
+}</pre>
+      <p style="font-size:11px;color:#5b6b7c;margin:2px 0 0">
+      <code>Source</code> &isin; { WORKFLOW, UI, SYSTEM } &middot;
+      <code>entityType</code> &isin; { ASSUMPTIONS, PROCESS_SUBPROCESS, VIEWS, ACTORS, PROCEDURES, ALL }</p>
+    </div>
+    <div>
+      <h4>Expected response &mdash; 200</h4>
+<pre>{
+  "data": {
+    "jobId": "9f6c2d18-4c1e-4b4a-8f0e-1a2b3c4d5e6f",
+    "status": "IN_PROGRESS",
+    "message": "Validation job accepted"
+  },
+  "error": null,
+  "timestamp": "2026-08-31T09:14:22.117Z"
+}</pre>
+      <h4>GET /job/validation/{task_id} &mdash; 200</h4>
+<pre>{
+  "data": {
+    "jobId": "9f6c2d18-4c1e-4b4a-8f0e-1a2b3c4d5e6f",
+    "status": "SUCCESS",
+    "message": "0 orphan mappings found"
+  },
+  "error": null,
+  "timestamp": "2026-08-31T09:14:58.402Z"
+}</pre>
+      <h4>Unknown task id &mdash; 400</h4>
+<pre>{
+  "data": null,
+  "error": { "error": "INVALID_TASK_ID",
+             "message": "No job found for id [bogus]" },
+  "timestamp": "2026-08-31T09:15:03.900Z"
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-05 / G-06 -->
+<div class="gap prio0">
+  <h3><span class="pill p0">P0</span><span class="pill sc">Critical</span><span class="ep">POST /importData</span> &nbsp;+&nbsp; <span class="ep">POST /exportData</span></h3>
+  <div class="kv"><span><b>Gaps:</b> G-05, G-06</span><span><b>Effort:</b> 16 h + 8 h</span><span><b>Controller:</b> ImportExportController</span></div>
+  <p><b>Why it matters:</b> Import is the tenant-onboarding and DR path. There is <b>zero</b> automation on it.
+  <code>ImportExportService</code> also carries a guard flag
+  (<code>isDataExportImportAllowedForSameSourceAndTarget</code>) and batching (<code>batchSize</code>) that nothing
+  exercises. Export is only touched indirectly by a cross-service migration suite, so the LM-native request shape
+  (full <code>[]</code> vs. selective) and the <code>entityViewsProcedure</code> block are unasserted. The pair should be
+  tested as a round trip: export &rarr; wipe &rarr; import &rarr; re-read &rarr; assert byte-for-byte equivalence.</p>
+  <div class="cols2">
+    <div>
+      <h4>POST /exportData &mdash; selective</h4>
+<pre>{
+  "entityViews": [
+    { "type": "subprocess",
+      "entityId": ["APILinkManagementTest"] }
+  ],
+  "entityViewsProcedure": [
+    { "type": "subprocess",
+      "entityId": ["APILinkManagementTest"] }
+  ]
+}</pre>
+      <h4>POST /exportData &mdash; full</h4>
+<pre>{ "entityViews": [], "entityViewsProcedure": [] }</pre>
+    </div>
+    <div>
+      <h4>Export response &mdash; 200 (also the import request body)</h4>
+<pre>{
+  "tenantId": "byd-interop-01",
+  "entityViews": [
+    {
+      "entityTypeMappingId": "subprocess::APILinkManagementTest",
+      "views": [
+        { "id": "67d80da8f2967ca960ced3af", "sequence": 1,
+          "hidden": false, "scopeId": "scope-001" }
+      ]
+    }
+  ],
+  "entityViewsProcedure": [
+    {
+      "id": "67d80da8f2967ca960ced3af",
+      "sequence": 1,
+      "hidden": false,
+      "scopeId": "scope-001",
+      "procedures": [
+        { "procedureName": "DefaultProcedure",
+          "primary": true, "secondary": false, "sequence": 1 }
+      ]
+    }
+  ]
+}</pre>
+      <h4>Import response &mdash; 200</h4>
+<pre>{
+  "entityViews": [
+    { "type": "subprocess", "entityId": "APILinkManagementTest" }
+  ]
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-10 -->
+<div class="gap prio0">
+  <h3><span class="pill p0">P0</span><span class="pill sc">Critical</span><span class="ep">DELETE /entity/{id}</span></h3>
+  <div class="kv"><span><b>Gap:</b> G-10</span><span><b>Effort:</b> 8 h</span><span><b>Controller:</b> SourceEntityController.deleteEntity</span></div>
+  <p><b>Why it matters:</b> Documented as &ldquo;delete a source entity <em>and its related objects</em>&rdquo; &mdash; a
+  cascading delete across view mappings, procedure mappings, presets and scope. An over-broad cascade is a
+  data-loss defect with no automated guard today. The path variable is also constrained
+  (<code>^[a-zA-Z0-9-]+$</code>, max 36) so injection-shaped inputs must be proven to be rejected.</p>
+  <div class="cols2">
+    <div>
+      <h4>Sample request</h4>
+<pre>DELETE /entity/APILM-SourceEntity-001
+
+(no request body)</pre>
+    </div>
+    <div>
+      <h4>Expected response &mdash; 200</h4>
+<pre>"Entity with id [APILM-SourceEntity-001] deleted"</pre>
+      <h4>Invalid id (pattern violation) &mdash; 400</h4>
+<pre>{
+  "error": "VALIDATION_ERROR",
+  "message": "deleteEntity.id: must match \"^[a-zA-Z0-9-]+$\""
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-07 / G-08 -->
+<div class="gap prio1">
+  <h3><span class="pill p1">P1</span><span class="pill sh">High</span><span class="ep">POST /views</span> &nbsp;+&nbsp; <span class="ep">GET /views</span></h3>
+  <div class="kv"><span><b>Gaps:</b> G-07, G-08</span><span><b>Effort:</b> 6 h + 3 h</span><span><b>Controller:</b> LinksController</span></div>
+  <p><b>Why it matters:</b> Every mapping suite hard-codes MongoDB-style view ids (e.g. <code>67d80da8f2967ca960ced3af</code>)
+  that were provisioned by hand. Automating the catalogue endpoints removes that brittle dependency &mdash; suites can
+  create their own views &mdash; and covers the <code>isScopeEnabled</code> flag that drives whether the Scope tab renders
+  at all. <code>maxLength</code> constraints on <code>name</code> (100) and <code>viewId</code>/<code>containerId</code> (36)
+  are unverified.</p>
+  <div class="cols2">
+    <div>
+      <h4>POST /views &mdash; request</h4>
+<pre>{
+  "name": "API Automation View 001",
+  "viewId": "api-auto-view-001",
+  "containerId": "api-auto-container-001",
+  "isActive": true,
+  "isScopeEnabled": true
+}</pre>
+    </div>
+    <div>
+      <h4>POST /views &mdash; 201</h4>
+<pre>{
+  "id": "68f1a2b3c4d5e6f708192a3b",
+  "name": "API Automation View 001",
+  "viewId": "api-auto-view-001",
+  "containerId": "api-auto-container-001",
+  "isActive": true,
+  "isScopeEnabled": true
+}</pre>
+      <h4>GET /views &mdash; 200</h4>
+<pre>{
+  "views": [
+    { "id": "68f1a2b3c4d5e6f708192a3b",
+      "name": "API Automation View 001",
+      "viewId": "api-auto-view-001",
+      "containerId": "api-auto-container-001",
+      "isActive": true, "isScopeEnabled": true }
+  ]
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-09 -->
+<div class="gap prio1">
+  <h3><span class="pill p1">P1</span><span class="pill sm">Medium</span><span class="ep">POST /entity</span></h3>
+  <div class="kv"><span><b>Gap:</b> G-09</span><span><b>Effort:</b> 4 h</span><span><b>Controller:</b> SourceEntityController.createEntity</span></div>
+  <p><b>Why it matters:</b> Creates the source entity that <code>DELETE /entity/{id}</code> later cascades over, so it is a
+  prerequisite fixture for G-10. Also the only place <code>description</code> (max 1000) is validated.</p>
+  <div class="cols2">
+    <div>
+      <h4>Sample request</h4>
+<pre>{
+  "name": "APILM-SourceEntity-001",
+  "description": "Source entity created by API automation",
+  "isActive": true
+}</pre>
+    </div>
+    <div>
+      <h4>Expected response &mdash; 201</h4>
+<pre>{
+  "id": "APILM-SourceEntity-001",
+  "name": "APILM-SourceEntity-001",
+  "description": "Source entity created by API automation",
+  "isActive": true,
+  "createdBy": "PSAutomation1@jdadelivers.com",
+  "updatedBy": "PSAutomation1@jdadelivers.com",
+  "createdOn": "2026-08-31T09:20:00.000Z",
+  "updatedOn": "2026-08-31T09:20:00.000Z"
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-11..G-16 -->
+<div class="gap prio1">
+  <h3><span class="pill p1">P1</span><span class="pill sm">Medium</span>User favourite views &mdash; 6 endpoints</h3>
+  <div class="kv"><span><b>Gaps:</b> G-11 &ndash; G-16</span><span><b>Effort:</b> 19 h total</span><span><b>Controller:</b> LinksController</span></div>
+  <p><b>Why it matters:</b> Two parallel families exist &mdash; a typed family
+  (<code>/type/{type}/entity/{entity}/views</code>) and an untyped family (<code>/entity/{entityId}/views</code>) that the
+  controller hard-wires to <code>Constants.GLOBAL</code>. Neither is automated, and nothing proves they are isolated from
+  each other or that favourites are correctly scoped <em>per user</em>. Cross-user leakage here is a privacy defect, so a
+  two-user assertion (<code>TEST_AUTOMATION_USER_1</code> vs <code>TEST_AUTOMATION_USER_2</code>) is mandatory.</p>
+  <div class="cols2">
+    <div>
+      <h4>POST /type/process/entity/APILinkManagementTest/views</h4>
+<pre>{
+  "name": "Favourite Demand View",
+  "viewId": "api-auto-view-001",
+  "containerId": "api-auto-container-001",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre>
+      <h4>Response &mdash; 201</h4>
+<pre>{
+  "id": "68f1b4c5d6e7f8091a2b3c4d",
+  "name": "Favourite Demand View",
+  "viewId": "api-auto-view-001",
+  "containerId": "api-auto-container-001",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre>
+    </div>
+    <div>
+      <h4>GET /type/process/entity/APILinkManagementTest/views &mdash; 200</h4>
+<pre>{
+  "views": [
+    { "id": "68f1b4c5d6e7f8091a2b3c4d",
+      "name": "Favourite Demand View",
+      "viewId": "api-auto-view-001",
+      "containerId": "api-auto-container-001",
+      "isActive": true, "isScopeEnabled": false }
+  ]
+}</pre>
+      <h4>DELETE .../views/api-auto-view-001 &mdash; 200</h4>
+<pre>"View with id [api-auto-view-001] deleted for
+ Entity Id [APILinkManagementTest] of type [process]"</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-17 / G-18 -->
+<div class="gap prio2">
+  <h3><span class="pill p2">P2</span><span class="pill sm">Medium</span><span class="ep">GET /tenant</span> &nbsp;+&nbsp; <span class="ep">GET /ops/db/state</span></h3>
+  <div class="kv"><span><b>Gaps:</b> G-17, G-18</span><span><b>Effort:</b> 3 h + 4 h</span><span><b>Controller:</b> TenantController / <em>not found</em></span></div>
+  <p><b>Why it matters:</b> <code>GET /tenant</code> lazily <em>creates</em> a tenant row when one does not exist for the
+  JWT&rsquo;s tenant id &mdash; a write hidden behind a GET, and the first call any new tenant makes. If it regresses,
+  onboarding breaks before any other API is reachable. <code>GET /ops/db/state</code> is a documented ops endpoint requiring
+  a <code>JID</code> header; it is published in the OAS spec but has no controller in this repo &mdash; resolve the drift
+  first (remove from spec, or locate the serving component) before estimating further.</p>
+  <div class="cols2">
+    <div>
+      <h4>GET /tenant &mdash; 200</h4>
+<pre>{
+  "id": "68f1c5d6e7f8091a2b3c4d5e",
+  "tenantId": "byd-interop-01",
+  "isActive": true,
+  "isDeleted": false,
+  "createdBy": "PSAutomation1@jdadelivers.com",
+  "updatedBy": "PSAutomation1@jdadelivers.com"
+}</pre>
+    </div>
+    <div>
+      <h4>GET /ops/db/state &mdash; 200 (header <code>JID: &lt;job-id&gt;</code>)</h4>
+<pre>{
+  "dbStateReport": [
+    { "tableName": "entity_view",           "partitionIndex": "p0" },
+    { "tableName": "entity_view_procedure", "partitionIndex": "p0" },
+    { "tableName": "scope_mapping",         "partitionIndex": "p1" }
+  ],
+  "error": null
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- G-19 / G-20 -->
+<div class="gap prio3">
+  <h3><span class="pill p3">P3</span><span class="pill sl">Low</span>Deprecated admin surfaces &mdash; <span class="ep">/tenants</span>, <span class="ep">/users</span></h3>
+  <div class="kv"><span><b>Gaps:</b> G-19, G-20</span><span><b>Effort:</b> 10 h total</span><span><b>Controllers:</b> TenantController, UserController</span></div>
+  <p><b>Why it matters (or does not):</b> All eight operations are annotated <code>@Deprecated</code> and are absent from the
+  published OAS spec, so they are effectively dark surface area. <b>Recommendation: do not automate.</b> Raise a removal
+  story instead &mdash; deleting them retires 8 endpoints, lifts active coverage from 43% to 57% at zero test cost, and
+  removes an unaudited admin surface (<code>GET /users</code> returns every user in the tenant). Only automate if Product
+  confirms an external consumer still exists; the 10 h estimate is the fallback.</p>
+  <div class="cols2">
+    <div>
+      <h4>POST /tenants (deprecated) &mdash; request</h4>
+<pre>{ "tenantId": "byd-interop-automation", "isActive": true }</pre>
+    </div>
+    <div>
+      <h4>GET /users/me (deprecated) &mdash; 200</h4>
+<pre>{
+  "id": "u-0001",
+  "userId": "PSAutomation1@jdadelivers.com",
+  "tenantId": "byd-interop-01",
+  "isActive": true
+}</pre>
+    </div>
+  </div>
+</div>
+
+<h2>5. Proposed test suites &mdash; execution order</h2>
+
+<p>
+Order is dependency-driven. Phases 0 and 1 create the catalogue views and source entity that later phases consume, so
+running out of order will produce false failures. Every suite should use
+<code>test.describe.serial</code> (as Test_009 and Test_010 already do) and end with an <code>afterAll</code> cleanup so
+the tenant is left in its starting state.
+</p>
+
+<table>
+  <thead>
+    <tr><th style="width:7%">Phase</th><th style="width:6%">Order</th><th style="width:26%">Suite</th><th style="width:14%">Gaps closed</th><th style="width:22%">Depends on</th><th>Leaves behind</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="2">0 &mdash; Fixtures</td><td>1</td><td><code>Test_011_ViewCatalogueManagement.spec.ts</code></td><td>G-07, G-08</td><td>&mdash;</td><td><code>api-auto-view-001..003</code> in catalogue</td></tr>
+    <tr><td>2</td><td><code>Test_012_SourceEntityLifecycle.spec.ts</code> (create half)</td><td>G-09</td><td>&mdash;</td><td><code>APILM-SourceEntity-001</code></td></tr>
+    <tr><td>1 &mdash; Regression</td><td>3</td><td>Existing <code>Test_001</code> &ndash; <code>Test_010</code></td><td>&mdash;</td><td>Phase 0 views</td><td>Self-cleaning</td></tr>
+    <tr><td rowspan="3">2 &mdash; Core gaps</td><td>4</td><td><code>Test_013_UserFavouriteViews.spec.ts</code></td><td>G-11 &ndash; G-16</td><td>Test_011</td><td>Self-cleaning</td></tr>
+    <tr><td>5</td><td><code>Test_014_MultiEntityViewSearchV2.spec.ts</code></td><td>G-01</td><td>Test_011, Test_001&ndash;003</td><td>Self-cleaning</td></tr>
+    <tr><td>6</td><td><code>Test_015_EntityViewProcedureDelete.spec.ts</code></td><td>G-02</td><td>Test_004</td><td>Self-cleaning</td></tr>
+    <tr><td>3 &mdash; Async</td><td>7</td><td><code>Test_016_EntityValidationJob.spec.ts</code></td><td>G-03, G-04</td><td>Phases 0&ndash;2 (needs real mappings to validate)</td><td>Job rows only</td></tr>
+    <tr><td>4 &mdash; Round trip</td><td>8</td><td><code>Test_017_ExportImportRoundTrip.spec.ts</code></td><td>G-05, G-06</td><td>Phases 0&ndash;2 (needs a populated tenant)</td><td>Restores its own snapshot</td></tr>
+    <tr><td rowspan="2">5 &mdash; Peripheral</td><td>9</td><td><code>Test_018_TenantAndOps.spec.ts</code></td><td>G-17, G-18</td><td>&mdash;</td><td>Self-cleaning</td></tr>
+    <tr><td>10</td><td><code>Test_019_DeprecatedAdminApis.spec.ts</code> <em>(only if not retired)</em></td><td>G-19, G-20</td><td>&mdash;</td><td>Self-cleaning</td></tr>
+    <tr><td>6 &mdash; Teardown</td><td>11</td><td><code>Test_012_SourceEntityLifecycle.spec.ts</code> (delete half)</td><td>G-10</td><td>Everything above</td><td>Clean tenant</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+<b>Why the source-entity delete runs last.</b> <code>DELETE /entity/{id}</code> cascades to view mappings, procedure
+mappings, presets and scope. Running it mid-stream would destroy fixtures the other suites rely on. Splitting Test_012
+into a create step (order 2) and a delete step (order 11) also gives the cascade assertion something real to delete.
+</div>
+
+<h2>6. Test-case backlog</h2>
+
+<h3>Test_011 &mdash; View Catalogue Management <span class="pill p1">P1</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>011-01</td><td>Create a view with all fields populated</td><td>POST /views</td><td>201 + echoed body, <code>id</code> present</td><td>Store <code>viewId</code> for later suites</td></tr>
+    <tr><td>011-02</td><td>Create a view with <code>isScopeEnabled: false</code></td><td>POST /views</td><td>201, flag persisted as false</td><td>Feeds Test_010 negative scope path</td></tr>
+    <tr><td>011-03</td><td>Retrieve catalogue and assert both created views are present</td><td>GET /views</td><td>200, array contains 011-01 &amp; 011-02</td><td>Assert response schema and types</td></tr>
+    <tr><td>011-04</td><td>Create a view missing required <code>viewId</code></td><td>POST /views</td><td>400</td><td>Required: name, viewId, containerId</td></tr>
+    <tr><td>011-05</td><td>Create a view with <code>name</code> of 101 characters</td><td>POST /views</td><td>400</td><td>maxLength 100 boundary</td></tr>
+    <tr><td>011-06</td><td>Create a view with <code>viewId</code> of 37 characters</td><td>POST /views</td><td>400</td><td>maxLength 36 boundary</td></tr>
+    <tr><td>011-07</td><td>Create a view with <code>name</code> of exactly 100 characters</td><td>POST /views</td><td>201</td><td>Positive boundary</td></tr>
+    <tr><td>011-08</td><td>Create a duplicate <code>viewId</code></td><td>POST /views</td><td>409 or 400 &mdash; assert deterministic</td><td>Document actual behaviour</td></tr>
+    <tr><td>011-09</td><td>Create with HTML/script in <code>name</code></td><td>POST /views</td><td>201 with escaped output, or 400</td><td>XSS-shaped input; service escapes elsewhere</td></tr>
+    <tr><td>011-10</td><td>GET and POST without Authorization header</td><td>GET, POST /views</td><td>401</td><td>Mirrors Test_009 TC-05 pattern</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_012 &mdash; Source Entity Lifecycle <span class="pill p0">P0</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>012-01</td><td>Create a source entity with name + description</td><td>POST /entity<br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">Via PO only</span></td><td>201, audit fields populated</td><td>Runs in Phase 0</td></tr>
+    <tr><td>012-02</td><td>Create with name only (description omitted)</td><td>POST /entity<br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">Via PO only</span></td><td>201</td><td>Only <code>name</code> is required</td></tr>
+    <tr><td>012-03</td><td>Create with <code>description</code> of 1001 characters</td><td>POST /entity<br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">Via PO only</span></td><td>400</td><td>maxLength 1000 boundary</td></tr>
+    <tr><td>012-04</td><td>Create with empty body</td><td>POST /entity<br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">Via PO only</span></td><td>400</td><td>&mdash;</td></tr>
+    <tr><td>012-05</td><td>Map views + procedures + preset + scope to the entity</td><td>various</td><td>2xx</td><td>Builds the cascade fixture</td></tr>
+    <tr><td>012-06</td><td>Delete the source entity</td><td>DELETE /entity/{id}</td><td>200</td><td>Runs last, Phase 6</td></tr>
+    <tr><td>012-07</td><td>Assert view mappings for the entity are gone</td><td>POST /view-entity-map/search<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, LinkManagement/Test_008, LinkManagement/Test_012, Migration/Test_006">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +4</span></td><td>200, empty</td><td>Cascade proof</td></tr>
+    <tr><td>012-08</td><td>Assert procedure mappings for the entity are gone</td><td>POST /entity-view-procedure-map/search<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_004, LinkManagement/Test_005, LinkManagement/Test_006, LinkManagement/Test_007">&#10003; Covered &middot; LinkManagement/Test_004, LinkManagement/Test_005 +2</span></td><td>200, empty + never-mapped reason</td><td>Cascade proof</td></tr>
+    <tr><td>012-09</td><td>Assert presets and scope for the entity are gone</td><td>POST /search-preset, GET /scope<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_009, LinkManagement/Test_011, LinkManagement/Test_014">&#10003; POST /search-preset &middot; Covered &middot; LinkManagement/Test_009, LinkManagement/Test_011 +1</span> <span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_010">&#10003; GET /scope &middot; Covered &middot; LinkManagement/Test_010</span></td><td>200, empty / null scope</td><td>Cascade proof</td></tr>
+    <tr><td>012-10</td><td>Assert an unrelated entity&rsquo;s mappings survive</td><td>POST /view-entity-map/search<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, LinkManagement/Test_008, LinkManagement/Test_012, Migration/Test_006">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +4</span></td><td>200, unchanged</td><td><b>Over-cascade guard &mdash; critical</b></td></tr>
+    <tr><td>012-11</td><td>Delete the same entity again</td><td>DELETE /entity/{id}</td><td>404 or 200 idempotent &mdash; assert deterministic</td><td>&mdash;</td></tr>
+    <tr><td>012-12</td><td>Delete with id violating <code>^[a-zA-Z0-9-]+$</code></td><td>DELETE /entity/{id}</td><td>400</td><td>e.g. <code>abc_def</code>, <code>a/b</code></td></tr>
+    <tr><td>012-13</td><td>Delete with a 37-character id</td><td>DELETE /entity/{id}</td><td>400</td><td>maxLength 36 boundary</td></tr>
+    <tr><td>012-14</td><td>Create and delete without Authorization</td><td>POST, DELETE /entity<br/><span class="upd-b upd-po" title="POST /process/template, POST /process/{processName}/subprocess">POST /entity &middot; Via PO only</span></td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_013 &mdash; User Favourite Views <span class="pill p1">P1</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>013-01</td><td>Add a favourite for type <code>process</code></td><td>POST /type/{type}/entity/{entity}/views<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>201</td><td>&mdash;</td></tr>
+    <tr><td>013-02</td><td>Retrieve typed favourites and assert the view is listed</td><td>GET /type/{type}/entity/{entity}/views<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>200, contains 013-01</td><td>&mdash;</td></tr>
+    <tr><td>013-03</td><td>Add a second favourite and assert both are returned</td><td>POST + GET typed</td><td>201, 200 with 2 items</td><td>Assert ordering is stable</td></tr>
+    <tr><td>013-04</td><td>Delete one typed favourite</td><td>DELETE /type/{type}/entity/{entity}/views/{viewId}<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>200, message echoes ids</td><td>&mdash;</td></tr>
+    <tr><td>013-05</td><td>GET after delete returns only the remaining favourite</td><td>GET typed</td><td>200, 1 item</td><td>&mdash;</td></tr>
+    <tr><td>013-06</td><td>Add a favourite via the untyped (GLOBAL) route</td><td>POST /entity/{entityId}/views<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>201</td><td>Controller forces <code>Constants.GLOBAL</code></td></tr>
+    <tr><td>013-07</td><td>GET untyped returns the GLOBAL favourite</td><td>GET /entity/{entityId}/views<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>200</td><td>&mdash;</td></tr>
+    <tr><td>013-08</td><td>GET typed does <b>not</b> return the GLOBAL favourite (and vice versa)</td><td>GET typed + untyped</td><td>200, disjoint sets</td><td><b>Isolation assertion</b></td></tr>
+    <tr><td>013-09</td><td>Delete the untyped favourite</td><td>DELETE /entity/{entityId}/views/{viewId}<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_013">&#10003; Covered &middot; LinkManagement/Test_013</span></td><td>200</td><td>&mdash;</td></tr>
+    <tr><td>013-10</td><td>User 2 does not see User 1&rsquo;s favourites</td><td>GET typed as <code>TEST_AUTOMATION_USER_2</code></td><td>200, empty</td><td><b>Privacy assertion &mdash; must pass</b></td></tr>
+    <tr><td>013-11</td><td>Delete a favourite that was never added</td><td>DELETE typed</td><td>200 idempotent or 404 &mdash; assert deterministic</td><td>&mdash;</td></tr>
+    <tr><td>013-12</td><td>Add a favourite referencing a non-existent catalogue view</td><td>POST typed</td><td>400 or 404</td><td>Referential-integrity check</td></tr>
+    <tr><td>013-13</td><td><code>entityId</code> violating <code>^[a-zA-Z0-9-]+$</code> on the untyped route</td><td>GET/POST/DELETE untyped</td><td>400</td><td>Pattern is only on the untyped family</td></tr>
+    <tr><td>013-14</td><td>All six operations without Authorization</td><td>all</td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_014 &mdash; Multi-Entity View Search (v2) <span class="pill p0">P0</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>014-01</td><td>Search one entity and assert parity with the v1 <code>/search</code> result<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_012">&#10003; Covered &middot; LinkManagement/Test_012</span></td><td>POST /view-entity-map/lm-search/v2</td><td>200, identical view list</td><td><b>v1/v2 parity &mdash; the key assertion</b></td></tr>
+    <tr><td>014-02</td><td>Search 3 entities of the same type</td><td>v2</td><td>200, 3 grouped results</td><td>&mdash;</td></tr>
+    <tr><td>014-03</td><td>Search across process + subprocess + assumption in one call</td><td>v2</td><td>200, correct <code>entityType</code> per item</td><td>Mixed-type grouping</td></tr>
+    <tr><td>014-04</td><td>Assert <code>quick_filter_enabled</code> / <code>quick_filter_config_id</code> are returned per entity</td><td>v2</td><td>200, values match Test_010 scope state</td><td>Cross-suite consistency</td></tr>
+    <tr><td>014-05</td><td>Include one mapped and one unmapped entity in the same request</td><td>v2</td><td>200, unmapped returns empty views (not omitted)</td><td>Shape stability for the MFE</td></tr>
+    <tr><td>014-06</td><td>Empty <code>requests</code> array</td><td>v2</td><td>400 (required) &mdash; assert actual</td><td><code>requests</code> is required</td></tr>
+    <tr><td>014-07</td><td>Omit <code>requests</code> entirely</td><td>v2</td><td>400</td><td>&mdash;</td></tr>
+    <tr><td>014-08</td><td>100 requests (upper bound)</td><td>v2</td><td>200</td><td><code>maxItems: 100</code> positive boundary</td></tr>
+    <tr><td>014-09</td><td>101 requests</td><td>v2</td><td>400</td><td>Negative boundary</td></tr>
+    <tr><td>014-10</td><td>101 <code>entityId</code> values inside one request</td><td>v2</td><td>400</td><td>Inner <code>maxItems: 100</code></td></tr>
+    <tr><td>014-11</td><td>Duplicate entity ids across two request blocks</td><td>v2</td><td>200, deduplicated or duplicated &mdash; assert deterministic</td><td>Document behaviour</td></tr>
+    <tr><td>014-12</td><td>Unknown <code>entityType</code></td><td>v2</td><td>200 empty or 400 &mdash; assert deterministic</td><td>Mirrors Test_009 TC-11 finding</td></tr>
+    <tr><td>014-13</td><td>Response-time budget for a 100-entity batch</td><td>v2</td><td>&lt; 3 s</td><td>Mirrors Test_001 TC-18 perf pattern</td></tr>
+    <tr><td>014-14</td><td>Without Authorization</td><td>v2</td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_015 &mdash; Entity-View-Procedure Delete <span class="pill p0">P0</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>015-01</td><td>Map 4 procedures to a view (fixture)</td><td>POST /entity-view-procedure-map<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_004, LinkManagement/Test_005, LinkManagement/Test_006, LinkManagement/Test_007">&#10003; Covered &middot; LinkManagement/Test_004, LinkManagement/Test_005 +2</span></td><td>200</td><td>Reuse Test_004 payload</td></tr>
+    <tr><td>015-02</td><td>Search and confirm 4 procedures are present</td><td>POST .../search</td><td>200, 4 items</td><td>&mdash;</td></tr>
+    <tr><td>015-03</td><td>Delete the mapping via the DELETE route</td><td>DELETE .../type/{t}/entity/{e}/views/{v}</td><td>200</td><td>&mdash;</td></tr>
+    <tr><td>015-04</td><td>Search returns empty with reason <code>PROCEDURES_NEVER_MAPPED_TO_VIEW</code></td><td>POST .../search</td><td>200</td><td><b>Distinguishes DELETE from empty-array POST</b></td></tr>
+    <tr><td>015-05</td><td>Empty-array POST then search returns <code>PLANNER_WANTS_NO_PROCEDURES</code></td><td>POST + search</td><td>200</td><td>Contrast case, pins the semantic difference</td></tr>
+    <tr><td>015-06</td><td>Delete on a view that was never mapped</td><td>DELETE</td><td>200 idempotent or 404 &mdash; assert deterministic</td><td>&mdash;</td></tr>
+    <tr><td>015-07</td><td>Delete the same mapping twice</td><td>DELETE &times;2</td><td>Second call deterministic</td><td>Idempotency</td></tr>
+    <tr><td>015-08</td><td>Delete view A; assert view B mappings on the same entity survive</td><td>DELETE + search</td><td>200, B intact</td><td><b>Over-delete guard</b></td></tr>
+    <tr><td>015-09</td><td>Delete for entity A; assert entity B mappings survive</td><td>DELETE + search</td><td>200, B intact</td><td><b>Over-delete guard</b></td></tr>
+    <tr><td>015-10</td><td>Delete with a URL-encoded / special-character entity id</td><td>DELETE</td><td>400 or handled &mdash; assert deterministic</td><td>Path-traversal shaped input</td></tr>
+    <tr><td>015-11</td><td>Without Authorization</td><td>DELETE</td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_016 &mdash; Entity Validation &amp; Job Status <span class="pill p0">P0</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>016-01</td><td>Start a validation with <code>Source: UI</code>, <code>entityType=ALL</code></td><td>POST /validate</td><td>200, <code>jobId</code> returned</td><td>Capture <code>jobId</code></td></tr>
+    <tr><td>016-02</td><td>Poll job status until terminal</td><td>GET /job/validation/{task_id}</td><td>200, status &rarr; SUCCESS/FAILED</td><td>Reuse the polling helper from Migration Test_007</td></tr>
+    <tr><td>016-03</td><td>Start a second validation with the same <code>taskId</code> while the first is running</td><td>POST /validate</td><td>200, <b>same</b> <code>jobId</code></td><td>Proves <code>startOrReturnExistingJob</code> idempotency</td></tr>
+    <tr><td>016-04</td><td><code>callBack=false</code> returns a completed result inline</td><td>POST /validate?callBack=false</td><td>200, terminal status in one call</td><td>Synchronous mode</td></tr>
+    <tr><td>016-05</td><td>Each <code>Source</code> enum value is accepted</td><td>POST /validate</td><td>200 &times;3</td><td>WORKFLOW, UI, SYSTEM</td></tr>
+    <tr><td>016-06</td><td>Omitting the <code>Source</code> header defaults to SYSTEM</td><td>POST /validate</td><td>200, response reflects SYSTEM</td><td>Controller default</td></tr>
+    <tr><td>016-07</td><td>Invalid <code>Source</code> header value</td><td>POST /validate</td><td>400</td><td>Enum binding failure</td></tr>
+    <tr><td>016-08</td><td>Each <code>entityType</code> enum value is accepted</td><td>POST /validate</td><td>200 &times;6</td><td>ASSUMPTIONS, PROCESS_SUBPROCESS, VIEWS, ACTORS, PROCEDURES, ALL</td></tr>
+    <tr><td>016-09</td><td>Invalid <code>entityType</code> query value</td><td>POST /validate</td><td>400</td><td>&mdash;</td></tr>
+    <tr><td>016-10</td><td>Missing required <code>taskId</code> in body</td><td>POST /validate</td><td>400</td><td>&mdash;</td></tr>
+    <tr><td>016-11</td><td>Seed a deliberate orphan mapping, then validate</td><td>POST /validate + GET status</td><td>Status FAILED with the orphan reported</td><td><b>Proves validation actually detects drift</b></td></tr>
+    <tr><td>016-12</td><td>Job status for an unknown task id</td><td>GET /job/validation/{task_id}</td><td>400 with populated <code>error</code></td><td>Controller maps error &rarr; 400</td></tr>
+    <tr><td>016-13</td><td>Response envelope shape: <code>data</code> / <code>error</code> / <code>timestamp</code></td><td>both</td><td>200, all three keys present</td><td>CommonResponse contract</td></tr>
+    <tr><td>016-14</td><td>Both endpoints without Authorization</td><td>both</td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_017 &mdash; Export / Import Round Trip <span class="pill p0">P0</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>017-01</td><td>Full export with <code>entityViews: []</code> and <code>entityViewsProcedure: []</code></td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>200, non-empty payload, <code>tenantId</code> present</td><td>Snapshot for the round trip</td></tr>
+    <tr><td>017-02</td><td>Selective export for one subprocess</td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>200, only that entity returned</td><td>&mdash;</td></tr>
+    <tr><td>017-03</td><td>Selective export for procedures only</td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>200, <code>entityViews</code> empty</td><td>Block independence</td></tr>
+    <tr><td>017-04</td><td>Export for an unknown entity name</td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>200 with empty blocks (not 500)</td><td>Mirrors Migration Test_003 TC-04</td></tr>
+    <tr><td>017-05</td><td>Malformed export payload</td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>400</td><td>&mdash;</td></tr>
+    <tr><td>017-06</td><td>Export includes <code>scopeId</code> and procedure <code>primary</code>/<code>secondary</code>/<code>sequence</code></td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>200, fields present</td><td>Contract completeness</td></tr>
+    <tr><td>017-07</td><td>Clear all mappings for the exported entity</td><td>POST /view-entity-map/clear<br/><span class="upd-b upd-ok" title="Exercised by LinkManagement/Test_001, LinkManagement/Test_002, LinkManagement/Test_003, Migration/Test_006, Migration/Test_009">&#10003; Covered &middot; LinkManagement/Test_001, LinkManagement/Test_002 +3</span></td><td>200</td><td>Wipe step</td></tr>
+    <tr><td>017-08</td><td>Import the 017-01 snapshot</td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>200, <code>entityViews</code> echoed</td><td>&mdash;</td></tr>
+    <tr><td>017-09</td><td>Re-export and deep-compare against the 017-01 snapshot</td><td>POST /exportData<br/><span class="upd-b upd-po" title="POST /exportData">Via PO only</span></td><td>Structurally identical</td><td><b>Round-trip fidelity &mdash; the headline assertion</b></td></tr>
+    <tr><td>017-10</td><td>Import the same payload twice</td><td>POST /importData &times;2<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>200, no duplicate mappings</td><td>Idempotency</td></tr>
+    <tr><td>017-11</td><td>Import with a mismatched <code>tenantId</code></td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>400/403 &mdash; assert deterministic</td><td>Cross-tenant guard</td></tr>
+    <tr><td>017-12</td><td>Import when source and target tenant are identical</td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>Governed by <code>isDataExportImportAllowedForSameSourceAndTarget</code></td><td><b>Config flag currently untested</b></td></tr>
+    <tr><td>017-13</td><td>Import a payload larger than <code>batchSize</code></td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>200, all rows imported</td><td>Batching path</td></tr>
+    <tr><td>017-14</td><td>Import referencing a view id absent from the catalogue</td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>400 or partial with reported failures</td><td>Referential integrity</td></tr>
+    <tr><td>017-15</td><td>Import an empty / malformed body</td><td>POST /importData<br/><span class="upd-b upd-po" title="POST /importData">Via PO only</span></td><td>400</td><td>Body is required</td></tr>
+    <tr><td>017-16</td><td>Both endpoints without Authorization</td><td>both</td><td>401</td><td>Mirrors Migration Test_003 TC-03</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_018 &mdash; Tenant &amp; Ops <span class="pill p2">P2</span></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>018-01</td><td>Retrieve tenant details for the automation user</td><td>GET /tenant</td><td>200, <code>tenantId</code> matches the JWT claim</td><td>&mdash;</td></tr>
+    <tr><td>018-02</td><td>Assert <code>isActive: true</code> and <code>isDeleted: false</code></td><td>GET /tenant</td><td>200</td><td>&mdash;</td></tr>
+    <tr><td>018-03</td><td>Two consecutive calls return the same tenant <code>id</code></td><td>GET /tenant &times;2</td><td>200, identical</td><td><b>Guards the lazy-create write hidden in a GET</b></td></tr>
+    <tr><td>018-04</td><td>User 2 in the same tenant receives the same tenant record</td><td>GET /tenant</td><td>200, identical <code>tenantId</code></td><td>&mdash;</td></tr>
+    <tr><td>018-05</td><td>Without Authorization</td><td>GET /tenant</td><td>401</td><td>&mdash;</td></tr>
+    <tr><td>018-06</td><td><b>Blocked:</b> confirm whether <code>/ops/db/state</code> is implemented<br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>GET /ops/db/state</td><td>200 or 404</td><td>Resolve spec drift before writing 018-07/08</td></tr>
+    <tr><td>018-07</td><td>DB state report with a valid <code>JID</code> header</td><td>GET /ops/db/state<br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>200, <code>dbStateReport</code> array</td><td>Conditional on 018-06</td></tr>
+    <tr><td>018-08</td><td>Missing <code>JID</code> header</td><td>GET /ops/db/state<br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>400</td><td>Header is required</td></tr>
+  </tbody>
+</table>
+
+<h3>Test_019 &mdash; Deprecated Admin APIs <span class="pill p3">P3</span> <em>(build only if retirement is rejected)</em></h3>
+<table>
+  <thead><tr><th style="width:8%">TC</th><th style="width:38%">Test case</th><th style="width:14%">Endpoint</th><th style="width:12%">Expected</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>019-01</td><td>Create a tenant</td><td>POST /tenants<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>201</td><td>Deprecated</td></tr>
+    <tr><td>019-02</td><td>List all tenants</td><td>GET /tenants<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated</td></tr>
+    <tr><td>019-03</td><td>Get tenant by id</td><td>GET /tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated</td></tr>
+    <tr><td>019-04</td><td>Update tenant</td><td>PUT /tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated</td></tr>
+    <tr><td>019-05</td><td>Delete tenant</td><td>DELETE /tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated</td></tr>
+    <tr><td>019-06</td><td>Onboard current user</td><td>GET /users/me<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated; performs a write</td></tr>
+    <tr><td>019-07</td><td>Get user by id</td><td>GET /users/{user_id}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated</td></tr>
+    <tr><td>019-08</td><td>List users in tenant</td><td>GET /users<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>200</td><td>Deprecated; assert tenant isolation</td></tr>
+    <tr><td>019-09</td><td>User 1 cannot read a tenant they do not belong to</td><td>GET /tenants/{tenantId}<br/><span class="upd-b upd-dep">@Deprecated</span></td><td>403/404</td><td><b>Tenant-isolation assertion</b></td></tr>
+    <tr><td>019-10</td><td>All operations without Authorization</td><td>all</td><td>401</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h2>7. Recommendations (status 05-Oct-2026)</h2>
+<ol>
+  <li><b>Close the remaining P0 set (42 h).</b> Import round trip (now including SM-33313 reason codes), source-entity cascade delete and the
+      validation job are the places where a silent regression reaches customers with no automated warning. v2 batch search is done (<code>Test_012</code>).</li>
+  <li><b>Retire the deprecated surfaces instead of testing them.</b> Removing the eight <code>@Deprecated</code>
+      <code>/tenants</code> and <code>/users</code> operations raises overall coverage from 55% to 70% for zero test
+      spend and shrinks the unaudited admin surface.</li>
+  <li><b>Done &mdash; OAS drift.</b> <code>GET /ops/db/state</code> is served by plan-sop-po-be-commons. An OAS-vs-controller diff is still worth adding to the build.</li>
+  <li><b>Break the hard-coded view-id dependency.</b> <code>Test_012</code>&ndash;<code>Test_014</code> already seed their own data with
+      <code>MappingUtil.mapSingleView</code>; migrate Test_001 &ndash; Test_008 the same way. The view-catalogue suite proposed as Test_011 has not landed
+      (<code>Test_011</code> is now <code>AdminFilterManagement</code>).</li>
+  <li><b>Partly done &mdash; two-user fixture.</b> <code>Test_011</code> and <code>Test_013</code> use <code>getUserBearerToken</code> from
+      <code>util/user-token.util.ts</code> for per-user assertions. Presets and tenant isolation still need a second-user case.</li>
+  <li><b>Standardise the &ldquo;assert deterministic&rdquo; cases.</b> Several test cases above record behaviour the spec does
+      not pin down (duplicate ids, repeat deletes, unknown enums). Test_009 TC-11 already found one such case. Each should
+      raise a spec-clarification ticket rather than an assertion guessed from current behaviour.</li>
+</ol>
+
+<h2>8. Method and assumptions</h2>
+<ul>
+  <li>Endpoint inventory taken from Spring request-mapping annotations across the ten controllers in
+      <code>src/main/java/com/blueyonder/linkmanagement</code>, cross-checked against
+      <code>open-api3-specification/v1/links-oas-spec.yaml</code>.</li>
+  <li>Coverage determined by static inspection of <code>playwright-e2e/tests/ProcessOrchestrationBackend</code>
+      (LinkManagement and Migration suites) plus <code>util/alm-migration.util.ts</code>. No suites were executed.</li>
+  <li>Sample payloads are derived from the OAS component schemas and the existing INTEROP test-data JSON files. Response
+      bodies are representative examples, not captured traffic &mdash; confirm exact field casing on first execution.</li>
+  <li>Effort assumes one engineer already familiar with the <code>ApiUtil</code> / <code>CommonFunctions</code> helpers, and
+      includes test-data JSON, helper changes and one green INTEROP run. It excludes CI wiring and review time.</li>
+  <li>Severity reflects production blast radius if the endpoint silently breaks; priority reflects build sequencing.</li>
+  <li><b>05-Oct-2026 update:</b> coverage was re-measured from the request logs in the allure-results of the four 2026-10-04 nightly backend runs
+      (INTEROP and QA, Azure and Gravitee). An endpoint counts as covered when a test body (not a hook) calls it; calls PO makes to LM on its own behalf are shown as &ldquo;Via PO only&rdquo;.</li>
+</ul>
+
+<footer>
+  Generated from static analysis of plan-sop-link-management and plan-sop-ui-automation &middot; 31 Aug 2026 &middot;
+  Figures are estimates for planning purposes and should be re-baselined after the first P0 suite lands.
+  Updated 05 Oct 2026 from plan-sop-link-management @ a81f252f and the 2026-10-04 nightly run evidence.
+</footer>
+
+</body>
+</html>

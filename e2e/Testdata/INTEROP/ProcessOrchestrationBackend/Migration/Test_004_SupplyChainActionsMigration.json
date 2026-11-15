@@ -1,0 +1,12 @@
+{
+    "FULL_EXPORT_PAYLOAD": {
+        "supplyChainActions": []
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "supplyChainActions": [
+            "MigrationSCA1",
+            "MigrationSCA2",
+            "MigrationSCA3"
+        ]
+    }
+}

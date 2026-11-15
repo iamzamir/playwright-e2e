@@ -1,0 +1,28 @@
+{
+    "testFiles": [
+        "**/DataSetup/ODM/Test_002_RestartMaasCluster.spec.ts",
+        "**/DataSetup/Scenarios/Test_002_SetBaseScenarioAsDefault.spec.ts",
+        "**/DataSetup/Scenarios/Test_003_AddChildScenariosToMaas.spec.ts",
+        "**/DataSetup/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+        "**/DataSetup/UIDataReset/Test_002_MapViewsToContext.spec.ts",
+        "**/SupplyChainActionsBatch/Test_003_SCPWizardLayout.spec.ts",
+        "**/ScopeBatch/Test_009_GlobalScopeForAllProcess.spec.ts",
+        "**/ScopeBatch/Test_011_GlobalScopeForAllAssumptions.spec.ts",
+        "**/ScopeBatch/Test_012_GlobalScopeForAllSubProcess.spec.ts",
+        "**/DraftFilter/Test_001_DraftFilterForProcess.spec.ts",
+        "**/DraftFilter/Test_002_DraftFilterForSubProcess.spec.ts",
+        "**/DrillThroughBatch/Test_007_HiddenViewTransitionInNewTab.spec.ts",
+        "**/DrillThroughBatch/Test_013_CreateScenarioAfterDrillThroughFromBDECard.spec.ts",
+        "**/SupplyChainActionsBatch/Test_010_ConfigurePrimaryAndSecondarySCA.spec.ts",
+        "**/SupplyChainActionsBatch/Test_014_SCAButtonVerifyByEnablingToggle.spec.ts",
+        "**/SupplyChainActionsBatch/Test_001_SupplyChainActions.spec.ts",
+        "**/DrillThroughBatch/Test_018_DrillThroughSceanrioDefaultAndCheckDefaultInTarget.spec.ts",
+        "**/SupplyChainActionsBatch/Test_004_SCAProcedures.spec.ts",
+        "**/SupplyChainActionsBatch/Test_005_PublishScenario.spec.ts",
+        "**/SupplyChainActionsBatch/Test_012_ProcessModelProcedures.spec.ts",
+        "**/SupplyChainActionsBatch/Test_013_CloneMember.spec.ts",
+        "**/SupplyChainActionsBatch/Test_006_SCPPopupLayout.spec.ts",
+        "**/Collaboration/Test_001_CollaborationPanel.spec.ts",
+        "**/DrillThroughBatch/Test_021_CreateMultipleChildScenariosAfterDrillThrough.spec.ts"
+    ]
+}

@@ -1,0 +1,41 @@
+{
+  "_schema": {
+    "FAVOURITE": "object (required) - stable catalogue favourite { name, viewId (<=36), containerId (<=36) }; reused every run because LM never deletes catalogue rows",
+    "SCOPED_FAVOURITE": "object (required) - stable catalogue favourite created with isScopeEnabled true",
+    "PROCESS_ENTITY_ID": "string (required) - synthetic untyped (process linkEntityId style) entity",
+    "SECOND_PROCESS_ENTITY_ID": "string (required) - second untyped entity sharing the same catalogue row",
+    "RESERVED_CHAR_ENTITY_ID": "string (required) - entity id with URL-reserved characters (space and &)",
+    "UNKNOWN_ENTITY_ID": "string (required) - entity id that never has favourites",
+    "SUBPROCESS_TYPE": "string (required) - typed favourite entity type for subprocesses",
+    "SUBPROCESS_ENTITY_ID": "string (required) - synthetic <process><subprocess> entity id",
+    "ACTOR_TYPE": "string (required) - interactive cluster actor entity type",
+    "ACTOR_ENTITY_ID": "string (required) - synthetic interactive cluster id",
+    "UNKNOWN_FAVOURITE_ID": "string (required) - favourite id that does not exist",
+    "LONG_VIEW_ID_LENGTH": "number (required) - viewId length over the 36-character limit",
+    "LONG_NAME_LENGTH": "number (required) - name length over the 100-character limit",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a request body that is not valid JSON"
+  },
+  "FAVOURITE": {
+    "name": "PWAutoFavView",
+    "viewId": "6650aaaa0000000000000001",
+    "containerId": "PWAutoFavContainer"
+  },
+  "SCOPED_FAVOURITE": {
+    "name": "PWAutoFavScopedView",
+    "viewId": "6650aaaa0000000000000002",
+    "containerId": "PWAutoFavContainer",
+    "isScopeEnabled": true
+  },
+  "PROCESS_ENTITY_ID": "PWAutoFavProcess",
+  "SECOND_PROCESS_ENTITY_ID": "PWAutoFavProcess2",
+  "RESERVED_CHAR_ENTITY_ID": "PW Auto&1",
+  "UNKNOWN_ENTITY_ID": "PWAutoFavNoSuchEntity",
+  "SUBPROCESS_TYPE": "subprocess",
+  "SUBPROCESS_ENTITY_ID": "PWAutoFavProcessPWAutoFavSubprocess",
+  "ACTOR_TYPE": "maasactor",
+  "ACTOR_ENTITY_ID": "PWAutoFavCluster",
+  "UNKNOWN_FAVOURITE_ID": "00000000-0000-0000-0000-000000000000",
+  "LONG_VIEW_ID_LENGTH": 37,
+  "LONG_NAME_LENGTH": 101,
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022"
+}

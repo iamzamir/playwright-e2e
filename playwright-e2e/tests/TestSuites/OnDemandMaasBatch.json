@@ -1,0 +1,8 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/OnDemandMaas/Test_001_VerifyODMDefaultScenarioInPivot.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/OnDemandMaas/Test_002_VerifyDrillThroughForODM.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/OnDemandMaas/Test_004_OnDemandMaasStatus.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/OnDemandMaas/Test_007_OnDemandMaasStatusSubProcess.spec.ts"
+  ]
+}

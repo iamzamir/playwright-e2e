@@ -1,0 +1,15 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION_NAME": "PS Auto Assumption 5",
+    "PRESELECTED_SCOPE_FOR_ASSUMPTION": {
+        "DIMENSION_NAME": "ITEM",
+        "ATTRIBUTE_NAME": "AllProducts",
+        "VALUE": "ALL"
+    },
+    "SCOPE_TO_APPLY_IN_PLANNING_FOR_ASSUMPTION": {
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "AllLocations",
+        "VALUE": "ALL"
+    }
+}

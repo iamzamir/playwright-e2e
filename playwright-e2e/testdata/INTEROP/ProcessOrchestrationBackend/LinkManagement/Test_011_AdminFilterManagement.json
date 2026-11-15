@@ -1,0 +1,106 @@
+{
+  "_schema": {
+    "tenantId": "string (required, SQL tenant_id / REALM_ID)",
+    "process": "object (required)",
+    "subprocess": "object (required)",
+    "gravitee": "object (optional, used when GATEWAY_TYPE=GRAVITEE; same shape plus realmKey)",
+    "gravitee.realmKey": "string (required inside gravitee, Gravitee REALM_KEY for this spec)"
+  },
+  "tenantId": "b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc",
+  "process": {
+    "createRequest": {
+      "viewId": "68bfb8dd74d5de1a3f960f67",
+      "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+      "entityType": "process",
+      "entityName": "PSAutomation",
+      "filterId": "91d02f4b-9391-4c67-be1f-b95c617192ff",
+      "applyToAllUsers": true
+    },
+    "searchRequest": {
+      "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+      "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+      "entityType": "process",
+      "entityName": "PSAutomation"
+    },
+    "clearRequest": {
+      "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+      "entityId": "FAAABB91-F54C-4455-A399-1C18D0AA58C9",
+      "entityType": "process",
+      "applyToAllUsers": true,
+      "entityName": "PSAutomation"
+    }
+  },
+  "subprocess": {
+    "createRequest": {
+      "viewId": "68ef2e81cdb9f94d180fb592",
+      "entityId": "9BF49A07-E1A4-4093-BA0A-FBA048B280DD",
+      "entityType": "subprocess",
+      "entityName": "PSAutomation.DemandReview",
+      "filterId": "84712f16-f762-4ce2-a261-a3bcad34c73c",
+      "applyToAllUsers": true
+    },
+    "searchRequest": {
+      "viewIds": ["68ef2e81cdb9f94d180fb592"],
+      "entityId": "9BF49A07-E1A4-4093-BA0A-FBA048B280DD",
+      "entityType": "subprocess",
+      "entityName": "PSAutomation.DemandReview"
+    },
+    "clearRequest": {
+      "viewIds": ["68ef2e81cdb9f94d180fb592"],
+      "entityId": "9BF49A07-E1A4-4093-BA0A-FBA048B280DD",
+      "entityType": "subprocess",
+      "applyToAllUsers": true,
+      "entityName": "PSAutomation.DemandReview"
+    }
+  },
+  "gravitee": {
+    "realmKey": "cbpf-test41",
+    "tenantId": "ce567ee9-e1c1-4190-88a8-1d37a123f334",
+    "process": {
+      "createRequest": {
+        "viewId": "67b47adfc5b0456f10930d7a",
+        "entityId": "17182C34-322B-4847-BFAF-281FF0309E44",
+        "entityType": "process",
+        "entityName": "PSProcess",
+        "filterId": "a6c092c0-1a81-4e6d-aa0a-4e3b72ab9401",
+        "applyToAllUsers": true
+      },
+      "searchRequest": {
+        "viewIds": ["67b47adfc5b0456f10930d7a"],
+        "entityId": "17182C34-322B-4847-BFAF-281FF0309E44",
+        "entityType": "process",
+        "entityName": "PSProcess"
+      },
+      "clearRequest": {
+        "viewIds": ["67b47adfc5b0456f10930d7a"],
+        "entityId": "17182C34-322B-4847-BFAF-281FF0309E44",
+        "entityType": "process",
+        "applyToAllUsers": true,
+        "entityName": "PSProcess"
+      }
+    },
+    "subprocess": {
+      "createRequest": {
+        "viewId": "69858eccd19cffe3397a098d",
+        "entityId": "05067EDB-60A7-4BDD-A941-C7790C03B02B",
+        "entityType": "subprocess",
+        "entityName": "PSProcess.DemandReview",
+        "filterId": "3918ab2c-83dd-478f-a26d-94a75819097d",
+        "applyToAllUsers": true
+      },
+      "searchRequest": {
+        "viewIds": ["69858eccd19cffe3397a098d"],
+        "entityId": "05067EDB-60A7-4BDD-A941-C7790C03B02B",
+        "entityType": "subprocess",
+        "entityName": "PSProcess.DemandReview"
+      },
+      "clearRequest": {
+        "viewIds": ["69858eccd19cffe3397a098d"],
+        "entityId": "05067EDB-60A7-4BDD-A941-C7790C03B02B",
+        "entityType": "subprocess",
+        "applyToAllUsers": true,
+        "entityName": "PSProcess.DemandReview"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "requestBody": {
+    "sourceIds": [
+      "PSAutomation"
+    ]
+  },
+  "requestBody2": {
+    "scenarioName": "SubprocessSelectSidenavchild1",
+    "scenarioDescription": "SubprocessSelectSidenavchild1",
+    "parentScenario": "Base 17-10-2025-0704",
+    "triggerType": "MANUAL",
+    "visibility": "PUBLIC",
+    "sourceContext": {
+      "sourceId": "PSAutomation",
+      "sourceType": "Process"
+    }
+  }
+}

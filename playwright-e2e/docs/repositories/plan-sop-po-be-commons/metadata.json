@@ -1,0 +1,74 @@
+{
+  "name": "plan-sop-po-be-commons",
+  "displayName": "PO Backend Commons",
+  "org": "BY-Product-Development",
+  "type": "shared-library",
+  "deployable": false,
+  "language": "java+kotlin",
+  "runtime": "Java 21",
+  "framework": "Spring Boot 3.4.3",
+  "buildTool": "gradle",
+  "artifactGroup": "com.blueyonder.process-orchestration",
+  "artifactName": "plan-sop-po-be-commons",
+  "versioningScheme": "git-sha-snapshot",
+  "knownPinnedVersion": "2dacec2-SNAPSHOT",
+  "pinnedByConsumers": { "plan-sop-process-orchestration-service": "2dacec2-SNAPSHOT", "plan-sop-actionitem": "2dacec2-SNAPSHOT", "plan-sop-link-management": "2dacec2-SNAPSHOT", "plan-sop-ui-fields-service": "2dacec2-SNAPSHOT", "asOf": "2026-10-05" },
+  "keyVaultDependency": "spring-cloud-azure-starter-keyvault-secrets (aggregate starter dropped in 2dacec2)",
+  "lastReviewed": "2026-10-05",
+  "registry": "jfrog-artifactory",
+  "owner": "sairaghava.katepally@blueyonder.com",
+  "standalonePort": 9999,
+  "database": null,
+  "controllers": 1,
+  "provides": [
+    "jwt-security",
+    "rbac-expression-root",
+    "webclient-config",
+    "kafka-audit-log-producer",
+    "ecs-structured-logging",
+    "elastic-apm",
+    "liquibase-core",
+    "mapstruct",
+    "springdoc-openapi",
+    "azure-key-vault",
+    "auditable-superclass"
+  ],
+  "sharedConfig": {
+    "codecMaxInMemorySize": "30MB",
+    "codecOverrideAllowed": false,
+    "liquibaseEnabled": false
+  },
+  "auditLog": {
+    "toggleEnvVar": "IS_EFS_INTEGRATION_ENABLED",
+    "defaultEnabled": true,
+    "allowlistedRealmIds": [
+      "ca7623d3-b234-431c-a445-4a1d5444668e",
+      "9beb5e0f-8e95-4979-b438-edbc7b054981"
+    ],
+    "matchesAutomationRealmId": true,
+    "delivery": "async-fire-and-forget"
+  },
+  "dependsOn": ["kafka", "azure-key-vault"],
+  "consumedBy": [
+    "plan-sop-process-orchestration-service",
+    "plan-sop-actionitem",
+    "plan-sop-link-management",
+    "plan-sop-ui-fields-service"
+  ],
+  "automation": {
+    "specGlobs": [],
+    "directCoverage": false,
+    "directCoverageAppropriate": false,
+    "indirectCoverageNote": "Exercised by every backend spec via security, logging and serialization layers.",
+    "doNotTarget": ["/hello", "port 9999"],
+    "untestedAreas": [
+      "audit-event-emission",
+      "audit-realm-allowlist",
+      "created-by-updated-by-assertions",
+      "commons-version-drift",
+      "codec-limit-boundary"
+    ],
+    "recommendedGuard": "CI check that all four consumers pin the same plan-sop-po-be-commons SHA"
+  },
+  "qualityGates": ["JFrog Xray", "Spotless", "Testcontainers integration tests"]
+}

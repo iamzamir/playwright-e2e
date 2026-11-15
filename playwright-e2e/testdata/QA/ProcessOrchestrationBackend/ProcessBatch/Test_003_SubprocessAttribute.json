@@ -1,0 +1,50 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "CUSTOM_ATTRIBUTE": "object (required)",
+    "CUSTOM_ATTRIBUTE_2": "object (required)",
+    "CUSTOM_ATTRIBUTE_UPDATED": "object (required)",
+    "CUSTOM_ATTRIBUTE_INACTIVE": "object (required)",
+    "CONTRACT_ATTRIBUTE": "object (required)",
+    "NON_EXISTENT_ATTRIBUTE": "object (required)",
+    "INVALID_PROCESS_NAME": "string (required)",
+    "INVALID_SUBPROCESS_NAME": "string (required)",
+    "INVALID_PROCESS_ATTRIBUTE_NAME": "string (required)",
+    "INVALID_SUBPROCESS_ATTRIBUTE_NAME": "string (required)"
+  },
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "CUSTOM_ATTRIBUTE": {
+    "name": "SubRisk",
+    "value": "Medium",
+    "isActive": true
+  },
+  "CUSTOM_ATTRIBUTE_2": {
+    "name": "SubPriority",
+    "value": "High",
+    "isActive": true
+  },
+  "CUSTOM_ATTRIBUTE_UPDATED": {
+    "value": "Low",
+    "isActive": true
+  },
+  "CUSTOM_ATTRIBUTE_INACTIVE": {
+    "name": "SubNotes",
+    "value": "SomeValue",
+    "isActive": false
+  },
+  "CONTRACT_ATTRIBUTE": {
+    "name": "SubContract",
+    "value": "ContractValue",
+    "isActive": true
+  },
+  "NON_EXISTENT_ATTRIBUTE": {
+    "name": "NonExistentSubAttribute",
+    "value": "NoValue"
+  },
+  "INVALID_PROCESS_NAME": "ProcessDoesNotExist_InvalidTest_12345",
+  "INVALID_SUBPROCESS_NAME": "SubprocessDoesNotExist_InvalidTest_12345",
+  "INVALID_PROCESS_ATTRIBUTE_NAME": "InvalidProcAttr",
+  "INVALID_SUBPROCESS_ATTRIBUTE_NAME": "InvalidSubAttr"
+}

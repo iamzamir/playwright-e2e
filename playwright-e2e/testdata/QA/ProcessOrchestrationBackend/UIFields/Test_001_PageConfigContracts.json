@@ -1,0 +1,57 @@
+{
+  "_schema": {
+    "ACCEPT_LANGUAGE": "string (required) - locale sent on every request so displayName is deterministic",
+    "ALT_ACCEPT_LANGUAGE": "string (required) - second locale for the localisation check",
+    "PROCESS_NAME": "string (required) - existing process whose id is read at runtime",
+    "SUBPROCESS_NAME": "string (required) - existing subprocess of PROCESS_NAME whose id is read at runtime",
+    "INVALID_PAGE_ID": "string (required) - non-numeric page id",
+    "UNKNOWN_PAGE_ID": "string (required) - numeric page id that is not seeded",
+    "ILLEGAL_ARGUMENT_ERROR_CODE": "string (required) - errorCode returned for a non-numeric page id",
+    "PAGES": "object (required) - { <key>: { pageId: string, entityName: string } } for the seeded pages under test",
+    "EXPECTED_FILTER_NAMES": "string[] (required) - sorted filter names on the process filters page",
+    "EXPECTED_STATUS_FILTER_KEYS": "string[] (required) - sorted value keys of the status filter",
+    "LIST_BASELINE": "object (required) - { '<pageId>:<entityName>': sorted field names }",
+    "DETAIL_BASELINE": "object (required) - { '<pageId>:<entityName>': { '<groupName or _header>': sorted field names } }"
+  },
+  "ACCEPT_LANGUAGE": "en-US",
+  "ALT_ACCEPT_LANGUAGE": "fr-FR",
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "INVALID_PAGE_ID": "abc",
+  "UNKNOWN_PAGE_ID": "999999",
+  "ILLEGAL_ARGUMENT_ERROR_CODE": "IBP_40_1027",
+  "PAGES": {
+    "PROCESS_LIST": { "pageId": "1", "entityName": "PROCESS" },
+    "PROCESS_SUMMARY": { "pageId": "2", "entityName": "PROCESS" },
+    "SUBPROCESS_LIST": { "pageId": "3", "entityName": "SUBPROCESS" },
+    "SUBPROCESS_SUMMARY": { "pageId": "4", "entityName": "SUBPROCESS" },
+    "PROCESS_FILTERS": { "pageId": "21", "entityName": "PROCESS" },
+    "CALENDAR_LIST": { "pageId": "22", "entityName": "CALENDAR" },
+    "CYCLE_LIST": { "pageId": "23", "entityName": "CYCLE" },
+    "CALENDAR_DETAILS": { "pageId": "24", "entityName": "CALENDAR" },
+    "TRANSITIONS_LIST": { "pageId": "32", "entityName": "PROCESS" }
+  },
+  "EXPECTED_FILTER_NAMES": ["status"],
+  "EXPECTED_STATUS_FILTER_KEYS": ["AUTO_COMPLETED", "COMPLETED", "IN_PROGRESS", "NOT_STARTED", "START_INITIATED", "STOP_INITIATED"],
+  "LIST_BASELINE": {
+    "1:PROCESS": ["cycleName", "description", "displayName", "endDate", "processName", "progress", "startDate", "status"],
+    "3:SUBPROCESS": ["cycleName", "description", "displayName", "endDate", "startDate", "status"],
+    "22:CALENDAR": ["description", "name"],
+    "23:CYCLE": ["description", "endDate", "name", "startDate"],
+    "32:PROCESS": ["outboundChildren", "outboundPeers", "transitionProcessName"]
+  },
+  "DETAIL_BASELINE": {
+    "2:PROCESS": {
+      "_header": ["displayName", "status"],
+      "General": ["cycleName", "name", "progress"]
+    },
+    "4:SUBPROCESS": {
+      "_header": ["displayName", "status"],
+      "General": ["cycleName", "description", "endDate", "name", "participants", "startDate"]
+    },
+    "24:CALENDAR": {
+      "_header": ["name"],
+      "General": ["description"]
+    }
+  }
+}

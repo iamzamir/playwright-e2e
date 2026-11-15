@@ -1,0 +1,82 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUB_PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "SCOPE_LEVELS": "array (required) - { dimension, hierarchy, hierarchyLabel?, values[] } per scope dimension; hierarchy is the level key (vf-filterPanel-property-<KEY>), hierarchyLabel its configuration-dialog name when different; values are the realm's members",
+    "SCOPE_OVERWRITE": "object (required) - { dimension, hierarchy, values[] } added to a SCOPE_LEVELS hierarchy before the overwrite",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUB_PROCESS_NAME": "Demand Review",
+  "VIEW_NAME": "Save And Delete Filter",
+  "SCOPE_LEVELS": [
+    {
+      "dimension": "ITEM",
+      "hierarchy": "ProductType",
+      "values": [
+        "PF-00"
+      ]
+    },
+    {
+      "dimension": "LOCATION",
+      "hierarchy": "AllLocations",
+      "values": [
+        "ALL"
+      ]
+    },
+    {
+      "dimension": "CUSTOMER",
+      "hierarchy": "AllChannels",
+      "values": [
+        "ALL CUSTOMERS"
+      ]
+    }
+  ],
+  "SCOPE_OVERWRITE": {
+    "dimension": "ITEM",
+    "hierarchy": "ProductType",
+    "values": [
+      "PF-20"
+    ]
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "SCOPE_LEVELS": [
+      {
+        "dimension": "Item",
+        "hierarchy": "ProductFamily",
+        "hierarchyLabel": "Product Family",
+        "values": [
+          "PF-00"
+        ]
+      },
+      {
+        "dimension": "Location",
+        "hierarchy": "AllLocations",
+        "hierarchyLabel": "All Locations",
+        "values": [
+          "CLP-ALL"
+        ]
+      },
+      {
+        "dimension": "Customer",
+        "hierarchy": "AllCustomers",
+        "hierarchyLabel": "All Customer",
+        "values": [
+          "CLP-ALL"
+        ]
+      }
+    ],
+    "SCOPE_OVERWRITE": {
+      "dimension": "Item",
+      "hierarchy": "ProductFamily",
+      "values": [
+        "PF-20"
+      ]
+    }
+  }
+}

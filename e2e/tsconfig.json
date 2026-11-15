@@ -1,0 +1,33 @@
+// {
+//     "compilerOptions": {
+//         "types": [
+//             "node",
+//             "webdriverio/async",
+//             "@wdio/mocha-framework",
+//             "expect-webdriverio"
+//         ],
+//         "target": "es2019"
+//     }
+// }
+
+{
+    "compilerOptions": {
+      "sourceMap": false,
+      "target": "es2019",
+      "module": "commonjs",
+      "removeComments": true,
+      "noImplicitAny": false,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "strictPropertyInitialization": true,
+      "strictNullChecks": true,
+      // "strict": true,
+      // "noImplicitReturns": true,
+      // "noFallthroughCasesInSwitch": true,
+      // "noUncheckedIndexedAccess": true,
+      // "exactOptionalPropertyTypes": true,
+      // "noImplicitOverride": true,
+      "forceConsistentCasingInFileNames": true,
+      "types": ["node", "webdriverio/sync", "expect-webdriverio", "@wdio/mocha-framework"]
+    }
+  }

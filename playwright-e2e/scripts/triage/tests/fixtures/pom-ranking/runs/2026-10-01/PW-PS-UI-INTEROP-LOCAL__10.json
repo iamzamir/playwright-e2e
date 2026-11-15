@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "suite": "PW-PS-UI-INTEROP-LOCAL",
+  "runNumber": 10,
+  "runAttempt": 1,
+  "trigger": "schedule",
+  "branch": "main",
+  "tests": [
+    { "id": "views-1", "spec": "PlanningSpace/Views/Test_001.spec.ts", "name": "TC1 select view", "status": "failed", "signature": "View \"…\" did not become visible", "error": { "location": { "file": "pageobjects/sample.page.ts", "line": 9, "function": "SamplePage.selectView" } } },
+    { "id": "views-2", "spec": "PlanningSpace/Views/Test_001.spec.ts", "name": "TC2 edit view", "status": "blocked", "blockedBy": "TC1 select view", "blockedById": "views-1" },
+    { "id": "views-3", "spec": "PlanningSpace/Views/Test_001.spec.ts", "name": "TC3 delete view", "status": "blocked", "blockedBy": "TC1 select view", "blockedById": "views-1" },
+    { "id": "cards-1", "spec": "PlanningSpace/Cards/Test_002.spec.ts", "name": "TC1 open card", "status": "failed", "signature": "TimeoutError: locator.waitFor: Timeout Nms exceeded.", "error": { "location": { "file": "pageobjects/sample.page.ts", "line": 15, "function": "SamplePage.openCard" } } },
+    { "id": "api-1", "spec": "ProcessOrchestrationBackend/Test_003.spec.ts", "name": "TC1 api", "status": "failed", "signature": "Expected: N", "error": { "location": { "file": "tests/ProcessOrchestrationBackend/Test_003.spec.ts", "line": 40, "function": null } } },
+    { "id": "util-1", "spec": "PlanningSpace/PowerBar/Test_004.spec.ts", "name": "TC1 power bar", "status": "failed", "signature": "boom", "error": { "location": { "file": "util/test.util.ts", "line": 12, "function": "TestUtil.clickPowerBarLink" } } },
+    { "id": "pass-1", "spec": "PlanningSpace/Cards/Test_002.spec.ts", "name": "TC2 passes", "status": "passed" }
+  ]
+}

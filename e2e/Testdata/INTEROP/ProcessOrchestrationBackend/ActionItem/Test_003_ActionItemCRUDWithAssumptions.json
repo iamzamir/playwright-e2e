@@ -1,0 +1,91 @@
+{
+    "CycleDescriptionUpdate": "Action Item Cycle Interop Desciption Update",
+    "requestBody":{
+        "attributes": [
+            {
+                "name": "processName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "8220a965-fa89-4b48-8251-37b1360f4213"
+            },
+            {
+                "name": "processDisplayName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E"
+            },
+            {
+                "name": "sourceDisplayName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857"
+            }
+        ],
+        "status": "0",
+        "actionType": "4",
+        "priority": "3",
+        "dueDate": "2025-04-04T08:56:04.586Z",
+        "assigneeUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "notifyUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "name": "Test1",
+        "description": "for test",
+        "remarks": "for test",
+        "entityId": "c0d30cc0-bca9-4346-81c2-fe8cf1c44296",
+        "sourceId": "0a221880-96d3-1938-8196-d9621aa50087",
+        "sourceType": "ASSUMPTION",
+        "origin": "0F303DBD-B67B-4455-982F-599AF85847D4",
+        "sourceName": "Assumption1"
+    },
+    "updateReqest":{
+        "attributes": [
+            {
+                "id": "78036e55-772b-4d00-b5a2-8a285101b77a",
+                "name": "processName",
+                "title": "processName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "c1ce6d0a-5f30-4a7d-af25-e08397346f89",
+                "name": "processDisplayName",
+                "title": "processDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "f241cb13-48a9-4938-b86c-184afd591822",
+                "name": "sourceDisplayName",
+                "title": "sourceDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            }
+        ],
+        "name": "Test1",
+        "entityId": "c0d30cc0-bca9-4346-81c2-fe8cf1c44296",
+        "sourceId": "0a221880-96d3-1938-8196-d9621aa50087",
+        "sourceName": "Assumptio1",
+        "sourceType": "ASSUMPTION",
+        "origin": "0F303DBD-B67B-4455-982F-599AF85847D4",
+        "status": "0",
+        "actionType": "4",
+        "priority": "3",
+        "dueDate": "2025-04-04T08:56:04",
+        "description": "for test",
+        "remarks": "for test",
+        "isActive": true,
+        "commentsActive": false,
+        "assigneeUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "notifyUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ]
+    }
+  }

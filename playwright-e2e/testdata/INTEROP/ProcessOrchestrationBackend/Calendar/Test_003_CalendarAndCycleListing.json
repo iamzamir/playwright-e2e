@@ -1,0 +1,26 @@
+{
+  "_schema": {
+    "CALENDAR_NAME_PREFIX": "string (required) - prefix of the calendar this spec creates; contains spaces so every path is percent-encoded; a run id is appended",
+    "DESCRIPTION": "string (required) - calendar description",
+    "CYCLES": "object[] (required) - three cycles sent on create, deliberately not in startDate order",
+    "OLDER_CALENDAR_NAME": "string (required) - long-standing seeded calendar; the new calendar must be listed before it (createdOn DESC)",
+    "DEFAULT_PAGE_SIZE": "number (required) - page size of both listings when pageSize is omitted",
+    "LIST_PAGE_SIZE": "number (required) - page size used to walk the calendar list",
+    "ALL_ROWS_PAGE_SIZE": "number (required) - page size large enough to return every calendar",
+    "UNKNOWN_CALENDAR_NAME": "string (required) - calendar name that does not exist",
+    "INVALID_ARGUMENT_ERROR_CODE": "string (required) - errorCode for a pageSize or pageNumber PageRequest rejects"
+  },
+  "CALENDAR_NAME_PREFIX": "PW Cal List",
+  "DESCRIPTION": "Playwright calendar and cycle listing test",
+  "CYCLES": [
+    { "cycleName": "PW Cycle March", "description": "PW Cycle March", "startDate": "2024-03-01T00:00:00.000Z", "endDate": "2024-03-31T23:59:59.000Z" },
+    { "cycleName": "PW Cycle January", "description": "PW Cycle January", "startDate": "2024-01-01T00:00:00.000Z", "endDate": "2024-01-31T23:59:59.000Z" },
+    { "cycleName": "PW Cycle February", "description": "PW Cycle February", "startDate": "2024-02-01T00:00:00.000Z", "endDate": "2024-02-29T23:59:59.000Z" }
+  ],
+  "OLDER_CALENDAR_NAME": "Monthly Calendar",
+  "DEFAULT_PAGE_SIZE": 5,
+  "LIST_PAGE_SIZE": 50,
+  "ALL_ROWS_PAGE_SIZE": 500,
+  "UNKNOWN_CALENDAR_NAME": "PWNoSuchCalendar",
+  "INVALID_ARGUMENT_ERROR_CODE": "IBP_40_1027"
+}

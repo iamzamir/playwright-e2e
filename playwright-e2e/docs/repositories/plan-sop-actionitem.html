@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Action Item Service — Repository Dossier</title>
+  <style>
+    .shell{width:100%;overflow-x:hidden}
+    :root{--ink:#17212b;--muted:#5d6a76;--line:#d7dee5;--paper:#fff;--wash:#f5f7f8;--navy:#17324d;--green:#18735b;--amber:#b25e09;--red:#a53b3b;--blue:#27618b}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e9eef1;color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}
+    .shell{max-width:1220px;margin:auto;background:var(--paper);min-height:100vh;box-shadow:0 0 28px #2437461c}.top{padding:30px 42px 22px;border-bottom:5px solid var(--navy);background:#f8fafb}
+    .eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;font-size:11px}.top h1{font-size:30px;letter-spacing:0;margin:3px 0}.lede{max-width:900px;color:var(--muted);font-size:15px}
+    .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.tag{border:1px solid var(--line);padding:3px 8px;background:#fff;font-size:12px}.tag strong{color:var(--navy)}
+    nav{position:sticky;top:0;z-index:3;background:var(--navy);padding:9px 42px;display:flex;gap:18px;overflow:auto}nav a{color:#fff;text-decoration:none;white-space:nowrap;font-size:12px}
+    main{padding:26px 42px 54px}h2{font-size:21px;letter-spacing:0;border-bottom:2px solid var(--line);padding-bottom:6px;margin:32px 0 13px}h3{font-size:15px;margin:20px 0 8px;color:var(--navy)}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.card{border:1px solid var(--line);border-top:3px solid var(--green);padding:13px;background:var(--wash);border-radius:5px}.card b{display:block;font-size:20px;color:var(--navy)}.card span{color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}.panel{border:1px solid var(--line);padding:15px;border-radius:5px;background:#fff}.panel h3{margin-top:0}.panel ul{margin:5px 0;padding-left:20px}
+    table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}th{background:var(--wash);color:var(--navy)}tr:nth-child(even) td{background:#fbfcfc}
+    code{font-family:Consolas,monospace;background:#edf1f3;padding:1px 4px}.note{padding:11px 14px;border-left:4px solid var(--amber);background:#fff8e9;margin:12px 0}.risk{border-left-color:var(--red);background:#fff3f3}.good{border-left-color:var(--green);background:#eef8f4}
+    .diagram{border:1px solid var(--line);background:#fcfdfd;padding:12px;overflow:auto;margin:11px 0 22px;border-radius:5px}.mermaid{min-width:700px;text-align:center}.links a{color:var(--blue)}footer{padding:18px 42px;background:var(--wash);border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+    @media(max-width:700px){.top,main,footer{padding-left:20px;padding-right:20px}nav{padding-left:20px}.mermaid{min-width:570px}.top h1{font-size:25px}}
+    @media print{body{background:#fff}.shell{box-shadow:none}nav{display:none}.diagram,.panel,.card,table{break-inside:avoid}main{padding:10mm}footer{display:none}}
+  </style>
+</head>
+<body><div class="shell">
+<header class="top">
+  <div class="eyebrow">Plan SOP · Backend repository</div>
+  <h1>Action Item Service</h1>
+  <p class="lede">Owns action items and playbooks across Process Orchestration and Planning Space: creation, assignment, status tracking, bulk operations, templates, comments, due dates, KPI roll-ups, notifications, and configurable editor fields.</p>
+  <div class="tags"><span class="tag"><strong>Repo</strong> plan-sop-actionitem</span><span class="tag"><strong>Runtime</strong> Java 21</span><span class="tag"><strong>Framework</strong> Spring Boot 3.5.16</span><span class="tag"><strong>Database</strong> Azure SQL / actionitem</span><span class="tag"><strong>Local</strong> :8080</span></div>
+</header>
+<nav><a href="#purpose">Purpose</a><a href="#functions">Functionality</a><a href="#architecture">Architecture</a><a href="#flows">Key flows</a><a href="#automation">Automation</a><a href="#risks">Risks</a><a href="#evidence">Evidence</a></nav>
+<main>
+<section id="purpose"><h2>What this repository does</h2>
+  <p>The service is the system of record for work that must be completed by a user or team. An action item is attached to a source entity such as a process, subprocess, or assumption. It carries assignee, status, dates, comments, custom attributes, KPI mappings, notifications, and audit information.</p>
+  <p>It also owns <strong>playbooks</strong>: reusable definitions containing action-item templates. Initiating a playbook creates a separate instance and instance items. Editing the definition later does not mutate running instances.</p>
+  <div class="cards"><div class="card"><b>14</b><span>REST controllers</span></div><div class="card"><b>32</b><span>JPA entities</span></div><div class="card"><b>50</b><span>maximum DB pool size</span></div><div class="card"><b>8 + 4</b><span>direct backend + UI specs</span></div><div class="card"><b>13 / 73</b><span>active routes exercised (17.8%)</span></div><div class="card"><b>18</b><span>playbook endpoints, currently uncovered</span></div></div>
+</section>
+<section id="functions"><h2>Functional capabilities</h2>
+<div class="grid">
+  <article class="panel"><h3>Action-item lifecycle</h3><ul><li>Create one item or create in bulk.</li><li>Read by item ID or source entity.</li><li>Edit details, extend a due date, and update status in bulk.</li><li>Delete one, delete a supplied set, or delete every item for an entity.</li><li>Search with server-side criteria via <code>POST /searchActionItems</code>.</li></ul></article>
+  <article class="panel"><h3>Playbooks</h3><ul><li>Define a named playbook and its item templates.</li><li>Initiate manual or recurring instances.</li><li>Update individual or bulk instance-item statuses.</li><li>Read grouped instances and history; archive completed definitions.</li><li>Recurring initiation is cluster-guarded by ShedLock.</li></ul></article>
+  <article class="panel"><h3>Collaboration and notifications</h3><ul><li>Create collaboration channels through a proxy.</li><li>Store comments and remove all comments for an entity.</li><li>Map source events to recipients and delivered user notifications.</li><li>Resolve users and entity users through RBAC proxies.</li></ul></article>
+  <article class="panel"><h3>KPI and metadata</h3><ul><li>Create KPIs, configure attributes, and map KPIs to entities.</li><li>Serve editor, summary, and filter field configurations.</li><li>Manage pages, UI components, custom attributes, allowed values, field groups, and conditional rules.</li><li>Import and export tenant configuration.</li></ul></article>
+</div>
+<h3>Primary API groups</h3>
+<table><thead><tr><th>Area</th><th>Representative paths</th><th>Data owned</th></tr></thead><tbody>
+<tr><td>Action items</td><td><code>/actionitems</code>, <code>/actionitems/bulk</code>, <code>/actionitems/status</code>, <code>/searchActionItems</code></td><td>Items, attributes, assignee, status, dates</td></tr>
+<tr><td>Playbooks</td><td><code>/playbook/**</code>, <code>/playbooks</code></td><td>Definitions, templates, instances, instance items, archive</td></tr>
+<tr><td>Comments</td><td><code>/comments/**</code></td><td>Entity and item discussions</td></tr>
+<tr><td>KPI</td><td><code>/kpis/**</code>, <code>/kpi-config-attributes/**</code></td><td>KPI definitions and entity mappings</td></tr>
+<tr><td>UI metadata</td><td><code>/attribute-config/**</code>, <code>/ui-field-config/**</code></td><td>Editor and filter configuration</td></tr>
+<tr><td>Tenant / user</td><td><code>/tenant</code>, <code>/tenants/**</code>, <code>/users/**</code></td><td>Tenant registry and user projection</td></tr>
+</tbody></table>
+</section>
+<section id="architecture"><h2>Architecture</h2><h3>System context</h3><div class="diagram"><pre class="mermaid">
+graph TB
+  PO["Process Orchestration Service<br/>process-scoped proxy"] --> GW{{"API Gateway"}}
+  LUI["LUI<br/>Action Item UI"] --> GW
+  PS["Planning Space<br/>My Task card"] --> GW
+  AUTO["Playwright Automation"] --> GW
+  GW --> AI["Action Item Service<br/>14 controllers · Spring Boot"]
+  AI --> DB[("Azure SQL<br/>actionitem")]
+  AI --> LOCK[("ShedLock<br/>recurring playbooks")]
+  AI --> COLLAB["Collaboration Service"]
+  AI --> LIAM["LIAM / RBAC"]
+</pre></div>
+<h3>Internal layering</h3><div class="diagram"><pre class="mermaid">
+graph TD
+  C["Controllers 11<br/>Configuration controllers 3"] --> S["Services 22<br/>Configuration services 3"]
+  C --> DTO["Requests 29 · Responses 29<br/>DTOs 20 · Import/export DTOs 6"]
+  S --> DAO["DAO 4<br/>JPA Specifications 1"]
+  S --> R["Repositories 28"]
+  DAO --> R
+  R --> E["Entities 30<br/>Base entities 2"]
+  E --> DB[("Azure SQL")]
+  M["Mappers 10"] -. "entity ↔ DTO" .-> DTO
+  X["Config · Logging · Filters · Utilities"] -. "cross-cutting" .-> C
+</pre></div>
+<h3>Domain model</h3><div class="diagram"><pre class="mermaid">
+graph LR
+  SE["SourceEntity"] --> ITEM["ActionItem"]
+  ITEM --> ATTR["ActionItemAttrMapping"]
+  ITEM --> COM["Comments"]
+  TPL["ActionItemTemplate"] -. "instantiates" .-> ITEM
+  PB["Playbook"] --> PAI["PlaybookActionItem"]
+  PB -->|initiate| PI["PlaybookInstance"]
+  PI --> PII["PlaybookInstanceItem"]
+  PAI -. "copied into" .-> PII
+  PB --> ARC["PlaybookArchive"]
+  KPI["Kpi"] --> KCA["KpiConfigAttributes"]
+  KPI --> KEM["KpiEntityMap"]
+</pre></div></section>
+<section id="flows"><h2>Key runtime flows</h2><h3>Direct API versus Process Orchestration proxy</h3><div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant T as Test or UI
+  participant PO as PO ActionItemProxy
+  participant AI as ActionItemController
+  participant DB as actionitem DB
+  alt Process-context route
+    T->>PO: POST /process/{name}/actionitem
+    PO->>PO: enforce process RBAC
+    PO->>AI: POST /actionitems with resolved entityId
+    AI->>DB: insert
+    DB-->>T: ActionItemDto via PO
+  else Direct route
+    T->>AI: POST /actionitems
+    AI->>DB: insert
+    DB-->>T: ActionItemDto
+  end
+</pre></div>
+<h3>Playbook lifecycle</h3><div class="diagram"><pre class="mermaid">
+stateDiagram-v2
+  [*] --> Defined: POST /playbook
+  Defined --> Populated: add action-item templates
+  Populated --> Instantiated: initiate manually or recurrently
+  Instantiated --> InProgress: update item status
+  InProgress --> Complete: all items closed
+  Complete --> Archived
+  Populated --> Deleted
+  Archived --> [*]
+  Deleted --> [*]
+</pre></div>
+<div class="note"><strong>Automation decision:</strong> use the PO proxy when testing process-level authorization. The direct route bypasses that layer and is best for fast setup, cleanup, and service-native CRUD.</div>
+</section>
+<section id="automation"><h2>Automation relevance</h2>
+<table><thead><tr><th>Coverage</th><th>Specs</th><th>What they prove</th></tr></thead><tbody>
+<tr><td>Backend CRUD</td><td><code>ProcessOrchestrationBackend/ActionItem/Test_001..003</code></td><td>Process, subprocess, and assumption contexts</td></tr>
+<tr><td>Backend search (PO proxy)</td><td><code>ActionItem/Test_004..005</code></td><td>Process and subprocess search filters, paging, sort order</td></tr>
+<tr><td>Backend configuration</td><td><code>ActionItem/Test_006..008</code></td><td>Editor and filter config, templates, KPI configuration CRUD</td></tr>
+<tr><td>UI lifecycle</td><td><code>ProcessOrchestration/ActionItemsBatch/Test_001..004</code></td><td>Create/edit/delete, unauthorized user, bulk operations, assignment</td></tr>
+<tr><td>Planning card</td><td><code>PlanningSpace/CardsBatch/Test_013_MyTask</code></td><td>Search and presentation through Planning Space</td></tr>
+</tbody></table>
+<div class="note good"><strong>Deterministic checks:</strong> capture the server-generated ID, re-read after mutation, assert the ID list returned by bulk status calls, and clear the API token cache before switching users. Backend writes go through <code>ActionItemApiHelper.write()</code> (single send); <code>sendUntilStatus</code> is for reads only.</div>
+</section>
+<section id="risks"><h2>Risks and testing gaps</h2>
+<table><thead><tr><th>Risk</th><th>Why it matters</th><th>Recommended coverage</th></tr></thead><tbody>
+<tr><td><strong>Playbooks are uncovered</strong></td><td>18 endpoints, RBAC, scheduled execution, definition-instance separation</td><td>Definition CRUD → initiate → instance status → history</td></tr>
+<tr><td>Recurring initiation</td><td>Cluster-wide scheduling can race a test</td><td>Run-scoped names and polling; never assert a global exact count</td></tr>
+<tr><td>Entity-wide delete</td><td><code>DELETE /actionitems/entity/{id}</code> is destructive</td><td>Use only on a dedicated entity and assert the empty search result</td></tr>
+<tr><td>Duplicated UI-field model</td><td>Similar tables exist in UI Fields, and can drift</td><td>Contract comparison and migration parity checks</td></tr>
+<tr><td>Bulk and status routes untested at API level</td><td>lui uses them; listed as P1 on the coverage dashboard</td><td>Backend spec on the returned ID list, including partial failure</td></tr>
+<tr><td>Notifications</td><td>Eventual delivery; since ABPIBP-7362 one playbook-initiated notification per initiation, with no navLink</td><td>Poll the consumer rather than read immediately</td></tr>
+<tr><td>Playbook date filters</td><td>Since ABPIBP-7362 "today" is computed in UTC, while the suite runs in Australia/Adelaide</td><td>Avoid midnight boundaries or compute expectations in UTC</td></tr>
+</tbody></table>
+</section>
+<section id="evidence" class="links"><h2>Detailed evidence</h2><p>This dossier summarizes the verified source analysis. Use the deeper documents for exact endpoint and entity tables:</p><ul><li><a href="plan-sop-actionitem/overview.md">Repository overview</a></li><li><a href="plan-sop-actionitem/architecture.md">Architecture source diagrams</a></li><li><a href="plan-sop-actionitem/api-contract.md">Complete API contract</a></li><li><a href="plan-sop-actionitem/data-model.md">Entity and table model</a></li><li><a href="plan-sop-actionitem/environments.md">Environment routing</a></li><li><a href="plan-sop-actionitem/test-hooks.md">Setup, teardown, and waits</a></li><li><a href="plan-sop-actionitem/automation-coverage.md">Coverage gaps</a></li><li><a href="plan-sop-actionitem/troubleshooting.md">Failure signatures</a></li></ul></section>
+</main><footer>Generated from source under C:\Backend\plan-sop-actionitem · Repository documentation date: 16 Sep 2026, reviewed 5 Oct 2026 · Mermaid diagrams load through jsDelivr when online.</footer>
+</div>
+<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{fontFamily:'Segoe UI, sans-serif',primaryColor:'#eef6ff',primaryTextColor:'#17212b',primaryBorderColor:'#27618b',lineColor:'#5d6a76',secondaryColor:'#eef8f4',tertiaryColor:'#fff8e9'}});</script>
+</body></html>

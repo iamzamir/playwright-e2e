@@ -1,0 +1,19 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_001_WhiteListedCards.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_002_CardActions.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_003_MaasPivotCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_004_MaasChartCard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_005_BDECard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_006_DonutChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_007_LineChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_008_MultiKPICard.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_009_CombinationChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_010_BulletChart.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Collaboration/Test_001_CollaborationPanel.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/LiveBlocks/Test_002_LiveBlocks.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/LiveBlocks/Test_003_LiveBlocksExtended.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/CardsBatch/Test_021_VerifycardsResize.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DynConstraints/Test_001_ConstraintsFromCapacityPivot.spec.ts"
+  ]
+}

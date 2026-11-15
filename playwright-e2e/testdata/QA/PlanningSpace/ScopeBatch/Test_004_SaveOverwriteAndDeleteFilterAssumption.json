@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "ASSUMPTION_NAME": "string (required)",
+    "VIEW_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION_NAME": "PS Auto Assumption2",
+  "VIEW_NAME": "Save And Delete Filter"
+}

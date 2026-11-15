@@ -1,0 +1,25 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "FEATURE_FLAG_NAME1": "string (required)",
+    "FEATURE_FLAG_NAME2": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "TARGET_VIEW_GROUP": "string (required)",
+    "INITIAL_VIEW_GROUP": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ProcessStartStop",
+  "SUBPROCESS_NAME": "DemandReview",
+  "FEATURE_FLAG_NAME1": "WITH_SCENARIO_SCOPE_PINNING",
+  "FEATURE_FLAG_NAME2": "WITH_NEW_VIEW_FILTER_UI",
+  "VIEW_NAME": "arrange views view1",
+  "TARGET_VIEW_GROUP": "Automation View Group",
+  "INITIAL_VIEW_GROUP": "Automation View Group",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

@@ -1,0 +1,28 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "USER2": "string (required)",
+        "ACTION_ITEM_NAME": "string (required)",
+        "SUB_PROCESS_NAME": "string (required)",
+        "STATUS": "string (required)",
+        "ACTION_TYPE": "string (required)",
+        "PRIORITY": "string (required)",
+        "PRIORITY_UPDATED": "string (required)",
+        "CREATE_SUCCESS": "string (required)",
+        "EDIT_SUCCESS": "string (required)",
+        "DELETE_SUCCESS": "string (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "USER2": "PS Automation2",
+    "ACTION_ITEM_NAME": "ACTION_ITEM_NAME",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "STATUS": "In Progress",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "EDIT_SUCCESS": "Your changes have been saved successfully.",
+    "DELETE_SUCCESS": "Action Item has been deleted successfully"
+}

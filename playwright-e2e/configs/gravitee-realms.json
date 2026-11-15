@@ -1,0 +1,15 @@
+{
+  "_schema": {
+    "purpose": "Non-secret identity of Gravitee-only realms, keyed by environment then REALM_KEY. Read by configs/setup.js at startup and by applyRealmKeyOverride() in util/gateway.util.ts when test data pins a REALM_KEY.",
+    "realmName": "string (required) - REALM_NAME of the tenant",
+    "realmId": "string (required) - REALM_ID used for machine tokens",
+    "subjectId": "string (required) - SUBJECT_ID of the realm's machine user"
+  },
+  "INTEROP": {
+    "pspoat-test1": {
+      "realmName": "pspo-int-automation",
+      "realmId": "2a098426-4f14-4c2c-8f14-8f61692840d6",
+      "subjectId": "a5b17f53-8455-44d0-b17f-538455d4d0ec"
+    }
+  }
+}

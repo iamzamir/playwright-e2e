@@ -1,0 +1,20 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "ContextOverRideAT",
+    
+    "SELECT_PROCESS" : "Context OverRide AT",
+    "DRILL_THROUGH_CELL_VALUE": "49",
+
+    "SAME_TAB":
+    {
+        "NORMAL_VIEW_1": "Pivot- Source view",
+        "NORMAL_VIEW_2": "Maas Pivot Card View",
+        "HIDDEN_VIEW_1": "Pivot-Target view"
+    },
+    "NEW_TAB":
+    {
+        "NORMAL_VIEW_1": "DR Source",
+        "NORMAL_VIEW_2": "Bullet Chart Automation",
+        "HIDDEN_VIEW_1": "DR Destination"
+    }
+}

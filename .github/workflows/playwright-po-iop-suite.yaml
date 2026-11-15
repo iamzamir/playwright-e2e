@@ -1,0 +1,688 @@
+# RETIRED (T8.3, 2026-11-11): replaced by playwright-po-iop-ui-local-suite.yaml (PO UI on local headless Chrome, nightly on AZURE and GRAVITEE).
+# Disabled in GitHub Actions (last run 2026-05-22) and not maintained; do not re-enable. Kept for reference like the retired WDIO workflows (decision D3).
+# For an ad-hoc run of a PO UI folder, use playwright-custom-tests.yaml.
+name: '[RETIRED] playwright-po-iop-suite (Sauce Labs)'
+
+permissions:
+  contents: write
+
+on:
+  # schedule:  # retired, see header
+  #   - cron: '30 21 * * *'  # 3:00 AM IST daily
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      test-type:
+        description: Choose testing type
+        required: false
+        default: "saucelabs"
+        type: choice
+        options:
+          - local
+          - saucelabs
+      branch:
+        description: Branch to run workflow on
+        required: false
+        default: "main"
+        type: string
+      test-name:
+        description: 'Test name pattern to run (e.g., "Test_001" or "CreateEditDelete" or "Test_001_CreateEditDeleteActionItem")'
+        required: false
+        type: string
+      folder-name:
+        description: 'Folder path to run tests from (e.g., "tests/ProcessOrchestration/ActionItemsBatch")'
+        required: false
+        type: string
+      concurrency:
+        description: 'Number of parallel workers (SauceLabs only)'
+        required: false
+        default: '5'
+        type: string
+      enable-html-report:
+        description: 'Generate and upload Playwright HTML Report (default: false)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      retries:
+        description: 'Number of retries for failed tests (default: 1)'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '0'
+          - '2'
+          - '3'
+
+env:
+  PW_ENABLE_HTML_REPORT: ${{ github.event.inputs['enable-html-report'] || 'false' }}
+  PW_RETRIES: ${{ github.event.inputs.retries || '1' }}
+  SAUCE_USERNAME: ${{ secrets.SAUCE_PS_USERNAME }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_PS_1 }}
+
+jobs:
+  run-tests:
+    name: Run Process ProcessOrchestration UI Tests
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    outputs:
+      artifact-url: ${{ steps.get-artifact-url.outputs.artifact-url }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24.x"
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install saucectl
+        run: |
+          if [[ "${{ github.event.inputs.test-type }}" == "saucelabs" || "${{ github.event_name }}" == "schedule" ]]; then
+            npm install -g saucectl
+          fi
+
+      - name: Install Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Run Tests - PO UI suite
+        if: ${{ github.event.inputs.test-name == '' && github.event.inputs.folder-name == '' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: INTEROP
+          TZ: Australia/Adelaide
+        run: |
+          if [[ "${{ github.event.inputs.test-type }}" == "saucelabs" || "${{ github.event_name }}" == "schedule" ]]; then
+            echo "=== Running tests on Sauce Labs ==="
+            npm run po-ui:sauce:interop
+          else
+            echo "=== Running tests locally ==="
+            npm run test:interop
+          fi
+        continue-on-error: true
+
+      - name: Run Tests - Dynamic Test Selection
+        if: ${{ github.event.inputs.test-name != '' || github.event.inputs.folder-name != '' }}
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: INTEROP
+          TZ: Australia/Adelaide
+          TEST_GREP_PATTERN: ${{ github.event.inputs.test-name }}
+        run: |
+          # Build test command based on inputs
+          TEST_CMD=""
+          SAUCE_CMD="saucectl run -c .sauce/config.yml"
+          
+          # Handle concurrency override for SauceLabs
+          if [[ -n "${{ github.event.inputs.concurrency }}" ]]; then
+            SAUCE_CMD="$SAUCE_CMD --concurrency ${{ github.event.inputs.concurrency }}"
+          fi
+          
+          if [[ "${{ github.event.inputs.test-type }}" == "saucelabs" || "${{ github.event_name }}" == "schedule" ]]; then
+            echo "=== Running tests on Sauce Labs ==="
+            
+            # Handle test name or folder (need to create dynamic config for these)
+            if [[ -n "${{ github.event.inputs.test-name }}" || -n "${{ github.event.inputs.folder-name }}" ]]; then
+              echo "Creating dynamic test configuration..."
+              
+              # Build testMatch pattern - find actual test files
+              if [[ -n "${{ github.event.inputs.folder-name }}" ]]; then
+                echo "Finding tests in folder: ${{ github.event.inputs.folder-name }}"
+                TEST_FILES=$(find "${{ github.event.inputs.folder-name }}" -name "*.spec.ts" -type f | sed 's|^./||' | awk '{printf "\"%s\",\n", $0}' | sed '$ s/,$//')
+              elif [[ -n "${{ github.event.inputs.test-name }}" ]]; then
+                echo "Finding tests matching: ${{ github.event.inputs.test-name }}"
+                TEST_FILES=$(find tests/ProcessOrchestration -name "*${{ github.event.inputs.test-name }}*.spec.ts" -type f | sed 's|^./||' | awk '{printf "\"%s\",\n", $0}' | sed '$ s/,$//')
+              fi
+              
+              if [[ -z "$TEST_FILES" ]]; then
+                echo "ERROR: No test files found matching the criteria"
+                exit 1
+              fi
+              
+              echo "Found test files:"
+              echo "$TEST_FILES"
+              
+              # Create a temporary config file
+              cat > .sauce/config-dynamic.yml << EOF
+          apiVersion: v1alpha
+          kind: playwright
+          defaults:
+            timeout: 60m
+          sauce:
+            region: us-west-1
+            concurrency: ${{ github.event.inputs.concurrency || 5 }}
+            metadata:
+              tags:
+                - e2e
+                - dynamic-run
+          playwright:
+            version: package.json
+            configFile: configs/playwright.sauce.config.ts
+          npm:
+            dependencies:
+            - allure-playwright
+            - monocart-reporter
+          env:
+            TEST_AUTOMATION_USER_1: "\$TEST_AUTOMATION_USER_1"
+            TEST_AUTOMATION_USER_2: "\$TEST_AUTOMATION_USER_2"
+            TEST_AUTOMATION_PASSWORD: "\$TEST_AUTOMATION_PASSWORD"
+            SAUCE_PS_USERNAME: "\$SAUCE_PS_USERNAME"
+            SAUCE_PS_ACCESS_KEY: "\$SAUCE_PS_ACCESS_KEY"
+            CLIENT_SECRET_QA: "\$CLIENT_SECRET_QA"
+            CLIENT_SECRET_IOP: "\$CLIENT_SECRET_IOP"
+            REALM_CLIENT_SECRET_PO_QA_MIG_1: "\$REALM_CLIENT_SECRET_PO_QA_MIG_1"
+            REALM_CLIENT_SECRET_PO_QA_MIG_2: "\$REALM_CLIENT_SECRET_PO_QA_MIG_2"
+            REALM_CLIENT_SECRET_PO_IOP_MIG_1: "\$REALM_CLIENT_SECRET_PO_IOP_MIG_1"
+            REALM_CLIENT_SECRET_PO_IOP_MIG_2: "\$REALM_CLIENT_SECRET_PO_IOP_MIG_2"
+            REALM_CLIENT_SECRET_IOP_PO_PS_1: "\$REALM_CLIENT_SECRET_IOP_PO_PS_1"
+            ENVIRONMENT: "INTEROP"
+            PSENV: "INTEROP"
+            TZ: "Australia/Adelaide"
+            PW_ENABLE_HTML_REPORT: "\$PW_ENABLE_HTML_REPORT"
+            PW_RETRIES: "\$PW_RETRIES"
+            TEST_GREP_PATTERN: "${{ github.event.inputs.test-name }}"
+          rootDir: ./
+          suites:
+            - name: "Dynamic Test Run"
+              platformName: "Windows 11"
+              screenResolution: "1920x1080"
+              testMatch: [$TEST_FILES]
+              params:
+                browserName: "chrome"
+          artifacts:
+            retain:
+              'allure-results': 'allure-results.zip'
+              'performance-metrics': 'performance-metrics.zip'
+              'reports': 'reports.zip'
+            download:
+              when: always
+              match:
+                - 'artifacts/**'
+                - 'reports/performance-metrics/**'
+                - 'allure-results/**'
+                - 'reports/**'
+                - 'test-results/**'
+                - 'playwright-report/**'
+                - '*.json'
+                - '*.zip'
+                - '*.xml'
+                - '*.png'
+                - '*.txt'
+                - '*.log'
+                - '**/*.html'
+              directory: './artifacts'
+              reporters:
+                spotlight:
+                  enabled: true
+          EOF
+              SAUCE_CMD="saucectl run -c .sauce/config-dynamic.yml"
+            fi
+            
+            echo "Executing: $SAUCE_CMD"
+            eval $SAUCE_CMD
+            
+          else
+            echo "=== Running tests locally ==="
+            TEST_CMD="npx playwright test --config=configs/playwright.config.ts"
+            
+            # Add folder path if specified
+            if [[ -n "${{ github.event.inputs.folder-name }}" ]]; then
+              echo "Running tests from folder: ${{ github.event.inputs.folder-name }}"
+              TEST_CMD="$TEST_CMD ${{ github.event.inputs.folder-name }}"
+            fi
+            
+            # Add test name grep if specified
+            if [[ -n "${{ github.event.inputs.test-name }}" ]]; then
+              echo "Running tests matching: ${{ github.event.inputs.test-name }}"
+              TEST_CMD="$TEST_CMD --grep \"${{ github.event.inputs.test-name }}\""
+            fi
+            
+            echo "Executing: $TEST_CMD"
+            eval $TEST_CMD
+          fi
+        continue-on-error: true
+
+      - name: List Available Artifacts
+        working-directory: playwright-e2e
+        run: |
+          echo "Checking for artifacts..."
+          if [ -d "artifacts" ]; then
+            find artifacts -type f -name "*.zip" -o -name "*.json" | head -20
+          else
+            echo "No artifacts directory found"
+          fi
+
+      - name: Upload Raw Artifacts
+        id: upload-artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: sauce-labs-artifacts
+          path: |
+            playwright-e2e/artifacts/
+          if-no-files-found: ignore
+
+      - name: Upload Playwright HTML Report
+        if: always() && (github.event.inputs['enable-html-report'] == 'true')
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-html-report
+          # Local runs write to reports/; Sauce runs land under artifacts/ after the saucectl download.
+          path: |
+            playwright-e2e/reports/html-report
+            playwright-e2e/artifacts/**/html-report
+          if-no-files-found: ignore
+
+      - name: Upload Monocart Report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: monocart-report
+          path: |
+            playwright-e2e/reports/monocart-report
+            playwright-e2e/artifacts/**/monocart-report
+          if-no-files-found: ignore
+
+      - name: Upload Playwright Assets (traces, videos, test-results)
+        id: upload-assets
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-assets
+          path: |
+            playwright-e2e/test-results
+            playwright-e2e/artifacts/**/test-results
+          if-no-files-found: ignore
+
+      - name: Get Artifact URL
+        if: always()
+        id: get-artifact-url
+        run: |
+          ASSETS_ID="${{ steps.upload-assets.outputs.artifact-id }}"
+          RAW_ID="${{ steps.upload-artifact.outputs.artifact-id }}"
+          TARGET_ID="${ASSETS_ID:-$RAW_ID}"
+          if [[ -n "$TARGET_ID" ]]; then
+            ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${TARGET_ID}"
+          else
+            ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
+          echo "artifact-url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+          echo "Artifact URL: $ARTIFACT_URL"
+
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: run-tests
+    if: always()
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Download GitHub Artifacts
+        if: always()
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: sauce-labs-artifacts
+          path: playwright-e2e/artifacts-backup/
+        continue-on-error: true
+
+      - name: Merge Artifact Sources
+        working-directory: playwright-e2e
+        run: |
+          echo "Merging artifact sources..."
+          
+          # If primary artifacts exist, use them
+          if [ -d "artifacts" ] && [ "$(ls -A artifacts 2>/dev/null)" ]; then
+            echo "Using primary Sauce Labs artifacts"
+            ls -la artifacts/
+          # Otherwise, use backup GitHub artifacts
+          elif [ -d "artifacts-backup" ] && [ "$(ls -A artifacts-backup 2>/dev/null)" ]; then
+            echo "Using backup GitHub artifacts"
+            mv artifacts-backup artifacts
+            ls -la artifacts/
+          else
+            echo "No artifacts found from either source"
+            mkdir -p artifacts
+          fi
+
+      - name: Extract and Prepare Allure Results
+        working-directory: playwright-e2e
+        run: |
+          # Create directories
+          mkdir -p reports/allure-results
+          
+          echo "Looking for artifacts..."
+          find . -name "*allure*" -type f 2>/dev/null || echo "No allure files found with find"
+          
+          # Try multiple approaches to find allure results
+          ALLURE_FOUND=false
+          
+          # Approach 1: Look for allure-results.zip
+          if [ -f "artifacts/allure-results.zip" ]; then
+            echo "Found allure-results.zip, extracting..."
+            unzip -o artifacts/allure-results.zip -d reports/allure-results/
+            ALLURE_FOUND=true
+          fi
+          
+          # Approach 2: Look for allure-results directory
+          if [ -d "artifacts/allure-results" ] && [ "$ALLURE_FOUND" = false ]; then
+            echo "Found allure-results directory, copying..."
+            cp -r artifacts/allure-results/* reports/allure-results/ 2>/dev/null || echo "Copy failed"
+            ALLURE_FOUND=true
+          fi
+          
+          # Approach 3: Search recursively for allure JSON files
+          if [ "$ALLURE_FOUND" = false ]; then
+            echo "Searching recursively for allure files..."
+            find artifacts -name "*.json" -exec grep -l "allure" {} \; 2>/dev/null | while read file; do
+              echo "Copying allure file: $file"
+              cp "$file" reports/allure-results/
+              ALLURE_FOUND=true
+            done
+          fi
+          
+          # Approach 4: Look for any zip files and extract them
+          if [ "$ALLURE_FOUND" = false ]; then
+            echo "Looking for any zip files..."
+            find artifacts -name "*.zip" -exec unzip -o {} -d reports/allure-results/ \; 2>/dev/null || echo "No zip files found"
+          fi
+          
+          # Verify allure results exist
+          if [ "$(ls -A reports/allure-results/ 2>/dev/null)" ]; then
+            echo "Allure results found:"
+            ls -la reports/allure-results/
+          else
+            echo "No allure results found, creating minimal test data for report generation"
+            cat > reports/allure-results/test-result.json << EOF
+          {
+            "uuid": "$(uuidgen)",
+            "name": "No Test Results Found",
+            "status": "broken",
+            "stage": "finished",
+            "description": "No allure results were found in Sauce Labs artifacts",
+            "start": $(date +%s)000,
+            "stop": $(date +%s)000
+          }
+          EOF
+          fi
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Upload Processed Allure Results
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: processed-allure-results
+          path: playwright-e2e/reports/allure-results
+          if-no-files-found: ignore
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies for Allure CLI
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Setup Java (Allure dependency)
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Generate Allure Report (No Docker)
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RESULTS_DIR="playwright-e2e/reports/allure-results"
+          HISTORY_ROOT="playwright-e2e/reports/allure-history/PSAutomationReports/PW-PO-UI-INTEROP"
+          CURRENT_REPORT_DIR="${HISTORY_ROOT}/${{ github.run_number }}"
+          LATEST_REPORT_DIR="${HISTORY_ROOT}/latest"
+          PREV_ROOT="gh-pages/PSAutomationReports/PW-PO-UI-INTEROP"
+          PREV_HISTORY_DIR="${PREV_ROOT}/latest/history"
+
+          mkdir -p "$RESULTS_DIR" "$HISTORY_ROOT"
+
+          # Restore previously published numbered report folders from gh-pages so the
+          # "keep last 7" retention operates over the full history, not just this run.
+          if [ -d "$PREV_ROOT" ]; then
+            for prev in "$PREV_ROOT"/[0-9]*; do
+              [ -d "$prev" ] || continue
+              cp -R "$prev" "$HISTORY_ROOT/"
+            done
+          fi
+
+          if [ -d "$PREV_HISTORY_DIR" ]; then
+            cp -R "$PREV_HISTORY_DIR" "$RESULTS_DIR/history"
+          fi
+
+          # Safety check: clean trace and video attachments from Allure result JSONs and remove binary files
+          node playwright-e2e/scripts/strip-allure-traces.js "$RESULTS_DIR"
+
+          cd playwright-e2e
+          npx allure generate reports/allure-results --clean -o "reports/allure-history/PSAutomationReports/PW-PO-UI-INTEROP/${{ github.run_number }}"
+          cd - >/dev/null
+
+          rm -rf "$LATEST_REPORT_DIR"
+          cp -R "$CURRENT_REPORT_DIR" "$LATEST_REPORT_DIR"
+
+          # Keep latest + last 7 numeric report folders.
+          cd "$HISTORY_ROOT"
+          ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf
+          cd - >/dev/null
+
+      - name: Sanitize Allure History for gh-pages Deploy
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          HISTORY_DIR="playwright-e2e/reports/allure-history"
+
+          if [ -d "$HISTORY_DIR" ]; then
+            sudo chown -R "$USER":"$USER" "$HISTORY_DIR" || true
+            find "$HISTORY_DIR" -type d -name ".git" -prune -exec sudo rm -rf {} + || true
+            chmod -R u+rwX "$HISTORY_DIR" || true
+          fi
+
+      - name: Deploy report to Github Pages
+        id: deploy-gh-pages
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      # Suites that finish together all push to gh-pages, so a push can land between this action's clone and its push
+      # and get it rejected ("fetch first", or the server's "fatal error in commit_refs"). Each attempt clones gh-pages
+      # afresh, so a retry after a random wait publishes on top of the other run instead of losing this run's report.
+      - name: Wait before retrying the Github Pages deploy
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        shell: bash
+        run: sleep $((20 + RANDOM % 41))
+
+      - name: Deploy report to Github Pages (retry 1)
+        id: deploy-gh-pages-retry
+        if: steps.deploy-gh-pages.outcome == 'failure'
+        continue-on-error: true
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Wait before the last Github Pages deploy
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        shell: bash
+        run: sleep $((40 + RANDOM % 61))
+
+      - name: Deploy report to Github Pages (retry 2)
+        if: steps.deploy-gh-pages-retry.outcome == 'failure'
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: playwright-e2e/reports/allure-history
+          keep_files: true
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/PW-PO-UI-INTEROP/${{ github.run_number }}
+          ARTIFACTS_URL: ${{ needs.run-tests.outputs.artifact-url }}
+          WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TEAMS_WEBHOOK_URL)) {
+            Write-Host "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          }
+
+          $title = "UI Automation Test Results - PO-UI-INTEROP - Playwright"
+          $summary = "Test Run #${{ github.run_number }}: ${{ job.status }}"
+
+          function Send-TeamsPayload {
+            param(
+              [string]$JsonBody
+            )
+
+            $invokeWebRequestParams = @{
+              Method = 'Post'
+              Uri = $env:TEAMS_WEBHOOK_URL
+              Body = $JsonBody
+              ContentType = 'application/json'
+              SkipHttpErrorCheck = $true
+            }
+            $response = Invoke-WebRequest @invokeWebRequestParams
+
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+              return $true
+            }
+
+            Write-Host "Teams webhook returned status: $($response.StatusCode)"
+            return $false
+          }
+
+          # Teams Workflows webhooks only render an Adaptive Card envelope. Simpler payloads
+          # return 202 (accepted) but post nothing, so send the Adaptive Card directly.
+          $adaptivePayload = @{
+            type = 'message'
+            attachments = @(
+              @{
+                contentType = 'application/vnd.microsoft.card.adaptive'
+                content = @{
+                  '$schema' = 'http://adaptivecards.io/schemas/adaptive-card.json'
+                  type = 'AdaptiveCard'
+                  version = '1.4'
+                  body = @(
+                    @{
+                      type = 'TextBlock'
+                      size = 'Medium'
+                      weight = 'Bolder'
+                      text = $title
+                      wrap = $true
+                    },
+                    @{
+                      type = 'TextBlock'
+                      text = $summary
+                      wrap = $true
+                      spacing = 'Small'
+                    }
+                  )
+                  actions = @(
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Allure Report'
+                      url = $env:REPORT_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Download Artifacts'
+                      url = $env:ARTIFACTS_URL
+                    },
+                    @{
+                      type = 'Action.OpenUrl'
+                      title = 'Workflow Run'
+                      url = $env:WORKFLOW_URL
+                    }
+                  )
+                }
+              }
+            )
+          } | ConvertTo-Json -Depth 20
+
+          if (Send-TeamsPayload -JsonBody $adaptivePayload) {
+            Write-Host "Teams notification sent using Adaptive Card payload format."
+            exit 0
+          }
+
+          Write-Host "Unable to send Teams notification with available payload formats."
+          exit 0
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: generate-report
+    if: always() && needs.generate-report.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit

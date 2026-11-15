@@ -1,0 +1,22 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "PRIMARY_SCA_ACTION": {
+        "procedureDisplayName": "Clone Member"
+    },
+    "SECONDARY_SCA_ACTION": {
+        "procedureDisplayName": "CreateScenarioPopup"
+    },
+    "OTHER_SCA_ACTIONS": [
+        {
+            "procedureDisplayName": "Create Scenario"
+        },
+        {
+            "procedureDisplayName": "InteractiveDemand"
+        },
+         {
+            "procedureDisplayName": "Publish Scenario"
+        }
+    ],
+    "SUBPROCESS_NAME" : "Supply Review"
+}

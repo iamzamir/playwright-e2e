@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "PROCEDURE_NAME": "CreateScenario1",
+    "DRILL_THROUGH_VIEW_FROM": "Maas Pivot Card View",
+    "DRILL_THROUGH_VIEW_TO": "Maas Chart Card View",
+    "DRILL_THROUGH_CELL": "47",
+    "CARD_NAME": "Maas Pivot",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS": "Sceanrio_Case_Automation"
+}

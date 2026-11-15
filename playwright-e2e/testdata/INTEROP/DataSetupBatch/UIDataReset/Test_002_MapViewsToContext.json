@@ -1,0 +1,169 @@
+{
+  "_schema": {
+    "PAYLOAD": "object (required) - { entities: [{ type, entityId[] }], views[] }; every entity gets all the views",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "PAYLOAD": {
+    "entities": [
+      {
+        "type": "subprocess",
+        "entityId": [
+          "PSAutomation",
+          "B67A827E-F66A-4E0D-99F2-2B76D71E7148",
+          "PSAutomationInitiativesAndAssumptionsReview",
+          "DAF42EA6-21D4-438D-AFC1-B3DD7A8C4D05",
+          "PSAutomationDemandReview",
+          "9BF49A07-E1A4-4093-BA0A-FBA048B280DD"
+        ]
+      },
+      {
+        "entityId": [
+          "Opportunity"
+        ],
+        "type": "assumptiontype"
+      }
+    ],
+    "views": [
+      { "id": "6ab4f10e7cdd9320c76a5d6a", "sequence": 1, "hidden": false },
+      { "id": "6ab4ef37e9a35e725bd7e488", "sequence": 2, "hidden": false },
+      { "id": "6aa0056b712c03eeae347a49", "sequence": 3, "hidden": false },
+      { "id": "69b7ae13d3895baf46c6b79b", "sequence": 4, "hidden": false },
+      { "id": "69bd2bbd1cc45e339b4189dc", "sequence": 5, "hidden": false },
+      { "id": "69b7943cd3895baf46c6b796", "sequence": 6, "hidden": false },
+      { "id": "6874a68d8c14e821aab0e469", "sequence": 7, "hidden": false },
+      { "id": "6874a69f373383a0a0013575", "sequence": 8, "hidden": false },
+      { "id": "67d80da8f2967ca960ced3af", "sequence": 9, "hidden": false },
+      { "id": "68a59f3e029bd85e1136d06e", "sequence": 10, "hidden": true },
+      { "id": "68ef2e818fb3b2eae082a5d0", "sequence": 11, "hidden": false },
+      { "id": "6a969ac399cb6d54a014075c", "sequence": 12, "hidden": false },
+      { "id": "6a98fabf8ae6613b616588b0", "sequence": 13, "hidden": false },
+      { "id": "6a9e7c62712c03eeae347968", "sequence": 14, "hidden": false },
+      { "id": "6a9e815b48943053aba6da63", "sequence": 15, "hidden": false },
+      { "id": "6a9e950e8ae6613b6165899b", "sequence": 16, "hidden": false },
+      { "id": "6aa28ebef78b639fa5357efb", "sequence": 17, "hidden": false },
+      { "id": "6aa28ec9f78b639fa5357efc", "sequence": 18, "hidden": false },
+      { "id": "6aa28ed6cebace8a57eaefdf", "sequence": 19, "hidden": false },
+      { "id": "6aa3c0ca07a26cc8a1fc38dd", "sequence": 20, "hidden": false },
+      { "id": "6aaccb927cdd9320c76a59ad", "sequence": 21, "hidden": false },
+      { "id": "685d6a3fa71c40f4d4193f11", "sequence": 22, "hidden": false },
+      { "id": "6894ac49a47dc9d41137a50b", "sequence": 23, "hidden": false },
+      { "id": "6894ac6e0e3c100a14b18f25", "sequence": 24, "hidden": false },
+      { "id": "69d8cc3bce02043f2e8512cb", "sequence": 25, "hidden": false },
+      { "id": "69d8cc89567621b1e50154b1", "sequence": 26, "hidden": false },
+      { "id": "67ed37cd0520410f68df7385", "sequence": 27, "hidden": false },
+      { "id": "67f7cf8ba975f07a2df28d2d", "sequence": 28, "hidden": false },
+      { "id": "68a325ef36eaf0123a209397", "sequence": 29, "hidden": true },
+      { "id": "68ad44acfae45a7ea648d26d", "sequence": 30, "hidden": false },
+      { "id": "68e4ec60810db6fb0ac4126a", "sequence": 31, "hidden": true },
+      { "id": "68e604ba810db6fb0ac412e6", "sequence": 32, "hidden": false },
+      { "id": "68e604eff1cb71971c555c24", "sequence": 33, "hidden": false },
+      { "id": "68e605c0f1cb71971c555c28", "sequence": 34, "hidden": false },
+      { "id": "68e7a955810db6fb0ac41307", "sequence": 35, "hidden": false },
+      { "id": "68e7a970810db6fb0ac41308", "sequence": 36, "hidden": false },
+      { "id": "68e7b321f1cb71971c555c44", "sequence": 37, "hidden": false },
+      { "id": "68f9fc939d638f45112aa8b4", "sequence": 38, "hidden": false },
+      { "id": "6a9ff2ba48943053aba6db49", "sequence": 39, "hidden": false },
+      { "id": "6aa0f285f78b639fa5357e8e", "sequence": 40, "hidden": false },
+      { "id": "6aa0f352cebace8a57eaef43", "sequence": 41, "hidden": false },
+      { "id": "6aa0f3c207a26cc8a1fc37a8", "sequence": 42, "hidden": false },
+      { "id": "6aa0f49507a26cc8a1fc37a9", "sequence": 43, "hidden": false },
+      { "id": "6aa0f55acebace8a57eaef44", "sequence": 44, "hidden": false },
+      { "id": "6aa0f57ff78b639fa5357e91", "sequence": 45, "hidden": false },
+      { "id": "6aa0f5c807a26cc8a1fc37aa", "sequence": 46, "hidden": false },
+      { "id": "6aa0f60207a26cc8a1fc37ab", "sequence": 47, "hidden": false },
+      { "id": "6aa0f63f07a26cc8a1fc37ac", "sequence": 48, "hidden": false },
+      { "id": "6ab205441e42c7d224e4d9c5", "sequence": 49, "hidden": false },
+      { "id": "68ad44100be95e0fd0a9d6a1", "sequence": 50, "hidden": false },
+      { "id": "68ad4431fae45a7ea648d26c", "sequence": 51, "hidden": false },
+      { "id": "682331ff625a1a6ea4470433", "sequence": 52, "hidden": false },
+      { "id": "6aabdfa7589117827720cb66", "sequence": 53, "hidden": false },
+      { "id": "6a4e100a457a9f23932c2622", "sequence": 54, "hidden": false },
+      { "id": "67ef60a76ccd7b90b20520e0", "sequence": 55, "hidden": false },
+      { "id": "67ef60b76ccd7b90b20520e1", "sequence": 56, "hidden": false },
+      { "id": "6808ddd9e0297eb437feeedb", "sequence": 57, "hidden": false },
+      { "id": "687deade9d7538d30bbf22cf", "sequence": 58, "hidden": false },
+      { "id": "687deafa59fa7c6fa90f07e1", "sequence": 59, "hidden": false },
+      { "id": "689c3a04e739267edab84a6b", "sequence": 60, "hidden": false },
+      { "id": "689c3a1e36eaf0123a20900a", "sequence": 61, "hidden": false },
+      { "id": "689c3a3fe739267edab84a6e", "sequence": 62, "hidden": true },
+      { "id": "6916fe677988d527bc41a40e", "sequence": 63, "hidden": false },
+      { "id": "69aa7ac1d7df8e462fc433f0", "sequence": 64, "hidden": false },
+      { "id": "69ce3e0a1a11d3c39ef5ba19", "sequence": 65, "hidden": false },
+      { "id": "69ce3e22ce02043f2e850e84", "sequence": 66, "hidden": false },
+      { "id": "69ce3e34567621b1e5015077", "sequence": 67, "hidden": true },
+      { "id": "69ce3e441a11d3c39ef5ba1a", "sequence": 68, "hidden": true },
+      { "id": "69ce5052ce02043f2e850e86", "sequence": 69, "hidden": false },
+      { "id": "69ce5061ce02043f2e850e87", "sequence": 70, "hidden": false },
+      { "id": "69ce50eb567621b1e501507d", "sequence": 71, "hidden": true },
+      { "id": "69ce50fbce02043f2e850e88", "sequence": 72, "hidden": true },
+      { "id": "6ab45144e9a35e725bd7e46e", "sequence": 73, "hidden": false },
+      { "id": "68ca96d2a5a874e70cc4da6a", "sequence": 74, "hidden": false },
+      { "id": "68d2681b165fe91e9bf8f7e9", "sequence": 75, "hidden": false },
+      { "id": "69b7deb4d3895baf46c6b7a2", "sequence": 76, "hidden": false },
+      { "id": "69b149c4d6a6549597ff4496", "sequence": 77, "hidden": false },
+      { "id": "68d2952006e07eca7a05d172", "sequence": 78, "hidden": false },
+      { "id": "69e60298567621b1e50158d5", "sequence": 79, "hidden": false },
+      { "id": "69e606cc567621b1e50158d6", "sequence": 80, "hidden": false },
+      { "id": "6a0c516ae82f137744ded405", "sequence": 81, "hidden": false },
+      { "id": "67f0c3136ccd7b90b205229a", "sequence": 82, "hidden": false },
+      { "id": "6ab5005ae9a35e725bd7e48e", "sequence": 83, "hidden": false },
+      { "id": "6ab5133e1e42c7d224e4ddf4", "sequence": 84, "hidden": false },
+      { "id": "6ab515541e42c7d224e4ddf5", "sequence": 85, "hidden": false },
+      { "id": "680c7bf2b2a387098bf99bea", "sequence": 86, "hidden": false },
+      { "id": "6996aebeac96ddf22f2e068a", "sequence": 87, "hidden": false },
+      { "id": "68a558b3029bd85e1136cf60", "sequence": 88, "hidden": true },
+      { "id": "67b48a8ecf225d2608d25462", "sequence": 89, "hidden": false },
+      { "id": "67b48a9f417468cc6442c7ea", "sequence": 90, "hidden": false },
+      { "id": "68f23b6925a0ca39f0eb29ee", "sequence": 91, "hidden": false },
+      { "id": "6916cfef7988d527bc41a3d9", "sequence": 92, "hidden": true },
+      { "id": "6916d24a7988d527bc41a3db", "sequence": 93, "hidden": true },
+      { "id": "6a211e304bf8ade7a876e28b", "sequence": 94, "hidden": false },
+      { "id": "6a50bee9538d9a1275ee1283", "sequence": 95, "hidden": false },
+      { "id": "6a50cf35240f24dcdb672132", "sequence": 96, "hidden": false },
+      { "id": "68c11b6dc5e609ec2e1a1d2f", "sequence": 97, "hidden": false },
+      { "id": "69158640c16574c5aa7baeb5", "sequence": 98, "hidden": false },
+      { "id": "6915ebd1c16574c5aa7baf51", "sequence": 99, "hidden": false },
+      { "id": "69aa68d1d7df8e462fc433e7", "sequence": 100, "hidden": false },
+      { "id": "69aa6c44d7df8e462fc433e8", "sequence": 101, "hidden": false },
+      { "id": "69dde3ff1a11d3c39ef5bec0", "sequence": 102, "hidden": false },
+      { "id": "6998285eac96ddf22f2e0778", "sequence": 103, "hidden": false },
+      { "id": "68bfb8dda5a874e70cc4d413", "sequence": 104, "hidden": false },
+      { "id": "68bfeb04c5e609ec2e1a1c52", "sequence": 105, "hidden": false },
+      { "id": "68c264a7a5a874e70cc4d57f", "sequence": 106, "hidden": false },
+      { "id": "68c288e9c5e609ec2e1a1dcc", "sequence": 107, "hidden": false },
+      { "id": "679ccc162c8f35d223fc922f", "sequence": 108, "hidden": false },
+      { "id": "69491c6eef9e9ea95de25f49", "sequence": 109, "hidden": false },
+      { "id": "69491cc6ef9e9ea95de25f4a", "sequence": 110, "hidden": false },
+      { "id": "68111cc1b2a387098bf99e07", "sequence": 111, "hidden": false },
+      { "id": "68111cdb10763606d2000181", "sequence": 112, "hidden": false },
+      { "id": "68111f0d10763606d2000182", "sequence": 113, "hidden": false },
+      { "id": "6811ec50b2a387098bf99e1d", "sequence": 114, "hidden": false },
+      { "id": "68145a898d1565aff1600fc0", "sequence": 115, "hidden": false },
+      { "id": "6814634162fc8fdcc52877a6", "sequence": 116, "hidden": false },
+      { "id": "6ad9aff212efffed7e737c0e", "sequence": 117, "hidden": false }
+    ]
+  },
+  "GRAVITEE": {
+    "REALM_KEY": "pspoat-test1",
+    "PAYLOAD": {
+      "entities": [
+        {
+          "type": "subprocess",
+          "entityId": [
+            "PSAutomation",
+            "5AD0D90E-7924-4665-A637-0562A212B259",
+            "PSAutomationInitiativesAndAssumptionsReview",
+            "F7AFF5B9-BEFD-4300-9D1A-8848C0E95F8D",
+            "PSAutomationDemandReview"
+          ]
+        },
+        {
+          "type": "assumptiontype",
+          "entityId": [
+            "Opportunity"
+          ]
+        }
+      ]
+    }
+  }
+}

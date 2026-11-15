@@ -1,0 +1,26 @@
+{
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "Initiatives And Assumptions Review",
+  "VIEW_NAME": "duplicate view automation subprocess",
+  "DUPLICATED_VIEW_NAME": "duplicate view automation subprocess - Copy",
+  "QUICK_FILTER": ["Item", "Region"],
+  "WORKFLOW_FILTER": {
+    "DIMENSION_NAME": "LOCATION",
+    "ATTRIBUTE_NAME": "Region",
+    "VALUES": ["REGION-00"]
+  },
+  "CARDS": ["Maas Pivot Card", "BDE Card", "Maas Chart", "Demand Chart"],
+  "SCA_PROCEDURES": {
+    "PRIMARY_ACTION": "Clone Member",
+    "SECONDARY_ACTION": "Create Scenario",
+    "OTHER_ACTIONS": [
+      { "procedureDisplayName": "CreateScenarioPopup" },
+      { "procedureDisplayName": "InteractiveDemand" }
+    ]
+  },
+  "ACTORS_AND_DEFAULT_PROCEDURE": [
+    { "label": "Insight", "value": "Insight_actor" },
+    { "label": "Default Procedure", "value": "OnDemandMaasCluster" }
+  ]
+}

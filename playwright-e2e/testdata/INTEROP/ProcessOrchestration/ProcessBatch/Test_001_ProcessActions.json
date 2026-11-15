@@ -1,0 +1,24 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "SUBJECT_ID": "string (required)",
+        "MACHINE_USER_NAME": "string (required)",
+        "CREATE_PROCESS_FORM_DATA": "object (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE. Optional REALM_KEY (string) pins the Gravitee tenant (portal/API/auth hosts) for this spec"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "SUBJECT_ID": "f310e530-ce0b-42c8-a15d-22ed0d89a9d5",
+    "MACHINE_USER_NAME": "M2M-Procedure-Svc",
+    "CREATE_PROCESS_FORM_DATA":{
+        "TEMPLATE_NAME": "BY-Template",
+        "DISPLAY_NAME":"PROCESS CREATE",
+        "CALENDAR": "Monthly Calendar",
+        "CYCLE_NAME": "2024 NOVEMBER",
+        "DESCRIPTION": "This process is created for testing purpose"
+    },
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1",
+        "SUBJECT_ID": ""
+    }
+}

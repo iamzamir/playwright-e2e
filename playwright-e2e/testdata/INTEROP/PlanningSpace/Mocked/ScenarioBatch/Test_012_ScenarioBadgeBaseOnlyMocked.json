@@ -1,0 +1,8 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required) - process with a current base scenario; the spec replaces its scenario list with the base scenario only"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation"
+}

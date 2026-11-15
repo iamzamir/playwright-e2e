@@ -1,0 +1,8 @@
+{
+  "CalcEngineId": ["ebf85d02-4163-446e-9a71-c000b905f419"],
+  "requestBody": 
+    {
+      "dropExistingJournalSchema": true,
+      "loadFromSerializedCopy": false
+    }
+}

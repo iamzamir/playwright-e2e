@@ -1,0 +1,68 @@
+{
+    "PAYLOAD": {
+        "calendarName": "Migration Calendar",
+        "description": "Migration Calendar",
+        "cycles": [
+            {
+                "cycleName": "Sample Cycle 1",
+                "description": "Sample Cycle 1",
+                "startDate": "2024-01-22T06:57:33.967Z",
+                "endDate": "2024-02-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 2",
+                "description": "Sample Cycle 2",
+                "startDate": "2024-02-22T06:57:33.967Z",
+                "endDate": "2024-03-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 3",
+                "description": "Sample Cycle 3",
+                "startDate": "2024-03-22T06:57:33.967Z",
+                "endDate": "2024-04-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 4",
+                "description": "Sample Cycle 4",
+                "startDate": "2024-04-22T06:57:33.967Z",
+                "endDate": "2024-05-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 5",
+                "description": "Sample Cycle 5",
+                "startDate": "2024-05-22T06:57:33.967Z",
+                "endDate": "2024-06-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 6",
+                "description": "Sample Cycle 6",
+                "startDate": "2024-06-22T06:57:33.967Z",
+                "endDate": "2024-07-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 7",
+                "description": "Sample Cycle 7",
+                "startDate": "2024-07-22T06:57:33.967Z",
+                "endDate": "2024-08-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 8",
+                "description": "Sample Cycle 8",
+                "startDate": "2024-08-22T06:57:33.967Z",
+                "endDate": "2024-09-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 9",
+                "description": "Sample Cycle 9",
+                "startDate": "2024-09-22T06:57:33.967Z",
+                "endDate": "2024-10-22T06:57:33.967Z"
+            },
+            {
+                "cycleName": "Sample Cycle 10",
+                "description": "Sample Cycle 10",
+                "startDate": "2024-10-22T06:57:33.967Z",
+                "endDate": "2024-11-22T06:57:33.967Z"
+            }
+        ]
+    }
+}

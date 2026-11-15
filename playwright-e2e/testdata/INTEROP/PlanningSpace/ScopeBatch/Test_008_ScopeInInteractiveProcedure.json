@@ -1,0 +1,85 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "SCOPE_LEVELS": "array (required) - [item level, location level] as { dimension, hierarchy, hierarchyLabel?, values[] }; the first value of each is applied",
+    "DATA_SCOPE": "object (required) - ITEM and LOCATION chips the procedure's data scope shows: { dimesionName, filterName (level key), filterValues[] }",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "VerticalFilterTest",
+  "VIEW_NAME": "Save And Delete Filter",
+  "PROCEDURE_NAME": "InteractiveDemand",
+  "SCOPE_LEVELS": [
+    {
+      "dimension": "ITEM",
+      "hierarchy": "ProductType",
+      "values": [
+        "PF-00"
+      ]
+    },
+    {
+      "dimension": "LOCATION",
+      "hierarchy": "AllLocations",
+      "values": [
+        "ALL"
+      ]
+    }
+  ],
+  "DATA_SCOPE": {
+    "ITEM": {
+      "dimesionName": "ITEM",
+      "filterName": "ProductType",
+      "filterValues": [
+        "PF-00 | BEER"
+      ]
+    },
+    "LOCATION": {
+      "dimesionName": "LOCATION",
+      "filterName": "AllLocations",
+      "filterValues": [
+        "ALL"
+      ]
+    }
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "SCOPE_LEVELS": [
+      {
+        "dimension": "Item",
+        "hierarchy": "ProductFamily",
+        "hierarchyLabel": "Product Family",
+        "values": [
+          "PF-00"
+        ]
+      },
+      {
+        "dimension": "Location",
+        "hierarchy": "AllLocations",
+        "hierarchyLabel": "All Locations",
+        "values": [
+          "CLP-ALL"
+        ]
+      }
+    ],
+    "DATA_SCOPE": {
+      "ITEM": {
+        "dimesionName": "Item",
+        "filterName": "ProductFamily",
+        "filterValues": [
+          "PF-00 | Beer"
+        ]
+      },
+      "LOCATION": {
+        "dimesionName": "Location",
+        "filterName": "AllLocations",
+        "filterValues": [
+          "CLP-ALL"
+        ]
+      }
+    }
+  }
+}

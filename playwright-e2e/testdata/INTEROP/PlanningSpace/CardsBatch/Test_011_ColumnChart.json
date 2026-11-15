@@ -1,0 +1,16 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT": "string (required)",
+    "NO_DATA_ENDPOINT": "string (required)",
+    "WRONG_ENDPOINT": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Column Chart Test",
+  "DATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/ColumnBar",
+  "NO_DATA_ENDPOINT": "https://jsonblob.com/api/1292746807116161024",
+  "WRONG_ENDPOINT": "example.com/api/1sample1"
+}

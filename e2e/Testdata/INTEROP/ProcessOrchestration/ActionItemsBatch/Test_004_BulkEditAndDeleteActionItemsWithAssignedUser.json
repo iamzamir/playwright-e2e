@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "ASSIGNED_USER": "PS Automation2",
+    "PROCESS_NAME": "PSAutomation",
+    "ACTION_ITEM_NAME": "AI",
+    "STATUS": "In Progress",
+    "CHANGE_STATUS": "Not Started",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "BULK_EDIT_SUCCESS": "Status changed for selected Action Items successfully",
+    "BULK_DELETE_SUCCESS": "Action Items have been deleted successfully"
+}

@@ -1,0 +1,37 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_GROUPS": "object (required)",
+    "VIEWS": "object (required)",
+    "VIEW_IDS": "object (required) - ids of VIEWS entries that only exist for this spec; VIEW3 keeps Arrange Views View Group 2 non-empty so the Map With dialog lists it",
+    "ASSUMPTION": "object (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ArrangeViewsTesting",
+  "VIEW_GROUPS": {
+    "VIEW_GROUP1": "Arrange Views View Group 1",
+    "VIEW_GROUP2": "Arrange Views View Group 2"
+  },
+  "VIEWS": {
+    "VIEW1": "arrange views view1",
+    "VIEW2": "arrange views view 2",
+    "VIEW3": "arrange views group2 view"
+  },
+  "VIEW_IDS": {
+    "VIEW3": "6aec494d8ece75edbc931432"
+  },
+  "ASSUMPTION": {
+    "ASSUMPTION_NAME": "ArrangeViews Risk Assumption",
+    "ASSUMPTION_TYPE": "Risk",
+    "ASSUMPTION_ID": "0a220fda-97fd-19e2-8198-07806d9b20c0"
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "VIEW_IDS": {
+      "VIEW3": "6aec498e1378913106628bb4"
+    }
+  }
+}

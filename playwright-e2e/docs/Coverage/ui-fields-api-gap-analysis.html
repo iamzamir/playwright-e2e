@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI Fields Automation Coverage Gap Report</title>
+  <style>
+    :root { --ink: #19232d; --muted: #52616d; --paper: #f7f5f0; --white: #fff; --line: #cbd3d8; --navy: #003b5c; --teal: #007f86; --amber: #a75b00; --red: #a43131; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 14px/1.5 Georgia, "Times New Roman", serif; }
+    main { max-width: 1120px; margin: 0 auto; background: var(--white); padding: 42px 50px 56px; }
+    h1, h2, h3 { font-family: "Trebuchet MS", Verdana, sans-serif; letter-spacing: 0; }
+    h1 { margin: 0; color: var(--navy); font-size: 31px; line-height: 1.15; }
+    h2 { margin: 34px 0 10px; color: var(--navy); font-size: 21px; border-bottom: 2px solid var(--teal); padding-bottom: 5px; }
+    h3 { margin: 24px 0 6px; color: var(--navy); font-size: 16px; }
+    p { margin: 7px 0; }
+    .meta { color: var(--muted); margin-top: 8px; }
+    .notice { margin: 18px 0; padding: 13px 16px; border-left: 5px solid var(--amber); background: #fff7e8; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+    .card { min-height: 95px; padding: 13px; border: 1px solid var(--line); border-top: 4px solid var(--teal); }
+    .number { display: block; color: var(--navy); font: bold 29px/1 "Trebuchet MS", Verdana, sans-serif; }
+    .label { color: var(--muted); font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 18px; font-size: 12px; }
+    th { background: var(--navy); color: white; font-family: "Trebuchet MS", Verdana, sans-serif; text-align: left; }
+    th, td { border: 1px solid var(--line); padding: 7px 8px; vertical-align: top; }
+    tr:nth-child(even) td { background: #f5f8f9; }
+    code { color: #123d57; font: 11px/1.4 Consolas, "Courier New", monospace; word-break: break-word; }
+    pre { overflow: hidden; margin: 8px 0 18px; padding: 12px; color: #e8f4f5; background: #182b36; font: 11px/1.45 Consolas, "Courier New", monospace; white-space: pre-wrap; }
+    .pill { display: inline-block; padding: 1px 6px; color: white; font: bold 10px/1.45 "Trebuchet MS", Verdana, sans-serif; }
+    .p0 { background: var(--red); } .p1 { background: var(--amber); } .p2 { background: var(--teal); } .p3 { background: #60727c; }
+    .critical { color: var(--red); font-weight: bold; } .high { color: var(--amber); font-weight: bold; } .medium { color: var(--teal); font-weight: bold; } .low { color: var(--muted); font-weight: bold; }
+    ul { margin: 6px 0 8px; padding-left: 20px; }
+    .small { color: var(--muted); font-size: 12px; }
+    @media print { body { background: white; } main { max-width: none; padding: 24px 28px; } h2 { break-after: avoid; } table, pre { break-inside: avoid; } }
+    @media screen and (max-width: 680px) { main { padding: 26px 18px; } .cards { grid-template-columns: 1fr; } table { font-size: 10px; } th, td { padding: 5px; } }
+  .upd-b{display:inline-block;margin:3px 3px 0 0;padding:0 6px;border-radius:8px;font:600 9.5px/1.7 "Segoe UI",Arial,sans-serif;color:#fff;white-space:nowrap;letter-spacing:0;text-transform:none}.upd-ok{background:#1a7f45}.upd-po{background:#5a6876}.upd-setup{background:#8a6d00}.upd-gone{background:#7a2e8a}.upd-dep{background:#6b7785}.upd-banner{border:1px solid #1a7f45;border-left:5px solid #1a7f45;background:#f1faf4;padding:10px 14px;margin:16px 0;border-radius:6px;font-size:12px;line-height:1.5}.upd-banner ul{margin:6px 0 0 18px;padding:0}.upd-old{color:#8a96a3;text-decoration:line-through}
+</style>
+</head>
+<body>
+<main>
+  <h1>UI Fields Automation Coverage Gap Report</h1>
+  <p class="meta">Scope reviewed: <code>C:\Automation\plan-sop-ui-automation\e2e\Testdata\INTEROP\ProcessOrchestrationBackend</code> and the UI Fields service OpenAPI/controllers. Prepared 2026-08-31. <strong>Updated 2026-10-05</strong> against <code>playwright-e2e/tests/ProcessOrchestrationBackend</code> and plan-sop-ui-fields-service @ <code>7e6e357</code>.</p>
+
+  <div class="upd-banner">
+    <b>Update 05-Oct-2026.</b> Coverage was re-measured from the service source and the request logs of the four 2026-10-04 nightly backend runs (INTEROP and QA, Azure and Gravitee).
+    <ul>
+      <li><b>4 of 28</b> active operations are now exercised: <code>UIFields/Test_001_PageConfigContracts</code> (list, list-with-filter and detail page config, 32 cases) and <code>UIFields/Test_002_PageEditorConfig</code> (<code>GET /page/{name}/editor</code>), added 2026-10-01.</li>
+      <li>lui calls UI Fields through config keys (<code>listingPageConfig</code>, <code>detailPageConfig</code>, <code>uiFieldConfig</code>, <code>processTemplateEditor</code>, <code>processFilters</code>). <code>GET /page/filter</code> is the one lui-called route still untested.</li>
+      <li><code>GET /ops/db/state</code> is served by the shared <code>OperationsAPI</code> in plan-sop-po-be-commons, so it is out of scope for this service.</li>
+      <li>Rows below carry status badges; rows without one are still open. Full matrix: <a href="ui-fields-api-coverage-matrix.html">ui-fields-api-coverage-matrix.html</a>. Verified contracts: <a href="PSR-Gap-Plans/04-UIFields-PSR-Gap-Plan.md">UI Fields PSR gap plan</a>.</li>
+    </ul>
+  </div>
+
+  <div class="notice"><strong>Conclusion (31-Aug).</strong> The requested external INTEROP suite contains 21 data files and 20 matching TypeScript scenarios, but it makes no direct UI Fields API calls. Therefore all <strong>32 documented UI Fields operations</strong> are missing from that automation scope. The UI Fields repository's Postman collection provides a separate partial baseline of 26/32 operations; it does not close the gap in the external end-to-end suite.<br><strong>Status 05-Oct:</strong> the read-only page configuration contracts the UIs depend on are now automated; all write operations (attributes, values, UI fields, import/export) remain unautomated.</div>
+
+  <section class="cards">
+    <div class="card"><span class="number">4 / 28</span><span class="label">Active UI Fields operations exercised by the Playwright backend suite <span class="upd-old">0 / 32</span></span></div>
+    <div class="card"><span class="number">26 / 32</span><span class="label">Operations represented in service Postman collection (31-Aug)</span></div>
+    <div class="card"><span class="number">~14 days</span><span class="label">Remaining implementation and stabilization effort <span class="upd-old">18.5 days</span></span></div>
+  </section>
+
+  <h2>Evidence and Review Findings</h2>
+  <ul>
+    <li><strong>05-Oct:</strong> the Playwright suite has a <code>UIFields/</code> folder with test data for INTEROP and QA. UI Fields field lists are tenant-configured, so expected lists differ per environment (QA lists <code>processName</code>, adds <code>participants</code> and has 6 status filter keys).</li>
+    <li><strong>05-Oct:</strong> the 28 active operations exclude 3 deprecated subscription routes and 2 <code>@Profile("local")</code> mock routes; the 31-Aug count of 32 came from OpenAPI and included <code>/ops/db/state</code>.</li>
+    <li>The external suite covers Action Item, Calendar, Link Management, Migration, and Process Batch scenarios. Its full-export fixture contains a <code>customFields</code> object, but no scenario invokes <code>/ui-field</code>, <code>/entity/.../attribute</code>, page/configuration, subscription, or operational endpoints.</li>
+    <li>The service Postman collection covers attribute CRUD/value CRUD, UI-field CRUD, pages, three configuration reads, components, and import/export. It has no requests for subscriptions, <code>/echo</code>, <code>/list-page-config-with-filter</code>, or <code>/ops/db/state</code>.</li>
+    <li><strong>Contract drift:</strong> OpenAPI lists <code>200</code> for all create operations, but the controllers return <code>201 Created</code> for POST attribute, POST attribute values, POST UI field, and POST subscription. Align the specification before using it as a strict automated assertion source.</li>
+    <li>The sampled external Action Item data includes fixed UUIDs and a 2025 due date. New UI Fields tests should generate unique names and obtain IDs from preceding responses so runs stay repeatable.</li>
+  </ul>
+
+  <h2>Coverage Gap by API Group</h2>
+  <p class="small">Base URL: use the environment's UI Fields base URL (the service Postman environment uses <code>.../lsnop/ui-fields/v1dev</code>). All business endpoints require a bearer token according to OpenAPI. Effort includes data setup, assertions, cleanup, and one negative/auth check where applicable.</p>
+  <table>
+    <thead><tr><th>Operations missing from external suite</th><th>Automation outcome</th><th>Priority</th><th>Severity if broken</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td><code>POST, GET /entity/{entityType}/attribute</code><br><code>GET, PUT, DELETE /entity/{entityType}/attribute/{name}</code></td><td>Attribute lifecycle with duplicate, not-found, and invalid-body cases.</td><td><span class="pill p0">P0</span></td><td class="critical">Critical</td><td>2.0 d</td></tr>
+      <tr><td><code>POST, GET /entity/{entityType}/attribute/{attributeName}/values</code><br><code>PUT, DELETE /.../values/{name}</code><br><code>POST /entity/{entityType}/attribute/valueNames</code></td><td>Attribute-value lifecycle and name/value lookup after setup.</td><td><span class="pill p0">P0</span></td><td class="critical">Critical</td><td>2.0 d</td></tr>
+      <tr><td><code>POST, GET /ui-field</code><br><code>GET, PUT, DELETE /ui-field/{id}</code></td><td>UI metadata lifecycle, including persisted update and cleanup.</td><td><span class="pill p0">P0</span></td><td class="critical">Critical</td><td>2.0 d</td></tr>
+      <tr><td><code>GET /page</code>; <code>GET /page/{name}</code><br><code>GET /page/{name}/editor</code>; <code>GET /page/filter</code><br/><span class="upd-b upd-ok" title="Exercised by UIFields/Test_002">&#10003; GET /page/{name}/editor &middot; Covered &middot; UIFields/Test_002</span></td><td>Validate page discovery and editor/filter metadata for PROCESS and a missing entity/page.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>1.5 d</td></tr>
+      <tr><td><code>GET /filter-config</code>; <code>GET /list-page-config</code><br><code>GET /detail-page-config</code>; <code>GET /list-page-config-with-filter</code><br/><span class="upd-b upd-ok" title="Exercised by UIFields/Test_001">&#10003; GET /list-page-config &middot; Covered &middot; UIFields/Test_001</span> <span class="upd-b upd-ok" title="Exercised by UIFields/Test_001">&#10003; GET /detail-page-config &middot; Covered &middot; UIFields/Test_001</span> <span class="upd-b upd-ok" title="Exercised by UIFields/Test_001">&#10003; GET /list-page-config-with-filter &middot; Covered &middot; UIFields/Test_001</span></td><td>Validate UI render contracts, required query parameters, and optional entity/context inputs.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>2.0 d</td></tr>
+      <tr><td><code>GET /ui-component</code>; <code>GET /attribute/tenant</code></td><td>Assert reference metadata is non-empty and fields conform to UI contract.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>1.0 d</td></tr>
+      <tr><td><code>POST /exportData</code>; <code>POST /importData</code></td><td>Round-trip an isolated generated attribute and UI field; validate error response and no duplicate import.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>2.5 d</td></tr>
+      <tr><td><code>POST, PUT, DELETE /entity/{entityId}/attribute/{attrName}/page/{pageName}/subscribe</code><br/><span class="upd-b upd-dep">POST /entity/{entityId}/attribute/{attrName}/page/{pageName}/subscribe &middot; @Deprecated</span> <span class="upd-b upd-dep">PUT /entity/{entityId}/attribute/{attrName}/page/{pageName}/subscribe &middot; @Deprecated</span> <span class="upd-b upd-dep">DELETE /entity/{entityId}/attribute/{attrName}/page/{pageName}/subscribe &middot; @Deprecated</span></td><td>Subscription lifecycle. Controller is deprecated, so confirm product support first; otherwise retain only a contract/deprecation check.</td><td><span class="pill p2">P2</span></td><td class="medium">Medium</td><td>1.5 d</td></tr>
+      <tr><td><code>POST /echo</code></td><td>Simple authenticated request/response diagnostic test plus malformed/missing-token case.</td><td><span class="pill p3">P3</span></td><td class="low">Low</td><td>0.5 d</td></tr>
+      <tr><td><code>GET /ops/db/state</code><br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>Operational smoke check with mandatory <code>JID</code> header; assert report shape, not row counts/checksums.</td><td><span class="pill p2">P2</span></td><td class="medium">Medium</td><td>0.5 d</td></tr>
+      <tr><td>Shared negative/security coverage for all above</td><td>Missing token <code>401</code>, insufficient permission <code>403</code>, missing resource <code>404</code>, malformed/missing input, and response schema checks.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>2.5 d</td></tr>
+      <tr><td>CI integration, isolation, retry/cleanup, and report wiring<br/><span class="upd-b upd-ok">&#10003; Done &middot; UIFields/ folder in the nightly backend suite</span></td><td>New UIFields spec folder, test data, API env constants, sequential dependencies, cleanup in <code>after</code>, and execution documentation.</td><td><span class="pill p1">P1</span></td><td class="high">High</td><td>2.5 d</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Ordered Test Cases</h2>
+  <table>
+    <thead><tr><th>Order</th><th>Test case</th><th>Steps and expected results</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Authentication and isolated test identity</td><td>Acquire bearer token; create a run suffix; select an existing PROCESS page/component through read APIs. Abort writes if prerequisites are absent.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>1</td><td>Create attribute</td><td>POST a unique attribute. Expect <code>201</code> in the live implementation; retain returned name/ID. Repeat same name and expect conflict.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>2</td><td>Read and update attribute</td><td>GET by name and list by entity; PUT title/description/flags; GET again and assert only intended values changed.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>3</td><td>Attribute values lifecycle</td><td>POST one or more unique values; GET values; PUT one value; call valueNames using the created attribute; assert mapped display/value data.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>4</td><td>Create UI field</td><td>POST using the created attribute and discovered page/component. Expect <code>201</code>; save UI field ID.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>5</td><td>Read/update UI field</td><td>GET by ID and tenant list; PUT sequence/visibility; GET again and assert persistence and tenant isolation.</td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>6</td><td>Page and component discovery</td><td>GET pages, page ID, editor fields, filters, UI components, and tenant attributes. Test a missing page/entity for the documented failure response.</td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>7</td><td>Configuration reads</td><td>GET list, detail, filter, and combined list/filter configurations. Assert required keys, field groups, and filters, not fixed database ordering.</td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>8</td><td>Export/import round trip</td><td>Export only the unique attribute; validate exported JSON; import it into the approved isolated target; assert <code>error=false</code> and verify via GET.</td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>9</td><td>Subscription lifecycle decision</td><td>Confirm deprecated endpoint remains supported. If supported: POST, PUT, DELETE and verify success; otherwise test that deprecation behavior is intentional and remove it from product-critical scope.</td><td><span class="pill p2">P2</span></td></tr>
+      <tr><td>10</td><td>Diagnostics and operations</td><td>POST echo and assert exact body; GET DB state with JID and validate response schema only.</td><td><span class="pill p2">P2</span></td></tr>
+      <tr><td>11</td><td>Cross-cutting negative and authorization tests</td><td>For every write/read family, exercise invalid token, forbidden role, missing resource, missing required body/query/path input, and duplicate-create behavior.</td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>12</td><td>Cleanup and post-condition</td><td>DELETE UI field, value, and attribute in reverse dependency order; GET each and assert absence. Ensure cleanup executes after failed assertions.</td><td><span class="pill p0">P0</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Sample Contracts</h2>
+  <h3>Create Attribute</h3>
+  <pre>POST /entity/PROCESS/attribute
+{
+  "name": "automation_attr_&lt;runId&gt;",
+  "title": "Automation attribute",
+  "description": "Created by INTEROP suite",
+  "isCustom": true,
+  "isEnabled": true,
+  "isActive": true,
+  "values": []
+}
+
+Expected live response: 201 Created
+{ "id": "&lt;uuid&gt;", "name": "automation_attr_&lt;runId&gt;", "entityType": "PROCESS", "isCustom": 1 }</pre>
+  <h3>Create Attribute Value</h3>
+  <pre>POST /entity/PROCESS/attribute/automation_attr_&lt;runId&gt;/values
+[{ "name": "automation_value_&lt;runId&gt;", "value": "Automation value", "sequence": 0,
+   "isVisible": true, "isDefault": false, "isEditorDefault": false,
+   "isEnabled": true, "isActive": true }]
+
+Expected live response: 201 Created
+[{ "id": "&lt;uuid&gt;", "name": "automation_value_&lt;runId&gt;", "value": "Automation value", "attributeId": "&lt;uuid&gt;" }]</pre>
+  <h3>Create UI Field</h3>
+  <pre>POST /ui-field
+{ "attributeName": "automation_attr_&lt;runId&gt;", "groupId": "1", "pageId": 17,
+  "uiComponentId": 6, "sequence": 0, "isVisible": true, "isActive": true,
+  "isEnabled": true, "entityType": "PROCESS" }
+
+Expected live response: 201 Created
+{ "id": "&lt;uuid&gt;", "attributeName": "automation_attr_&lt;runId&gt;", "pageId": 17,
+  "uiComponentId": 6, "sequence": 0, "isVisible": 1, "entityType": "PROCESS" }</pre>
+  <h3>Combined List and Filter Configuration</h3>
+  <pre>GET /list-page-config-with-filter?pageId=1&amp;filterPageId=1&amp;entityName=PROCESS
+
+Expected response: 200 OK
+{ "fields": [{ "name": "name", "displayName": "Name", "cmp": "input" }],
+  "filters": [{ "name": "status", "displayName": "Status", "values": [] }] }</pre>
+  <h3>Import Result</h3>
+  <pre>POST /importData
+&lt;the JSON returned by POST /exportData for the isolated generated resource&gt;
+
+Expected response: 200 OK
+{ "attributes": { "PROCESS": ["automation_attr_&lt;runId&gt;"] }, "uiFields": {}, "error": false }</pre>
+
+  <h2>Recommended Delivery Sequence</h2>
+  <p>Implement P0 test cases 0-5 and 12 first (6.0 days), then P1 configuration/import/negative coverage (8.5 days), then P2/P3 subscription and operational checks (2.5 days). Reserve 1.5 days to align OpenAPI status codes with the controllers and update assertions only after the contract decision is approved.</p>
+  <p><strong>Status 05-Oct-2026:</strong> test case 7 (configuration reads) is done except <code>GET /filter-config</code>, and the editor part of test case 6 is done. Next: <code>GET /page/filter</code> (called by lui), then the P0 attribute, value and UI-field write lifecycle (test cases 1-5 and 12).</p>
+  <p class="small">Source evidence: external INTEROP test-data/spec directories; UI Fields OpenAPI specification; service controllers; and <code>automation/IBP-UI-Field-Service.postman_collection.json</code>.</p>
+</main>
+</body>
+</html>

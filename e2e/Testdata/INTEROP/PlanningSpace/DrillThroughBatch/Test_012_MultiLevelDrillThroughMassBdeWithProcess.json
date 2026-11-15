@@ -1,0 +1,29 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME":"Initiatives And Assumptions Review",
+    "MASS_CHART_DATA":"CG-01, PL-11, REGION-20",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption",
+        "ASSUMPTION_TYPE": "Opportunity"
+    },
+    "TC1_DRILL_THROUGH_VIEW_FROM": "Maas Pivot Card View",
+    "TC1_DRILL_THROUGH_VIEW_TO": "DR Destination 2",
+    "TC1_DRILL_THROUGH_CELL": "47",
+    "LV2_DRILL_THROUGH_VIEW_FROM": "DR Destination 2",
+    "LV2_DRILL_THROUGH_VIEW_TO": "Maas Chart Card View",
+    "LV2_DRILL_THROUGH_CELL": "47",
+    "TC2_DRILL_THROUGH_VIEW_FROM": "Demand Review",
+    "TC2_DRILL_THROUGH_VIEW_TO": "Demand Analysis",
+    "TC2_DRILL_THROUGH_CELL": "264,170",
+    "TC2_SESSION_NAME": "test11",
+    "VIEW_NAME1":"Maas Chart Card View",
+    "CARD_NAME":"BDE Card",
+    "BDE_CARD_DATA":"CUST-01",
+    "DIMENSIONS1": {
+        "ITEM": {"Brand": "PL-11"},
+        "LOCATION":{"Region": "REGION-20"},
+        "CUSTOMER": {"Channel": "CG-01"},
+        "TIME": {"CALENDARYEAR": "CY-2022"}
+    }
+}

@@ -1,0 +1,41 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "ASSUMPTION": "object (required)",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC1_DRILL_THROUGH_CELL": "string (required)",
+    "LV2_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "LV2_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "LV2_DRILL_THROUGH_CELL": "string (required)",
+    "TC2_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "TC2_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC2_DRILL_THROUGH_CELL": "string (required)",
+    "TC2_SESSION_NAME": "string (required)",
+    "VIEW_NAME1": "string (required)",
+    "CARD_NAME": "string (required)",
+    "BDE_CARD_DATA": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUBPROCESS_NAME": "Demand Review",
+  "ASSUMPTION": {
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "ASSUMPTION_TYPE": "Opportunity"
+  },
+  "TC1_DRILL_THROUGH_VIEW_FROM": "Maas Pivot Card View",
+  "TC1_DRILL_THROUGH_VIEW_TO": "DR Destination 2",
+  "TC1_DRILL_THROUGH_CELL": "42",
+  "LV2_DRILL_THROUGH_VIEW_FROM": "DR Destination 2",
+  "LV2_DRILL_THROUGH_VIEW_TO": "Maas Chart Card View",
+  "LV2_DRILL_THROUGH_CELL": "42",
+  "TC2_DRILL_THROUGH_VIEW_FROM": "Demand Review",
+  "TC2_DRILL_THROUGH_VIEW_TO": "Demand Analysis",
+  "TC2_DRILL_THROUGH_CELL": "264,170",
+  "TC2_SESSION_NAME": "test11",
+  "VIEW_NAME1": "Maas Chart Card View",
+  "CARD_NAME": "BDE Card",
+  "BDE_CARD_DATA": "CUST-01"
+}

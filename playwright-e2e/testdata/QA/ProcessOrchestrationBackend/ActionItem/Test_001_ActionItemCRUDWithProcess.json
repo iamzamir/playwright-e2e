@@ -1,0 +1,113 @@
+{
+    "_schema": {
+        "CycleDescriptionUpdate": "string (required)",
+        "requestBody": "object (required)",
+        "updateReqest": "object (required)"
+    },
+    "CycleDescriptionUpdate": "Action Item Cycle QA Desciption Update",
+    "requestBody": {
+        "attributes": [
+            {
+                "name": "processName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "8220a965-fa89-4b48-8251-37b1360f4213"
+            },
+            {
+                "name": "processDisplayName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E"
+            },
+            {
+                "name": "sourceDisplayName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857"
+            }
+        ],
+        "status": "0",
+        "actionType": "4",
+        "priority": "0",
+        "dueDate": "2025-03-27T05:44:59.787Z",
+        "assigneeUsers": [
+            "1f93c6fc-5ee1-446f-8b40-ef336b2dd545"
+        ],
+        "notifyUsers": [
+            "1f93c6fc-5ee1-446f-8b40-ef336b2dd545"
+        ],
+        "name": "Test1",
+        "description": "for test",
+        "remarks": "for test",
+        "entityId": "d64b7f34-34ec-4b38-b40a-bd5ef95aa693",
+        "sourceId": "80A2C286-31DD-4FE5-992B-AC7DB188ED70",
+        "sourceType": "PROCESS",
+        "origin": "80A2C286-31DD-4FE5-992B-AC7DB188ED70",
+        "sourceName": "IntegratedBusinessPlanning",
+        "processName": "IntegratedBusinessPlanning"
+    },
+    "updateReqest": {
+        "attributes": [
+            {
+                "id": "1b65c23f-4b27-490c-81a2-848b4e2bc031",
+                "name": "sourceDisplayName",
+                "title": "sourceDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "889c9409-a1ff-448f-a829-7ccf8fe9abe5",
+                "name": "processName",
+                "title": "processName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "9a6afd3b-12cf-4115-b40b-5df036d8a9fb",
+                "name": "originCycleName",
+                "title": "originCycleName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "2025 APRIL",
+                "value": "2025 APRIL"
+            },
+            {
+                "id": "fe72eb7b-9cc7-4109-a55f-25ac6635c013",
+                "name": "processDisplayName",
+                "title": "processDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            }
+        ],
+        "id": "441ea3c8-efd5-43cf-b134-876a8c0db16c",
+        "name": "Test1 update",
+        "entityId": "d64b7f34-34ec-4b38-b40a-bd5ef95aa693",
+        "sourceId": "80A2C286-31DD-4FE5-992B-AC7DB188ED70",
+        "sourceName": "IntegratedBusinessPlanning",
+        "sourceType": "PROCESS",
+        "origin": "80A2C286-31DD-4FE5-992B-AC7DB188ED70",
+        "status": "0",
+        "actionType": "4",
+        "priority": "2",
+        "dueDate": "2025-03-27T06:41:03",
+        "description": "for test updated",
+        "remarks": "for test updated",
+        "isEnabled": true,
+        "isActive": true,
+        "commentsActive": false,
+        "author": [
+            "1f93c6fc-5ee1-446f-8b40-ef336b2dd545"
+        ],
+        "assigneeUsers": [
+            "1f93c6fc-5ee1-446f-8b40-ef336b2dd545"
+        ],
+        "notifyUsers": [
+            "1f93c6fc-5ee1-446f-8b40-ef336b2dd545"
+        ],
+        "originCycleName": "2025 APRIL",
+        "processName": "IntegratedBusinessPlanning"
+    }
+}

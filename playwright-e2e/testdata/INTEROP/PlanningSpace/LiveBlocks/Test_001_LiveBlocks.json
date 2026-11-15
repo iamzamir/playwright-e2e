@@ -1,0 +1,20 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "SECOND_USER": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "CARD_NAME": "string (required)",
+    "CARD_TYPE": "string (required)",
+    "CELL_VALUE_1": "string (required)",
+    "CELL_VALUE_2": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "SECOND_USER": "PS Automation2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Live Blocks Test",
+  "CARD_NAME": "Maas Pivot Card",
+  "CARD_TYPE": "PivotCard",
+  "CELL_VALUE_1": "90",
+  "CELL_VALUE_2": "120"
+}

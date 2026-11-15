@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "PRIVATE_SCENARIONAME": "Dont_Delete_VF_Scope_Dimension_data",
+    "PUBLIC_SCENARIONAME" : "Dont_Delete_Public_Scenario",
+    "BASE_SCENARIONAME" : "Base 28-03-2025-0212"
+}

@@ -1,0 +1,39 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SUB_PROCESS_NAME": "string (required)",
+        "ACTION_ITEM_NAME": "string (required) - prefix; the spec appends the context and a run id",
+        "ASSIGNED_USER": "string (required) - display name of the second user (FUNCTIONAL_TEST_USERNAME + 2)",
+        "STATUS": "string (required)",
+        "CHANGE_STATUS": "string (required)",
+        "ACTION_TYPE": "string (required)",
+        "PRIORITY": "string (required)",
+        "TOOL_TIP": "string (required) - row Edit/Delete no-access tooltip",
+        "BULK_CHANGE_TOOLTIP": "string (required)",
+        "BULK_DELETE_TOOLTIP": "string (required)",
+        "BULK_EDIT_SUCCESS": "string (required)",
+        "BULK_DELETE_SUCCESS": "string (required)",
+        "PARTIAL_ALERT_MSG": "string (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE. Optional REALM_KEY (string) pins the Gravitee tenant (portal/API/auth hosts) for this spec"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ACTION_ITEM_NAME": "AI",
+    "ASSIGNED_USER": "PS Automation2",
+    "STATUS": "In Progress",
+    "CHANGE_STATUS": "Not Started",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "TOOL_TIP": "You are not authorized to do this action.",
+    "BULK_CHANGE_TOOLTIP": "You are not authorized to do this action.",
+    "BULK_DELETE_TOOLTIP": "You are not authorized to do this action.",
+    "BULK_EDIT_SUCCESS": "Status changed for selected Action Items successfully",
+    "BULK_DELETE_SUCCESS": "Action Items have been deleted successfully",
+    "PARTIAL_ALERT_MSG": "Your action may apply partially. You are not authorized to change some of the selected records.",
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1"
+    }
+}

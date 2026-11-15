@@ -1,0 +1,10 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "QUICK_LINKS": "string[] (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "QUICK_LINKS": ["Action Items", "Scenario", "Supply Chain Procedures - History"]
+}

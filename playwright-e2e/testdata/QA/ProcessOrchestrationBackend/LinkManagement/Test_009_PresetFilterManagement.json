@@ -1,0 +1,125 @@
+{
+  "_schema": {
+    "createRequest": "object (required)",
+    "searchRequest": "object (required)",
+    "clearRequest": "object (required)",
+    "upsertRequest": "object (required)",
+    "multiViewSearchRequest": "object (required)",
+    "unmappedEntitySearchRequest": "object (required)",
+    "unmappedClearRequest": "object (required)",
+    "missingViewIdRequest": "object (required)",
+    "missingEntityIdRequest": "object (required)",
+    "missingFilterIdRequest": "object (required)",
+    "missingEntityTypeRequest": "object (required)",
+    "invalidEntityTypeRequest": "object (required)",
+    "emptyViewIdsSearchRequest": "object (required)",
+    "emptyViewIdsClearRequest": "object (required)",
+    "createRequestSubprocess": "object (required)",
+    "searchRequestSubprocess": "object (required)",
+    "clearRequestSubprocess": "object (required)"
+  },
+  "createRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process",
+    "filterId": "d52e6ca9-bd14-467d-ba50-8387d4b6cdbf"
+  },
+  "searchRequest": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "clearRequest": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "upsertRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process",
+    "filterId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  },
+  "multiViewSearchRequest": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173",
+      "000000000000000000000001"
+    ],
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "unmappedEntitySearchRequest": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "00000000-0000-0000-0000-000000000000",
+    "entityType": "process"
+  },
+  "unmappedClearRequest": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "00000000-0000-0000-0000-000000000000",
+    "entityType": "process"
+  },
+  "missingViewIdRequest": {
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process",
+    "filterId": "d52e6ca9-bd14-467d-ba50-8387d4b6cdbf"
+  },
+  "missingEntityIdRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityType": "process",
+    "filterId": "d52e6ca9-bd14-467d-ba50-8387d4b6cdbf"
+  },
+  "missingFilterIdRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "missingEntityTypeRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "filterId": "d52e6ca9-bd14-467d-ba50-8387d4b6cdbf"
+  },
+  "invalidEntityTypeRequest": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "invalidType",
+    "filterId": "d52e6ca9-bd14-467d-ba50-8387d4b6cdbf"
+  },
+  "emptyViewIdsSearchRequest": {
+    "viewIds": [],
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "emptyViewIdsClearRequest": {
+    "viewIds": [],
+    "entityId": "930999F4-C08E-4DF8-A74F-E88735F08218",
+    "entityType": "process"
+  },
+  "createRequestSubprocess": {
+    "viewId": "69dde3ff41934df6dc046173",
+    "entityId": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+    "entityType": "subprocess",
+    "filterId": "e5f6a7b8-c9d0-1234-5678-9abcdef01234"
+  },
+  "searchRequestSubprocess": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+    "entityType": "subprocess"
+  },
+  "clearRequestSubprocess": {
+    "viewIds": [
+      "69dde3ff41934df6dc046173"
+    ],
+    "entityId": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+    "entityType": "subprocess"
+  }
+}

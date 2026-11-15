@@ -1,0 +1,41 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - process whose action item entity is the editor/filter context",
+    "SUBPROCESS_NAME": "string (required) - subprocess used for the subprocess context",
+    "UNKNOWN_ID": "string (required) - UUID that is not an action item entity",
+    "INVALID_CONTEXT_TYPE": "string (required) - contextType that is not an EntityTypeEnum value",
+    "ILLEGAL_ARGUMENT_ERROR_CODE": "string (required) - errorCode for an invalid contextType",
+    "ALT_ACCEPT_LANGUAGE": "string (required) - alternate Accept-Language header",
+    "EXPECTED_EDITOR_FIELDS": "object (required) - editor field names per group (header group keyed _header), sorted",
+    "EXPECTED_EDITOR_DEFAULTS": "object (required) - sorted default value keys per editor field that has defaults",
+    "EXPECTED_USER_PICKERS": "string[] (required) - sorted editor field names rendered as user pickers",
+    "EXPECTED_FILTERS": "object (required) - sorted filter names keyed by GATEWAY_TYPE (AZURE, GRAVITEE)",
+    "EXPECTED_FILTER_CODES": "object (required) - sorted value keys of the status, priority and actionType filters"
+  },
+  "PROCESS_NAME": "IntegratedBusinessPlanning",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "UNKNOWN_ID": "7d6c1b3e-0000-4000-8000-000000000000",
+  "INVALID_CONTEXT_TYPE": "FOO",
+  "ILLEGAL_ARGUMENT_ERROR_CODE": "IBP_40_1027",
+  "ALT_ACCEPT_LANGUAGE": "fr-FR",
+  "EXPECTED_EDITOR_FIELDS": {
+    "_header": ["name", "status"],
+    "General": ["actionType", "assigneeUsers", "description", "dueDate", "notifyUsers", "priority", "processDisplayName", "processName", "remarks", "sourceDisplayName"]
+  },
+  "EXPECTED_EDITOR_DEFAULTS": {
+    "status": ["0"],
+    "actionType": ["4"],
+    "priority": ["3"],
+    "dueDate": ["end"]
+  },
+  "EXPECTED_USER_PICKERS": ["assigneeUsers", "notifyUsers"],
+  "EXPECTED_FILTERS": {
+    "AZURE": ["actionType", "assigneeUsers", "dueDate", "name", "priority", "status"],
+    "GRAVITEE": ["actionType", "assigneeUsers", "dueDate", "name", "priority", "status"]
+  },
+  "EXPECTED_FILTER_CODES": {
+    "status": ["0", "1", "2", "4"],
+    "priority": ["0", "1", "2", "3"],
+    "actionType": ["1", "3", "4"]
+  }
+}

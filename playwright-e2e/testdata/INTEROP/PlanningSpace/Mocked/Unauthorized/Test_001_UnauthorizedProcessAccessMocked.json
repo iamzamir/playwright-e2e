@@ -1,0 +1,8 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required) - any process; its context call is answered with 401, so the user's real access to it does not matter"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomationProcess"
+}

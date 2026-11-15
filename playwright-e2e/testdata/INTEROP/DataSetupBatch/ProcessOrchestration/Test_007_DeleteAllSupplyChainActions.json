@@ -1,0 +1,8 @@
+{
+  "_schema": {
+    "EXPORT_PAYLOAD": "object (required) - exportData request body to fetch all supply chain actions"
+  },
+  "EXPORT_PAYLOAD": {
+    "supplyChainActions": []
+  }
+}

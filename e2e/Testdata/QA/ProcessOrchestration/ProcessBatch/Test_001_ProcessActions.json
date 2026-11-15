@@ -1,0 +1,12 @@
+{
+    "REALM_NAME": "cbp-qa-ps-automation",
+    "SUBJECT_ID": "b74f474a-ac87-4017-911d-28f3c9fa05b1",
+    "MACHINE_USER_NAME": "M2M-Procedure-Svc",
+    "CREATE_PROCESS_FORM_DATA":{
+        "TEMPLATE_NAME": "BY-Template",
+        "DISPLAY_NAME":"PROCESS CREATE",
+        "CALENDAR": "Monthly Calendar",
+        "CYCLE_NAME": "2024 NOVEMBER",
+        "DESCRIPTION": "This process is created for testing purpose"
+    }
+}

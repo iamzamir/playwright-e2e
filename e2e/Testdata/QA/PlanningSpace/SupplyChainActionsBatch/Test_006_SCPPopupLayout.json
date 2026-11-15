@@ -1,0 +1,15 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "IDSPAutomationProcess",
+    "PROCEDURE_NAME": "CreateScenarioWithPopup",
+    "REQUEST_URL": "https://api-tst.jdadelivers.com/cbp/qa/foundation/procedure-orchestration/",
+    "PARENT_SCENARIO_NAME": "Base 23-09-2024-0636",
+    "PARENT_SCENARIO_ID": "0100d5d6-b757-49bf-ac8e-8cc33a98b555",
+    "requestBody": {
+        "sourceIds": [
+          "IDSPAutomationProcess"
+        ]
+      },
+    "PROCEDURE_EXECUTION_URL": "https://api-tst.jdadelivers.com/cbp/qa/foundation/procedure-orchestration/v1/procedureExecutions",
+    "IS_DEFAULT_SEARCH": true
+}

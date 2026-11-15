@@ -1,0 +1,75 @@
+{
+    "_schema": {
+        "FULL_EXPORT_PAYLOAD": "object (required)",
+        "PARTIAL_EXPORT_PAYLOAD": "object (required)",
+        "PARTIAL_EXPORT_EXPECTED_COUNTS": "object (required)",
+        "MALFORMED_EXPORT_PAYLOAD": "object (required)"
+    },
+    "FULL_EXPORT_PAYLOAD": {
+        "calendars": [],
+        "processes": [],
+        "customFields": {
+            "attributes": [],
+            "uiFields": []
+        },
+        "actionItems": {
+            "attributes": [],
+            "kpis": [],
+            "ui_fields": []
+        },
+        "assumptions": {
+            "attributes": [],
+            "ui_fields": [],
+            "ui_fields_values": [],
+            "kpi_configs": [],
+            "assumption_types": []
+        },
+        "links": {
+            "entityViews": [],
+            "entityViewsProcedure": []
+        },
+        "supplyChainActions": [],
+        "featureToggle": {
+            "tenantLevel": [],
+            "processes": [],
+            "subProcesses": [],
+            "assumptions": []
+        }
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "calendars": [
+            "Monthly Calendar"
+        ],
+        "processes": [
+            "IntegratedBusinessPlanning"
+        ],
+        "actionItems": {
+            "kpis": [
+                "02e274f3-915d-4551-a518-00f053c1d63d"
+            ]
+        },
+        "supplyChainActions": [],
+        "links": {
+            "entityViews": [
+                {
+                    "type": "subprocess",
+                    "entityId": [
+                        "IntegratedBusinessPlanning"
+                    ]
+                }
+            ],
+            "entityViewsProcedure": []
+        }
+    },
+    "PARTIAL_EXPORT_EXPECTED_COUNTS": {
+        "processes": 1,
+        "calendars": 1,
+        "actionItemKpis": 1,
+        "supplyChainActions": 0,
+        "entityViews": 1,
+        "entityViewsProcedure": 0
+    },
+    "MALFORMED_EXPORT_PAYLOAD": {
+        "processes": "IntegratedBusinessPlanning"
+    }
+}

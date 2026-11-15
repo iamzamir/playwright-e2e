@@ -1,0 +1,22 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME_1": "string (required)",
+    "VIEW_NAME_2": "string (required)",
+    "MAAS_PIVOT_CARD_NAME": "string (required)",
+    "MAAS_PIVOT_CARD_DIRTY_STATE_CELL": "string (required)",
+    "MAAS_PIVOT_CARD_DIRTY_STATE_CELL_CHANGE_TO": "string (required)",
+    "ENHANCED_TABLE_CARD_NAME": "string (required)",
+    "FEATURE_FLAG_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME_1": "Dirty state view1",
+  "VIEW_NAME_2": "Dirty state view2",
+  "MAAS_PIVOT_CARD_NAME": "Maas Pivot Card",
+  "MAAS_PIVOT_CARD_DIRTY_STATE_CELL": "42",
+  "MAAS_PIVOT_CARD_DIRTY_STATE_CELL_CHANGE_TO": "444",
+  "ENHANCED_TABLE_CARD_NAME": "Enhanced Table Card",
+  "FEATURE_FLAG_NAME": "WITH_DIRTY_STATE"
+}

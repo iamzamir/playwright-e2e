@@ -1,0 +1,16 @@
+{
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "PROCEDURE_NAME": "CreateScenario1",
+  "PROCEDURE_TYPE": "CreateScenario1",
+  "VIEW_NAME": "ViewToCheckBDE",
+  "VIEW_NAME1": "Maas Chart Card View",
+  "CARD_NAME": "BDE card (entire data)",
+  "REQUEST_URL": "https://api-tst.jdadelivers.com/cbp/qa/foundation/procedure-orchestration/v1/procedureExecutions",
+  "PARENT_SCENARIO_ID": "099a8437-2ec2-474c-a2d1-43832fd3833a",
+  "IS_DEFAULT_SEARCH": true,
+  "REQUEST_BODY": {
+    "sourceIds": ["PSAutomation"]
+  },
+  "PROCEDURE_EXECUTION_URL": "https://api-tst.jdadelivers.com/cbp/qa/foundation/procedure-orchestration/v1/procedureExecutions"
+}

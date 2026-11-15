@@ -1,0 +1,46 @@
+{
+    "_schema": {
+        "requestBody": "object (required)",
+        "requestSearchBody": "object (required)",
+        "requestSearchBodyView2": "object (required)",
+        "requestSearchBodyView3": "object (required)",
+        "requestSearchBodyView4": "object (required)",
+        "requestSearchBodyView5": "object (required)"
+    },
+    "requestBody": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "views": ["685d6a2598ced3081770ee95", "685d6a34a71c40f4d4193f10", "685d6a3fa71c40f4d4193f11", "685d6a4da71c40f4d4193f12", "685d6a5698ced3081770ee96"],
+        "procedures": [
+            { "procedureName": "ProcedureMapping_1", "primary": true,  "secondary": false },
+            { "procedureName": "ProcedureMapping_2", "primary": false, "secondary": true  },
+            { "procedureName": "ProcedureMapping_3", "primary": false, "secondary": false },
+            { "procedureName": "ProcedureMapping_4", "primary": false, "secondary": false }
+        ]
+    },
+    "requestSearchBody": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "viewId": "685d6a2598ced3081770ee95"
+    },
+    "requestSearchBodyView2": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "viewId": "685d6a34a71c40f4d4193f10"
+    },
+    "requestSearchBodyView3": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "viewId": "685d6a3fa71c40f4d4193f11"
+    },
+    "requestSearchBodyView4": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "viewId": "685d6a4da71c40f4d4193f12"
+    },
+    "requestSearchBodyView5": {
+        "entityId": "APIEntityProcedureMappingTestDemandReview",
+        "entityType": "subprocess",
+        "viewId": "685d6a5698ced3081770ee96"
+    }
+}

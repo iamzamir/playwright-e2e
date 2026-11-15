@@ -1,0 +1,1006 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Process Orchestration Service &ndash; API Automation Gap Analysis</title>
+<style>
+  :root{
+    --ink:#12181f; --muted:#5b6874; --line:#dbe1e8; --bg:#ffffff; --soft:#f6f8fa;
+    --p0:#b3001b; --p1:#c25e00; --p2:#0b6b8f; --p3:#4a5a68;
+    --ok:#1a7f45; --warn:#b3001b;
+  }
+  *{box-sizing:border-box}
+  body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);margin:0;
+       font-size:12px;line-height:1.5;background:var(--bg)}
+  .page{max-width:1180px;margin:0 auto;padding:28px 34px 60px}
+  h1{font-size:26px;margin:0 0 4px;letter-spacing:-.4px}
+  h2{font-size:17px;margin:34px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+  h3{font-size:14px;margin:22px 0 8px;color:#1d2733}
+  h4{font-size:12.5px;margin:16px 0 6px;color:#243040}
+  p{margin:8px 0}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 18px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:11.5px;color:var(--muted);
+        border:1px solid var(--line);background:var(--soft);padding:10px 14px;border-radius:6px}
+  .meta b{color:var(--ink)}
+  table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:11px}
+  th,td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+  th{background:#eef2f6;font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+  tbody tr:nth-child(even){background:#fbfcfd}
+  code,pre{font-family:"Cascadia Mono",Consolas,"Courier New",monospace}
+  code{background:#eef2f6;padding:1px 5px;border-radius:3px;font-size:10.5px;white-space:nowrap}
+  pre{background:#0f1720;color:#dfe7ef;padding:11px 13px;border-radius:6px;overflow-x:auto;
+      font-size:10px;line-height:1.45;margin:6px 0 12px}
+  pre.resp{background:#10231a;color:#d6efdf}
+  .pill{display:inline-block;padding:1px 7px;border-radius:10px;color:#fff;font-size:9.5px;
+        font-weight:700;letter-spacing:.4px;white-space:nowrap}
+  .P0{background:var(--p0)} .P1{background:var(--p1)} .P2{background:var(--p2)} .P3{background:var(--p3)}
+  .sev-Critical{color:var(--p0);font-weight:700}
+  .sev-High{color:var(--p1);font-weight:700}
+  .sev-Medium{color:var(--p2);font-weight:600}
+  .sev-Low{color:var(--p3)}
+  .cards{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 6px}
+  .card{flex:1 1 150px;border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:var(--soft)}
+  .card .n{font-size:23px;font-weight:700;line-height:1.1}
+  .card .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+  .bar{height:14px;background:#e6ebf0;border-radius:7px;overflow:hidden;margin:6px 0 2px}
+  .bar > span{display:block;height:100%;background:linear-gradient(90deg,#1a7f45,#37a866)}
+  .note{border-left:3px solid var(--p1);background:#fff8f0;padding:9px 13px;margin:12px 0;font-size:11.5px}
+  .danger{border-left:3px solid var(--p0);background:#fff2f3}
+  .ok{border-left:3px solid var(--ok);background:#f1faf4}
+  .legend span{margin-right:14px;font-size:11px}
+  .small{font-size:10.5px;color:var(--muted)}
+  .nowrap{white-space:nowrap}
+  .ep{font-family:"Cascadia Mono",Consolas,monospace;font-size:10.5px}
+  .m{display:inline-block;min-width:44px;font-weight:700;font-size:9.5px;padding:1px 4px;border-radius:3px;
+     text-align:center;color:#fff;margin-right:5px}
+  .GET{background:#0b6b8f}.POST{background:#1a7f45}.PUT{background:#c25e00}.DELETE{background:#b3001b}
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:10.5px}
+  @media print{
+    .page{max-width:none;padding:0 8mm}
+    h2{page-break-after:avoid} table{page-break-inside:auto}
+    tr{page-break-inside:avoid} pre{page-break-inside:avoid}
+    .modblock{page-break-inside:avoid}
+  }
+  @page{size:A4 landscape;margin:12mm 8mm}
+.upd-b{display:inline-block;margin:3px 3px 0 0;padding:0 6px;border-radius:8px;font:600 9.5px/1.7 "Segoe UI",Arial,sans-serif;color:#fff;white-space:nowrap;letter-spacing:0;text-transform:none}.upd-ok{background:#1a7f45}.upd-po{background:#5a6876}.upd-setup{background:#8a6d00}.upd-gone{background:#7a2e8a}.upd-dep{background:#6b7785}.upd-banner{border:1px solid #1a7f45;border-left:5px solid #1a7f45;background:#f1faf4;padding:10px 14px;margin:16px 0;border-radius:6px;font-size:12px;line-height:1.5}.upd-banner ul{margin:6px 0 0 18px;padding:0}.upd-old{color:#8a96a3;text-decoration:line-through}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Process Orchestration Service &mdash; API Automation Gap Analysis</h1>
+<p class="sub">Uncovered REST endpoints, effort estimates, priority &amp; severity, sample payloads and an execution-ordered test suite.</p>
+
+<div class="meta">
+  <div><b>Service repo:</b> plan-sop-process-orchestration-service @ 333ef85b (2026-09-25)</div>
+  <div><b>Automation repo:</b> plan-sop-ui-automation</div>
+  <div><b>Suite analysed:</b> playwright-e2e/tests/ProcessOrchestrationBackend (45 specs)</div>
+  <div><b>Evidence:</b> 2026-10-04 nightly runs on INTEROP and QA, Azure and Gravitee</div>
+  <div><b>Report date:</b> 31-Aug-2026 &middot; <b>Updated:</b> 05-Oct-2026</div>
+</div>
+
+<div class="upd-banner">
+  <b>Update 05-Oct-2026.</b> Coverage was re-measured from the service source and the request logs of the four nightly backend runs.
+  <ul>
+    <li><b>59 of 144</b> active endpoints (41.0%) are now exercised in a test, up from 24 of 146 (16.4%). The 2026-10-01 PSR gap specs (<code>ProcessBatch/Test_006</code>&ndash;<code>Test_009</code>, <code>Calendar/Test_003</code>) closed most of the change.</li>
+    <li>Every endpoint row below carries a status badge: <span class="upd-b upd-ok">&#10003; Covered</span> with the covering spec, or <span class="upd-b upd-gone">Not in source</span> for rows that never existed in the controllers (the subprocess <code>eventAction</code> routes and <code>GET /template/.../status/{status}</code>). Rows without a badge are still open.</li>
+    <li>Sample payloads in section 4 date from 31-Aug. Some request and response shapes differ from the verified contracts (for example <code>POST /process/search</code> takes <code>filter</code> and returns <code>data</code> + <code>pager</code>); use the <a href="PSR-Gap-Plans/01-ProcessOrchestration-PSR-Gap-Plan.md">PO PSR gap plan</a> for verified shapes.</li>
+    <li>The full endpoint matrix and a UI-caller-based priority list are in <a href="process-orchestration-api-coverage-matrix.html">process-orchestration-api-coverage-matrix.html</a> and the <a href="backend-api-coverage-dashboard.html">backend API coverage dashboard</a>.</li>
+  </ul>
+</div>
+
+<h2>1. Executive Summary</h2>
+
+<div class="cards">
+  <div class="card"><div class="n">144</div><div class="l">Active endpoints <span class="upd-old">146</span></div></div>
+  <div class="card"><div class="n" style="color:#1a7f45">59</div><div class="l">Automated <span class="upd-old">24</span></div></div>
+  <div class="card"><div class="n" style="color:#b3001b">85</div><div class="l">Not automated <span class="upd-old">122</span></div></div>
+  <div class="card"><div class="n">41.0%</div><div class="l">Coverage <span class="upd-old">16.4%</span></div></div>
+  <div class="card"><div class="n">~64</div><div class="l">Person-days to close <span class="upd-old">~89</span></div></div>
+  <div class="card"><div class="n">45</div><div class="l">Backend spec files <span class="upd-old">20</span></div></div>
+</div>
+
+<div class="bar"><span style="width:41.0%"></span></div>
+<p class="small">Endpoint-level coverage: 59 of 144 active operations exercised by a test body in at least one environment (15 <code>@Deprecated</code> and 2 <code>@Profile("local")</code> mock routes excluded).</p>
+
+<p>The backend suite now covers <b>Calendar/Cycle</b> completely, <b>node attributes</b>, <b>supply chain actions</b>, <b>process search, context and scope</b>,
+the <b>process and subprocess read APIs</b>, <b>action-item search</b> and <b>Export/Import migration</b>. The orchestration core is still
+unautomated: <b>transitions, node scheduling and reschedule, event actions, subprocess start/stop, templates, quota and RBAC propagation</b>.
+These remain the areas with the highest defect blast radius, and lui calls most of them.</p>
+
+<div class="note danger">
+  <b>Top 5 risks from the gap (updated 05-Oct-2026):</b>
+  <ol style="margin:6px 0 0 18px;padding:0">
+    <li><b>Transition engine</b> (11 endpoints, 1 covered: <code>GET /job/{jobId}/status</code>) &mdash; lui calls 7 of the transition routes and none is tested.</li>
+    <li><b>Node schedule &amp; reschedule</b> (3 endpoints, 0 covered) &mdash; lui calls reschedule; date-cascade defects shift every downstream subprocess.</li>
+    <li><b>Event actions</b> (4 endpoints, 0 covered) &mdash; supply chain action CRUD is now covered by <code>ProcessBatch/Test_009</code>, but the event bindings that invoke it are not.</li>
+    <li><b>Subprocess lifecycle</b> (12 endpoints, 7 covered) &mdash; read, update and delete are covered; start/stop (called by lui), referenceable nodes and the subprocess Gantt are not.</li>
+    <li><b>RBAC propagation</b> (<code>/users/roles/add|remove</code>) &mdash; unchanged; an authorization regression is a security-severity incident, not just a functional one.</li>
+  </ol>
+</div>
+
+<h3>Legend</h3>
+<p class="legend">
+  <span><span class="pill P0">P0</span> Must automate this sprint</span>
+  <span><span class="pill P1">P1</span> Next release</span>
+  <span><span class="pill P2">P2</span> Backlog / opportunistic</span>
+  <span><span class="pill P3">P3</span> Low value</span>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <span class="sev-Critical">Critical</span> = cycle-blocking / data corruption &nbsp;
+  <span class="sev-High">High</span> = major feature broken &nbsp;
+  <span class="sev-Medium">Medium</span> = degraded UX &nbsp;
+  <span class="sev-Low">Low</span> = cosmetic / ops
+</p>
+<p class="small">Effort is in person-days for one senior SDET, and includes test-data setup, negative cases (400/401/403/404/409), assertions and CI wiring.</p>
+
+<h2>2. What Is Already Covered (baseline, updated 05-Oct-2026)</h2>
+<table>
+<thead><tr><th style="width:70px">Method</th><th>Endpoint</th><th style="width:330px">Covering spec</th><th style="width:200px">Environments (2026-10-04 nightly)</th></tr></thead>
+<tbody>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/actionitem/{id}</td><td>ActionItem/Test_001_ActionItemCRUDWithProcess, ActionItem/Test_002_ActionItemCRUDWithSubProcess, ActionItem/Test_003_ActionItemCRUDWithAssumptions</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar</td><td>Calendar/Test_003_CalendarAndCycleListing</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/calendar</td><td>Calendar/Test_001_CalendarsCRUD, Calendar/Test_002_CyclesCRUD, Calendar/Test_003_CalendarAndCycleListing, Migration/Test_001_CalendarMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar/{calendarName}/cycle</td><td>Calendar/Test_003_CalendarAndCycleListing, Migration/Test_001_CalendarMigration, ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/calendar/{calendarName}/cycle</td><td>Calendar/Test_002_CyclesCRUD, Migration/Test_001_CalendarMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/calendar/{calendarName}/cycle/{cycleName}</td><td>Calendar/Test_002_CyclesCRUD, Calendar/Test_003_CalendarAndCycleListing</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar/{calendarName}/cycle/{cycleName}</td><td>Calendar/Test_002_CyclesCRUD</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/calendar/{calendarName}/cycle/{cycleName}</td><td>Calendar/Test_002_CyclesCRUD</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/calendar/{name}</td><td>Calendar/Test_001_CalendarsCRUD, Calendar/Test_002_CyclesCRUD, Calendar/Test_003_CalendarAndCycleListing, Migration/Test_001_CalendarMigration, Migration/Test_009_ALMDeployResourceMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar/{name}</td><td>Calendar/Test_001_CalendarsCRUD, Calendar/Test_002_CyclesCRUD, Migration/Test_001_CalendarMigration</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/calendar/{name}</td><td>Calendar/Test_001_CalendarsCRUD</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/exchange/publish<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Migration/Test_009_ALMDeployResourceMigration</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/exportData<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_001, Migration/Test_002, Migration/Test_003, Migration/Test_004, Migration/Test_005, Migration/Test_006, Migration/Test_008, Migration/Test_009">&#10003; Covered &middot; Migration/Test_001, Migration/Test_002 +6</span></td><td>Migration/Test_001_CalendarMigration, Migration/Test_002_ProcessMigration, Migration/Test_003_FullAndPartialExport, Migration/Test_004_SupplyChainActionsMigration, Migration/Test_005_AssumptionAndActionItemKPIMigration, Migration/Test_006_EntityViewMappingMigration, Migration/Test_008_EntityViewProcedureMappingMigration, Migration/Test_009_ALMDeployResourceMigration</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/importData<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_001, Migration/Test_002, Migration/Test_004, Migration/Test_005, Migration/Test_006, Migration/Test_008">&#10003; Covered &middot; Migration/Test_001, Migration/Test_002 +4</span></td><td>Migration/Test_001_CalendarMigration, Migration/Test_002_ProcessMigration, Migration/Test_004_SupplyChainActionsMigration, Migration/Test_005_AssumptionAndActionItemKPIMigration, Migration/Test_006_EntityViewMappingMigration, Migration/Test_008_EntityViewProcedureMappingMigration</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/job/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Migration/Test_009_ALMDeployResourceMigration</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Migration/Test_009_ALMDeployResourceMigration</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{processName}</td><td>Migration/Test_002_ProcessMigration, Migration/Test_009_ALMDeployResourceMigration, ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}</td><td>ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess, ActionItem/Test_006_ActionItemEditorAndFilterConfig, ActionItem/Test_007_ActionItemTemplates, ActionItem/Test_008_ActionItemKpiConfigCrud, Migration/Test_002_ProcessMigration, ProcessBatch/Test_001_ProcessApiStartStop, ProcessBatch/Test_002_ProcessAttribute, ProcessBatch/Test_004_ProcessApiStartStopTwice, ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_007_ProcessContextAndScope, UIFields/Test_001_PageConfigContracts</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/actionitem</td><td>ActionItem/Test_001_ActionItemCRUDWithProcess, ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/actionitem/{id}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_001">&#10003; Covered &middot; ActionItem/Test_001</span></td><td>ActionItem/Test_001_ActionItemCRUDWithProcess</td><td>IOP Azure, IOP Gravitee, QA Gravitee</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/actionitem/search</td><td>ActionItem/Test_004_ActionItemSearchForProcess</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/attribute</td><td>ProcessBatch/Test_002_ProcessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/attribute</td><td>ProcessBatch/Test_002_ProcessAttribute, ProcessBatch/Test_006_ProcessSearch</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{processName}/attribute/{attrName}/value/{attrValue}</td><td>ProcessBatch/Test_002_ProcessAttribute, ProcessBatch/Test_006_ProcessSearch</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/attribute/{attrName}/value/{attrValue}</td><td>ProcessBatch/Test_002_ProcessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/children</td><td>ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/context</td><td>ActionItem/Test_001_ActionItemCRUDWithProcess, ActionItem/Test_003_ActionItemCRUDWithAssumptions, Migration/Test_005_AssumptionAndActionItemKPIMigration, ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/entity/{entityName}</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/kpi</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/planstartdate</td><td>ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/processGantt</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/scope</td><td>ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/scope</td><td>ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/start</td><td>ProcessBatch/Test_001_ProcessApiStartStop, ProcessBatch/Test_004_ProcessApiStartStopTwice, ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/stop<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_001, ProcessBatch/Test_004, ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_001, ProcessBatch/Test_004 +1</span></td><td>ProcessBatch/Test_001_ProcessApiStartStop, ProcessBatch/Test_004_ProcessApiStartStopTwice, ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>IOP Azure, IOP Gravitee</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/subprocess</td><td>ActionItem/Test_005_ActionItemSearchForSubprocess, Migration/Test_002_ProcessMigration, ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}</td><td>ActionItem/Test_005_ActionItemSearchForSubprocess, Migration/Test_002_ProcessMigration, ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}</td><td>ActionItem/Test_002_ActionItemCRUDWithSubProcess, ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess, ActionItem/Test_006_ActionItemEditorAndFilterConfig, ActionItem/Test_007_ActionItemTemplates, ActionItem/Test_008_ActionItemKpiConfigCrud, Migration/Test_002_ProcessMigration, ProcessBatch/Test_003_SubprocessAttribute, ProcessBatch/Test_005_ProcessLifecycleCrud, UIFields/Test_001_PageConfigContracts</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}</td><td>ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/actionitem</td><td>ActionItem/Test_002_ActionItemCRUDWithSubProcess, ActionItem/Test_004_ActionItemSearchForProcess, ActionItem/Test_005_ActionItemSearchForSubprocess, ActionItem/Test_007_ActionItemTemplates</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/actionitem/{id}</td><td>ActionItem/Test_002_ActionItemCRUDWithSubProcess</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/actionitem/search</td><td>ActionItem/Test_005_ActionItemSearchForSubprocess</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/attribute</td><td>ProcessBatch/Test_003_SubprocessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/attribute</td><td>ProcessBatch/Test_003_SubprocessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/attribute/{attrName}/value/{attrValue}</td><td>ProcessBatch/Test_003_SubprocessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/attribute/{attrName}/value/{attrValue}</td><td>ProcessBatch/Test_003_SubprocessAttribute</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/children</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/kpi</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/subprocess/{subprocessName}/tree</td><td>ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/tree</td><td>ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/users</td><td>ProcessBatch/Test_008_ProcessDetailsReads</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/search</td><td>ProcessBatch/Test_006_ProcessSearch</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/template</td><td>Migration/Test_002_ProcessMigration, ProcessBatch/Test_005_ProcessLifecycleCrud, ProcessBatch/Test_007_ProcessContextAndScope</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/supplyChainAction</td><td>Migration/Test_004_SupplyChainActionsMigration, Migration/Test_009_ALMDeployResourceMigration, ProcessBatch/Test_009_SupplyChainActionCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/supplyChainAction</td><td>ProcessBatch/Test_009_SupplyChainActionCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/supplyChainAction/{id}</td><td>Migration/Test_004_SupplyChainActionsMigration, Migration/Test_009_ALMDeployResourceMigration, ProcessBatch/Test_009_SupplyChainActionCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/supplyChainAction/{id}</td><td>ProcessBatch/Test_009_SupplyChainActionCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/supplyChainAction/{id}</td><td>ProcessBatch/Test_009_SupplyChainActionCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/transitionJob/{jobId}/status</td><td>ProcessBatch/Test_001_ProcessApiStartStop, ProcessBatch/Test_004_ProcessApiStartStopTwice, ProcessBatch/Test_005_ProcessLifecycleCrud</td><td>All 4 (IOP + QA, Azure + Gravitee)</td></tr>
+</tbody>
+</table>
+
+<div class="note">
+  <b>Quality observations on the existing suite</b> (re-checked 05-Oct-2026 against the Playwright specs):
+  <ul style="margin:6px 0 0 18px;padding:0">
+    <li><b>Still open:</b> <code>Calendar/Test_001_CalendarsCRUD</code> asserts <code>500</code> as the <i>expected</i> status for an invalid date range and for
+        duplicate cycle names. A validation failure should be <code>400</code>. The test <b>locks in a defect</b> &mdash; raise a bug and change the assertion to 400.</li>
+    <li><b>Fixed:</b> the copy-pasted &ldquo;Fetching Calendar&rdquo; step names no longer appear in the Action Item specs.</li>
+    <li><b>Improved:</b> the PSR gap specs (2026-10-01) assert required keys, pagers and field contracts; the older CRUD specs still check only status and a few fields.
+        Contracts are recorded in the PSR gap plans rather than generated from the OAS spec.</li>
+    <li><b>Improved:</b> teardown now runs in <code>afterAll</code> in 31 backend specs, and <code>util/process-fixture.util.ts</code> creates and deletes a writable process for any spec that needs one.</li>
+    <li>Test data is still duplicated per environment (<code>testdata/INTEROP|QA|PSR</code>), partly by design because field lists are tenant-configured.</li>
+  </ul>
+</div>
+
+<h2>3. Coverage Gap by Module</h2>
+
+<p class="small">Recomputed 05-Oct-2026 from the controllers (active routes only) using this report's module grouping; routes the 31-Aug inventory did not list are assigned by controller. Struck-through figures are the 31-Aug values. Effort is what remains for the open rows.</p>
+<table>
+<thead><tr><th>#</th><th>Module</th><th class="nowrap">Endpoints</th><th class="nowrap">Covered</th><th class="nowrap">Gap</th><th class="nowrap">Priority</th><th class="nowrap">Max severity</th><th class="nowrap">Effort (pd)</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Calendar &amp; Cycle</td><td>10</td><td>10 <span class="upd-old">8</span></td><td>0 <span class="upd-old">2</span></td><td><span class="upd-b upd-ok">Done</span></td><td class="sev-Medium">Medium</td><td>0 <span class="upd-old">0.5</span></td></tr>
+<tr><td>1</td><td>Process lifecycle &amp; CRUD</td><td>27 <span class="upd-old">23</span></td><td>16 <span class="upd-old">2</span></td><td>11 <span class="upd-old">22</span></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>9.0 <span class="upd-old">16.0</span></td></tr>
+<tr><td>2</td><td>Subprocess lifecycle</td><td>12</td><td>7 <span class="upd-old">1</span></td><td>5 <span class="upd-old">11</span></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>3.5 <span class="upd-old">7.5</span></td></tr>
+<tr><td>3</td><td>Node attributes</td><td>8</td><td>8 <span class="upd-old">0</span></td><td>0 <span class="upd-old">8</span></td><td><span class="upd-b upd-ok">Done</span></td><td class="sev-High">High</td><td>0 <span class="upd-old">3.5</span></td></tr>
+<tr><td>4</td><td>Transitions &amp; jobs</td><td>12 <span class="upd-old">11</span></td><td>2 <span class="upd-old">0</span></td><td>10 <span class="upd-old">11</span></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>7.5 <span class="upd-old">7.75</span></td></tr>
+<tr><td>5</td><td>Node schedule / reschedule</td><td>2</td><td>0</td><td>2</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>3.0</td></tr>
+<tr><td>6</td><td>Event actions</td><td>4 <span class="upd-old">8</span></td><td>0</td><td>4 <span class="upd-old">8</span></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0 <span class="upd-old">4.0</span></td></tr>
+<tr><td>7</td><td>Supply chain actions</td><td>5</td><td>5 <span class="upd-old">2</span></td><td>0 <span class="upd-old">3</span></td><td><span class="upd-b upd-ok">Done</span></td><td class="sev-Critical">Critical</td><td>0 <span class="upd-old">2.5</span></td></tr>
+<tr><td>8</td><td>Action items (search / bulk)</td><td>9</td><td>7 <span class="upd-old">5</span></td><td>2 <span class="upd-old">4</span></td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.75 <span class="upd-old">3.5</span></td></tr>
+<tr><td>9</td><td>Templates &amp; template entities</td><td>11</td><td>0</td><td>11</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>7.0 <span class="upd-old">6.75</span></td></tr>
+<tr><td>10</td><td>Entity limits, quota &amp; metering</td><td>8</td><td>1 <span class="upd-old">0</span></td><td>7 <span class="upd-old">8</span></td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>4.25 <span class="upd-old">4.75</span></td></tr>
+<tr><td>11</td><td>Users, roles &amp; RBAC</td><td>10 <span class="upd-old">7</span></td><td>0</td><td>10 <span class="upd-old">7</span></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>5.5 <span class="upd-old">4.0</span></td></tr>
+<tr><td>12</td><td>Tenant onboarding &amp; realm</td><td>12</td><td>0</td><td>12</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>4.5</td></tr>
+<tr><td>13</td><td>Configuration &amp; ALM publish/deploy</td><td>9 <span class="upd-old">7</span></td><td>3 <span class="upd-old">0</span></td><td>6 <span class="upd-old">7</span></td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>4.5 <span class="upd-old">5.5</span></td></tr>
+<tr><td>14</td><td>Reporting configuration</td><td>5</td><td>0</td><td>5</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>3.0</td></tr>
+<tr><td>15</td><td>Ops / diagnostics</td><td>0 <span class="upd-old">1</span></td><td>&mdash;</td><td>&mdash;</td><td><span class="pill P3">P3</span></td><td class="sev-Low">Low</td><td>&mdash; <span class="upd-old">0.25</span></td></tr>
+<tr style="font-weight:700;background:#eef2f6">
+  <td colspan="2">TOTAL</td><td>144 <span class="upd-old">146</span></td><td>59 <span class="upd-old">24</span></td><td>85 <span class="upd-old">122</span></td><td colspan="2">Core automation effort</td><td>55.5 <span class="upd-old">77.0</span></td></tr>
+<tr style="font-weight:700;background:#eef2f6">
+  <td colspan="7">+ framework hardening, schema assertions, CI/report wiring (~15%; shared fixtures now exist)</td><td>8.3 <span class="upd-old">12.0</span></td></tr>
+<tr style="font-weight:700;background:#e2eaf1">
+  <td colspan="7">GRAND TOTAL</td><td>~64 pd (~13 person-weeks) <span class="upd-old">89.0</span></td></tr>
+</tbody>
+</table>
+<p class="small">Module 1 gained <code>DELETE/GET /process/{p}</code>, <code>start</code>, <code>stop</code> and <code>POST /process/template</code>, which the 31-Aug inventory counted only in the baseline. Module 4 gained <code>GET /transitionJob/{jobId}/status</code>, module 11 the RBAC proxy routes (<code>/cache/clear</code>, <code>/resources</code>, <code>/users/{u}/entities/{e}/actions</code>), and module 13 <code>/exportData</code> and <code>/importData</code>. Module 6 lost the four subprocess-level <code>eventAction</code> routes, which do not exist in the controllers. <code>GET /ops/db/state</code> is served by plan-sop-po-be-commons for every service and is out of scope.</p>
+
+<h2>4. Detailed Uncovered API Inventory</h2>
+
+<div class="modblock">
+<h3>Module 0 &mdash; Calendar &amp; Cycle (residual gap)</h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_003">&#10003; Covered &middot; Calendar/Test_003</span></td><td>Paged list of all calendars. Pagination + sort correctness is unverified; UI calendar picker depends on it.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/calendar/{calendarName}/cycle<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_003, Migration/Test_001, ProcessBatch/Test_005, ProcessBatch/Test_007">&#10003; Covered &middot; Calendar/Test_003, Migration/Test_001 +2</span></td><td>Paged list of cycles in a calendar. Postman shows a known negative (<code>pageSize=-1</code>) that is not automated.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>GET /calendar/{calendarName}/cycle?pageNumber=0&amp;pageSize=5</code></h4>
+<pre class="resp">200 OK
+{
+  "content": [
+    { "name": "Cycle_Jan_2026", "description": "January cycle",
+      "startDate": "2026-01-01T00:00:00Z", "endDate": "2026-01-31T00:00:00Z", "isActive": true }
+  ],
+  "pageNumber": 0, "pageSize": 5, "totalElements": 4, "totalPages": 1
+}</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 1 &mdash; Process lifecycle &amp; CRUD <span class="pill P0">P0</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process</td><td>Create a process directly (not from template). The primary creation path; every downstream object hangs off it.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}</td><td>Update process metadata / calendar-cycle association. High regression risk &mdash; can orphan schedules.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/calendarcycle/{cycleName}/reschedule</td><td>Bulk reschedule of node dates within a cycle. Cascades to every subprocess; silent corruption if wrong.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Paged/filtered process list. Backs the process cockpit landing page.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/search<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_006">&#10003; Covered &middot; ProcessBatch/Test_006</span></td><td>Filtered search (cycle, status, owner). Filter combinations are completely unverified.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/context<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_001, ActionItem/Test_003, Migration/Test_005, ProcessBatch/Test_007">&#10003; Covered &middot; ActionItem/Test_001, ActionItem/Test_003 +2</span></td><td>Resolved planning context (model, scope, cycle) consumed by Planning Space drill-through.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/tree<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Full hierarchy of the process. Any tree-shape regression breaks the Gantt and cockpit.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/children<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005, ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_005, ProcessBatch/Test_008</span></td><td>Immediate subprocesses. Used for lazy-loaded navigation.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/status</td><td>Live execution status of the process node.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/status</td><td>Bulk status for a list of processes. Performance-sensitive (cockpit polls it).</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/scope<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_007">&#10003; Covered &middot; ProcessBatch/Test_007</span></td><td>Read planning scope (dimensions/levels/filters).</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/scope<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_007">&#10003; Covered &middot; ProcessBatch/Test_007</span></td><td>Update planning scope. Wrong scope silently changes what planners see.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/planstartdate<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Shift plan start date for a cycle. Date-arithmetic hot spot.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/processGantt<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>Gantt payload (flat). Large-response contract, easy to break.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/processGanttWithTree</td><td>Gantt + hierarchy in one call. Primary cockpit render call.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/kpi<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>Aggregated KPI values for the process.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/users<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>Users resolved through role policies on the process.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{processName}/export</td><td>Single-process export bundle (distinct from <code>/exportData</code>).</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/import</td><td>Single-process import. Round-trip fidelity is unverified.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/id/{processId}</td><td>Resolve process name by id. Used by cross-service callbacks.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/name/{displayName}</td><td>Resolve internal names by display name (duplicate-display-name behaviour untested).</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{processName}/report/folder</td><td>Bind a reporting workspace folder to the process.</td><td><span class="pill P3">P3</span></td><td class="sev-Low">Low</td><td>0.5</td></tr>
+</tbody></table>
+
+<h4>Sample request &mdash; <code>POST /process</code></h4>
+<pre>{
+  "name": "AUT_Process_01",
+  "displayName": "AUT Process 01",
+  "description": "Automation created process",
+  "calendarName": "AUT_Calendar_01",
+  "cycleName": "AUT_Cycle_01"
+}</pre>
+<pre class="resp">201 Created
+{ "processId": "8f1a5c0c-8f2e-4d51-9b7a-9d2f3f1c4e77", "name": "AUT_Process_01" }</pre>
+
+<h4>Sample request &mdash; <code>POST /process/search</code></h4>
+<pre>{
+  "filters": { "cycleName": "AUT_Cycle_01", "status": "IN_PROGRESS" },
+  "pageNumber": 0,
+  "pageSize": 10
+}</pre>
+<pre class="resp">200 OK
+{
+  "content": [
+    { "id": "8f1a5c0c-...", "name": "AUT_Process_01", "displayName": "AUT Process 01",
+      "calendarName": "AUT_Calendar_01", "cycleName": "AUT_Cycle_01",
+      "status": "IN_PROGRESS", "startDate": "2026-01-01", "endDate": "2026-01-31" }
+  ],
+  "totalElements": 1, "totalPages": 1, "pageNumber": 0, "pageSize": 10
+}</pre>
+
+<h4>Sample request &mdash; <code>PUT /process/{processName}/calendarcycle/{cycleName}/reschedule</code></h4>
+<pre>[
+  { "nodeName": "AUT_Process_01",  "startDate": "2026-02-02", "endDate": "2026-02-27" },
+  { "nodeName": "DemandReview",    "startDate": "2026-02-05", "endDate": "2026-02-11" }
+]</pre>
+<pre class="resp">200 OK
+"Reschedule completed for process AUT_Process_01 / cycle AUT_Cycle_01"</pre>
+
+<h4>Sample request &mdash; <code>POST /process/status</code></h4>
+<pre>{ "processNames": ["AUT_Process_01", "AUT_Process_02"] }</pre>
+<pre class="resp">200 OK
+[ { "processName": "AUT_Process_01", "status": "IN_PROGRESS", "startedOn": "2026-02-02T09:00:00Z" },
+  { "processName": "AUT_Process_02", "status": "NOT_STARTED", "startedOn": null } ]</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 2 &mdash; Subprocess lifecycle <span class="pill P0">P0</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_002, ActionItem/Test_004, ActionItem/Test_005, ActionItem/Test_006, ActionItem/Test_007, ActionItem/Test_008, Migration/Test_002, ProcessBatch/Test_003, ProcessBatch/Test_005, UIFields/Test_001">&#10003; Covered &middot; ActionItem/Test_002, ActionItem/Test_004 +8</span></td><td>Read a subprocess. Baseline for every other subprocess assertion.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Update offsets, duration, sequence, transition types. Highest-churn write path in the service.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_005, Migration/Test_002, ProcessBatch/Test_005">&#10003; Covered &middot; ActionItem/Test_005, Migration/Test_002 +1</span></td><td>Delete a subprocess. Must correctly re-link transitions of siblings &mdash; classic orphan-node defect.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/start</td><td>Start a subprocess node; fires start event actions.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/stop</td><td>Stop a subprocess node; fires end event actions and auto-transitions.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/tree<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005, ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_005, ProcessBatch/Test_008</span></td><td>Subtree from a subprocess down.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/children<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>Direct children of a subprocess.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/referenceableNodes</td><td>Valid <code>referenceNodeName</code> candidates. Drives the UI dropdown; wrong list = invalid schedules.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/processGantt</td><td>Gantt scoped to a subprocess.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/processGanttWithTree</td><td>Gantt + subtree.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/kpi<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>KPI roll-up for a subprocess.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST/PUT /process/{p}/subprocess[/{s}]</code></h4>
+<pre>{
+  "name": "DemandReview",
+  "displayName": "Demand Review",
+  "description": "Demand review step",
+  "parentNodeName": "AUT_Process_01",
+  "referenceNodeName": "InitiativesAssumptionsReview",
+  "startTransitionType": "MANUAL",
+  "endTransitionType": "MANUAL",
+  "startOffsetReference": "END",
+  "startOffset": 1,
+  "duration": 5,
+  "sequence": 2,
+  "isActive": true,
+  "attributes": [ { "name": "Owner", "value": "demand.planner", "isActive": true } ]
+}</pre>
+<pre class="resp">201 Created
+{ "nodeId": "2c73b0c1-...", "name": "DemandReview" }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 3 &mdash; Node attributes <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/attribute<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002">&#10003; Covered &middot; ProcessBatch/Test_002</span></td><td>List dynamic attributes on a process.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/attribute<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002, ProcessBatch/Test_006">&#10003; Covered &middot; ProcessBatch/Test_002, ProcessBatch/Test_006</span></td><td>Create a dynamic attribute. Attributes feed workflow filters &amp; drill-through context.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{p}/attribute/{attrName}/value/{attrValue}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002">&#10003; Covered &middot; ProcessBatch/Test_002</span></td><td>Update an attribute value.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/attribute/{attrName}/value/{attrValue}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002, ProcessBatch/Test_006">&#10003; Covered &middot; ProcessBatch/Test_002, ProcessBatch/Test_006</span></td><td>Delete an attribute value.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/attribute<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; Covered &middot; ProcessBatch/Test_003</span></td><td>Same, at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/attribute<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; Covered &middot; ProcessBatch/Test_003</span></td><td>Same, at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{p}/subprocess/{s}/attribute/{attrName}/value/{attrValue}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; Covered &middot; ProcessBatch/Test_003</span></td><td>Same, at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/subprocess/{s}/attribute/{attrName}/value/{attrValue}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; Covered &middot; ProcessBatch/Test_003</span></td><td>Same, at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /process/{p}/attribute</code></h4>
+<pre>{
+  "name": "Region",
+  "value": "EMEA",
+  "entityId": "8f1a5c0c-8f2e-4d51-9b7a-9d2f3f1c4e77",
+  "entityType": "PROCESS",
+  "isActive": true
+}</pre>
+<pre class="resp">201 Created
+{ "id": "a11c8f31-...", "name": "Region", "value": "EMEA", "entityType": "PROCESS", "isActive": true }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 4 &mdash; Transitions &amp; async jobs <span class="pill P0">P0</span></h3>
+<div class="note danger"><b>Highest-risk module.</b> Zero automated coverage today. The transition graph determines which node
+starts next; an incorrect edge stalls a live customer cycle and requires manual DB intervention to recover.</div>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/cycle/{c}/transition/generate</td><td>Auto-generate the whole transition hierarchy for a cycle. Async &rarr; returns a job id.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/transitionhierarchy</td><td>Read the resulting graph. The single best assertion target for graph correctness.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/transition</td><td>Create outbound-children transitions manually.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/transition</td><td>Delete a node's transitions. Must not orphan downstream nodes.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/transition/tree</td><td>Delete the whole hierarchy. Destructive &mdash; needs an explicit guard test.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/transition-options</td><td>Legal next-transition candidates for a node.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/transitionhierarchy</td><td>Subprocess-scoped graph.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.75</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/transition</td><td>Create subprocess transitions.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.75</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/subprocess/{s}/transition</td><td>Delete subprocess transitions.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/transition-options</td><td>Subprocess transition candidates.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/job/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Generic async job poller (role assignment, publish, validation). Used by many flows, never asserted.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /process/{p}/transition</code></h4>
+<pre>{ "outboundChildren": ["InitiativesAssumptionsReview"] }</pre>
+<pre class="resp">201 Created
+"Transition created for AUT_Process_01"</pre>
+<h4>Sample response &mdash; <code>GET /process/{p}/transitionhierarchy</code></h4>
+<pre class="resp">200 OK
+{
+  "name": "AUT_Process_01",
+  "transition": { "outboundChildren": [ { "name": "InitiativesAssumptionsReview" } ], "outboundPeers": [] },
+  "children": [
+    { "name": "InitiativesAssumptionsReview",
+      "transition": { "outboundChildren": [], "outboundPeers": [ { "name": "DemandReview" } ] } },
+    { "name": "DemandReview",
+      "transition": { "outboundChildren": [], "outboundPeers": [ { "name": "SupplyReview" } ] } }
+  ]
+}</pre>
+<h4>Sample response &mdash; <code>POST /process/{p}/cycle/{c}/transition/generate</code></h4>
+<pre class="resp">202 Accepted
+{ "jobId": "b8f4a1de-2f77-4a15-9c1a-11e2c66a4d90",
+  "statusApi": "/po/api/v1/transitionJob/b8f4a1de-2f77-4a15-9c1a-11e2c66a4d90/status" }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 5 &mdash; Node schedule <span class="pill P0">P0</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/calendarcycle/{c}/nodeschedule</td><td>Deletes and regenerates the schedule for the process <b>and every referencing subprocess</b>. Destructive-by-design; no automation exists.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/calendarcycle/{c}/nodeschedule</td><td>Same at subprocess scope.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /process/{p}/calendarcycle/{c}/nodeschedule</code></h4>
+<pre>{ "startDate": "01-Feb-2026", "endDate": "28-Feb-2026" }</pre>
+<pre class="resp">201 Created
+"Node schedule created for AUT_Process_01 / AUT_Cycle_01"</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 6 &mdash; Event actions <span class="pill P0">P0</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/eventAction</td><td>Bind an SCA/webhook to a node event (start/stop). This is how scenarios get created automatically.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.75</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/eventAction/{eventName}</td><td>Read the binding.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{p}/eventAction/{eventName}</td><td>Update payload / http method / auth-token flag.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/eventAction/{eventName}</td><td>Remove the binding.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/eventAction<br/><span class="upd-b upd-gone">Not in source</span></td><td>Same at subprocess scope (the common real-world case).</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.75</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/subprocess/{s}/eventAction/{eventName}<br/><span class="upd-b upd-gone">Not in source</span></td><td>Read.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/process/{p}/subprocess/{s}/eventAction/{eventName}<br/><span class="upd-b upd-gone">Not in source</span></td><td>Update.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/process/{p}/subprocess/{s}/eventAction/{eventName}<br/><span class="upd-b upd-gone">Not in source</span></td><td>Delete.</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /process/{p}/eventAction</code></h4>
+<pre>{
+  "sourceId": "8f1a5c0c-8f2e-4d51-9b7a-9d2f3f1c4e77",
+  "eventName": "onStart",
+  "eventType": "SYNC",
+  "type": "SCA",
+  "httpMethod": "POST",
+  "includeAuthToken": true,
+  "isActive": true,
+  "isVisible": true,
+  "payload": {
+    "procedureName": "Create_Scenario",
+    "procInput": {
+      "scenarioName": "AUT_Scenario_onStart",
+      "parentScenario": "${parentScenario}",
+      "visibility": "PUBLIC",
+      "triggerType": "MANUAL",
+      "sourceId": "${sourceId}",
+      "sourceType": "${sourceType}",
+      "planningModelId": "${planningModelId}",
+      "cycleStartDate": "${cycleStartDate} first.Monday",
+      "currentDate": "${now()} previous.Monday"
+    },
+    "sourceId": "${sourceId}",
+    "sourceType": "${sourceType}",
+    "context": "${context}"
+  }
+}</pre>
+<pre class="resp">201 Created
+{ "id": "5d1f...", "eventName": "onStart", "eventType": "SYNC", "type": "SCA",
+  "httpMethod": "POST", "isActive": true, "isVisible": true }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 7 &mdash; Supply chain actions <span class="pill P0">P0</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/supplyChainAction<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>Create an SCA (procedure + wizard UI config). Only the <i>migrated</i> path is covered today, never native creation.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/supplyChainAction/{id}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>Read one SCA including <code>uiConfig</code> JSON blob (escaping bugs live here).</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/supplyChainAction/{id}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>Update SCA. Must not break existing event-action bindings.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /supplyChainAction</code></h4>
+<pre>{
+  "name": "AUT_SCA_CreateScenario",
+  "type": "CREATE_SCENARIO",
+  "description": "Automation SCA",
+  "procedureName": "Create_Scenario",
+  "uiConfig": "{\"steps\":[{\"id\":1,\"name\":\"Scenario - Overview\",\"pages\":[{\"type\":\"SCENARIO_DETAILS\",\"name\":\"Scenario Details\"}]}]}",
+  "isActive": true,
+  "isEnabled": true
+}</pre>
+<pre class="resp">201 Created
+{ "id": "d4a9...", "name": "AUT_SCA_CreateScenario", "type": "CREATE_SCENARIO", "isActive": true, "isEnabled": true }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 8 &mdash; Action items: search &amp; bulk <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/actionitem/search<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004">&#10003; Covered &middot; ActionItem/Test_004</span></td><td>Filtered/paged search. Backs the action-item grid; filter regressions are user-visible immediately.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/actionitem/bulk</td><td>Playbook-driven bulk creation. Partial-failure semantics untested.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/actionitem/search<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_005">&#10003; Covered &middot; ActionItem/Test_005</span></td><td>Same at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.75</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/subprocess/{s}/actionitem/bulk</td><td>Same at subprocess scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.75</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /process/{p}/actionitem/search</code></h4>
+<pre>{
+  "filters": { "status": [1], "priority": [2], "dueDateFrom": "2026-02-01", "dueDateTo": "2026-02-28" },
+  "sort": [ { "field": "dueDate", "direction": "ASC" } ],
+  "pageNumber": 0,
+  "pageSize": 25
+}</pre>
+<pre class="resp">200 OK
+{ "content": [ { "id": "ai-001", "title": "Resolve supply gap", "status": 1, "priority": 2,
+                 "dueDate": "2026-02-14", "sourceType": "PROCESS", "sourceId": "8f1a5c0c-..." } ],
+  "totalElements": 1, "totalPages": 1 }</pre>
+<h4>Sample request &mdash; <code>POST /process/{p}/actionitem/bulk</code></h4>
+<pre>{
+  "playbookName": "AUT_Playbook_01",
+  "actionItems": [
+    { "title": "AUT AI 1", "description": "bulk 1", "priority": 2, "dueDate": "2026-02-14" },
+    { "title": "AUT AI 2", "description": "bulk 2", "priority": 1, "dueDate": "2026-02-20" }
+  ]
+}</pre>
+<pre class="resp">201 Created
+{ "created": 2, "failed": 0, "ids": ["ai-001", "ai-002"] }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 9 &mdash; Templates &amp; template entities <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/template</td><td>Create a process/entity template. Templates are the seed for every customer process &mdash; a bad template is multiplied N times.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/template/{name}/type/{type}</td><td>Update template config / entity limits.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/template/{name}/type/{type}</td><td>Delete template; must fail when processes still reference it.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/template/{templateType}</td><td>List templates by type.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/template/{templateType}/{templateName}</td><td>Read one template.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/template/Id/{templateId}</td><td>Read by id.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/template/schema/type/{templateType}</td><td>JSON schema for the template type &mdash; ideal source for contract assertions.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/template/{name}/type/{type}/status/{status}</td><td>Enable/disable a template.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/template/{name}/type/{type}/status/{status}<br/><span class="upd-b upd-gone">Not in source</span></td><td>Read template-entity set by status.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/template/{name}/type/{type}/template-entity</td><td>Attach template entities.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/template-entity/{id}</td><td>Detach a template entity.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /template</code></h4>
+<pre>{
+  "name": "AUT_Process_Template",
+  "displayName": "AUT Process Template",
+  "type": "PROCESS",
+  "description": "Automation template",
+  "isActive": true,
+  "config": {
+    "PROCESS": {
+      "name": "${processName}",
+      "displayName": "${processDisplayName}",
+      "calendarName": "${calendarName}",
+      "cycleName": "${cycleName}",
+      "children": [
+        { "name": "DemandReview", "displayName": "Demand Review", "startTransitionType": "MANUAL",
+          "endTransitionType": "MANUAL", "startOffsetReference": "START", "startOffset": 0,
+          "duration": 5, "sequence": 1, "isActive": true,
+          "transition": { "outboundChildren": [], "outboundPeers": [ { "name": "SupplyReview" } ] } },
+        { "name": "SupplyReview", "displayName": "Supply Review", "referenceNodeName": "DemandReview",
+          "startOffsetReference": "END", "startOffset": 1, "duration": 5, "sequence": 2, "isActive": true,
+          "transition": { "outboundChildren": [], "outboundPeers": [] } }
+      ],
+      "transition": { "outboundChildren": [ { "name": "DemandReview" } ], "outboundPeers": [] }
+    },
+    "ENTITY_LIMITS": [ { "entityType": "SCENARIO", "entityOperation": "maxcount", "entityLimit": 10, "enforcementType": "HARD" } ]
+  }
+}</pre>
+<pre class="resp">201 Created
+{ "id": "tpl-9931...", "name": "AUT_Process_Template", "type": "PROCESS", "isActive": true }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 10 &mdash; Entity limits, quota &amp; metering <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/process/{p}/validate/{entityName}</td><td>Pre-flight check before creating a scenario/cluster. HARD enforcement must actually block.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/process/{p}/entity/{entityName}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>Current usage vs. limit for an entity type.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/quota</td><td>Create/update quota for a scope. Over-permissive quota = cost/perf incident.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/quota/scope/{scopeType}/{scopeId}</td><td>Read all quotas for a scope.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/quota/{entityType}/{entityOperation}/{scopeType}/{scopeId}</td><td>Read a single quota value; must fall back to default when unset.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/quota/scope/{scopeType}/{scopeId}</td><td>Delete all quotas for a scope.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/quota/{id}</td><td>Delete one quota.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/meter/{entityType}/{entityOperation}/{scopeType}/{scopeId}</td><td>Consumption counter driving enforcement.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /quota</code></h4>
+<pre>{
+  "tenantId": "12f53fad-e4c8-45df-8342-2a8372ba0798",
+  "scopeType": "TEMPLATE",
+  "scopeId": "tpl-9931...",
+  "entityOperations": [
+    { "entityType": "SCENARIO", "entityOperation": "maxcount", "entityLimit": 11, "enforcementType": "HARD" },
+    { "entityType": "SCENARIO", "entityOperation": "scope",    "entityLimit": 1,  "enforcementType": "HARD" },
+    { "entityType": "CLUSTER",  "entityOperation": "maxcount", "entityLimit": 11, "enforcementType": "SOFT" }
+  ]
+}</pre>
+<pre class="resp">201 Created
+{ "id": "qta-4410...", "scopeType": "TEMPLATE", "scopeId": "tpl-9931...", "entityOperations": 3 }</pre>
+<h4>Sample response &mdash; <code>POST /process/{p}/validate/SCENARIO</code> (limit exceeded)</h4>
+<pre class="resp">200 OK
+{ "status": "BLOCKED", "entityType": "SCENARIO", "limit": "11", "current": "11",
+  "enforcementType": "HARD", "message": "Scenario limit reached for process AUT_Process_01" }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 11 &mdash; Users, roles &amp; RBAC <span class="pill P0">P0</span></h3>
+<div class="note danger">Authorization regressions here are <b>security severity</b>, not functional. They are also the hardest to detect manually.</div>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/users/roles/add</td><td>Assign roles to subjects/roles. Async job. Grants access to processes.</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/users/roles/remove</td><td>Revoke. <b>Failure to revoke is a data-exposure defect.</b></td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/user/onboard</td><td>Create default admin/planner roles &amp; entities for a new user.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/user/{entityType}/{entityName}</td><td>Users resolved for a PROCESS/SUBPROCESS.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/role</td><td>Create a custom role.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.4</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/role/admin</td><td>Create the OOTB admin role.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.3</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/role/planner</td><td>Create the OOTB planner role.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.3</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /users/roles/add</code></h4>
+<pre>{
+  "users": { "subjects": ["31b95517-dd75-4734-b9a6-b3dc0be7ecd4"], "roles": [] },
+  "roles":  ["AUT_Role_Planner"]
+}</pre>
+<pre class="resp">202 Accepted
+{ "jobId": "job-7d21...", "statusApi": "/po/api/v1/job/job-7d21.../status" }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 12 &mdash; Tenant onboarding &amp; realm <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/tenant/onboard</td><td>Full tenant bootstrap (roles, calendar, solution area, filters). Day-0 blocker if broken.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/tenant/onboard/status</td><td>Per-step boolean matrix of onboarding progress.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/tenant/onboard/status</td><td>Manually mark a step complete (recovery path).</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/tenant</td><td>Tenant metadata.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/realm/solutionArea</td><td>Create tenant solution area + card gallery.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.4</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/realm/solutionArea/gallery</td><td>Create card gallery only.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.3</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/realm/filter-instance</td><td>Create the vertical filter instance.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.3</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/procedure/onboard</td><td>Seed OOTB procedures used by SCAs. Async job.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/tenants/machineCreds</td><td>Store M2M credentials. <b>Must assert secrets are never echoed back.</b></td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/tenants/machineCreds</td><td>Read credential metadata (not the secret).</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.25</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/tenants/snowflakeCreds</td><td>Store Snowflake credentials. Same secret-leak concern.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.15</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/tenants/snowflakeCreds</td><td>Read Snowflake credential metadata.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.1</td></tr>
+</tbody></table>
+<h4>Sample response &mdash; <code>GET /tenant/onboard/status</code></h4>
+<pre class="resp">200 OK
+{ "Tenant": true, "SolutionArea": true, "VerticalFilter": true,
+  "ROLES": true, "Calendar": true, "Process": false, "Procedures": false }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 13 &mdash; Configuration &amp; ALM publish/deploy <span class="pill P1">P1</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/realmConfiguration</td><td>Create realm-wide PO configuration.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/configuration/realmConfiguration</td><td>Update realm configuration.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/configuration/realmConfiguration</td><td>Read realm configuration.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/publish</td><td>Publish PO configuration as an ALM artefact. Async.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/deploy</td><td>Deploy a published artefact into a realm.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/exchange/publish<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Publish to the BY Exchange. Async, job-status polled.</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/configuration/exchange/deploy</td><td>Deploy from the BY Exchange. Cross-realm blast radius.</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /configuration/realmConfiguration</code></h4>
+<pre>{
+  "name": "automation",
+  "description": "PO realm configuration for automation",
+  "configuration": {
+    "featureToggles": { "enableSubprocessGantt": true, "enableEntityLimits": true },
+    "defaults": { "calendarName": "AUT_Calendar_01", "processTemplate": "AUT_Process_Template" }
+  }
+}</pre>
+<pre class="resp">201 Created
+{ "id": "cfg-2201...", "name": "automation", "version": 1 }</pre>
+<h4>Sample response &mdash; <code>POST /configuration/publish?name=automation</code></h4>
+<pre class="resp">202 Accepted
+{ "jobId": "pub-8712...", "statusApi": "/po/api/v1/job/pub-8712.../status" }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 14 &mdash; Reporting configuration <span class="pill P2">P2</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/reporting/config</td><td>Register a SIGMA workspace. Validation: <code>workspaceId</code> non-empty, <code>type</code> must equal <code>SIGMA</code>.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+<tr><td><span class="m PUT">PUT</span></td><td class="ep">/reporting/config</td><td>Update an existing report configuration.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/reporting/config/{type}</td><td>Read configuration by type.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m DELETE">DELETE</span></td><td class="ep">/reporting/config/workspace/{workspaceId}/type/{type}</td><td>Remove a workspace binding.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td><span class="m POST">POST</span></td><td class="ep">/reporting/config/team/{teamName}</td><td>Bind a reporting team.</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+</tbody></table>
+<h4>Sample request &mdash; <code>POST /reporting/config</code></h4>
+<pre>{ "workspaceId": "ws-aut-001", "processParentId": "8f1a5c0c-8f2e-4d51-9b7a-9d2f3f1c4e77", "type": "SIGMA" }</pre>
+<pre class="resp">201 Created
+{ "id": "rc-5501...", "workspaceId": "ws-aut-001", "type": "SIGMA",
+  "processParentId": "8f1a5c0c-8f2e-4d51-9b7a-9d2f3f1c4e77" }</pre>
+<pre class="resp">400 Bad Request  (type != SIGMA)
+{ "errors": [ { "field": "type", "message": "Invalid value supported values are SIGMA" } ] }</pre>
+</div>
+
+<div class="modblock">
+<h3>Module 15 &mdash; Ops / diagnostics <span class="pill P3">P3</span></h3>
+<table>
+<thead><tr><th style="width:64px">Method</th><th>Endpoint</th><th>What it does / why it matters</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Effort</th></tr></thead>
+<tbody>
+<tr><td><span class="m GET">GET</span></td><td class="ep">/ops/db/state<br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>Liquibase / DB migration state. Cheap post-deploy smoke assertion.</td><td><span class="pill P3">P3</span></td><td class="sev-Low">Low</td><td>0.25</td></tr>
+</tbody></table>
+</div>
+
+<h2>5. Test Cases &mdash; Execution Order</h2>
+
+<p>The service is stateful and hierarchical: a template must exist before a process, a process before a subprocess, a subprocess
+before a transition, a transition before a meaningful start/stop. The suite below is therefore ordered as a <b>single dependency
+chain</b>. Each phase produces artefacts consumed by the next; teardown runs in reverse. Run phases sequentially, tests within a
+phase may run in parallel unless <i>Depends&nbsp;on</i> says otherwise.</p>
+
+<div class="note ok">
+<b>Suggested spec layout in the automation repo</b><br />
+<code>e2e/specs/ProcessOrchestrationBackend/&lt;Module&gt;/Test_0NN_&lt;Name&gt;.spec.ts</code> with matching
+<code>e2e/Testdata/&lt;ENV&gt;/ProcessOrchestrationBackend/&lt;Module&gt;/Test_0NN_&lt;Name&gt;.json</code>, registered in
+<code>e2e/specs/TestSuites/po-backend-suite.json</code>. New endpoint path variables go into <code>e2e/configs/setup.js</code>
+alongside the existing <code>CALENDAR</code> / <code>EXPORT_DATA</code> entries.
+</div>
+
+<h3>Phase 0 &mdash; Environment &amp; Authentication (prerequisite)</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-000</td><td>Acquire M2M bearer token</td><td class="ep">AUTH_URL (B2C client credentials)</td><td>POST client-credentials grant &rarr; <b>200</b>, non-empty <code>access_token</code>, <code>expires_in</code> &gt; 0. Cache for the run.</td><td>&mdash;</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.1</td></tr>
+<tr><td>PO-001</td><td>DB migration state healthy</td><td class="ep">GET /ops/db/state<br/><span class="upd-b upd-dep" title="OperationsAPI in plan-sop-po-be-commons, shared by every service">Shared ops route (po-be-commons)</span></td><td>GET &rarr; <b>200</b>, all changesets <code>EXECUTED</code>, no pending. Fail-fast gate for the whole suite.</td><td>PO-000</td><td><span class="pill P3">P3</span></td><td class="sev-Low">Low</td><td>0.25</td></tr>
+<tr><td>PO-002</td><td>Unauthenticated access is rejected</td><td class="ep">GET /process, POST /process<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; GET /process &middot; Covered &middot; Migration/Test_009</span></td><td>Call with no token &rarr; <b>401</b>; with a malformed token &rarr; <b>401</b>; with a valid token lacking the role &rarr; <b>403</b>.</td><td>PO-000</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.4</td></tr>
+</tbody></table>
+
+<h3>Phase 1 &mdash; Tenant &amp; onboarding</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-010</td><td>Tenant metadata readable</td><td class="ep">GET /tenant</td><td>GET &rarr; <b>200</b>; <code>realmId</code> matches the configured <code>REALM_ID</code>.</td><td>PO-000</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td>PO-011</td><td>Onboard tenant (idempotent)</td><td class="ep">POST /tenant/onboard</td><td>POST &rarr; <b>200/202</b> with <code>statusApi</code>. Re-invoke &rarr; must not duplicate artefacts.</td><td>PO-010</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-012</td><td>Onboarding status matrix</td><td class="ep">GET /tenant/onboard/status</td><td>Poll until all keys true or timeout. Assert <code>Tenant</code>, <code>SolutionArea</code>, <code>VerticalFilter</code>, <code>ROLES</code>, <code>Calendar</code> = <code>true</code>.</td><td>PO-011</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-013</td><td>Manual status override</td><td class="ep">PUT /tenant/onboard/status</td><td>Flip one step to <code>true</code> &rarr; <b>200</b>; GET reflects it. Invalid step name &rarr; <b>400</b>.</td><td>PO-012</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td>PO-014</td><td>Solution area &amp; gallery</td><td class="ep">POST /realm/solutionArea<br/>POST /realm/solutionArea/gallery</td><td>Create &rarr; <b>201</b>. Repeat &rarr; <b>409</b> or idempotent 200 (assert the documented behaviour, not both).</td><td>PO-011</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.7</td></tr>
+<tr><td>PO-015</td><td>Vertical filter instance</td><td class="ep">POST /realm/filter-instance</td><td>Create &rarr; <b>201</b>; response contains the filter instance id.</td><td>PO-014</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.3</td></tr>
+<tr><td>PO-016</td><td>Seed OOTB procedures</td><td class="ep">POST /procedure/onboard<br/>GET /job/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; GET /job/{jobId}/status &middot; Covered &middot; Migration/Test_009</span></td><td>POST &rarr; <b>201</b> + job id; poll job to <code>COMPLETED</code>; procedures list is non-empty.</td><td>PO-011</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td>PO-017</td><td>Machine credentials never echoed</td><td class="ep">POST/GET /tenants/machineCreds</td><td>POST creds &rarr; <b>201</b>. GET &rarr; <b>200</b> and response body <b>must not contain</b> the secret value (assert absence of <code>clientSecret</code>/plaintext).</td><td>PO-011</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td>PO-018</td><td>Snowflake credentials never echoed</td><td class="ep">POST/GET /tenants/snowflakeCreds</td><td>Same assertion pattern as PO-017.</td><td>PO-011</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>0.25</td></tr>
+<tr><td>PO-019</td><td>Onboard user &amp; default roles</td><td class="ep">POST /user/onboard<br/>POST /role/admin, /role/planner</td><td>Onboard &rarr; <b>201</b>; admin and planner roles exist and are returned by the IAM roles listing.</td><td>PO-011</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+</tbody></table>
+
+<h3>Phase 2 &mdash; Realm configuration</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-020</td><td>Create realm configuration</td><td class="ep">POST /configuration/realmConfiguration</td><td>POST &rarr; <b>201</b>. Duplicate name &rarr; <b>409</b>. Empty body &rarr; <b>400</b>.</td><td>PO-011</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-021</td><td>Read realm configuration</td><td class="ep">GET /configuration/realmConfiguration</td><td>GET &rarr; <b>200</b>; payload deep-equals what PO-020 posted.</td><td>PO-020</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-022</td><td>Update realm configuration</td><td class="ep">PUT /configuration/realmConfiguration</td><td>Toggle a feature flag &rarr; <b>200</b>; GET reflects the change and version increments.</td><td>PO-021</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 3 &mdash; Templates, template entities &amp; quota</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-030</td><td>Template schema contract</td><td class="ep">GET /template/schema/type/PROCESS</td><td>GET &rarr; <b>200</b>; store the schema and reuse it to validate PO-031 responses.</td><td>PO-000</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td>PO-031</td><td>Create process template</td><td class="ep">POST /template</td><td>Create &rarr; <b>201</b>. Duplicate &rarr; <b>409</b>. Empty <code>config</code> &rarr; <b>400</b>. No token &rarr; <b>401</b>.</td><td>PO-030</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-032</td><td>Read template by type / name / id</td><td class="ep">GET /template/{type}<br/>GET /template/{type}/{name}<br/>GET /template/Id/{id}</td><td>All &rarr; <b>200</b> and consistent. Unknown name &rarr; <b>404</b>.</td><td>PO-031</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-033</td><td>Update template</td><td class="ep">PUT /template/{name}/type/PROCESS</td><td>Update description + entity limits &rarr; <b>200</b>; GET reflects it. Non-existent &rarr; <b>404</b>.</td><td>PO-032</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-034</td><td>Enable / disable template</td><td class="ep">PUT /template/{n}/type/{t}/status/{status}</td><td>Set <code>false</code> &rarr; <b>200</b>; template no longer offered for process creation. Set back to <code>true</code>.</td><td>PO-033</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td>PO-035</td><td>Template entities CRUD</td><td class="ep">POST/GET /template/{n}/type/{t}/template-entity<br/>DELETE /template-entity/{id}</td><td>Create &rarr; <b>201</b>; list contains it; delete &rarr; <b>200</b>; list is empty. Unknown template &rarr; <b>404</b>. No token &rarr; <b>401</b>.</td><td>PO-031</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>2.0</td></tr>
+<tr><td>PO-036</td><td>Create quota for template scope</td><td class="ep">POST /quota</td><td>Create HARD + SOFT quotas &rarr; <b>201</b>. Unknown <code>scopeId</code> &rarr; <b>404</b>. No token &rarr; <b>401</b>.</td><td>PO-031</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-037</td><td>Read quota &amp; default fallback</td><td class="ep">GET /quota/scope/TEMPLATE/{id}<br/>GET /quota/{et}/{eo}/TEMPLATE/{id}</td><td>Configured key returns the configured value; unconfigured key returns the <b>system default</b>, not 404.</td><td>PO-036</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-038</td><td>Update &amp; delete quota</td><td class="ep">POST /quota (upsert)<br/>DELETE /quota/{id}<br/>DELETE /quota/scope/{st}/{sid}</td><td>Upsert changes the limit; delete by id removes one; delete by scope removes all &rarr; subsequent GET returns defaults.</td><td>PO-037</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.75</td></tr>
+</tbody></table>
+
+<h3>Phase 4 &mdash; Calendar &amp; cycle (residual)</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-040</td><td>List calendars with paging</td><td class="ep">GET /calendar?pageNumber&amp;pageSize<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_003">&#10003; Covered &middot; Calendar/Test_003</span></td><td>Page 0 size 5 &rarr; <b>200</b>, &le;5 items, totals consistent. <code>pageSize=-1</code> &rarr; <b>400</b>.</td><td>existing Calendar suite</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td>PO-041</td><td>List cycles with paging</td><td class="ep">GET /calendar/{c}/cycle?pageNumber&amp;pageSize<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_003, Migration/Test_001, ProcessBatch/Test_005, ProcessBatch/Test_007">&#10003; Covered &middot; Calendar/Test_003, Migration/Test_001 +2</span></td><td>Same paging assertions; unknown calendar &rarr; <b>404</b>.</td><td>PO-040</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.25</td></tr>
+<tr><td>PO-042</td><td><b>Bug-fix</b>: validation returns 400 not 500</td><td class="ep">POST /calendar (invalid date range, duplicate cycle names)<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_001, Calendar/Test_002, Calendar/Test_003, Migration/Test_001">&#10003; Covered &middot; Calendar/Test_001, Calendar/Test_002 +2</span></td><td>Currently the suite asserts <b>500</b>. Raise a defect and change the expectation to <b>400</b> with a field-level error body.</td><td>PO-040</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.25</td></tr>
+</tbody></table>
+
+<h3>Phase 5 &mdash; Process CRUD</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-050</td><td>Create process (direct)</td><td class="ep">POST /process</td><td>Create &rarr; <b>201</b> + <code>processId</code>. Duplicate name &rarr; <b>409</b>. Missing <code>calendarName</code> &rarr; <b>400</b>. Unknown cycle &rarr; <b>404/400</b>. No token &rarr; <b>401</b>.</td><td>PO-042</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-051</td><td>Create process from template with entity limits</td><td class="ep">POST /process/template<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_002, ProcessBatch/Test_005, ProcessBatch/Test_007">&#10003; Covered &middot; Migration/Test_002, ProcessBatch/Test_005 +1</span></td><td>Create from PO-031 template &rarr; <b>201</b>; resulting tree matches the template <code>config</code> node-for-node; entity limits are copied.</td><td>PO-031, PO-050</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-052</td><td>Read process by name / id / display name</td><td class="ep">GET /process/{name}<br/>GET /process/id/{id}<br/>GET /process/name/{displayName}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004, ActionItem/Test_005, ActionItem/Test_006, ActionItem/Test_007, ActionItem/Test_008, Migration/Test_002, ProcessBatch/Test_001, ProcessBatch/Test_002, ProcessBatch/Test_004, ProcessBatch/Test_005, ProcessBatch/Test_007, UIFields/Test_001">&#10003; GET /process/{name} &middot; Covered &middot; ActionItem/Test_004, ActionItem/Test_005 +10</span></td><td>All three resolve to the same process. Unknown &rarr; <b>404</b>. Duplicate display name returns an array of all matches.</td><td>PO-050</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-053</td><td>List processes with paging</td><td class="ep">GET /process<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; Covered &middot; Migration/Test_009</span></td><td>Both processes present; paging totals correct; <code>pageSize=0</code> &rarr; <b>400</b>.</td><td>PO-051</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-054</td><td>Search processes by filter</td><td class="ep">POST /process/search<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_006">&#10003; Covered &middot; ProcessBatch/Test_006</span></td><td>Filter by <code>cycleName</code> &rarr; only matching rows. Filter by non-existent value &rarr; <b>200</b> with empty <code>content</code> (not 404). Unknown filter key &rarr; <b>400</b>.</td><td>PO-053</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-055</td><td>Update process</td><td class="ep">PUT /process/{name}</td><td>Change description &amp; cycle &rarr; <b>200</b>; GET reflects it. Non-existent &rarr; <b>404</b>. Invalid cycle &rarr; <b>400</b>.</td><td>PO-052</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-056</td><td>Process context resolves</td><td class="ep">GET /process/{name}/context<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_001, ActionItem/Test_003, Migration/Test_005, ProcessBatch/Test_007">&#10003; Covered &middot; ActionItem/Test_001, ActionItem/Test_003 +2</span></td><td>&rarr; <b>200</b>; contains <code>planningModelId</code>, <code>cycleStartDate</code>, <code>scope</code>. Used later by drill-through.</td><td>PO-050</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-057</td><td>Read &amp; update process scope</td><td class="ep">GET/PUT /process/{name}/scope<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_007">&#10003; GET /process/{name}/scope &middot; Covered &middot; ProcessBatch/Test_007</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_007">&#10003; PUT /process/{name}/scope &middot; Covered &middot; ProcessBatch/Test_007</span></td><td>GET baseline; PUT a new dimension filter &rarr; <b>200</b>; GET reflects it; invalid dimension &rarr; <b>400</b>.</td><td>PO-056</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-058</td><td>Update plan start date</td><td class="ep">PUT /process/{name}/planstartdate<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Shift by +7d &rarr; <b>200</b>; process and all child schedules shift consistently; date outside the cycle &rarr; <b>400</b>.</td><td>PO-057</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-059</td><td>Bind reporting folder</td><td class="ep">PUT /process/{name}/report/folder</td><td>Bind &rarr; <b>200</b>; GET process shows the folder. Unknown workspace &rarr; <b>404</b>.</td><td>PO-050</td><td><span class="pill P3">P3</span></td><td class="sev-Low">Low</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 6 &mdash; Node attributes</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-060</td><td>Process attribute CRUD</td><td class="ep">GET/POST /process/{p}/attribute<br/>PUT/DELETE .../{attrName}/value/{attrValue}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002">&#10003; GET /process/{p}/attribute &middot; Covered &middot; ProcessBatch/Test_002</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002, ProcessBatch/Test_006">&#10003; POST /process/{p}/attribute &middot; Covered &middot; ProcessBatch/Test_002, ProcessBatch/Test_006</span></td><td>Create &rarr; <b>201</b>; list contains it; update value &rarr; <b>200</b>; delete &rarr; <b>200</b>; list no longer contains it. Invalid process &rarr; <b>404</b>. Duplicate attribute &rarr; <b>409</b>.</td><td>PO-050</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>2.0</td></tr>
+<tr><td>PO-061</td><td>Attribute value with special characters</td><td class="ep">PUT /process/{p}/attribute/{n}/value/{v}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_002">&#10003; Covered &middot; ProcessBatch/Test_002</span></td><td>URL-encoded value containing <code>/</code>, space and <code>%</code> round-trips unchanged (path-variable encoding defect class).</td><td>PO-060</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 7 &mdash; Subprocess lifecycle</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-070</td><td>Create subprocess chain</td><td class="ep">POST /process/{p}/subprocess<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_005, Migration/Test_002, ProcessBatch/Test_005">&#10003; Covered &middot; ActionItem/Test_005, Migration/Test_002 +1</span></td><td>Create 3 peers (A&rarr;B&rarr;C) with <code>referenceNodeName</code> offsets &rarr; <b>201</b> each. Unknown parent &rarr; <b>404</b>. Duplicate name &rarr; <b>409</b>. Negative <code>duration</code> &rarr; <b>400</b>.</td><td>PO-050</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-071</td><td>Read subprocess</td><td class="ep">GET /process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_002, ActionItem/Test_004, ActionItem/Test_005, ActionItem/Test_006, ActionItem/Test_007, ActionItem/Test_008, Migration/Test_002, ProcessBatch/Test_003, ProcessBatch/Test_005, UIFields/Test_001">&#10003; Covered &middot; ActionItem/Test_002, ActionItem/Test_004 +8</span></td><td>&rarr; <b>200</b>, all offsets/sequence/transition types match PO-070. Invalid process &rarr; <b>404</b>; invalid subprocess &rarr; <b>404</b>.</td><td>PO-070</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-072</td><td>Update subprocess</td><td class="ep">PUT /process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Change <code>duration</code> 5&rarr;10 and <code>startOffset</code> &rarr; <b>200</b>; dependent siblings' dates shift accordingly in the Gantt.</td><td>PO-071</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-073</td><td>Referenceable nodes list</td><td class="ep">GET /process/{p}/subprocess/{s}/referenceableNodes</td><td>&rarr; <b>200</b>; must <b>exclude self</b> and any node that would create a cycle.</td><td>PO-071</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td>PO-074</td><td>Tree &amp; children consistency</td><td class="ep">GET /process/{p}/tree, /children<br/>GET .../subprocess/{s}/tree, /children<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_005</span></td><td>Process tree contains all 3 subprocesses in sequence order; subprocess tree returns only its subtree; <code>children</code> is a strict subset of <code>tree</code>.</td><td>PO-070</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-075</td><td>Subprocess attribute CRUD</td><td class="ep">GET/POST/PUT/DELETE /process/{p}/subprocess/{s}/attribute...<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; GET /process/{p}/subprocess/{s}/attribute... &middot; Covered &middot; ProcessBatch/Test_003</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; POST /process/{p}/subprocess/{s}/attribute... &middot; Covered &middot; ProcessBatch/Test_003</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; PUT /process/{p}/subprocess/{s}/attribute... &middot; Covered &middot; ProcessBatch/Test_003</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_003">&#10003; DELETE /process/{p}/subprocess/{s}/attribute... &middot; Covered &middot; ProcessBatch/Test_003</span></td><td>Mirror of PO-060 at subprocess scope.</td><td>PO-071</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-076</td><td>Delete subprocess relinks siblings</td><td class="ep">DELETE /process/{p}/subprocess/{s}<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_005, Migration/Test_002, ProcessBatch/Test_005">&#10003; Covered &middot; ActionItem/Test_005, Migration/Test_002 +1</span></td><td>Delete middle node B &rarr; <b>200</b>; A&rarr;C transition must be repaired or explicitly removed &mdash; assert no orphan/dangling edge in <code>transitionhierarchy</code>. Re-create B afterwards for later phases.</td><td>PO-074</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+</tbody></table>
+
+<h3>Phase 8 &mdash; Transitions</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-080</td><td>Generate transition hierarchy</td><td class="ep">POST /process/{p}/cycle/{c}/transition/generate<br/>GET /transitionJob/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_001, ProcessBatch/Test_004, ProcessBatch/Test_005">&#10003; GET /transitionJob/{jobId}/status &middot; Covered &middot; ProcessBatch/Test_001, ProcessBatch/Test_004 +1</span></td><td>&rarr; <b>202</b> + job id; poll to <code>COMPLETED</code> within SLA; job for an unknown process &rarr; <b>404</b>.</td><td>PO-076</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+<tr><td>PO-081</td><td>Verify generated graph</td><td class="ep">GET /process/{p}/transitionhierarchy</td><td>&rarr; <b>200</b>; root has exactly one <code>outboundChildren</code> (first node); each peer chains to the next; last node has empty <code>outboundPeers</code>; <b>no cycles</b>.</td><td>PO-080</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-082</td><td>Create transition manually</td><td class="ep">POST /process/{p}/transition</td><td>Add an outbound child &rarr; <b>201</b>; hierarchy reflects it. Self-reference &rarr; <b>400</b>. Cycle-creating edge &rarr; <b>400</b>. Unknown node &rarr; <b>404</b>.</td><td>PO-081</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-083</td><td>Transition options are legal</td><td class="ep">GET /process/{p}/transition-options<br/>GET .../subprocess/{s}/transition-options</td><td>&rarr; <b>200</b>; every returned candidate can actually be POSTed without a 400 (property test over the returned list).</td><td>PO-082</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.75</td></tr>
+<tr><td>PO-084</td><td>Subprocess transitions</td><td class="ep">GET/POST/DELETE /process/{p}/subprocess/{s}/transition[hierarchy]</td><td>Create nested transitions inside a subprocess &rarr; <b>201</b>; hierarchy correct; delete &rarr; <b>200</b> and parent graph stays valid.</td><td>PO-083</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.5</td></tr>
+<tr><td>PO-085</td><td>Delete a single transition</td><td class="ep">DELETE /process/{p}/transition</td><td>&rarr; <b>200</b>; downstream node becomes unreachable &mdash; assert it is reported as orphaned rather than silently dropped.</td><td>PO-084</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td>PO-086</td><td>Delete whole transition tree (destructive)</td><td class="ep">DELETE /process/{p}/transition/tree</td><td>&rarr; <b>200</b>; hierarchy empty; starting the process now &rarr; <b>400/409</b> with a clear message. Regenerate via PO-080 to restore state.</td><td>PO-085</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 9 &mdash; Node schedule &amp; reschedule</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-090</td><td>Create node schedule for a cycle</td><td class="ep">POST /process/{p}/calendarcycle/{c}/nodeschedule</td><td>&rarr; <b>201</b>; every node has start/end inside the cycle window; offsets honoured. End before start &rarr; <b>400</b>. Cycle not on the process calendar &rarr; <b>400</b>.</td><td>PO-081</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+<tr><td>PO-091</td><td>Re-running replaces, never duplicates</td><td class="ep">POST /process/{p}/calendarcycle/{c}/nodeschedule</td><td>Invoke twice; node-schedule row count is identical after the 2nd call (documented delete-then-insert behaviour).</td><td>PO-090</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+<tr><td>PO-092</td><td>Subprocess node schedule</td><td class="ep">POST /process/{p}/subprocess/{s}/calendarcycle/{c}/nodeschedule</td><td>&rarr; <b>201</b>; only the subtree is rescheduled; peers outside the subtree are untouched.</td><td>PO-090</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-093</td><td>Bulk reschedule cascade</td><td class="ep">PUT /process/{p}/calendarcycle/{c}/reschedule</td><td>Shift the root by +1 day &rarr; <b>200</b>; every dependent node shifts by exactly +1 day; nodes with <code>startOffsetReference=START</code> vs <code>END</code> behave differently &mdash; assert both.</td><td>PO-092</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+</tbody></table>
+
+<h3>Phase 10 &mdash; Supply chain actions &amp; event actions</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-100</td><td>Create supply chain action</td><td class="ep">POST /supplyChainAction<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>&rarr; <b>201</b>. Duplicate name &rarr; <b>409</b>. Unknown <code>procedureName</code> &rarr; <b>400/404</b>. Malformed <code>uiConfig</code> JSON string &rarr; <b>400</b>.</td><td>PO-016</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-101</td><td>Read SCA &amp; uiConfig fidelity</td><td class="ep">GET /supplyChainAction/{id}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>&rarr; <b>200</b>; <code>uiConfig</code> parses back to the exact object that was sent (no double-escaping). Unknown id &rarr; <b>404</b>.</td><td>PO-100</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-102</td><td>Update SCA</td><td class="ep">PUT /supplyChainAction/{id}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_009">&#10003; Covered &middot; ProcessBatch/Test_009</span></td><td>Add a wizard step &rarr; <b>200</b>; GET reflects it; existing event-action bindings still resolve. Unknown id &rarr; <b>404</b>.</td><td>PO-101</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-103</td><td>Bind event action to process</td><td class="ep">POST /process/{p}/eventAction</td><td>Bind SCA to <code>onStart</code> &rarr; <b>201</b>. Unknown process &rarr; <b>404</b>. Duplicate <code>eventName</code> &rarr; <b>409</b>. Unsupported <code>eventType</code> &rarr; <b>400</b>.</td><td>PO-100, PO-050</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.75</td></tr>
+<tr><td>PO-104</td><td>Read / update / delete process event action</td><td class="ep">GET/PUT/DELETE /process/{p}/eventAction/{eventName}</td><td>GET &rarr; <b>200</b> with placeholders (<code>${sourceId}</code>) preserved verbatim; PUT changes <code>httpMethod</code> &rarr; <b>200</b>; DELETE &rarr; <b>200</b>; GET after delete &rarr; <b>404</b>.</td><td>PO-103</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.25</td></tr>
+<tr><td>PO-105</td><td>Subprocess event action CRUD</td><td class="ep">POST/GET/PUT/DELETE /process/{p}/subprocess/{s}/eventAction[/{eventName}]<br/><span class="upd-b upd-gone">POST /process/{p}/subprocess/{s}/eventAction[/{eventName}] &middot; Not in source</span> <span class="upd-b upd-gone">GET /process/{p}/subprocess/{s}/eventAction[/{eventName}] &middot; Not in source</span> <span class="upd-b upd-gone">PUT /process/{p}/subprocess/{s}/eventAction[/{eventName}] &middot; Not in source</span> <span class="upd-b upd-gone">DELETE /process/{p}/subprocess/{s}/eventAction[/{eventName}] &middot; Not in source</span></td><td>Mirror of PO-103/104 at subprocess scope &mdash; this is the common production configuration.</td><td>PO-070, PO-100</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+</tbody></table>
+
+<h3>Phase 11 &mdash; Execution: start, stop, status, Gantt, KPI</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-110</td><td>Start subprocess fires event action</td><td class="ep">POST /process/{p}/subprocess/{s}/start<br/>GET /transitionJob/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_001, ProcessBatch/Test_004, ProcessBatch/Test_005">&#10003; GET /transitionJob/{jobId}/status &middot; Covered &middot; ProcessBatch/Test_001, ProcessBatch/Test_004 +1</span></td><td>Start &rarr; <b>200/202</b> + job id; poll to <code>COMPLETED</code>; the SCA-created scenario exists downstream. Start twice &rarr; idempotent (assert documented behaviour, not 500).</td><td>PO-105, PO-093</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-111</td><td>Stop subprocess auto-transitions</td><td class="ep">POST /process/{p}/subprocess/{s}/stop</td><td>Stop A &rarr; <b>200</b>; if <code>endTransitionType=AUTO</code>, node B moves to <code>IN_PROGRESS</code> without a manual start.</td><td>PO-110</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-112</td><td>Process status &amp; bulk status</td><td class="ep">GET /process/{p}/status<br/>POST /process/status</td><td>Single &rarr; <b>200</b>; bulk for 2 processes &rarr; <b>200</b> with 2 entries and the same values as the single calls. Unknown name in the bulk list &rarr; entry with <code>null</code> status, not a 404 for the whole call.</td><td>PO-111</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-113</td><td>Gantt contract</td><td class="ep">GET /process/{p}/processGantt<br/>GET /process/{p}/processGanttWithTree<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; GET /process/{p}/processGantt &middot; Covered &middot; ProcessBatch/Test_008</span></td><td>&rarr; <b>200</b>; every node from PO-074 present; dates equal the node schedule from PO-090; <code>WithTree</code> variant is a superset. Validate against the OAS schema.</td><td>PO-090</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>2.0</td></tr>
+<tr><td>PO-114</td><td>Subprocess Gantt &amp; KPI</td><td class="ep">GET .../subprocess/{s}/processGantt[WithTree]<br/>GET .../subprocess/{s}/kpi</td><td>Scoped to the subtree only; KPI values match the process-level roll-up for that branch.</td><td>PO-113</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.5</td></tr>
+<tr><td>PO-115</td><td>Process KPI &amp; users</td><td class="ep">GET /process/{p}/kpi<br/>GET /process/{p}/users<br/>GET /user/{entityType}/{entityName}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; GET /process/{p}/kpi &middot; Covered &middot; ProcessBatch/Test_008</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; GET /process/{p}/users &middot; Covered &middot; ProcessBatch/Test_008</span></td><td>KPI &rarr; <b>200</b> with the configured KPI names; users list matches the role policies assigned in Phase 14.</td><td>PO-112</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+<tr><td>PO-116</td><td>Start blocked when hierarchy missing</td><td class="ep">POST /process/{p}/start<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_001, ProcessBatch/Test_004, ProcessBatch/Test_005">&#10003; Covered &middot; ProcessBatch/Test_001, ProcessBatch/Test_004 +1</span></td><td>After PO-086 removed the tree, start &rarr; <b>400/409</b> with an actionable message (guards against a silent no-op).</td><td>PO-086</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 12 &mdash; Action items: search &amp; bulk</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-120</td><td>Bulk create action items</td><td class="ep">POST /process/{p}/actionitem/bulk</td><td>Create 2 &rarr; <b>201</b> with 2 ids. Mixed valid/invalid batch &rarr; assert the documented all-or-nothing vs partial behaviour. Unknown process &rarr; <b>404</b>.</td><td>PO-050</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-121</td><td>Search action items (no filter)</td><td class="ep">POST /process/{p}/actionitem/search<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004">&#10003; Covered &middot; ActionItem/Test_004</span></td><td>Empty filter &rarr; <b>200</b> returning all items for the process, correctly paged.</td><td>PO-120</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-122</td><td>Search with filters &amp; sort</td><td class="ep">POST /process/{p}/actionitem/search<br/><span class="upd-b upd-ok" title="Exercised by ActionItem/Test_004">&#10003; Covered &middot; ActionItem/Test_004</span></td><td>Filter by <code>status</code>+<code>priority</code>+due-date range &rarr; only matching items; sort by <code>dueDate ASC</code> is honoured; non-matching filter &rarr; empty <code>content</code>, not 404.</td><td>PO-121</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.75</td></tr>
+<tr><td>PO-123</td><td>Subprocess bulk &amp; search</td><td class="ep">POST /process/{p}/subprocess/{s}/actionitem/bulk<br/>POST .../actionitem/search</td><td>Mirror of PO-120/122; items created at subprocess scope must <b>not</b> appear in the process-scope search unless the API documents roll-up.</td><td>PO-070, PO-122</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.25</td></tr>
+</tbody></table>
+
+<h3>Phase 13 &mdash; Entity limits &amp; metering enforcement</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-130</td><td>Read entity usage vs limit</td><td class="ep">GET /process/{p}/entity/SCENARIO<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; Covered &middot; ProcessBatch/Test_008</span></td><td>&rarr; <b>200</b>; <code>limit</code> equals the quota set in PO-036; <code>current</code> starts at 0.</td><td>PO-051, PO-036</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-131</td><td>Validate under the limit &rarr; allowed</td><td class="ep">POST /process/{p}/validate/SCENARIO</td><td>&rarr; <b>200</b> with <code>status=ALLOWED</code> while <code>current &lt; limit</code>.</td><td>PO-130</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-132</td><td>HARD limit actually blocks</td><td class="ep">POST /process/{p}/validate/SCENARIO<br/>GET /meter/SCENARIO/maxcount/...</td><td>Drive the meter to the limit, then validate &rarr; <code>status=BLOCKED</code> with <code>enforcementType=HARD</code>. This is the single most valuable quota test.</td><td>PO-131</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-133</td><td>SOFT limit warns but permits</td><td class="ep">POST /process/{p}/validate/CLUSTER</td><td>At/over the SOFT limit &rarr; <code>status=WARN</code> (not BLOCKED); operation still permitted.</td><td>PO-132</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 14 &mdash; RBAC propagation</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-140</td><td>Create custom role</td><td class="ep">POST /role</td><td>&rarr; <b>201</b>; role appears in the IAM role list. Duplicate &rarr; <b>409</b>.</td><td>PO-019</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+<tr><td>PO-141</td><td>Assign role to a subject</td><td class="ep">POST /users/roles/add<br/>GET /job/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; GET /job/{jobId}/status &middot; Covered &middot; Migration/Test_009</span> <span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; GET /process/{p}/users &middot; Covered &middot; ProcessBatch/Test_008</span></td><td>&rarr; <b>202</b> + job id; poll to <code>COMPLETED</code>; <code>GET /process/{p}/users</code> now includes the subject.</td><td>PO-140, PO-050</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-142</td><td>Assign role to another role (nesting)</td><td class="ep">POST /users/roles/add</td><td>Nest Role2 inside Role1 &rarr; subjects of Role1 inherit Role2. Assert the effective user list, not just the 202.</td><td>PO-141</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.75</td></tr>
+<tr><td>PO-143</td><td><b>Revocation actually revokes</b></td><td class="ep">POST /users/roles/remove<br/>GET /process/{p}/users<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_008">&#10003; GET /process/{p}/users &middot; Covered &middot; ProcessBatch/Test_008</span></td><td>Remove &rarr; <b>202</b>; after the job completes the subject is <b>absent</b> from <code>/process/{p}/users</code> <i>and</i> a token for that subject gets <b>403</b> on the process. Security-critical.</td><td>PO-142</td><td><span class="pill P0">P0</span></td><td class="sev-Critical">Critical</td><td>1.25</td></tr>
+<tr><td>PO-144</td><td>Remove a role the user does not have</td><td class="ep">POST /users/roles/remove</td><td>&rarr; <b>200/202</b> no-op (or documented 404) &mdash; must never 500.</td><td>PO-143</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>0.5</td></tr>
+</tbody></table>
+
+<h3>Phase 15 &mdash; Reporting configuration</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-150</td><td>Create report configuration</td><td class="ep">POST /reporting/config</td><td>Valid SIGMA config &rarr; <b>201</b>. Empty <code>workspaceId</code> &rarr; <b>400</b> (&ldquo;Workspace Id cannot be null or empty&rdquo;). <code>type=POWERBI</code> &rarr; <b>400</b> (&ldquo;supported values are SIGMA&rdquo;).</td><td>PO-050</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+<tr><td>PO-151</td><td>Read / update report configuration</td><td class="ep">GET /reporting/config/SIGMA<br/>PUT /reporting/config</td><td>GET &rarr; <b>200</b> matching PO-150; PUT changes <code>processParentId</code> &rarr; <b>200</b> and GET reflects it.</td><td>PO-150</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+<tr><td>PO-152</td><td>Team binding &amp; delete</td><td class="ep">POST /reporting/config/team/{teamName}<br/>DELETE /reporting/config/workspace/{id}/type/SIGMA</td><td>Bind team &rarr; <b>200/201</b>; delete workspace binding &rarr; <b>200</b>; GET afterwards &rarr; <b>404</b>.</td><td>PO-151</td><td><span class="pill P2">P2</span></td><td class="sev-Medium">Medium</td><td>1.0</td></tr>
+</tbody></table>
+
+<h3>Phase 16 &mdash; Single-process export/import &amp; ALM</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-160</td><td>Export a single process</td><td class="ep">GET /process/{p}/export</td><td>&rarr; <b>200</b>; bundle contains the process, all subprocesses, transitions, attributes and event actions. Unknown process &rarr; <b>404</b>.</td><td>PO-105</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-161</td><td>Import round-trip fidelity</td><td class="ep">POST /process/import</td><td>Import the PO-160 bundle under a new name &rarr; <b>201</b>; the new process tree, transition hierarchy and event actions deep-equal the source. Import the same name twice &rarr; <b>409</b>.</td><td>PO-160</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-162</td><td>Publish PO configuration</td><td class="ep">POST /configuration/publish<br/>GET /job/{jobId}/status<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; GET /job/{jobId}/status &middot; Covered &middot; Migration/Test_009</span></td><td>&rarr; <b>202</b> + job id; poll to <code>COMPLETED</code>; artefact is listed. Publish with an unknown name &rarr; <b>404</b>.</td><td>PO-022</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>1.0</td></tr>
+<tr><td>PO-163</td><td>Deploy PO configuration</td><td class="ep">POST /configuration/deploy</td><td>Deploy into the target realm &rarr; <b>202</b>; after completion the target realm's <code>realmConfiguration</code> matches the source.</td><td>PO-162</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>1.0</td></tr>
+<tr><td>PO-164</td><td>Exchange publish &amp; deploy</td><td class="ep">POST /configuration/exchange/publish<br/>POST /configuration/exchange/deploy<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_009">&#10003; POST /configuration/exchange/publish &middot; Covered &middot; Migration/Test_009</span></td><td>Publish &rarr; <b>202</b>, poll job; deploy in the target realm &rarr; <b>202</b>, poll job; target artefacts match source. Deploy an unpublished artefact &rarr; <b>404</b>.</td><td>PO-163</td><td><span class="pill P1">P1</span></td><td class="sev-Critical">Critical</td><td>2.0</td></tr>
+</tbody></table>
+
+<h3>Phase 17 &mdash; Teardown (reverse order)</h3>
+<table>
+<thead><tr><th class="nowrap" style="width:78px">TC ID</th><th style="width:210px">Title</th><th style="width:230px">Endpoint(s)</th><th>Steps &amp; expected result</th><th class="nowrap">Depends on</th><th class="nowrap">Pri</th><th class="nowrap">Sev</th><th class="nowrap">Eff</th></tr></thead>
+<tbody>
+<tr><td>PO-170</td><td>Stop and delete processes</td><td class="ep">POST /process/{p}/stop<br/>DELETE /process/{p}<br/><span class="upd-b upd-ok" title="Exercised by ProcessBatch/Test_001, ProcessBatch/Test_004, ProcessBatch/Test_005">&#10003; POST /process/{p}/stop &middot; Covered &middot; ProcessBatch/Test_001, ProcessBatch/Test_004 +1</span> <span class="upd-b upd-ok" title="Exercised by Migration/Test_002, Migration/Test_009, ProcessBatch/Test_005, ProcessBatch/Test_007">&#10003; DELETE /process/{p} &middot; Covered &middot; Migration/Test_002, Migration/Test_009 +2</span></td><td>Stop then delete each process created in Phases 5&ndash;16 &rarr; <b>200</b>; GET afterwards &rarr; <b>404</b>. Delete a running process &rarr; assert the documented guard.</td><td>all</td><td><span class="pill P0">P0</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-171</td><td>Delete SCAs, quotas, templates</td><td class="ep">DELETE /supplyChainAction/{id}<br/>DELETE /quota/scope/...<br/>DELETE /template/{n}/type/{t}<br/><span class="upd-b upd-ok" title="Exercised by Migration/Test_004, Migration/Test_009, ProcessBatch/Test_009">&#10003; DELETE /supplyChainAction/{id} &middot; Covered &middot; Migration/Test_004, Migration/Test_009 +1</span></td><td>Delete in dependency order &rarr; <b>200</b>. Deleting a template still referenced by a live process must fail with <b>409</b>.</td><td>PO-170</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+<tr><td>PO-172</td><td>Delete calendars &amp; roles</td><td class="ep">DELETE /calendar/{name}<br/>DELETE role (IAM)<br/><span class="upd-b upd-ok" title="Exercised by Calendar/Test_001, Calendar/Test_002, Calendar/Test_003, Migration/Test_001, Migration/Test_009">&#10003; Covered &middot; Calendar/Test_001, Calendar/Test_002 +3</span></td><td>&rarr; <b>200</b>; environment returns to the pre-run baseline; a second full run of the suite passes unchanged (idempotency proof).</td><td>PO-171</td><td><span class="pill P1">P1</span></td><td class="sev-High">High</td><td>0.5</td></tr>
+</tbody></table>
+
+<h2>6. Delivery Roadmap</h2>
+<table>
+<thead><tr><th class="nowrap">Sprint</th><th>Scope</th><th>Test cases</th><th class="nowrap">Endpoints closed</th><th class="nowrap">Effort (pd)</th><th class="nowrap">Cumulative coverage</th><th>Status 05-Oct-2026</th></tr></thead>
+<tbody>
+<tr><td>S1</td><td>Framework hardening: schema assertions from OAS, shared setup/teardown fixtures, endpoint env vars, fix the 500-vs-400 assertions</td><td>PO-000&ndash;002, PO-042</td><td>3</td><td>12.0</td><td>18%</td><td><b>Partly done.</b> Shared process fixture and <code>afterAll</code> teardown in place; the two 500 assertions in <code>Calendar/Test_001</code> remain.</td></tr>
+<tr><td>S2</td><td><b>P0 core</b>: Process CRUD + Subprocess lifecycle</td><td>PO-050&ndash;059, PO-070&ndash;076</td><td>33</td><td>18.0</td><td>41%</td><td><b>Mostly done.</b> Reads, search, context, scope, plan start date and subprocess CRUD are covered. Open: <code>POST /process</code>, <code>PUT /process/{p}</code>, subprocess start/stop, Gantt-with-tree, single-process export/import.</td></tr>
+<tr><td>S3</td><td><b>P0 core</b>: Transitions, node schedule, reschedule</td><td>PO-080&ndash;086, PO-090&ndash;093</td><td>13</td><td>13.0</td><td>50%</td><td><b>Not started.</b> Highest remaining risk; lui calls 7 transition routes and reschedule.</td></tr>
+<tr><td>S4</td><td><b>P0 core</b>: Event actions, SCA, execution &amp; Gantt, RBAC propagation</td><td>PO-100&ndash;105, PO-110&ndash;116, PO-140&ndash;144</td><td>26</td><td>18.0</td><td>68%</td><td><b>Partly done.</b> SCA CRUD (<code>ProcessBatch/Test_009</code>) and <code>processGantt</code> covered. Open: event actions, RBAC role add/remove.</td></tr>
+<tr><td>S5</td><td><b>P1</b>: Templates, quota/entity limits, attributes, action-item search/bulk</td><td>PO-030&ndash;038, PO-060&ndash;061, PO-120&ndash;123, PO-130&ndash;133</td><td>26</td><td>17.0</td><td>86%</td><td><b>Partly done.</b> Node attributes and action-item search covered. Open: templates, quota/metering, <code>validate/{entity}</code>, action-item bulk.</td></tr>
+<tr><td>S6</td><td><b>P1/P2</b>: Tenant onboarding, configuration/ALM, single-process export-import, reporting, ops, teardown</td><td>PO-010&ndash;022, PO-150&ndash;152, PO-160&ndash;164, PO-170&ndash;172</td><td>24</td><td>11.0</td><td>~99%</td><td><b>Partly done.</b> <code>/exportData</code>, <code>/importData</code>, exchange publish and job status covered by Migration specs. Open: onboarding, realm config, reporting.</td></tr>
+<tr style="font-weight:700;background:#eef2f6"><td>Total</td><td colspan="2">6 sprints, 1 senior SDET (or 3 sprints with 2)</td><td>122</td><td>89.0</td><td>&mdash;</td><td>41.0% reached; ~64 pd remain</td></tr>
+</tbody></table>
+
+<h2>7. Recommendations</h2>
+<ol style="margin:8px 0 0 20px;padding:0">
+  <li><b>Generate response-schema assertions from the OAS spec.</b> The existing suite only checks status codes and one or two fields.
+      A schema-diff assertion would have caught every contract break in this service for a fraction of the effort.</li>
+  <li><b>Fix the tests that encode defects.</b> <code>Calendar/Test_001_CalendarsCRUD</code> still asserts <code>500</code> for invalid input in two
+      places. Raise the defect, change the expectation to <code>400</code>, and add a lint rule that flags any assertion on a 5xx code.</li>
+  <li><b>Reuse the shared fixtures.</b> <code>util/process-fixture.util.ts</code> and <code>util/calendar-cycle.util.ts</code> now build
+      calendar &rarr; cycle &rarr; template &rarr; process &rarr; subprocess; new transition and event-action specs should build on them.</li>
+  <li><b>Standardise async-job polling.</b> Five different flows return a <code>jobId</code> (transition generate, role add/remove,
+      publish, deploy, procedure onboard). One shared poller with a configurable SLA removes flakiness.</li>
+  <li><b>Add a negative-path template.</b> For every endpoint assert 400 / 401 / 403 / 404 / 409 explicitly. This is where the
+      current suite is thinnest and where most production incidents originate.</li>
+  <li><b>Gate the pipeline on P0 phases only</b> (Phases 5&ndash;11). Run P1/P2 phases nightly so PR feedback stays fast.</li>
+</ol>
+
+
+
+<footer>
+Generated from static analysis of <code>plan-sop-process-orchestration-service</code> (OpenAPI v1 spec + Spring controllers) and
+<code>plan-sop-ui-automation/e2e/specs/ProcessOrchestrationBackend</code>. Endpoint counts exclude actuator, internal
+<code>/process/migrate/namespace*</code> maintenance hooks and the LIAM mock controller.
+Updated 05-Oct-2026 from the controllers at <code>333ef85b</code> and the request logs of the 2026-10-04 nightly runs of
+<code>playwright-e2e/tests/ProcessOrchestrationBackend</code>; regenerate the companion report with <code>npm run docs:api-coverage</code>.
+</footer>
+
+</div>
+</body>
+</html>
+

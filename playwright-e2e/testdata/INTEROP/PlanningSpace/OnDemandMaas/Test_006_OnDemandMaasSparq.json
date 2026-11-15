@@ -1,0 +1,20 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "VIEW_NAME2": "string (required)",
+    "CARD_NAME": "string (required)",
+    "LoGGEDIN_USER_NAME": "string (required)",
+    "SCENARIOS": "string[] (required)",
+    "SCENARIO_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-po-ps-1",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasAndSparq",
+  "VIEW_NAME2": "Non Interactive View",
+  "CARD_NAME": "Maas Pivot Card ODM",
+  "LoGGEDIN_USER_NAME": "PS Automation1",
+  "SCENARIOS": ["Base 30-03-2026-0535"],
+  "SCENARIO_NAME": "child-scenario-1"
+}

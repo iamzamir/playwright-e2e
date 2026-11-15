@@ -1,0 +1,17 @@
+
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "VIEW_NAME": "BDE",
+    "VIEW" : "BDE",
+    "VIEW_ID": "6874a278ecac3f07818322eb",
+    "PROCESS_NAME": "PSAutomation",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "ROOM_NAME": "Sadhik 234",
+    "ROOM_DESCRIPTION": "This is a test description for the process ",
+    "PRIORITY": "Medium",
+    "PROCESS": [ { "entity": "process", "entityName": "PSAutomation" } ],
+    "SUBPROCESS": [ { "entity": "subprocess", "entityName": "DemandReview" } ],
+    "ASSUMPTION": [ {  "entity": "assumption", "entityName": "PS Auto Assumption"} ]
+
+}

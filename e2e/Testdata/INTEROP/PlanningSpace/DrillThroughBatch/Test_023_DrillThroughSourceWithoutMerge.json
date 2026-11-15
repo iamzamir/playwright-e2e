@@ -1,0 +1,40 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "Source View Without Merge",
+    "TC1_DRILL_THROUGH_VIEW_TO": "Target View Without Backend Filter",
+    "TC1_DRILL_THROUGH_CELL": "42",
+    "TC2_DRILL_THROUGH_VIEW_TO": "Target View With Backend Filter",
+    "DIMENSIONS1": {
+        "LOCATION": "REGION-10",
+        "CUSTOMER": "CG-21",
+        "TIME": "CY-2022"
+    },
+    "DIMENSIONS2": {
+        "LOCATION": "REGION-10",
+        "CUSTOMER": "CG-21",
+        "TIME": "CY-2022",
+        "ITEM": "FG-04"
+    },
+    "SCOPE_TAB" :"Scope",
+    "FILTERCONFIGS" : [
+        { "type": "ITEM", "category": "Brand", "value": ["PL-01"] }
+    ],
+    "BACKEND_FILTERS":{
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-10"]
+    },
+    "DRILL_THROUGH_SCOPE":[
+        {
+            "DIMENSION_NAME": "LOCATION",
+            "ATTRIBUTE_NAME": "Region",
+            "VALUES": ["REGION-00"]
+        },
+        {
+            "DIMENSION_NAME": "TIME",
+            "ATTRIBUTE_NAME": "CALENDARYEAR",
+            "VALUES": ["CY-2022"]
+        }
+    ]
+}

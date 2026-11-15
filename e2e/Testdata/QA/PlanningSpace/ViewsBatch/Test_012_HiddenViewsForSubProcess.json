@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "HiddenViewsProcess",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "testView2",
+    "VIEW_GROUP_NAME":"TestingHiddenViews"
+}

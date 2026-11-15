@@ -1,0 +1,20 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_003_ScenarioVisibilityFilterMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_006_ScenarioUsersFilterMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_007_ScenarioSyncStatusMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_012_ScenarioBadgeMultipleScenariosMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_012_ScenarioBadgeBaseOnlyMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/ScenarioBatch/Test_012_ScenarioBadgeNoScenarioMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_003_OnDemandNoFilterConfiguredMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_004_OnDemandMaasStatusMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_004_OnDemandMaasInProgressStatusMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_004_OnDemandMaasTroubleshootMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_006_OnDemandMaasSparqSessionMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_007_OnDemandMaasStatusSubProcessMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_008_VerifyTheUnifiedErrorStateMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/OnDemandMaas/Test_008_VerifyTheUnifiedEmptyStateMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/CardsBatch/Test_014_TreeCardStatesMocked.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/Mocked/Unauthorized/Test_001_UnauthorizedProcessAccessMocked.spec.ts"
+  ]
+}

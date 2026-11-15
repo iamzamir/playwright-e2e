@@ -1,0 +1,12 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "ProcedureMappingCheck",
+    "PO_PROCESS_NAME": "Procedure Mapping Check",
+    "ATTRIBUTE_VALUE": "SCP-Reporting",
+   
+    "PROCEDURE": {
+        "PROCEDURENAME1": "CreateScenario3",
+        "PROCEDURENAME2": "CreateScenarioPopupWithDefault",
+        "PROCEDURENAME3": "Clone Member"
+    }
+}

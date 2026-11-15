@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required) - interactive view with procedure mapping",
+    "SCENARIO_NAME": "string (required) - scenario the spec pins as default",
+    "LOGGED_IN_USER_NAME": "string (required) - full name the mocked process user list returns for the mocked run-by user"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasCluster",
+  "SCENARIO_NAME": "Base 30-03-2026-0535",
+  "LOGGED_IN_USER_NAME": "PS Automation1"
+}

@@ -1,0 +1,129 @@
+apiVersion: v1alpha
+kind: playwright
+defaults:
+  timeout: 60m
+sauce:
+  region: us-west-1
+  concurrency: 5
+  metadata:
+    tags:
+      - e2e
+      - release team
+      - other tag
+playwright:
+  version: package.json # See https://docs.saucelabs.com/web-apps/automated-testing/playwright/#supported-testing-platforms for a list of supported versions.
+  configFile: configs/playwright.sauce.config.ts # See https://docs.saucelabs.com/web-apps/automated-testing/playwright/yaml/#configfile for a list of supported configuration files.
+
+npm:
+  dependencies:
+  - allure-playwright
+  - monocart-reporter
+  - winston
+
+env:
+  TEST_AUTOMATION_USER_1: "$TEST_AUTOMATION_USER_1"
+  TEST_AUTOMATION_USER_2: "$TEST_AUTOMATION_USER_2"
+  TEST_AUTOMATION_PASSWORD: "$TEST_AUTOMATION_PASSWORD"
+  SAUCE_PS_USERNAME: "$SAUCE_PS_USERNAME"
+  SAUCE_PS_ACCESS_KEY: "$SAUCE_PS_ACCESS_KEY"
+  CLIENT_SECRET_QA: "$CLIENT_SECRET_QA"
+  CLIENT_SECRET_IOP: "$CLIENT_SECRET_IOP"
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: "$REALM_CLIENT_SECRET_PO_QA_MIG_1"
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: "$REALM_CLIENT_SECRET_PO_QA_MIG_2"
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: "$REALM_CLIENT_SECRET_PO_IOP_MIG_1"
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: "$REALM_CLIENT_SECRET_PO_IOP_MIG_2"
+  REALM_CLIENT_SECRET_IOP_PO_PS_1: "$REALM_CLIENT_SECRET_IOP_PO_PS_1"
+  ENVIRONMENT: "INTEROP"
+  PSENV: "INTEROP"
+  TZ: "Australia/Adelaide"
+  PW_ENABLE_HTML_REPORT: "$PW_ENABLE_HTML_REPORT"
+  PW_RETRIES: "$PW_RETRIES"
+
+rootDir: ./
+suites:
+  - name: "Action Items Batch"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/ProcessOrchestration/ActionItemsBatch/Test_001_CreateEditDeleteActionItem.spec.ts",
+      "tests/ProcessOrchestration/ActionItemsBatch/Test_002_ActionItemPermissionsAndBulkActions.spec.ts"
+      ]
+    params:
+      browserName: "chrome"
+  - name: "Powerbar Batch"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/ProcessOrchestration/PowerBar/Test_001_PowerBarForProcessInPO.spec.ts",
+      "tests/ProcessOrchestration/PowerBar/Test_002_PowerBarForSubProcessInPO.spec.ts",
+      "tests/ProcessOrchestration/PowerBar/Test_003_PowerBarForAssumptionInPO.spec.ts",
+      "tests/ProcessOrchestration/PowerBar/Test_004_RecentlyViewedEntityInPO.spec.ts",
+      "tests/ProcessOrchestration/PowerBar/Test_005_ContextSwitcherInPO.spec.ts",
+      ]
+    params:
+      browserName: "chrome"
+  - name: "Process Batch"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/ProcessOrchestration/ProcessBatch/Test_001_ProcessActions.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_002_AdoptVariantWhileCreateEditProcess.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_003_SubProcessActionsFromSettings.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_004_ValidateSubProcessCreation.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_005_ProcedureTriggersOnProcessStart.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_006_ProcessStartCloseCases.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_007_CloseSubprocessProcess.spec.ts",
+      "tests/ProcessOrchestration/ProcessBatch/Test_008_ProcedureMappingToProcess.spec.ts"
+      ]
+    params:
+      browserName: "chrome"
+  - name: "Scope Batch"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/ProcessOrchestration/ScopeBatch/Test_001_SaveAndDeleteFilterInAssumption.spec.ts",
+      "tests/ProcessOrchestration/ScopeBatch/Test_002_ScopePresetMappingInAssumption.spec.ts",
+      "tests/ProcessOrchestration/ScopeBatch/Test_003_SaveAndDeleteFilterInSettings.spec.ts",
+      ]
+    params:
+      browserName: "chrome"
+  - name: "Other Batch"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/ProcessOrchestration/ObjectiveBar/Test_001_ObjectiveBarInPO.spec.ts",
+      "tests/ProcessOrchestration/QuickLinks/Test_001_EasyAccessQuickLinksFromPO.spec.ts",
+      "tests/ProcessOrchestration/ViewManagerBatch/Test_001_MapPlanningViewToViewGroup.spec.ts",
+      "tests/ProcessOrchestration/ViewSearch/Test_001_ViewSearchForProcessInPO.spec.ts",
+      "tests/ProcessOrchestration/ViewSearch/Test_002_ViewSearchForSubProcessInPO.spec.ts",
+      "tests/ProcessOrchestration/ViewSearch/Test_003_ViewSearchForAssumptionInPO.spec.ts"
+    ]
+    params:
+      browserName: "chrome"
+
+# Download test reports as artifacts - they'll be available locally after test completion
+artifacts:
+  retain:
+    'allure-results': 'allure-results.zip'
+    'performance-metrics': 'performance-metrics.zip'
+    'reports': 'reports.zip'
+  download:
+    when: always  # Download reports regardless of test outcome
+    match:
+      - 'artifacts/**'                    # Download artifacts folder
+      - 'reports/performance-metrics/**'  # Download performance metrics from new location
+      - 'allure-results/**'               # Download Allure results
+      - 'reports/**'                      # Download all reports
+      - 'test-results/**'
+      - 'playwright-report/**'
+      - '*.json'
+      - '*.zip'
+      - '*.xml'
+      - '*.png'
+      - '*.txt'
+      - '*.log'
+      - '**/*.html'
+    directory: './artifacts'
+    reporters:
+      spotlight: # Prints an overview of failed or otherwise interesting jobs.
+        enabled: true

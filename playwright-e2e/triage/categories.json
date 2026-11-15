@@ -1,0 +1,87 @@
+[
+  {
+    "name": "Blocked by an earlier failure in the same serial spec",
+    "matchedStatuses": [
+      "skipped"
+    ],
+    "messageRegex": "(?s)Blocked:.*"
+  },
+  {
+    "name": "Interrupted or unfinished (unknown status)",
+    "matchedStatuses": [
+      "unknown"
+    ]
+  },
+  {
+    "name": "Environment: gateway or network error",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(Bad Gateway|Service Unavailable|Gateway Timeout|status code 50[234]|ECONNRESET|ECONNREFUSED|ETIMEDOUT|ENOTFOUND|EAI_AGAIN|socket hang up|net::ERR_).*"
+  },
+  {
+    "name": "Environment: login or authentication",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(launchAppFromCatalog failed|Login failed|401 Unauthorized|status code 401|invalid_client|invalid_grant|AADB2C).*"
+  },
+  {
+    "name": "Automation: locator matches several elements (strict mode)",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*strict mode violation.*"
+  },
+  {
+    "name": "Automation: script error in test code",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(TypeError|ReferenceError|SyntaxError|is not a function|Cannot read propert|Could not find .* with any selector).*"
+  },
+  {
+    "name": "API: server error (5xx) returned",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(Received:\\s*\"?5\\d\\d\"?|status code 500|Internal Server Error).*"
+  },
+  {
+    "name": "Test data: expected record missing or duplicated",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(No .*candidate|did not become visible in the .* list|No visible action menu found|already exists|status code 409|status code 404).*"
+  },
+  {
+    "name": "Test timeout",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*Test timeout of \\d+ms exceeded.*"
+  },
+  {
+    "name": "UI wait timed out (to investigate)",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(Timeout \\d+ms exceeded|TimeoutError).*"
+  },
+  {
+    "name": "Assertion failed (to investigate)",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "messageRegex": "(?s).*(expect\\(|Expected|toBe|toEqual).*"
+  }
+]

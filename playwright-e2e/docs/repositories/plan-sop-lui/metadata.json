@@ -1,0 +1,115 @@
+{
+  "name": "plan-sop-lui",
+  "displayName": "LUI — Process Orchestration Micro-Frontend",
+  "org": "BY-Product-Development",
+  "type": "micro-frontend",
+  "version": "0.0.3",
+  "language": "typescript",
+  "framework": "react",
+  "bundler": "vite",
+  "unitTestRunner": "vitest",
+  "legacyE2E": "webdriverio (e2e/ — superseded by playwright-e2e, do not extend)",
+  "installCommand": "npm install",
+  "startCommand": "npm start",
+  "requiresJfrogRegistry": true,
+  "sourceFiles": { "tsxJsx": 322 },
+  "testIds": { "total": 2178, "unique": 910, "asOf": "2026-10-05" },
+  "keyDependencies": {
+    "@by/lui-dashboard-library": "10.10.4",
+    "@by/lui-dashboard-scaffolding-core": "2.25.1",
+    "@by/lui-dashboard-scaffolding-components": "0.11.1",
+    "@by/lui-vertical-filter-component": "3.25.5",
+    "@by/lui-quick-filter-library": "3.1.1-rc.1",
+    "@by/plan-sop-ui-library": "2026.4.3",
+    "@jda/lui-common-component-library-mui5": "3.12.2",
+    "highcharts": "11.4.8",
+    "@by/lui-settings-ui-library": "1.2.5",
+    "@by/experience-system": "1.1.1"
+  },
+  "entryUrlEnvVar": "NAVIGATE_TO_PROCESS_ORCHESTRATION",
+  "portalLink": {
+    "QA": "pofeatureqa/",
+    "INTEROP": "pointegration/",
+    "PSR": "process-orchestration-psr/"
+  },
+  "clientCache": {
+    "type": "api-response-cache",
+    "module": "src/apis/cache.ts"
+  },
+  "settingsRoutes": [
+    { "id": "assumption-types", "path": "/assumption-types", "tested": false },
+    { "id": "data-attributes", "path": "/data-attributes", "tested": false },
+    { "id": "schedule-structure", "path": "/schedule-structure", "tested": false },
+    { "id": "node-transitions", "path": "/node-transitions", "tested": false }
+  ],
+  "dependsOn": [
+    "plan-sop-process-orchestration-service",
+    "plan-sop-link-management",
+    "plan-sop-ui-fields-service",
+    "plan-sop-actionitem",
+    "assumptions-service"
+  ],
+  "consumedBy": ["luminate-portal", "plan-sop-ui-automation"],
+  "automation": {
+    "specGlobs": [
+      "tests/ProcessOrchestration/**",
+      "tests/VisualAutomation/VisualSpecs/**"
+    ],
+    "specCount": 29,
+    "pageObjects": [
+      "process.page.ts",
+      "process-settings.page.ts",
+      "action-items.page.ts",
+      "powerbar.page.ts",
+      "assumption.page.ts",
+      "scope.page.ts",
+      "global-settings.page.ts",
+      "portal.page.ts",
+      "login.page.ts"
+    ],
+    "testSuites": [
+      "PowerBarBatch.json",
+      "ObjectiveQuickLinksViewSearchBatch.json",
+      "ScopeBatch.json",
+      "ViewsBatchA.json",
+      "ViewsBatchB.json"
+    ],
+    "testDataAreas": [
+      "testdata/INTEROP/ProcessOrchestration",
+      "testdata/QA/ProcessOrchestration",
+      "testdata/INTEROP/VisualAutomation",
+      "testdata/QA/VisualAutomation"
+    ],
+    "dominantInteraction": "lui-ccl-threedot-menu-icon-button",
+    "fragileLocators": [
+      "action-menu-item-0",
+      "action-menu-item-1",
+      "action-menu-item-2",
+      "action-menu-item-3",
+      "lui-ccl-threedot-menu-listitem-0-button"
+    ],
+    "testIdSpellingVariants": {
+      "refresh": ["refresh-icon-button", "refreshIconBtn", "refresh-button"],
+      "cancel": ["cancel-btn", "cancel-button"],
+      "overflowMenu": ["lui-ccl-threedot-menu-icon-button", "threeDotButton"],
+      "dropdown": ["drpdown", "simple-select"],
+      "search": ["lui-searchbar", "lui-search"]
+    },
+    "notRealTestIds": ["dataTestId", "props", "testId", "props.dataTestId"],
+    "untestedAreas": [
+      "lever-based-planning",
+      "node-transitions-settings",
+      "assumption-types-settings",
+      "data-attributes-settings",
+      "schedule-structure-settings",
+      "pagination",
+      "accessibility",
+      "iframe-component",
+      "api-response-cache-staleness"
+    ]
+  },
+  "uiFieldsRoutesCalled": ["GET /list-page-config", "GET /list-page-config-with-filter", "GET /detail-page-config", "GET /page/{name}/editor"],
+  "removedTestIdsSince20260916": ["drawer-close-btn", "drawer-open-btn", "pinned-icon", "unpinned-icon", "category-List", "child-category", "ArrowChevronDownIcon"],
+  "lastReviewed": "2026-10-05",
+  "qualityGates": ["BlackDuck", "CodeQL", "Vitest coverage", "ESLint", "Prettier", "Husky"]
+}

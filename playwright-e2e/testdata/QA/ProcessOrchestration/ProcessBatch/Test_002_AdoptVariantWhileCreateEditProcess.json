@@ -1,0 +1,26 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "SUBJECT_ID": "string (required)",
+        "PSAUTOMATION_SUBJECT_ID": "string (required)",
+        "MACHINE_USER_NAME": "string (required)",
+        "CREATE_PROCESS_FORM_DATA": "object (required)",
+        "EDIT_PROCESS_FORM_DATA": "object (required)"
+    },
+    "REALM_NAME": "cbp-qa-po-ps-1",
+    "SUBJECT_ID": "your-qa-subject-id",
+    "PSAUTOMATION_SUBJECT_ID": "your-qa-psautomation-subject-id",
+    "MACHINE_USER_NAME": "machineQA",
+    "CREATE_PROCESS_FORM_DATA":{
+        "TEMPLATE_NAME": "BY-Template",
+        "DISPLAY_NAME":"DATA VERSION PROCESS TEST",
+        "DATA_VERSION_DEFAULT": "Default",
+        "DATA_VERSION_VALUE": "IDSP-EMEA",
+        "CALENDAR": "Monthly Calendar",
+        "CYCLE_NAME": "2024 NOVEMBER",
+        "DESCRIPTION": "This process is created for testing Data Version dropdown functionality"
+    },
+    "EDIT_PROCESS_FORM_DATA":{
+        "DATA_VERSION_DEFAULT": "Default"
+        }
+}

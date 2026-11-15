@@ -1,0 +1,67 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - process whose action items are searched",
+    "SUBPROCESS_NAME": "string (required) - subprocess used for subprocess-raised items",
+    "UNKNOWN_PROCESS_NAME": "string (required) - process name that does not exist",
+    "STATUS_NOT_STARTED": "string (required) - display value of status code 0 in this environment",
+    "PAGE_SIZES": "number[] (required) - PSR page sizes",
+    "PAGE_NUMBER_PAST_END": "number (required) - page number beyond the last page",
+    "ATTRIBUTE_FILTER": "object (required) - PSR 'Action Items Attribute Search' filter (code lists)",
+    "EXCLUDING_STATUS_FILTER": "object (required) - status filter that excludes Not Started items",
+    "ITEM_REQUIRED_KEYS": "string[] (required) - keys every search item must carry",
+    "PO_INVALID_REQUEST_ERROR_CODE": "string (required) - PO errorCode for a hierarchy retrieval error",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a malformed JSON body",
+    "PROCESS_ACTION_ITEM": "object (required) - create body for a process action item; name, entityId, sourceId and origin are set at runtime",
+    "SUBPROCESS_ACTION_ITEM": "object (required) - create body for a subprocess action item; name and entityId are set at runtime"
+  },
+  "PROCESS_NAME": "ProcessWithCustomAttribute",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "UNKNOWN_PROCESS_NAME": "PWNoSuchProcess",
+  "STATUS_NOT_STARTED": "Not started",
+  "PAGE_SIZES": [5, 10, 20],
+  "PAGE_NUMBER_PAST_END": 9999,
+  "ATTRIBUTE_FILTER": {
+    "status": "0,1,2,4,5,6,7,8",
+    "actionType": "4,3,1",
+    "priority": "0,1,2,3,4"
+  },
+  "EXCLUDING_STATUS_FILTER": {
+    "status": "1"
+  },
+  "ITEM_REQUIRED_KEYS": ["id", "name", "entityId", "sourceId", "sourceType", "sourceName", "origin", "status", "actionType", "priority", "dueDate", "attributes"],
+  "PO_INVALID_REQUEST_ERROR_CODE": "IBP_PO_40_1003",
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022",
+  "PROCESS_ACTION_ITEM": {
+    "attributes": [
+      { "name": "processName", "value": "ProcessWithCustomAttribute", "id": "8220a965-fa89-4b48-8251-37b1360f4213" },
+      { "name": "processDisplayName", "value": "ProcessWithCustomAttribute", "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E" },
+      { "name": "sourceDisplayName", "value": "ProcessWithCustomAttribute", "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857" }
+    ],
+    "status": "0",
+    "actionType": "4",
+    "priority": "0",
+    "dueDate": "2025-04-03T07:28:04.684Z",
+    "assigneeUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "notifyUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "description": "Playwright PSR gap search fixture",
+    "remarks": "Playwright PSR gap search fixture",
+    "sourceType": "PROCESS",
+    "sourceName": "ProcessWithCustomAttribute"
+  },
+  "SUBPROCESS_ACTION_ITEM": {
+    "attributes": [
+      { "name": "processName", "value": "ProcessWithCustomAttribute", "id": "8220a965-fa89-4b48-8251-37b1360f4213" },
+      { "name": "processDisplayName", "value": "ProcessWithCustomAttribute", "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E" },
+      { "name": "sourceDisplayName", "value": "Supply Review", "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857" }
+    ],
+    "status": "0",
+    "actionType": "4",
+    "priority": "3",
+    "dueDate": "2025-04-04T04:49:54.636Z",
+    "assigneeUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "notifyUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "description": "Playwright PSR gap search fixture",
+    "remarks": "Playwright PSR gap search fixture",
+    "sourceType": "SUBPROCESS"
+  }
+}

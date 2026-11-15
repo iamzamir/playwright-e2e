@@ -1,0 +1,7 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Calendar/Test_001_CalendarsCRUD.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Calendar/Test_002_CyclesCRUD.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Calendar/Test_003_CalendarAndCycleListing.spec.ts"
+  ]
+}

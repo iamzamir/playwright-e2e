@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "HiddenViewsProcess",
+    "VIEW_NAME": "testView2",
+    "VIEW_GROUP_NAME":"TestingHiddenViews",
+    "ASSUMPTION_TYPE": "Opportunity",
+    "ASSUMPTION_NAME": "ArrangeViews Assumption"
+}

@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Multi-KPI",
+    "CONFIG_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/interop/maas/config/v1",
+    "CONTROLLER_SERVICE_API": "https://api-tst.jdadelivers.com/cbp/interop/maas/controller/v1",
+    "CALC_ENGINE_ID": "50104796-004a-44db-a944-9c2031033492"
+}

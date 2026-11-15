@@ -1,0 +1,23 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME" : "ArrangeViewsTesting",
+    "PROCESS_CONTEXT": {
+        "PROCESS_NAME": "ArrangeViewsTesting"
+    },
+    "SUB_PROCESS_CONTEXT": {
+        "PROCESS_NAME": "ArrangeViewsTesting",
+        "SUB_PROCESS_NAME": "ArrangeViews Subprocess"
+    },
+    "VIEW_GROUPS" : {
+        "VIEW_GROUP1" : "Arrange Views View Group",
+        "VIEW_GROUP2" : "Arrange Views View Group 1"
+    },
+    "VIEWS" : {
+        "VIEW1" : "arrange Views view1",
+        "VIEW2" : "arrange views view 2"
+    },
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "ArrangeViews Risk Assumption",
+        "ASSUMPTION_TYPE": "Risk"
+    }
+}

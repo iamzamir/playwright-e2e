@@ -1,0 +1,8 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_001_EndToEndDrillThrough.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_002_HiddenViewTransitionInSameTab.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_004_OnRowDrillThrough.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DrillThroughBatch/Test_011_HiddenViewTransitionInNewTab.spec.ts"
+  ]
+}

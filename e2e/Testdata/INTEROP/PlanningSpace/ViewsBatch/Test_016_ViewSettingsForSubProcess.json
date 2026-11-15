@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "AT of Move View 1",
+    "TARGET_VIEW_GROUP": "Move View Group 2",
+    "INITIAL_VIEW_GROUP": "Move View Group 1"
+}

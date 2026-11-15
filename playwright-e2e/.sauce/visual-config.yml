@@ -1,0 +1,49 @@
+apiVersion: v1alpha
+kind: playwright
+defaults:
+  timeout: 60m
+sauce:
+  region: us-west-1
+  concurrency: 1 # Single concurrency for visual tests to ensure consistency
+  metadata:
+    tags:
+      - visual-testing
+      - e2e
+      - ui-regression
+      - release team
+playwright:
+  version: package.json
+  configFile: configs/playwright.visual.sauce.config.ts
+
+npm:
+  dependencies:
+  - allure-playwright
+
+rootDir: ./
+suites:
+  - name: "PowerBar Visual Suite"
+    platformName: "Windows 11"
+    screenResolution: "1920x1080"
+    testMatch: [
+      "tests/VisualAutomation/VisualSpecs/PlanningSpace/PowerBar/Test_004_PowerBarVisualValidation.spec.ts"
+    ]
+    params:
+      browserName: "chrome"
+  
+  # - name: "Visual Login Tests - Cloud Optimized"
+  #   platformName: "Windows 11"
+  #   screenResolution: "1920x1080"
+  #   testMatch: [
+  #     "tests/Visual/Test_002_LoginPageVisual_Sauce.spec.ts"
+  #   ]
+  #   params:
+  #     browserName: "chrome"
+
+# Artifacts to download from SauceLabs after test execution
+artifacts:
+  download:
+    when: always
+    match:
+      - "test-results/visual-sauce/**"
+      - "reports/allure-results/**"
+    directory: ./artifacts/

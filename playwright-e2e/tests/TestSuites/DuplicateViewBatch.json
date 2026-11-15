@@ -1,0 +1,7 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/DuplicateView/Test_001_DuplicateViewProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/DuplicateView/Test_002_DuplicateViewSubprocess.spec.ts"
+  ]
+}
+

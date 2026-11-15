@@ -1,0 +1,26 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "ASSUMPTION": "string (required)",
+        "SCOPE_LEVELS": "array (required) - { dimension, hierarchy, hierarchyLabel?, values[] } per scope dimension; the values are the realm's members applied to the assumption",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION": "PS Auto Assumption 5",
+    "SCOPE_LEVELS": [
+        { "dimension": "ITEM", "hierarchy": "AllProducts", "values": ["ALL"] },
+        { "dimension": "LOCATION", "hierarchy": "AllLocations", "values": ["ALL"] },
+        { "dimension": "CUSTOMER", "hierarchy": "AllChannels", "values": ["ALL CUSTOMERS"] }
+    ],
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1",
+        "SCOPE_LEVELS": [
+            { "dimension": "Item", "hierarchy": "AllProducts", "hierarchyLabel": "All Products", "values": ["ALL FB FG PRODUCTS"] },
+            { "dimension": "Location", "hierarchy": "AllLocations", "hierarchyLabel": "All Locations", "values": ["CLP-ALL"] },
+            { "dimension": "Customer", "hierarchy": "AllCustomers", "hierarchyLabel": "All Customer", "values": ["CLP-ALL"] }
+        ]
+    }
+}

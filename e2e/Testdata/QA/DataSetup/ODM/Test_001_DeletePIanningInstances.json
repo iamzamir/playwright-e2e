@@ -1,0 +1,13 @@
+{
+  "ScenarioId": "7ae23359-7c11-4b29-a8a5-e2382d5a8070",
+  "requestBody": [
+    {
+      "engineName": "maas",
+      "engineStatus": "STOPPED"
+    },
+    {
+      "engineName": "sparq",
+      "engineStatus": "STOPPED"
+    }
+  ]
+}

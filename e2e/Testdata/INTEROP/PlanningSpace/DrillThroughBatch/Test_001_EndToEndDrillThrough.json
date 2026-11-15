@@ -1,0 +1,16 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "DR Source",
+    "TC1_DRILL_THROUGH_VIEW_TO": "DR Destination",
+    "TC1_DRILL_THROUGH_CELL": "47",
+    "LV2_DRILL_THROUGH_VIEW_FROM": "DR Destination",
+    "LV2_DRILL_THROUGH_VIEW_TO": "DR Source",
+    "LV2_DRILL_THROUGH_CELL": "47",
+    "DIMENSIONS": {
+        "ITEM": {"ProductType": "PF-00"},
+        "LOCATION":{"Region": "REGION-00"},
+        "CUSTOMER": {"Channel": "CG-01"},
+        "TIME": {"CALENDARYEAR": "CY-2022"}
+    }
+}

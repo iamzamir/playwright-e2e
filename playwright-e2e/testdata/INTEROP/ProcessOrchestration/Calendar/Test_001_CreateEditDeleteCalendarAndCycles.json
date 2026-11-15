@@ -1,0 +1,25 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "CALENDAR_NAME": "string (required)",
+    "CALENDAR_DESCRIPTION": "string (required)",
+    "UPDATED_CALENDAR_DESCRIPTION": "string (required)",
+    "CYCLES_TO_CREATE": "number (required)",
+    "CYCLE_NAME": "string (required)",
+    "CYCLE_DESCRIPTION": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "CALENDAR_NAME": "Test Calendar",
+  "CALENDAR_DESCRIPTION": "Test the Calendar with cycle operations",
+  "UPDATED_CALENDAR_DESCRIPTION": "Delete the Calendar",
+  "CYCLES_TO_CREATE": 4,
+  "CYCLE_NAME": "Cycle",
+  "CYCLE_DESCRIPTION": "Random cycle description",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

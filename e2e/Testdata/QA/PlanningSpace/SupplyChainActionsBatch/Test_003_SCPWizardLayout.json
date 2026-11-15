@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "IDSPAutomationProcess", 
+    "PROCEDURE_NAME": "CreateScenario1",
+    "UICONFIG_METADATA": {"layout":"wizard", "steps":[{"id":1,"name":"Scenario - Overview","pages":[{"type":"SCENARIO_DETAILS","name":"Scenario Details"}]}]}
+}

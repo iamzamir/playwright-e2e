@@ -1,0 +1,25 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "arrange views view1",
+    "REF_LEVEL_ATTRIBUTE": "Reference Level",
+    "REF_MEMBER_ATTRIBUTE": "Reference Member",
+    "TARGET_LEVEL_ATTRIBUTE": "Target Level",
+    "TARGET_MEMBER_ATTRIBUTE": "Target Member",
+    "DIMENSION_ITEM": "ITEM",
+    "DIMENSION_DEMANDITEM": "DEMANDITEM",
+    "REF_LEVEL_VALUE": "BRAND",
+    "REF_MEMBER_VALUE": "PF-00",
+    "TARGET_LEVEL_VALUE": "BRAND",
+    "TARGET_MEMBER_VALUE": "PF-10",
+    "COPIES": 1,
+    "SUCCESS_MESSAGE": "Clone Member procedure is running.",
+    "ERROR_MESSAGE": "Something went wrong while applying Clone Member procedure.",
+    "CLONE_MEMBER_TYPE": {
+        "NEW_MEMBER": "New Member",
+        "NEW_INTERSECTION": "New Intersection"
+    },
+    "DRILL_THROUGH_VIEW_FROM": "Maas Pivot Card View",
+    "DRILL_THROUGH_CELL": "47",
+    "ACTION_NAME": "Clone Member"
+}

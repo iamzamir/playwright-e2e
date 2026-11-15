@@ -1,0 +1,5 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "CARD_NAMES": "Analytics,KPI,Multi-KPI,Table,Line and Area Chart,Exception Aggregation,Column and Bar Chart,Combination Chart,Inline Analytics"
+}

@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "ViewToTest_MaasCluster",
+    "CARD_NAME":"Maas Pivot Card - ODM",
+    "SCENARIO_NAME" :"ODM multi scenario",
+    "BASE_SCENARIO" : "Base 09-10-2025-0904",
+    "SCENARIO_DESC" : "Scenario created for testing",
+    "PROCEDURE_NAME":"Create Scenario"
+}

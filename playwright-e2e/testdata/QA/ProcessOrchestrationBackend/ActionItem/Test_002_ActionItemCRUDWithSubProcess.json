@@ -1,0 +1,113 @@
+{
+    "_schema": {
+        "CycleDescriptionUpdate": "string (required)",
+        "requestBody": "object (required)",
+        "updateReqest": "object (required)"
+    },
+    "CycleDescriptionUpdate": "Action Item Cycle QA Desciption Update",
+    "requestBody": {
+        "attributes": [
+            {
+                "name": "processName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "8220a965-fa89-4b48-8251-37b1360f4213"
+            },
+            {
+                "name": "processDisplayName",
+                "value": "IntegratedBusinessPlanning",
+                "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E"
+            },
+            {
+                "name": "sourceDisplayName",
+                "value": "Supply Review",
+                "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857"
+            }
+        ],
+        "status": "0",
+        "actionType": "4",
+        "priority": "3",
+        "dueDate": "2025-04-04T04:49:54.636Z",
+        "assigneeUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "notifyUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "name": "Test1 Sub process",
+        "description": "for test",
+        "remarks": "for test",
+        "entityId": "4671a540-e9fb-44c2-bd50-5bbfffe8dc61",
+        "sourceId": "18895D84-FA7B-4E2E-8FB8-FBBA79CC0E8A",
+        "sourceType": "SUBPROCESS",
+        "sourceName": "SupplyReview",
+        "processName": "IntegratedBusinessPlanning",
+        "subprocessName": "SupplyReview"
+    },
+    "updateReqest": {
+        "attributes": [
+            {
+                "id": "2973c9e7-ae1d-4e01-9c3d-94797ef1c065",
+                "name": "processName",
+                "title": "processName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "363cd8ea-7d7f-4244-9f19-d01c240f5cd6",
+                "name": "processDisplayName",
+                "title": "processDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "IntegratedBusinessPlanning",
+                "value": "IntegratedBusinessPlanning"
+            },
+            {
+                "id": "42a48d70-021c-437f-bfd2-38622c54bc5b",
+                "name": "sourceDisplayName",
+                "title": "sourceDisplayName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "Supply Review",
+                "value": "Supply Review"
+            },
+            {
+                "id": "aa1f372f-ec26-44c0-9908-0f7388cf7b3d",
+                "name": "originCycleName",
+                "title": "originCycleName",
+                "isEnabled": true,
+                "isActive": true,
+                "displayValue": "2025 FEBRUARY",
+                "value": "2025 FEBRUARY"
+            }
+        ],
+        "id": "c3a9e766-6bde-4ba5-bc50-77a30be55fed",
+        "name": "Test1 Sub process updated",
+        "entityId": "4671a540-e9fb-44c2-bd50-5bbfffe8dc61",
+        "sourceId": "18895D84-FA7B-4E2E-8FB8-FBBA79CC0E8A",
+        "sourceName": "Supply Review",
+        "sourceType": "SUBPROCESS",
+        "status": "0",
+        "actionType": "4",
+        "priority": "1",
+        "dueDate": "2025-04-04T04:49:54",
+        "description": "for test updated",
+        "remarks": "for test updated",
+        "isEnabled": true,
+        "isActive": true,
+        "commentsActive": false,
+        "author": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "assigneeUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "notifyUsers": [
+            "4de6f5fc-59cb-4048-a4a9-3e141b76a802"
+        ],
+        "originCycleName": "2025 FEBRUARY",
+        "subprocessName": "SupplyReview",
+        "processName": "IntegratedBusinessPlanning"
+    }
+}

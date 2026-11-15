@@ -1,0 +1,24 @@
+{
+  "_schema": {
+    "VIEW_ID": "string (required) - synthetic 24-hex view id; LM does not check that it exists",
+    "GLOBAL_FILTER_ID": "string (required) - synthetic filter id for the global preset",
+    "ENTITY_FILTER_ID": "string (required) - synthetic filter id for the subprocess-specific preset",
+    "SUBPROCESS": "object (required) - subprocess context { entityId, entityType, entityName } with no preset of its own",
+    "PROCESS": "object (required) - process context { entityId, entityType, entityName } with no preset of its own",
+    "CLEAR_MESSAGE": "string (required) - text returned by POST /preset/clear"
+  },
+  "VIEW_ID": "6650bbbb0000000000000001",
+  "GLOBAL_FILTER_ID": "6650cccc-0000-4000-8000-000000000001",
+  "ENTITY_FILTER_ID": "6650cccc-0000-4000-8000-000000000002",
+  "SUBPROCESS": {
+    "entityId": "6650DDDD-0000-4000-8000-000000000002",
+    "entityType": "subprocess",
+    "entityName": "PWAutoPresetProcess.PWAutoPresetSubprocess"
+  },
+  "PROCESS": {
+    "entityId": "6650DDDD-0000-4000-8000-000000000001",
+    "entityType": "process",
+    "entityName": "PWAutoPresetProcess"
+  },
+  "CLEAR_MESSAGE": "Deleted filters as per search request"
+}

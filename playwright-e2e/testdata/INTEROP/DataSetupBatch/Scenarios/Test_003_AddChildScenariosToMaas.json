@@ -1,0 +1,31 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "ASSUMPTION": "string (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "CALC_ENGINE_ID": "string (required)",
+    "API_ENV_SEGMENT": "string (required)",
+    "scenarioSets": "object (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION": "0a201a66-9d4d-1a54-819d-bdd2e2d3098d",
+  "SUBPROCESS_NAME": "DemandReview",
+  "CALC_ENGINE_ID": "c4231521-5485-4c19-a0e0-b23e97c69b71",
+  "API_ENV_SEGMENT": "interop",
+  "scenarioSets": {
+    "default": [
+      "Base 17-10-2025-0704",
+      "Sceanrio_Case_Automation",
+      "Scenario_Selection",
+      "scenario_mass_chart_test",
+      "Scenario_For_MaasPivot",
+      "SubprocessSelectSidenavchild1",
+      "SubprocessSelectSidenavchild2",
+      "AssumptionScn5",
+      "AssumptionScn3",
+      "AssumptionScn4"
+    ]
+  }
+}

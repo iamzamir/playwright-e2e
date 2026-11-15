@@ -1,0 +1,12 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_009_DefaultFilterForProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_010_DefaultFilterForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_012_DefaultFilterPageContext.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_013_DraftFilterForProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_014_DraftFilterForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_015_QuickFilter.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ScopeBatch/Test_016_AdminFilter.spec.ts"
+  ]
+}
+

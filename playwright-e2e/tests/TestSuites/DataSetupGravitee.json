@@ -1,0 +1,11 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/DataSetupBatch/ODM/Test_002_RestartMaasCluster.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/ODM/Test_003_RestartPlanningInstance.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_002_MapViewsToContext.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_004_UpdateFeatureToggle.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_005_CleanupDuplicateViews.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_007_SeedScopeFilters.spec.ts"
+  ]
+}

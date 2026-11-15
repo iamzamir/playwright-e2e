@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Network Card",
+    "DATA_ENDPOINT":"https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/NetworkCard",
+    "WRONG_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/NetworkCardWrong"
+}
+

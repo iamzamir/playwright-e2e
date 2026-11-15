@@ -1,0 +1,27 @@
+{
+  "name": "<repo-name>",
+  "displayName": "<Repo Display Name>",
+  "org": "BY-Product-Development",
+  "type": "backend-service",
+  "language": "java",
+  "runtime": "",
+  "buildTool": "",
+  "artifactGroup": "",
+  "localPort": null,
+  "swaggerPath": "",
+  "database": null,
+  "gatewayPrefix": {
+    "QA": { "old": "", "new": "" },
+    "INTEROP": { "old": "", "new": "" },
+    "PSR": { "old": "", "new": "" }
+  },
+  "dependsOn": [],
+  "consumedBy": [],
+  "automation": {
+    "specGlobs": [],
+    "pageObjects": [],
+    "testSuites": [],
+    "testDataAreas": []
+  },
+  "qualityGates": []
+}

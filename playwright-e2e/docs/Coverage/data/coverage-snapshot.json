@@ -1,0 +1,203 @@
+{
+  "current": {
+    "date": "2026-10-05",
+    "source": "generated from INTEROP-AZURE, INTEROP-GRAVITEE, QA-GRAVITEE, QA-AZURE",
+    "services": {
+      "PO": {
+        "active": 144,
+        "covered": 59,
+        "keys": [
+          "PO DELETE /calendar/{calendarName}/cycle/{cycleName}",
+          "PO DELETE /calendar/{name}",
+          "PO DELETE /process/{processName}",
+          "PO DELETE /process/{processName}/attribute/{attrName}/value/{attrValue}",
+          "PO DELETE /process/{processName}/subprocess/{subprocessName}",
+          "PO DELETE /process/{processName}/subprocess/{subprocessName}/attribute/{attrName}/value/{attrValue}",
+          "PO DELETE /supplyChainAction/{id}",
+          "PO GET /actionitem/{id}",
+          "PO GET /calendar",
+          "PO GET /calendar/{calendarName}/cycle",
+          "PO GET /calendar/{calendarName}/cycle/{cycleName}",
+          "PO GET /calendar/{name}",
+          "PO GET /job/{jobId}/status",
+          "PO GET /process",
+          "PO GET /process/{processName}",
+          "PO GET /process/{processName}/attribute",
+          "PO GET /process/{processName}/children",
+          "PO GET /process/{processName}/context",
+          "PO GET /process/{processName}/entity/{entityName}",
+          "PO GET /process/{processName}/kpi",
+          "PO GET /process/{processName}/processGantt",
+          "PO GET /process/{processName}/scope",
+          "PO GET /process/{processName}/subprocess/{subprocessName}",
+          "PO GET /process/{processName}/subprocess/{subprocessName}/attribute",
+          "PO GET /process/{processName}/subprocess/{subprocessName}/children",
+          "PO GET /process/{processName}/subprocess/{subprocessName}/kpi",
+          "PO GET /process/{processName}/subprocess/{subprocessName}/tree",
+          "PO GET /process/{processName}/tree",
+          "PO GET /process/{processName}/users",
+          "PO GET /supplyChainAction",
+          "PO GET /supplyChainAction/{id}",
+          "PO GET /transitionJob/{jobId}/status",
+          "PO POST /calendar",
+          "PO POST /calendar/{calendarName}/cycle",
+          "PO POST /configuration/exchange/publish",
+          "PO POST /exportData",
+          "PO POST /importData",
+          "PO POST /process/search",
+          "PO POST /process/template",
+          "PO POST /process/{processName}/actionitem",
+          "PO POST /process/{processName}/actionitem/search",
+          "PO POST /process/{processName}/attribute",
+          "PO POST /process/{processName}/start",
+          "PO POST /process/{processName}/stop",
+          "PO POST /process/{processName}/subprocess",
+          "PO POST /process/{processName}/subprocess/{subprocessName}/actionitem",
+          "PO POST /process/{processName}/subprocess/{subprocessName}/actionitem/search",
+          "PO POST /process/{processName}/subprocess/{subprocessName}/attribute",
+          "PO POST /supplyChainAction",
+          "PO PUT /calendar/{calendarName}/cycle/{cycleName}",
+          "PO PUT /calendar/{name}",
+          "PO PUT /process/{processName}/actionitem/{id}",
+          "PO PUT /process/{processName}/attribute/{attrName}/value/{attrValue}",
+          "PO PUT /process/{processName}/planstartdate",
+          "PO PUT /process/{processName}/scope",
+          "PO PUT /process/{processName}/subprocess/{subprocessName}",
+          "PO PUT /process/{processName}/subprocess/{subprocessName}/actionitem/{id}",
+          "PO PUT /process/{processName}/subprocess/{subprocessName}/attribute/{attrName}/value/{attrValue}",
+          "PO PUT /supplyChainAction/{id}"
+        ]
+      },
+      "AI": {
+        "active": 73,
+        "covered": 13,
+        "keys": [
+          "AI DELETE /actionitemTemplates/{id}",
+          "AI DELETE /kpis/{id}",
+          "AI GET /actionitemTemplates",
+          "AI GET /actionitems/editor",
+          "AI GET /actionitems/filters",
+          "AI GET /kpi/entities/{id}",
+          "AI GET /kpis",
+          "AI GET /kpis/{id}",
+          "AI POST /actionitemTemplates",
+          "AI POST /actionitems",
+          "AI POST /kpis",
+          "AI PUT /actionitems/{id}",
+          "AI PUT /kpis/{id}"
+        ]
+      },
+      "LM": {
+        "active": 30,
+        "covered": 21,
+        "keys": [
+          "LM DELETE /entity-view-procedure-map/type/{entityType}/entity/{entityId}/views/{viewId}",
+          "LM DELETE /entity/{entityId}/views/{viewId}",
+          "LM DELETE /type/{type}/entity/{entity}/views/{viewId}",
+          "LM DELETE /view-entity-map/views/{view}/type/{type}/entity/{entity}",
+          "LM GET /entity/{entityId}/views",
+          "LM GET /scope",
+          "LM GET /type/{type}/entity/{entity}/views",
+          "LM PATCH /scope",
+          "LM POST /entity-view-procedure-map",
+          "LM POST /entity-view-procedure-map/search",
+          "LM POST /entity/{entityId}/views",
+          "LM POST /preset",
+          "LM POST /preset/clear",
+          "LM POST /search-preset",
+          "LM POST /type/{type}/entity/{entity}/views",
+          "LM POST /view-entity-map",
+          "LM POST /view-entity-map/clear",
+          "LM POST /view-entity-map/lm-search/v2",
+          "LM POST /view-entity-map/search",
+          "LM PUT /scope",
+          "LM PUT /view-entity-map/views/{view}/type/{type}/entity/{entity}"
+        ]
+      },
+      "UIF": {
+        "active": 28,
+        "covered": 4,
+        "keys": [
+          "UIF GET /detail-page-config",
+          "UIF GET /list-page-config",
+          "UIF GET /list-page-config-with-filter",
+          "UIF GET /page/{name}/editor"
+        ]
+      }
+    }
+  },
+  "previous": {
+    "date": "2026-08-31",
+    "source": "31-Aug-2026 per-service gap reports (legacy WDIO suite, e2e/specs)",
+    "services": {
+      "PO": {
+        "active": 146,
+        "covered": 24,
+        "keys": [
+          "PO DELETE /calendar/{calendarName}/cycle/{cycleName}",
+          "PO DELETE /calendar/{name}",
+          "PO DELETE /process/{processName}",
+          "PO DELETE /supplyChainAction/{id}",
+          "PO GET /actionitem/{id}",
+          "PO GET /calendar/{calendarName}/cycle/{cycleName}",
+          "PO GET /calendar/{name}",
+          "PO GET /process/{processName}",
+          "PO GET /supplyChainAction",
+          "PO GET /transitionJob/{jobId}/status",
+          "PO POST /calendar",
+          "PO POST /calendar/{calendarName}/cycle",
+          "PO POST /exportData",
+          "PO POST /importData",
+          "PO POST /process/template",
+          "PO POST /process/{processName}/actionitem",
+          "PO POST /process/{processName}/start",
+          "PO POST /process/{processName}/stop",
+          "PO POST /process/{processName}/subprocess",
+          "PO POST /process/{processName}/subprocess/{subprocessName}/actionitem",
+          "PO PUT /calendar/{calendarName}/cycle/{cycleName}",
+          "PO PUT /calendar/{name}",
+          "PO PUT /process/{processName}/actionitem/{id}",
+          "PO PUT /process/{processName}/subprocess/{subprocessName}/actionitem/{id}"
+        ]
+      },
+      "AI": {
+        "active": 88,
+        "covered": 8,
+        "keys": [
+          "AI DELETE /actionitems/{id}",
+          "AI DELETE /kpis/{id}",
+          "AI GET /actionitems/{id}",
+          "AI POST /actionitems",
+          "AI POST /exportData",
+          "AI POST /importData",
+          "AI POST /kpis",
+          "AI PUT /actionitems/{id}"
+        ]
+      },
+      "LM": {
+        "active": 38,
+        "covered": 13,
+        "keys": [
+          "LM DELETE /view-entity-map/views/{view}/type/{type}/entity/{entity}",
+          "LM GET /scope",
+          "LM PATCH /scope",
+          "LM POST /entity-view-procedure-map",
+          "LM POST /entity-view-procedure-map/search",
+          "LM POST /preset",
+          "LM POST /preset/clear",
+          "LM POST /search-preset",
+          "LM POST /view-entity-map",
+          "LM POST /view-entity-map/clear",
+          "LM POST /view-entity-map/search",
+          "LM PUT /scope",
+          "LM PUT /view-entity-map/views/{view}/type/{type}/entity/{entity}"
+        ]
+      },
+      "UIF": {
+        "active": 32,
+        "covered": 0,
+        "keys": []
+      }
+    }
+  }
+}

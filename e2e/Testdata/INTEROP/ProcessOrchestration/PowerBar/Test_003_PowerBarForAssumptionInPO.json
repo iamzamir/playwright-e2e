@@ -1,0 +1,9 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption 5",
+        "ASSUMPTION_TYPE": "Opportunity"
+    },
+    "QUICK_LINKS": ["Action Items", "Scenario"]
+}

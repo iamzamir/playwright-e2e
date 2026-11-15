@@ -1,0 +1,21 @@
+{
+    "testFiles": [
+        "**/ScenarioBatch/Test_001_ScenarioSubsetIncremental.spec.ts",
+        "**/ScenarioBatch/Test_002_ScenarioActions.spec.ts",
+        "**/ScenarioBatch/Test_003_ScenarioVisibilityFilter.spec.ts",
+        "**/ScenarioBatch/Test_004_ScenarioCreationUsingAPI.spec.ts",
+        "**/ScenarioBatch/Test_005_ScenarioSelection.spec.ts",
+        "**/ScenarioBatch/Test_006_ScenarioUsersFilter.spec.ts",
+        "**/ScenarioBatch/Test_011_AssumptionScenarioAction.spec.ts",
+        "**/ScenarioBatch/Test_013_SubprocessScenarioDefault.spec.ts",
+        "**/ScenarioBatch/Test_014_BasescenarioShouldBeDefaultIfNoDefaultScenario.spec.ts",
+        "**/ScenarioBatch/Test_015_SubprocessScenarioComparisonInPivot.spec.ts",
+        "**/ScenarioBatch/Test_018_SelectScenarioinSidenav.spec.ts",
+        "**/ScenarioBatch/Test_021_SubprocessScenarioActions.spec.ts",
+        "**/ScenarioBatch/Test_029_ScreensShouldRenderWithNoBaseScenarios.spec.ts",
+        "**/ScenarioBatch/Test_030_CustomHeaderWithScenarioBudge.spec.ts",
+        "**/ScenarioBatch/Test_031_BaseScenarioSetAsDefault.spec.ts",
+        "**/ScenarioBatch/Test_032_VFDimensiondatawithPrivateandPublicScenario.spec.ts",
+        "**/DrillThroughBatch/Test_027_ContextOverrideNavUsingBreadcrumnbs.spec.ts"
+    ]
+}

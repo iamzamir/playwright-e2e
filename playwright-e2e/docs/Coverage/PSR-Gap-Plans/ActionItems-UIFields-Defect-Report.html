@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Process Orchestration, Action Items, UI Fields and Link Management API defects</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;margin:24px;color:#1f2328;max-width:1300px}
+h1{margin-bottom:4px}h2{border-bottom:2px solid #d0d7de;padding-bottom:4px;margin-top:36px;font-size:1.2em}
+table{border-collapse:collapse;width:100%;margin:8px 0}th,td{border:1px solid #d0d7de;padding:6px 8px;text-align:left;vertical-align:top;font-size:13px}
+th{background:#f6f8fa}td.yes{background:#fff0f0;color:#a40e26;font-weight:600}td.no{background:#eef8ee;color:#1a7f37}
+table.meta th{width:12%}code{background:#f6f8fa;padding:1px 4px;border-radius:4px;font-size:12px;word-break:break-all}
+.ea{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}.exp{background:#eef8ee;border-left:4px solid #1a7f37;padding:8px}.act{background:#fff0f0;border-left:4px solid #cf222e;padding:8px}
+.lbl{font-weight:600;font-size:12px;color:#57606a;margin-bottom:4px}.step{border:1px solid #d0d7de;border-radius:6px;padding:8px;margin:8px 0}.step-h{font-weight:600;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}pre{background:#0d1117;color:#e6edf3;padding:8px;border-radius:6px;overflow:auto;max-height:340px;font-size:12px;margin:0}
+.m{background:#0969da;color:#fff;padding:1px 6px;border-radius:4px;font-size:12px;font-weight:600}.code{padding:1px 6px;border-radius:4px;color:#fff}.s2{background:#1a7f37}.s4{background:#9a6700}.s5{background:#cf222e}
+.src{font-size:13px;color:#57606a}.note{background:#eef6ff;border-left:4px solid #0969da;padding:8px;font-size:13px}
+</style></head><body>
+<h1>Process Orchestration, Action Items, UI Fields and Link Management API defects</h1>
+<p>Defects found while building the PSR gap API tests (<code>tests/ProcessOrchestrationBackend/ProcessBatch/Test_006</code> to <code>Test_009</code>, <code>tests/ProcessOrchestrationBackend/Calendar/Test_003</code>, <code>tests/ProcessOrchestrationBackend/ActionItem/Test_004</code> to <code>Test_008</code>, <code>tests/ProcessOrchestrationBackend/UIFields/Test_001</code>, <code>Test_002</code> and <code>tests/ProcessOrchestrationBackend/LinkManagement/Test_012</code> to <code>Test_014</code>). The specs do not assert this behaviour; this report is the record. Evidence was captured on 2026-10-01 by replaying each request against INTEROP and QA on both gateways (Azure: <code>api-tst.jdadelivers.com</code>, Gravitee: <code>cbpf-test23</code> / <code>cbpf-test27</code>). Bearer tokens are omitted; every request used a valid machine token for the environment's realm. Large configuration bodies are trimmed to the fields that show the defect.</p>
+<div class="note">Plan references D1 to D10 point to section 10 of <code>playwright-e2e/docs/Coverage/PSR-Gap-Plans/01-ProcessOrchestration-PSR-Gap-Plan.md</code>; A1 to A9 point to section 10 of <code>03-ActionItems-PSR-Gap-Plan.md</code>; L1 to L7 point to section 10 of <code>02-LinkManagement-PSR-Gap-Plan.md</code>. Source paths are relative to the service repository named in each defect.</div>
+<h2>Summary</h2>
+<table><tr><th>ID</th><th>Defect</th><th>API</th><th>Severity</th><th>INTEROP-AZURE</th><th>INTEROP-GRAVITEE</th><th>QA-AZURE</th><th>QA-GRAVITEE</th></tr>
+<tr><td><a href="#AI-D01">AI-D01</a></td><td>Creating a KPI without kpiConfigAttributes fails with an unhandled 500</td><td>POST /kpis</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D02">AI-D02</a></td><td>KPI attribute isEnabled is overwritten with isActive</td><td>POST /kpis</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D03">AI-D03</a></td><td>Updating a KPI skips validation and stores an empty attrName</td><td>PUT /kpis/{id}</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D04">AI-D04</a></td><td>Adding a KPI attribute without kpiId fails with an unhandled 500</td><td>PUT /kpis/{id}</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D05">AI-D05</a></td><td>Updating a KPI clears createdBy</td><td>PUT /kpis/{id}</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D06">AI-D06</a></td><td>Reading an unknown KPI returns 200 with null data</td><td>GET /kpis/{id}</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D07">AI-D07</a></td><td>Two KPIs with the same attrName can be created</td><td>POST /kpis</td><td class="sev">Needs confirmation</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D08">AI-D08</a></td><td>Action item search without a request body fails with an unhandled 500</td><td>POST /process/{p}/actionitem/search and /process/{p}/subprocess/{sp}/actionitem/search</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D09">AI-D09</a></td><td>An unknown filter.sort property fails with an unhandled 500</td><td>POST /process/{p}/actionitem/search</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D10">AI-D10</a></td><td>The top-level sort that planning-mfe sends is ignored</td><td>POST /process/{p}/actionitem/search</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D11">AI-D11</a></td><td>Search replaces the origin id with the process display name</td><td>POST /process/{p}/actionitem/search</td><td class="sev">Low (design)</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D12">AI-D12</a></td><td>The filters endpoint accepts an invalid contextType on QA</td><td>GET /actionitems/filters?contextType=&amp;contextId=</td><td class="sev">Low</td><td class="no">Not reproduced</td><td class="no">Not reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#AI-D13">AI-D13</a></td><td>QA Azure IntegratedBusinessPlanning has no action item entity, and creating a process action item fails with 500</td><td>POST /process/{p}/actionitem</td><td class="sev">Medium</td><td class="no">Not reproduced</td><td class="no">Not reproduced</td><td class="yes">Reproduced</td><td class="no">Not reproduced</td></tr>
+<tr><td><a href="#UF-D01">UF-D01</a></td><td>filterPageId is not checked to be a filter page</td><td>GET /list-page-config-with-filter</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#UF-D02">UF-D02</a></td><td>detail-page-config accepts a listing page id</td><td>GET /detail-page-config</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#LM-D01">LM-D01</a></td><td>planning-mfe's typed favourite DELETE URL has a double slash, and Gravitee rejects it</td><td>DELETE /type/{type}/entity/{entity}/views/{id}</td><td class="sev">Medium</td><td class="no">Not reproduced</td><td class="yes">Reproduced</td><td class="no">Not reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#LM-D02">LM-D02</a></td><td>Favourite POST ignores name and isScopeEnabled when the catalogue row exists</td><td>POST /entity/{e}/views and /type/{t}/entity/{e}/views</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#LM-D03">LM-D03</a></td><td>The untyped favourites GET also returns typed favourites</td><td>GET /entity/{entityId}/views</td><td class="sev">Low (design)</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#LM-D04">LM-D04</a></td><td>Deleting a favourite never removes its catalogue row</td><td>DELETE /entity/{e}/views/{id} and /type/{t}/entity/{e}/views/{id}</td><td class="sev">Low (design)</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#LM-D05">LM-D05</a></td><td>An admin (applyToAllUsers) global preset fails with 404 LIAM resource *.* not found</td><td>POST /preset</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D01">PO-D01</a></td><td>Process search with pageSize 0 or a negative pageNumber fails with an unhandled 500</td><td>POST /process/search</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D02">PO-D02</a></td><td>Process search pager: totalPages is one too high on exact multiples, and totalElements is 0 past the last page</td><td>POST /process/search</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D03">PO-D03</a></td><td>An empty-array search filter fails with 500 and the error message returns the full SQL query</td><td>POST /process/search</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D04">PO-D04</a></td><td>Any sort element in the search body fails with an unhandled 500</td><td>POST /process/search</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D05">PO-D05</a></td><td>Search rows return the string "null" for null columns, including actionItemEntityId</td><td>POST /process/search</td><td class="sev">Medium</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D06">PO-D06</a></td><td>KPIs of an unknown process or subprocess return 200 with an empty list</td><td>GET /process/{p}/kpi and /process/{p}/subprocess/{sp}/kpi</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D07">PO-D07</a></td><td>The process context drops custom attributes that GET /process returns</td><td>GET /process/{p}/context</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D08">PO-D08</a></td><td>PUT scope accepts a non-numeric horizon, after which every context call for the process fails</td><td>PUT /process/{p}/scope, GET /process/{p}/context</td><td class="sev">High</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D09">PO-D09</a></td><td>Children of an unknown subprocess return 200 with an empty page</td><td>GET /process/{p}/subprocess/{sp}/children</td><td class="sev">Low (design)</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+<tr><td><a href="#PO-D10">PO-D10</a></td><td>A supply chain action name longer than the column fails with an unhandled 500</td><td>POST /supplyChainAction</td><td class="sev">Low</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td><td class="yes">Reproduced</td></tr>
+</table>
+
+  <section id="AI-D01"><h2>AI-D01 - Creating a KPI without kpiConfigAttributes fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /kpis</code></td><th>Plan reference</th><td>A1</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-04-E01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 with a validation message (or 201 with an empty attribute list). The request must not reach the mapper with a null list.</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 "Cannot invoke java.util.List.iterator() because kpiConfigDtos is null". No KPI is created.</div></div>
+    <p class="src"><b>Source evidence:</b> mappers/KpiMapper.java, the @Named("kpiConfigAttributes") mapping iterates the list without a null check.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI noattr mupj36md",
+  "displayName": "PW Defect KPI noattr mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unexpected Error: An unhandled exception occurred: Cannot invoke \"java.util.List.iterator()\" because \"kpiConfigDtos\" is null.",
+  "timestamp": "01-10-2026 12:46:44"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D02"><h2>AI-D02 - KPI attribute isEnabled is overwritten with isActive</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /kpis</code></td><th>Plan reference</th><td>A2</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-04-E02</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The stored attribute keeps isEnabled = false as sent.</div><div class="act"><div class="lbl">Actual</div>201, and the returned (and stored) attribute has isEnabled = true.</div></div>
+    <p class="src"><b>Source evidence:</b> KpiMapper.kpi() calls setIsEnabled(kpi.getIsActive()).</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI enabled mupj36md",
+  "displayName": "PW Defect KPI enabled mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": false
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "createdOn": "2026-10-01T12:46:45.165843376",
+  "updatedOn": "2026-10-01T12:46:45.165843376",
+  "createdBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "id": "0a4fbaae-b16d-48b0-a8de-271ce3835ebf",
+  "attrName": "PW Defect KPI enabled mupj36md",
+  "displayName": "PW Defect KPI enabled mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "e997cd05-c25e-4216-8190-304f9dc6367c",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "kpiId": "0a4fbaae-b16d-48b0-a8de-271ce3835ebf",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D03"><h2>AI-D03 - Updating a KPI skips validation and stores an empty attrName</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>PUT /kpis/{id}</code></td><th>Plan reference</th><td>A3</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-06-E01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 "must not be empty", the same validation POST /kpis applies.</div><div class="act"><div class="lbl">Actual</div>200, and GET returns attrName "".</div></div>
+    <p class="src"><b>Source evidence:</b> KpiConfigurationController.java:151, the PUT request body has no @Valid.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">PUT</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "",
+  "displayName": "PW Defect KPI put mupj36md",
+  "description": "Open High Priority Action Items - Updated",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "createdOn": "2026-10-01T12:46:48.952875408",
+  "updatedOn": null,
+  "createdBy": null,
+  "updatedBy": null,
+  "id": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+  "attrName": "",
+  "displayName": "PW Defect KPI put mupj36md",
+  "description": "Open High Priority Action Items - Updated",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "createdOn": "2026-10-01T12:46:45.93",
+      "updatedOn": "2026-10-01T12:46:48.953",
+      "createdBy": null,
+      "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+      "id": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "attrName": "",
+      "displayName": "PW Defect KPI put mupj36md",
+      "description": "Open High Priority Action Items - Updated",
+      "isActive": true,
+      "isEnabled": true,
+      "kpiConfigAttributes": [
+        {
+          "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+          "kpiAttrName": "status",
+          "attrValue": "1",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        },
+        {
+          "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+          "kpiAttrName": "priority",
+          "attrValue": "2",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        }
+      ]
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D04"><h2>AI-D04 - Adding a KPI attribute without kpiId fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>PUT /kpis/{id}</code></td><th>Plan reference</th><td>A10 (new)</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-06-E04</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>200 with the new attribute linked to the KPI in the path (the id is already known), or a 400 that names the missing field.</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 org.hibernate.TransientPropertyValueException. Sending kpiId on the new attribute works.</div></div>
+    <p class="src"><b>Source evidence:</b> PUT maps the request to a new Kpi entity with the same id and saves it, so the new attribute has no persisted parent.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">PUT</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI put mupj36md",
+  "displayName": "PW Defect KPI put mupj36md",
+  "description": "Open High Priority Action Items - Updated",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "kpiAttrName": "actionType",
+      "attrValue": "4",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unexpected Error: An unhandled exception occurred: org.hibernate.TransientPropertyValueException: Not-null property references a transient value - transient instance must be saved before current operation: com.blueyonder.actionitem.entities.KpiConfigAttributes.kpiId -&gt; com.blueyonder.actionitem.entities.Kpi.",
+  "timestamp": "01-10-2026 12:46:48"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D05"><h2>AI-D05 - Updating a KPI clears createdBy</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>PUT /kpis/{id}</code></td><th>Plan reference</th><td>A11 (new)</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-06-E05</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>createdBy (and createdOn) are preserved after an update.</div><div class="act"><div class="lbl">Actual</div>The PUT response has createdBy null, and every later GET returns createdBy null. The audit trail loses the creator.</div></div>
+    <p class="src"><b>Source evidence:</b> PUT maps the request to a new entity with the same id and saves it (full replace).</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "createdOn": "2026-10-01T12:46:45.93",
+      "updatedOn": "2026-10-01T12:46:45.93",
+      "createdBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+      "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+      "id": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "attrName": "PW Defect KPI put mupj36md",
+      "displayName": "PW Defect KPI put mupj36md",
+      "description": "Open High Priority Action Items",
+      "isActive": true,
+      "isEnabled": true,
+      "kpiConfigAttributes": [
+        {
+          "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+          "kpiAttrName": "status",
+          "attrValue": "1",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        },
+        {
+          "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+          "kpiAttrName": "priority",
+          "attrValue": "2",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        }
+      ]
+    }
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">PUT</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI put mupj36md",
+  "displayName": "PW Defect KPI put mupj36md",
+  "description": "Open High Priority Action Items - Updated",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "createdOn": "2026-10-01T12:46:47.156764822",
+  "updatedOn": null,
+  "createdBy": null,
+  "updatedBy": null,
+  "id": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+  "attrName": "PW Defect KPI put mupj36md",
+  "displayName": "PW Defect KPI put mupj36md",
+  "description": "Open High Priority Action Items - Updated",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/3ef3cb67-dfb6-4654-b522-5e6e4537e3fe</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "createdOn": "2026-10-01T12:46:45.93",
+      "updatedOn": "2026-10-01T12:46:47.157",
+      "createdBy": null,
+      "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+      "id": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+      "attrName": "PW Defect KPI put mupj36md",
+      "displayName": "PW Defect KPI put mupj36md",
+      "description": "Open High Priority Action Items - Updated",
+      "isActive": true,
+      "isEnabled": true,
+      "kpiConfigAttributes": [
+        {
+          "id": "2c856e32-5a1b-40fe-8259-9d8d99f1bfdf",
+          "kpiAttrName": "status",
+          "attrValue": "1",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        },
+        {
+          "id": "9b28221d-a33c-4ca2-8272-29ead0df51d9",
+          "kpiAttrName": "priority",
+          "attrValue": "2",
+          "kpiId": "3ef3cb67-dfb6-4654-b522-5e6e4537e3fe",
+          "isActive": true,
+          "isEnabled": true
+        }
+      ]
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D06"><h2>AI-D06 - Reading an unknown KPI returns 200 with null data</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /kpis/{id}</code></td><th>Plan reference</th><td>A4</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-05-N01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>404 IBP_AI_40_1020, consistent with PUT and DELETE on the same id.</div><div class="act"><div class="lbl">Actual</div>200 {"data": null}. PUT on the same unknown id returns 404.</div></div>
+    <p class="src"><b>Source evidence:</b> KpiConfigurationService.findKpiById returns an empty wrapper instead of throwing EntityNotFoundException.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/7d6c1b3e-0000-4000-8000-000000000000</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": null
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">PUT</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis/7d6c1b3e-0000-4000-8000-000000000000</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "x",
+  "displayName": "x",
+  "kpiConfigAttributes": []
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s4">404</span></div><pre>{
+  "statusCode": 404,
+  "errorCode": "IBP_AI_40_1020",
+  "message": "Kpi not found: 7d6c1b3e-0000-4000-8000-000000000000",
+  "timestamp": "01-10-2026 12:46:51"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D07"><h2>AI-D07 - Two KPIs with the same attrName can be created</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Needs confirmation</td></tr>
+      <tr><th>API</th><td><code>POST /kpis</code></td><th>Plan reference</th><td>-</td></tr>
+      <tr><th>Removed test</th><td>Test_008 AI-04-E04</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>Product to confirm. If attrName identifies a KPI, the second create should return 400/409.</div><div class="act"><div class="lbl">Actual</div>Both creates return 201 with different ids. No unique constraint exists on attrName.</div></div>
+    <p class="src"><b>Source evidence:</b> No unique constraint on attrName was found in the service source.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - First create</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI dup mupj36md",
+  "displayName": "PW Defect KPI dup mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "0960f4f7-355f-4f34-8b5f-517e31af57ae",
+  "attrName": "PW Defect KPI dup mupj36md"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/kpis</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "attrName": "PW Defect KPI dup mupj36md",
+  "displayName": "PW Defect KPI dup mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "createdOn": "2026-10-01T12:46:52.294803152",
+  "updatedOn": "2026-10-01T12:46:52.294803152",
+  "createdBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "id": "a26f6471-6dc5-4f87-aa3f-270a5ff8e0c0",
+  "attrName": "PW Defect KPI dup mupj36md",
+  "displayName": "PW Defect KPI dup mupj36md",
+  "description": "Open High Priority Action Items",
+  "isActive": true,
+  "isEnabled": true,
+  "kpiConfigAttributes": [
+    {
+      "id": "241e4994-e852-43c3-9543-356e7d772737",
+      "kpiAttrName": "status",
+      "attrValue": "1",
+      "kpiId": "a26f6471-6dc5-4f87-aa3f-270a5ff8e0c0",
+      "isActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "5b216a2f-7023-4389-a805-979507f3e642",
+      "kpiAttrName": "priority",
+      "attrValue": "2",
+      "kpiId": "a26f6471-6dc5-4f87-aa3f-270a5ff8e0c0",
+      "isActive": true,
+      "isEnabled": true
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D08"><h2>AI-D08 - Action item search without a request body fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /process/{p}/actionitem/search and /process/{p}/subprocess/{sp}/actionitem/search</code></td><th>Plan reference</th><td>A5</td></tr>
+      <tr><th>Removed test</th><td>Test_004 AI-08-E01, Test_005 AI-09-E01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 (body required), or a default first page because the body is declared optional.</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 "Unhandled exception occurred" on both the process and the subprocess search.</div></div>
+    <p class="src"><b>Source evidence:</b> ActionItemProxyController declares @RequestBody(required = false) but ActionItemProxyService.getActionItemsWithUiConfig calls getFilter() on it.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 12:46:52"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/subprocess/SupplyReview/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 12:46:53"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D09"><h2>AI-D09 - An unknown filter.sort property fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem (via PO search)</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /process/{p}/actionitem/search</code></td><th>Plan reference</th><td>-</td></tr>
+      <tr><th>Removed test</th><td>Test_004 AI-08-E05</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 naming the invalid sort property.</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 "Unhandled exception occurred".</div></div>
+    <p class="src"><b>Source evidence:</b> The raw property name from filter.sort reaches the sort builder; the resulting exception is not mapped to a 400 (exact exception class not confirmed).</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "filter": {
+    "sort": "foo,asc"
+  },
+  "pageNumber": 0,
+  "pageSize": 5
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 12:46:54"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D10"><h2>AI-D10 - The top-level sort that planning-mfe sends is ignored</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service / planning-mfe</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /process/{p}/actionitem/search</code></td><th>Plan reference</th><td>A6</td></tr>
+      <tr><th>Removed test</th><td>Test_004 AI-08-E03</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>sort: "createdOn,asc" at the top level orders the results ascending (planning-mfe useActionItemList.ts sends it there), or the API rejects it.</div><div class="act"><div class="lbl">Actual</div>Results stay createdOn DESC. Only filter.sort is honoured. Item A was created before item B, yet B is listed first.</div></div>
+    <p class="src"><b>Source evidence:</b> planning-mfe src/pages/Assumptions/AssumptionsFlyout/ActionItems/useActionItemList.ts:26 sends top-level sort; the DTO only reads filter.sort.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "filter": {
+    "entityId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591"
+  },
+  "sort": "createdOn,asc",
+  "pageNumber": 0,
+  "pageSize": 10
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "id": "c717061b-4f13-47a0-8c6b-02368d9130df",
+      "name": "PW Defect B mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    },
+    {
+      "id": "07655db9-2e2f-4a26-9d35-a54ba26bcbe8",
+      "name": "PW Defect A mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    }
+  ],
+  "pager": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "numberOfElements": 2,
+    "totalElements": 2,
+    "totalPages": 1
+  }
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "filter": {
+    "entityId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+    "sort": "createdOn,asc"
+  },
+  "pageNumber": 0,
+  "pageSize": 10
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "id": "07655db9-2e2f-4a26-9d35-a54ba26bcbe8",
+      "name": "PW Defect A mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    },
+    {
+      "id": "c717061b-4f13-47a0-8c6b-02368d9130df",
+      "name": "PW Defect B mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    }
+  ],
+  "pager": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "numberOfElements": 2,
+    "totalElements": 2,
+    "totalPages": 1
+  }
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D11"><h2>AI-D11 - Search replaces the origin id with the process display name</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low (design)</td></tr>
+      <tr><th>API</th><td><code>POST /process/{p}/actionitem/search</code></td><th>Plan reference</th><td>A9</td></tr>
+      <tr><th>Removed test</th><td>Test_004 AI-08-P09</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>origin keeps the process id stored on the item (a separate display field can carry the name).</div><div class="act"><div class="lbl">Actual</div>The item is created with origin = process id, but the search returns origin = process display name. API consumers expecting ids get names.</div></div>
+    <p class="src"><b>Source evidence:</b> ActionItemProxyController.updateActionItemsResponse rewrites origin and sourceName.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create (direct AI service)</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/actionitems/v1/actionitems</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PW Defect A mupj36md",
+  "entityId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+  "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+  "sourceName": "PW Defect mupj36md",
+  "sourceType": "ASSUMPTION",
+  "origin": "0F303DBD-B67B-4455-982F-599AF85847D4",
+  "status": "0",
+  "actionType": "4",
+  "priority": "0",
+  "dueDate": "2025-04-03T07:28:04.684Z",
+  "description": "defect evidence",
+  "remarks": "defect evidence",
+  "assigneeUsers": [],
+  "notifyUsers": [],
+  "attributes": []
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "07655db9-2e2f-4a26-9d35-a54ba26bcbe8",
+  "origin": "0F303DBD-B67B-4455-982F-599AF85847D4",
+  "sourceName": "PW Defect mupj36md"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "filter": {
+    "entityId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+    "sort": "createdOn,asc"
+  },
+  "pageNumber": 0,
+  "pageSize": 10
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "id": "07655db9-2e2f-4a26-9d35-a54ba26bcbe8",
+      "name": "PW Defect A mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    },
+    {
+      "id": "c717061b-4f13-47a0-8c6b-02368d9130df",
+      "name": "PW Defect B mupj36md",
+      "origin": "IntegratedBusinessPlanning",
+      "sourceId": "6b77c5c6-268d-4d5c-9031-1bdb05b3c591",
+      "sourceName": "PW Defect mupj36md"
+    }
+  ],
+  "pager": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "numberOfElements": 2,
+    "totalElements": 2,
+    "totalPages": 1
+  }
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D12"><h2>AI-D12 - The filters endpoint accepts an invalid contextType on QA</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-actionitem</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /actionitems/filters?contextType=&amp;contextId=</code></td><th>Plan reference</th><td>A7</td></tr>
+      <tr><th>Removed test</th><td>Test_006 AI-02-E01</td><th>Reproduced on</th><td>QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 IBP_40_1027 for contextType=FOO, as /actionitems/editor returns in every environment.</div><div class="act"><div class="lbl">Actual</div>QA (Azure and Gravitee): 200 with the full filter configuration. INTEROP: 400. contextType is only validated while resolving local user-picker values, which depends on the tenant configuration.</div></div>
+    <p class="src"><b>Source evidence:</b> ActionItemCrudMetadataService.getFieldValues calls EntityTypeEnum.valueOf(contextType) only for local user-picker fields.</p>
+    <p class="lbl">Evidence captured on QA-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/actionitems/v1/actionitems/filters?contextType=FOO&amp;contextId=76632a26-2114-4cfc-90b2-d754cc30b96a</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "note": "truncated: full filter/editor configuration returned",
+  "keys": [
+    "filters"
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/actionitems/v1/actionitems/editor?contextType=FOO&amp;contextId=76632a26-2114-4cfc-90b2-d754cc30b96a</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">400</span></div><pre>{
+  "statusCode": 400,
+  "errorCode": "IBP_40_1027",
+  "message": "The operation could not be completed due to an invalid or inappropriate argument.",
+  "timestamp": "01-10-2026 12:47:26"
+}</pre></div></div></div>
+  </section>
+
+  <section id="AI-D13"><h2>AI-D13 - QA Azure IntegratedBusinessPlanning has no action item entity, and creating a process action item fails with 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service (data: QA Azure)</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /process/{p}/actionitem</code></td><th>Plan reference</th><td>-</td></tr>
+      <tr><th>Removed test</th><td>None (affects ActionItem Test_001 on QA Azure)</td><th>Reproduced on</th><td>QA-AZURE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>Every process has an actionItemEntityId. If one is missing, the API returns a 4xx that says so.</div><div class="act"><div class="lbl">Actual</div>GET /process/IntegratedBusinessPlanning has no actionItemEntityId on QA Azure, and the create returns 500 IBP_50_1025. The new specs use ProcessWithCustomAttribute on QA; existing Test_001 still targets IntegratedBusinessPlanning.</div></div>
+    <p class="src"><b>Source evidence:</b> Process data in the QA Azure realm (cbp-e2e-qa); PO does not guard a null action item entity.</p>
+    <p class="lbl">Evidence captured on QA-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "id": "35361F8B-A47F-4E7C-ABDC-56F096C02A2E",
+  "name": "IntegratedBusinessPlanning",
+  "actionItemEntityId": "(missing)"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/actionitem</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PW Defect no entity mupj3x3p",
+  "status": "0",
+  "actionType": "4",
+  "priority": "0",
+  "dueDate": "2025-04-03T07:28:04.684Z",
+  "description": "defect evidence",
+  "remarks": "defect evidence",
+  "sourceType": "PROCESS",
+  "sourceName": "IntegratedBusinessPlanning",
+  "processName": "IntegratedBusinessPlanning",
+  "assigneeUsers": [],
+  "notifyUsers": [],
+  "attributes": []
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 12:47:29"
+}</pre></div></div></div>
+  </section>
+
+  <section id="UF-D01"><h2>UF-D01 - filterPageId is not checked to be a filter page</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-ui-fields-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /list-page-config-with-filter</code></td><th>Plan reference</th><td>-</td></tr>
+      <tr><th>Removed test</th><td>UIFields Test_001 UF-02-E03</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>A listing page id (1) used as filterPageId returns 400, or no filters. The process filter page is 21.</div><div class="act"><div class="lbl">Actual</div>200, and filters contains the listing columns of page 1 instead of the status filter.</div></div>
+    <p class="src"><b>Source evidence:</b> Observed behaviour; the service loads any page id as the filter page without checking the page type.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Correct filter page (21)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/ui-fields/v1/list-page-config-with-filter?pageId=1&amp;entityName=PROCESS&amp;filterPageId=21</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "filters": [
+    "status"
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/ui-fields/v1/list-page-config-with-filter?pageId=1&amp;entityName=PROCESS&amp;filterPageId=1</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "filters": [
+    "displayName",
+    "description",
+    "progress",
+    "cycleName",
+    "status",
+    "startDate",
+    "actualStartDate",
+    "endDate",
+    "actualEndDate"
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="UF-D02"><h2>UF-D02 - detail-page-config accepts a listing page id</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-ui-fields-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /detail-page-config</code></td><th>Plan reference</th><td>-</td></tr>
+      <tr><th>Removed test</th><td>UIFields Test_001 UF-03-E03</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>A listing page id (1) returns 400 or an empty result. The process details page is 2.</div><div class="act"><div class="lbl">Actual</div>200, and the listing columns of page 1 are returned grouped as a details layout.</div></div>
+    <p class="src"><b>Source evidence:</b> The page type is not checked before building the grouped layout.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Correct details page (2)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/ui-fields/v1/detail-page-config?pageId=2&amp;entityName=PROCESS</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>[
+  {
+    "groupName": null,
+    "fields": [
+      "displayName",
+      "status"
+    ]
+  },
+  {
+    "groupName": "General",
+    "fields": [
+      "name",
+      "description",
+      "progress",
+      "cycleName",
+      "startDate",
+      "actualStartDate",
+      "endDate",
+      "actualEndDate"
+    ]
+  }
+]</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/ui-fields/v1/detail-page-config?pageId=1&amp;entityName=PROCESS</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>[
+  {
+    "groupName": null,
+    "fields": [
+      "displayName",
+      "status"
+    ]
+  },
+  {
+    "groupName": "General",
+    "fields": [
+      "description",
+      "progress",
+      "cycleName",
+      "startDate",
+      "actualStartDate",
+      "endDate",
+      "actualEndDate"
+    ]
+  }
+]</pre></div></div></div>
+  </section>
+
+  <section id="LM-D01"><h2>LM-D01 - planning-mfe's typed favourite DELETE URL has a double slash, and Gravitee rejects it</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-planning-mfe (client); Gravitee gateway</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>DELETE /type/{type}/entity/{entity}/views/{id}</code></td><th>Plan reference</th><td>L6</td></tr>
+      <tr><th>Removed test</th><td>LinkManagement Test_013 LM-07-E01</td><th>Reproduced on</th><td>INTEROP-GRAVITEE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>Removing a subprocess or interactive-cluster favourite in Planning Space deletes it (200) behind every gateway.</div><div class="act"><div class="lbl">Actual</div>planning-mfe sends <code>links/v1//type/...</code>. Gravitee answers 400 BY-API-G-C40020 "No API path found" and the favourite stays. Azure normalises the path and returns 200, so the defect only shows behind Gravitee.</div></div>
+    <p class="src"><b>Source evidence:</b> plan-sop-planning-mfe src/components/SideNav/SideNavWithRightPanel.tsx:2352 and :2357 build <code>`${linksUrl}/${config.apis.removeFavouiteForSubprocess(...)}`</code>, and src/config.ts:34 already starts that template with <code>/type/</code>. The untyped remove (:2362) and the add calls (:2306, :2310) produce a single slash.</p>
+    <p class="lbl">Evidence captured on INTEROP-GRAVITEE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create a typed favourite for an interactive cluster</div>
+        <div class="req"><span class="m">POST</span> <code>https://cbpf-test23.api.interop.na.blueyonder.dev/cbp/interop/ibp/links/v1/type/maasactor/entity/PWAutoFavCluster/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "43eb8a65-023e-458d-923e-f11e12cc551b",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - Delete it with the planning-mfe double-slash URL</div>
+        <div class="req"><span class="m">DELETE</span> <code>https://cbpf-test23.api.interop.na.blueyonder.dev/cbp/interop/ibp/links/v1//type/maasactor/entity/PWAutoFavCluster/views/43eb8a65-023e-458d-923e-f11e12cc551b</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">400</span></div><pre>{
+  "CorrelationID": "c8203e6c-c2d2-4f11-a03e-6cc2d26f11bb",
+  "ResponseCode": 400,
+  "ErrorMessage": "BY-API-G-C40020: No API path found that matches request '//type/maasactor/entity/PWAutoFavCluster/views/43eb8a65-023e-458d-923e-f11e12cc551b'."
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3 - List the typed favourites (still present)</div>
+        <div class="req"><span class="m">GET</span> <code>https://cbpf-test23.api.interop.na.blueyonder.dev/cbp/interop/ibp/links/v1/type/maasactor/entity/PWAutoFavCluster/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "views": [
+    {
+      "id": "43eb8a65-023e-458d-923e-f11e12cc551b",
+      "name": "PWAutoFavView",
+      "viewId": "6650aaaa0000000000000001",
+      "containerId": "PWAutoFavContainer",
+      "isActive": true,
+      "isScopeEnabled": false
+    }
+  ]
+}</pre></div></div></div>
+    <p class="lbl">For comparison, INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Same double-slash DELETE through Azure</div>
+        <div class="req"><span class="m">DELETE</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1//type/maasactor/entity/PWAutoFavCluster/views/bc9c9101-0c51-4083-b678-a2eaf45eb2f8</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>View with id [bc9c9101-0c51-4083-b678-a2eaf45eb2f8] deleted for Entity Id [PWAutoFavCluster] of type [maasactor]</pre></div></div></div>
+  </section>
+
+  <section id="LM-D02"><h2>LM-D02 - Favourite POST ignores name and isScopeEnabled when the catalogue row exists</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-link-management</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /entity/{entityId}/views</code>, <code>POST /type/{type}/entity/{entity}/views</code></td><th>Plan reference</th><td>L5</td></tr>
+      <tr><th>Removed test</th><td>LinkManagement Test_013 LM-04-E01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The request name and isScopeEnabled are stored (or the API rejects a conflicting value).</div><div class="act"><div class="lbl">Actual</div>201 with the original name and isScopeEnabled. The tenant-wide catalogue row is matched on (viewId, containerId) and the rest of the request is silently ignored, for every user.</div></div>
+    <p class="src"><b>Source evidence:</b> service/LinksService.java createUserFavorite: when <code>findByViewIdAndContainerIdAndTenantId</code> finds a row, the existing row is returned without applying the request DTO.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create a favourite</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavProcess/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - Post the same viewId and containerId with a new name and isScopeEnabled</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavProcess/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavViewRenamed",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": true
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+  </section>
+
+  <section id="LM-D03"><h2>LM-D03 - The untyped favourites GET also returns typed favourites</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-link-management</td><th>Severity</th><td>Low (design)</td></tr>
+      <tr><th>API</th><td><code>GET /entity/{entityId}/views</code></td><th>Plan reference</th><td>L3</td></tr>
+      <tr><th>Removed test</th><td>LinkManagement Test_013 LM-02-E01</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The untyped route returns only favourites stored untyped (entity type <code>*</code>), mirroring how the untyped POST and DELETE use <code>*</code>.</div><div class="act"><div class="lbl">Actual</div>200 and the subprocess-typed favourite of the same entity id is listed. The untyped DELETE then cannot remove it (404), so the UI can show a favourite it cannot delete through the same route.</div></div>
+    <p class="src"><b>Source evidence:</b> service/LinksService.java getUserFavoritesByEntity: for <code>Constants.GLOBAL</code> it calls <code>ViewRepository.findAllByUserIdAndEntityIdAndTenantId</code>, whose query has no <code>entity_type</code> condition.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create a subprocess-typed favourite</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/type/subprocess/entity/PWAutoFavCrossType/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - List favourites through the untyped route for the same entity id</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavCrossType/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "views": [
+    {
+      "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+      "name": "PWAutoFavView",
+      "viewId": "6650aaaa0000000000000001",
+      "containerId": "PWAutoFavContainer",
+      "isActive": true,
+      "isScopeEnabled": false
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="LM-D04"><h2>LM-D04 - Deleting a favourite never removes its catalogue row</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-link-management</td><th>Severity</th><td>Low (design)</td></tr>
+      <tr><th>API</th><td><code>DELETE /entity/{entityId}/views/{id}</code>, <code>DELETE /type/{type}/entity/{entity}/views/{id}</code></td><th>Plan reference</th><td>L4</td></tr>
+      <tr><th>Removed test</th><td>LinkManagement Test_013 LM-06-P02</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>A catalogue row with no remaining favourites is removed, or a route exists to remove it.</div><div class="act"><div class="lbl">Actual</div>DELETE removes only the user association. Re-creating returns the same catalogue id, and <code>GET /views</code> still lists the row. No route deletes catalogue rows, so they accumulate per tenant (and keep the stale name, see LM-D02).</div></div>
+    <p class="src"><b>Source evidence:</b> service/LinksService.java deleteUserFavorite deletes from <code>user_entity_dashboard</code> only; controllers/LinksController.java has no delete mapping for <code>/views/{id}</code>.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create a favourite</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavProcess2/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - Delete the favourite</div>
+        <div class="req"><span class="m">DELETE</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavProcess2/views/bc9c9101-0c51-4083-b678-a2eaf45eb2f8</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>View with id [bc9c9101-0c51-4083-b678-a2eaf45eb2f8] deleted for Entity Id [PWAutoFavProcess2]</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3 - Create it again (same catalogue id)</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/entity/PWAutoFavProcess2/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+  "name": "PWAutoFavView",
+  "viewId": "6650aaaa0000000000000001",
+  "containerId": "PWAutoFavContainer",
+  "isActive": true,
+  "isScopeEnabled": false
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 4 - Read the view catalogue (trimmed to this row)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/views</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "views": [
+    {
+      "id": "bc9c9101-0c51-4083-b678-a2eaf45eb2f8",
+      "name": "PWAutoFavView",
+      "viewId": "6650aaaa0000000000000001",
+      "containerId": "PWAutoFavContainer",
+      "isActive": true,
+      "isScopeEnabled": false
+    }
+  ]
+}</pre></div></div></div>
+  </section>
+
+  <section id="LM-D05"><h2>LM-D05 - An admin (applyToAllUsers) global preset fails with 404 LIAM resource *.* not found</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-link-management</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /preset</code> (and <code>POST /preset/clear</code> with <code>applyToAllUsers: true</code>)</td><th>Plan reference</th><td>LM-V1-E02</td></tr>
+      <tr><th>Removed test</th><td>LinkManagement Test_014 LM-V1-E02</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The admin flow either applies the global default to all tenant users, or rejects the request with a 400 that says a global entity is not supported for applyToAllUsers.</div><div class="act"><div class="lbl">Actual</div>404 IBP_LINK_40_SRV_006_404 "LIAM resource *.* was not found". The same body with applyToAllUsers false returns 201. The admin clear for <code>*</code> fails the same way.</div></div>
+    <p class="src"><b>Source evidence:</b> service/FilterPresetService.java createDefaultForAllUsers and deleteDefaultForAllUsers map a blank or <code>*</code> entity to GLOBAL and then call LiamResourceUserService.getAllUsersByResource("*", "*"), which asks LIAM for resource <code>*.*</code> and maps the 404 to LIAM_RESOURCE_NOT_FOUND. FilterPresetRequestDto.isBulkEntityIdentificationValid explicitly lets the global entity through.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Create a global preset for all users</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/preset</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "viewId": "6650bbbb0000000000000001",
+  "entityId": "*",
+  "entityType": "*",
+  "entityName": "*",
+  "filterId": "6650cccc-0000-4000-8000-000000000001",
+  "applyToAllUsers": true
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s4">404</span></div><pre>{
+  "statusCode": 404,
+  "errorCode": "IBP_LINK_40_SRV_006_404",
+  "message": "LIAM resource *.* was not found",
+  "timestamp": "01-10-2026 02:19:40"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - Create the same global preset for the current user only</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/links/v1/preset</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "viewId": "6650bbbb0000000000000001",
+  "entityId": "*",
+  "entityType": "*",
+  "entityName": "*",
+  "filterId": "6650cccc-0000-4000-8000-000000000001",
+  "applyToAllUsers": false
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "createdOn": "2026-10-01T14:19:40.65566984",
+  "updatedOn": "2026-10-01T14:19:40.65566984",
+  "createdBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "updatedBy": "31b95517-dd75-4734-b9a6-b3dc0be7ecd4",
+  "id": "6a71aabc-b3ee-441c-8379-168069263507",
+  "viewId": "6650bbbb0000000000000001",
+  "filterId": "6650cccc-0000-4000-8000-000000000001",
+  "entityId": "*",
+  "entityType": "*"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D01"><h2>PO-D01 - Process search with pageSize 0 or a negative pageNumber fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /process/search</code></td><th>Plan reference</th><td>D1</td></tr>
+      <tr><th>Plan test case</th><td>PO-03-E01, PO-03-E02 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 with the validation the service already raises (2082 BAD_REQUEST_SERVICE_ERROR for pageSize, 2031 PAGE_OFFSET_INVALID for pageNumber).</div><div class="act"><div class="lbl">Actual</div>500 IBP_PO_50_2018 "Unhandled exception occurred : error.service.bad.request" (pageSize 0) and "... : page.offset.invalid" (pageNumber -1).</div></div>
+    <p class="src"><b>Source evidence:</b> service/impl/ProcessService.java searchProcesses throws POServiceException(BAD_REQUEST_SERVICE_ERROR) for pageSize &lt;= 0 inside a try block whose final <code>catch (Exception ex)</code> rewraps every exception as UNHANDLED_EXCEPTION.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - pageSize 0</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 0,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_PO_50_2018",
+  "message": "Unhandled exception occurred : error.service.bad.request",
+  "timestamp": "01-10-2026 03:42:48"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - pageNumber -1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": -1,
+  "pageSize": 5,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_PO_50_2018",
+  "message": "Unhandled exception occurred : page.offset.invalid",
+  "timestamp": "01-10-2026 03:42:49"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D02"><h2>PO-D02 - Process search pager: totalPages is one too high on exact multiples, and totalElements is 0 past the last page</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /process/search</code></td><th>Plan reference</th><td>D2</td></tr>
+      <tr><th>Plan test case</th><td>PO-03-E04, PO-03-E05 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>totalPages = ceil(totalElements / pageSize), so 33 processes at pageSize 33 is 1 page. totalElements stays 33 on every page.</div><div class="act"><div class="lbl">Actual</div>pageSize 33 reports totalPages 2 (the second page is always empty). A page past the end reports totalElements 0 and totalPages 1. The PO listing grid shows an extra empty page whenever the count is a multiple of the page size. Seen with 33, 12, 4 and 13 processes on the four environments.</div></div>
+    <p class="src"><b>Source evidence:</b> repository/ProcessDynamicRepository.java:240 <code>pageDto.setTotalPages((int) (pageDto.getTotalElements() / pageSize + 1))</code>; totalElements is read from the returned rows, so an empty page yields 0.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Count every process</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 500,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span> (rows trimmed)</div><pre>{
+  "pager": {
+    "pageNumber": 0,
+    "pageSize": 500,
+    "numberOfElements": 33,
+    "totalElements": 33,
+    "totalPages": 1
+  }
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - pageSize equal to the total</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 33,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span> (rows trimmed)</div><pre>{
+  "pager": {
+    "pageNumber": 0,
+    "pageSize": 33,
+    "numberOfElements": 33,
+    "totalElements": 33,
+    "totalPages": 2
+  }
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3 - A page past the end</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 9999,
+  "pageSize": 5,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [],
+  "pager": {
+    "pageNumber": 9999,
+    "pageSize": 5,
+    "numberOfElements": 0,
+    "totalElements": 0,
+    "totalPages": 1
+  }
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D03"><h2>PO-D03 - An empty-array search filter fails with 500 and the error message returns the full SQL query</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Medium (information disclosure)</td></tr>
+      <tr><th>API</th><td><code>POST /process/search</code></td><th>Plan reference</th><td>D3</td></tr>
+      <tr><th>Plan test case</th><td>PO-03-E03 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>An empty value list is ignored (no filter) or rejected with 400. Error messages never contain SQL.</div><div class="act"><div class="lbl">Actual</div>500 IBP_PO_50_2018 whose message is "JDBC exception executing SQL [SELECT ...]" followed by the whole native query: table and column names (<code>node_attr_mapping</code>, <code>process_report_directory</code>, ...), the tenant filter and the RBAC id list.</div></div>
+    <p class="src"><b>Source evidence:</b> repository/ProcessDynamicRepository.java buildFilterClause appends <code>AND ns.status</code> and then adds the <code>IN (...)</code> list only when it is non-empty, leaving a dangling predicate; ProcessService.searchProcesses copies <code>ex.getMessage()</code> into the UNHANDLED_EXCEPTION it returns.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 10,
+  "filters": {
+    "status": []
+  }
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span> (message truncated here)</div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_PO_50_2018",
+  "message": "Unhandled exception occurred : JDBC exception executing SQL [SELECT           n.id,           n.name,           n.description,           n.display_name               AS displayName,           n.start_transition_type      AS startTransitionType,           n.end_transition_type        AS endTransitionType,           ISNULL(n.sequence, 999999)   AS sequence,           n.start_api                  AS startApi,           n.end_api                    AS endApi,           n.status_callback_api        AS statusCallbackApi,           n.action_item_entity_id      AS actionItemEntityId,           n.link_entity_id             AS linkEntityId,           n.is_active                  AS isActive,           ... (truncated)",
+  "timestamp": "01-10-2026 03:42:53"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D04"><h2>PO-D04 - Any sort element in the search body fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /process/search</code></td><th>Plan reference</th><td>- (new)</td></tr>
+      <tr><th>Plan test case</th><td>PO-03-E05 (sort has no effect; not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div><code>sort: [{columnName, direction, sequence}]</code>, a documented field of ProcessSearchRequestDto, is accepted (and applied, or ignored as today) or rejected with 400.</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 "Unhandled exception occurred : {0}" for any sort element. Neither lui nor planning-mfe sends <code>sort</code> today, so the UI is not affected.</div></div>
+    <p class="src"><b>Source evidence:</b> utils/Sort.java has only constructors with arguments and no <code>@JsonCreator</code>, so Jackson cannot deserialize a <code>List&lt;Sort&gt;</code>; the failure is not mapped to a 400.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 5,
+  "filters": {},
+  "sort": [
+    { "columnName": "name", "direction": "ASC", "sequence": 1 }
+  ]
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 03:42:53"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D05"><h2>PO-D05 - Search rows return the string "null" for null columns, including actionItemEntityId</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Medium</td></tr>
+      <tr><th>API</th><td><code>POST /process/search</code></td><th>Plan reference</th><td>- (new)</td></tr>
+      <tr><th>Plan test case</th><td>PO-03-P02 (nullable keys not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE (actionItemEntityId only on QA-AZURE)</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>A null column is JSON <code>null</code> or omitted, as <code>updatedOn</code> already is and as GET /process does.</div><div class="act"><div class="lbl">Actual</div><code>namespaceId</code>, <code>galleryId</code> and <code>updatedBy</code> are the string "null" on every environment. On QA-AZURE, where IntegratedBusinessPlanning has no action item entity (GET /process omits the key), the search returns <code>actionItemEntityId: "null"</code>, a truthy value a client takes for a real entity id.</div></div>
+    <p class="src"><b>Source evidence:</b> repository/ProcessDynamicRepository.java:262-286 builds every string column with <code>String.valueOf(obj[i++])</code>, which turns null into "null".</p>
+    <p class="lbl">Evidence captured on QA-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Search (trimmed to the IntegratedBusinessPlanning row and the affected fields)</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/process-orchestration/v1/process/search</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "pageNumber": 0,
+  "pageSize": 500,
+  "filters": {}
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "data": [
+    {
+      "name": "IntegratedBusinessPlanning",
+      "actionItemEntityId": "null",
+      "namespaceId": "null",
+      "galleryId": "null",
+      "updatedBy": "null",
+      "updatedOn": null
+    }
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - The same process through GET (trimmed)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/qa/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "name": "IntegratedBusinessPlanning",
+  "actionItemEntityId": "(key absent)"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D06"><h2>PO-D06 - KPIs of an unknown process or subprocess return 200 with an empty list</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /process/{p}/kpi</code>, <code>GET /process/{p}/subprocess/{sp}/kpi</code></td><th>Plan reference</th><td>D4, D4b</td></tr>
+      <tr><th>Plan test case</th><td>PO-09-E01, PO-10-N01 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>404 (or the RBAC rejection the other process routes give) for a process or subprocess that does not exist.</div><div class="act"><div class="lbl">Actual</div>200 <code>[]</code> for both routes, indistinguishable from a process with no KPI configured. The plan expected the subprocess route to fail (D4b); it also returns 200 [].</div></div>
+    <p class="src"><b>Source evidence:</b> service/KpiService.java getKPIForProcess catches every exception and returns the list built so far; neither KPI route has <code>@PreAuthorize</code>.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 - Unknown process</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWNoSuchProcess/kpi</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>[]</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - Unknown subprocess</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/subprocess/PWNoSuchSubprocess/kpi</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>[]</pre></div></div></div>
+      <div class="step"><div class="step-h">For comparison - scope of the same unknown process</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWNoSuchProcess/scope</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">401</span></div><pre>{
+  "statusCode": 401,
+  "errorCode": "IBP_40_1032",
+  "message": "Access denied:User lacks view permission on resource PROCESS.PWNoSuchProcess",
+  "timestamp": "01-10-2026 03:43:01"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D07"><h2>PO-D07 - The process context drops custom attributes that GET /process returns</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>GET /process/{p}/context</code> (with and without <code>all=true</code>)</td><th>Plan reference</th><td>- (new)</td></tr>
+      <tr><th>Plan test case</th><td>PO-04-P04 (attributes excluded from the comparison)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The context, which planning-mfe loads on every Planning Space open, returns the same <code>attributes</code> as GET /process for the same process.</div><div class="act"><div class="lbl">Actual</div>An attribute added through the attribute API is returned by GET /process but the context returns <code>attributes: []</code>. Also seen on QA with the existing attributes of IntegratedBusinessPlanning.</div></div>
+    <p class="src"><b>Source evidence:</b> service/impl/ProcessService.java:920 getProcessDetails (used by the context) passes the process through updateAttributeValueNames, which removes attributes UI Fields has no value names for; GET /process (ProcessController.java:128) reads through getProcessDetailsSequentialV3, which keeps them.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01) on a process created from BY-Template for the test</p>
+      <div class="step"><div class="step-h">Step 1 - Add a custom attribute</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/attribute</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWDefectAttr",
+  "value": "Medium",
+  "isActive": true
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">201</span></div><pre>{
+  "id": "58104eab-6c14-4ee0-8fc9-81daed89ae11",
+  "attrValue": "Medium",
+  "attrName": "PWDefectAttr",
+  "nodeId": "BC611694-24B5-4EEE-8499-51F6C3F6BFDA",
+  "isActive": true
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - GET /process (trimmed)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "name": "PWDefectmuppds6g",
+  "attributes": [
+    { "name": "PWDefectAttr", "value": "Medium" }
+  ]
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3 - GET context (trimmed; the summary without all=true is the same)</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/context?all=true</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "name": "PWDefectmuppds6g",
+  "attributes": []
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D08"><h2>PO-D08 - PUT scope accepts a non-numeric horizon, after which every context call for the process fails</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>High</td></tr>
+      <tr><th>API</th><td><code>PUT /process/{p}/scope</code>, <code>GET /process/{p}/context</code></td><th>Plan reference</th><td>- (new; extends the "no validation" note on PO-06)</td></tr>
+      <tr><th>Plan test case</th><td>None (found while building PO-06)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>PUT rejects a horizon whose <code>pastDays</code> or <code>futureDays</code> is not a whole number with 400, so a stored scope can always be read.</div><div class="act"><div class="lbl">Actual</div>PUT returns 200 "Scope updated successfully" and GET /scope returns the stored value, but from then on every GET /context (with and without <code>all=true</code>) returns 400 IBP_40_1027. planning-mfe calls <code>/context?all=true</code> on every Planning Space load and treats a failure as a fatal page error, so one bad save in lui Settings makes Planning Space unusable for every user of that process until the scope is fixed through the API.</div></div>
+    <p class="src"><b>Source evidence:</b> ProcessService.updateScope stores any JSON object; ProcessService.getProcessContext passes <code>horizon.pastDays</code>/<code>futureDays</code> to DateUtil.computeHorizon, which calls <code>Integer.parseInt</code> and throws NumberFormatException.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01) on a process created from BY-Template for the test (deleted afterwards)</p>
+      <div class="step"><div class="step-h">Step 1 - Save a non-numeric horizon</div>
+        <div class="req"><span class="m">PUT</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/scope</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "horizon": {
+    "pastDays": "ten",
+    "futureDays": "20"
+  }
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>Scope updated successfully</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 2 - The scope reads back</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/scope</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "horizon": {
+    "pastDays": "ten",
+    "futureDays": "20"
+  }
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 3 - The context (planning-mfe call) fails</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/context?all=true</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">400</span></div><pre>{
+  "statusCode": 400,
+  "errorCode": "IBP_40_1027",
+  "message": "The operation could not be completed due to an invalid or inappropriate argument.",
+  "timestamp": "01-10-2026 03:43:53"
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">Step 4 - The context summary (lui call) fails too</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/PWDefectmuppds6g/context</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">400</span></div><pre>{
+  "statusCode": 400,
+  "errorCode": "IBP_40_1027",
+  "message": "The operation could not be completed due to an invalid or inappropriate argument.",
+  "timestamp": "01-10-2026 03:43:53"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D09"><h2>PO-D09 - Children of an unknown subprocess return 200 with an empty page</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low (design)</td></tr>
+      <tr><th>API</th><td><code>GET /process/{p}/subprocess/{sp}/children</code></td><th>Plan reference</th><td>D8</td></tr>
+      <tr><th>Plan test case</th><td>PO-11-E04 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>The same answer as GET of that subprocess: an RBAC rejection or 404.</div><div class="act"><div class="lbl">Actual</div>200 with an empty page. The route has no <code>@PreAuthorize</code> and no existence check, while GET of the same subprocess returns 401 IBP_40_1032. A typo in the subprocess name looks like a leaf subprocess.</div></div>
+    <p class="src"><b>Source evidence:</b> rest/controller/NodeController.java:104 has no <code>@PreAuthorize</code>; NodeService.getChildNodes runs the stored procedure for any name.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/subprocess/PWNoSuchSubprocess/children</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s2">200</span></div><pre>{
+  "pager": {
+    "totalElements": 0,
+    "pageNumber": 0,
+    "pageSize": 20,
+    "numberOfElements": 0,
+    "totalPages": 1
+  },
+  "data": []
+}</pre></div></div></div>
+      <div class="step"><div class="step-h">For comparison - GET of the same subprocess</div>
+        <div class="req"><span class="m">GET</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/process/IntegratedBusinessPlanning/subprocess/PWNoSuchSubprocess</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>(no body)</pre></div>
+        <div><div class="lbl">Response <span class="code s4">401</span></div><pre>{
+  "statusCode": 401,
+  "errorCode": "IBP_40_1032",
+  "message": "Access denied:User lacks view permission on resource SUBPROCESS.IntegratedBusinessPlanning.PWNoSuchSubprocess",
+  "timestamp": "01-10-2026 03:43:03"
+}</pre></div></div></div>
+  </section>
+
+  <section id="PO-D10"><h2>PO-D10 - A supply chain action name longer than the column fails with an unhandled 500</h2>
+    <table class="meta">
+      <tr><th>Service</th><td>plan-sop-process-orchestration-service</td><th>Severity</th><td>Low</td></tr>
+      <tr><th>API</th><td><code>POST /supplyChainAction</code></td><th>Plan reference</th><td>D7</td></tr>
+      <tr><th>Plan test case</th><td>PO-16-E02 (not asserted)</td><th>Reproduced on</th><td>INTEROP-AZURE, INTEROP-GRAVITEE, QA-AZURE, QA-GRAVITEE</td></tr>
+    </table>
+    <div class="ea"><div class="exp"><div class="lbl">Expected</div>400 naming the field, the same class of answer as a duplicate or missing name (400 IBP_40_1031).</div><div class="act"><div class="lbl">Actual</div>500 IBP_50_1025 "Unhandled exception occurred : {0}". Nothing is created.</div></div>
+    <p class="src"><b>Source evidence:</b> The SupplyChainAction entity has no size validation, so the database truncation error reaches the generic handler.</p>
+    <p class="lbl">Evidence captured on INTEROP-AZURE (2026-10-01)</p>
+      <div class="step"><div class="step-h">Step 1 (name shortened here; 321 characters were sent)</div>
+        <div class="req"><span class="m">POST</span> <code>https://api-tst.jdadelivers.com/cbp/interop/ibp/process-orchestration/v1/supplyChainAction</code></div>
+        <div class="grid"><div><div class="lbl">Request payload</div><pre>{
+  "name": "PWDefectSCA_muppds6g_xxxxxxxx...xxxx",
+  "type": "CHANGE_MEASURE",
+  "description": "Playwright SCA",
+  "procedureName": "PWAutoProcedure",
+  "uiConfig": "{}"
+}</pre></div>
+        <div><div class="lbl">Response <span class="code s5">500</span></div><pre>{
+  "statusCode": 500,
+  "errorCode": "IBP_50_1025",
+  "message": "Unhandled exception occurred : {0}",
+  "timestamp": "01-10-2026 03:43:05"
+}</pre></div></div></div>
+  </section>
+<section id="ENV"><h2>Environment issues (not product defects)</h2>
+<table class="meta"><tr><th>QA Gravitee subprocess delete permission</th><td>The QA Gravitee machine client (<code>cbpf-test27</code>) can create subprocesses but <code>DELETE /process/{p}/subprocess/{sp}</code> returns 401 <code>IBP_40_1032</code> "Access denied:User lacks delete permission on resource SUBPROCESS.IntegratedBusinessPlanning.&lt;name&gt;". Test_005 AI-09-P03 is skipped on QA Gravitee for this reason. Three <code>PWChild*</code> subprocesses created on 2026-10-01 are still listed under IntegratedBusinessPlanning/SupplyReview (GET <code>.../subprocess/SupplyReview/children</code>, re-checked later on 2026-10-01); the machine client cannot remove them, so a user with delete permission has to.</td></tr>
+<tr><th>Second-realm credentials</th><td>Test_008 AI-05-E01 (tenant isolation) is skipped on QA because the <code>REALM_*_SOURCE</code> machine credentials are rejected by the identity provider.</td></tr></table>
+</section>
+</body></html>

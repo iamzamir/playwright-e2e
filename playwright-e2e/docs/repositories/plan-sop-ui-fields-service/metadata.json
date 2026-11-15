@@ -1,0 +1,76 @@
+{
+  "name": "plan-sop-ui-fields-service",
+  "displayName": "UI Fields Service",
+  "org": "BY-Product-Development",
+  "type": "backend-service",
+  "language": "java",
+  "runtime": "Java 21",
+  "framework": "Spring Boot 3.5.16",
+  "rootPackage": "com.blueyonder.crud",
+  "commonsVersion": "2dacec2-SNAPSHOT",
+  "buildTool": "gradle",
+  "localPort": 8086,
+  "swaggerPath": "/swagger-ui/index.html",
+  "database": {
+    "engine": "azure-sql-server",
+    "nameEnvVar": "azuresql_dc_database",
+    "migrations": "liquibase",
+    "maxPoolSize": 50,
+    "requiresExplicitEnvVars": true
+  },
+  "controllers": 9,
+  "entities": 10,
+  "gatewayPrefix": {
+    "QA": { "old": "cbp/qa/ibp/ui-fields/v1", "new": "UNCONFIRMED (setup.js reuses OLD)" },
+    "INTEROP": { "old": "cbp/interop/ibp/ui-fields/v1", "new": "UNCONFIRMED (setup.js reuses OLD)" },
+    "PSR": { "old": "cbp/psr/ibp/ui-fields/v1", "new": "UNCONFIRMED (setup.js reuses OLD)" }
+  },
+  "envVars": ["UI_FIELDS_BASE"],
+  "securityToggles": {
+    "LIAM_ENABLED": true,
+    "LIAM_RBAC_ENABLED": true,
+    "LIAM_ABAC_ENABLED": true,
+    "liamRbacCacheTimeout": 0
+  },
+  "dependsOn": ["plan-sop-po-be-commons", "liam-rbac"],
+  "consumedBy": ["plan-sop-lui", "plan-sop-ui-automation"],
+  "notConsumedBy": ["plan-sop-planning-mfe"],
+  "luiUsedRoutes": ["GET /list-page-config", "GET /list-page-config-with-filter", "GET /detail-page-config", "GET /page/{name}/editor"],
+  "routes": { "total": 33, "active": 28, "deprecated": 3, "devMock": 2 },
+  "automation": {
+    "specGlobs": ["tests/ProcessOrchestrationBackend/UIFields/**"],
+    "directCoverage": true,
+    "specs": 2,
+    "tests": 39,
+    "endpointCoverage": { "exercised": 4, "active": 28, "asOf": "2026-10-05" },
+    "indirectCoverageNote": "Exercised through lui (ProcessOrchestration/** UI specs) only; planning-mfe does not call this service.",
+    "pageObjects": ["process.page.ts", "process-settings.page.ts"],
+    "utilities": ["util/ui-fields.util.ts"],
+    "testSuites": ["POBackendUIFieldsBatch.json", "POBackendSmokeBatch.json"],
+    "testDataAreas": [
+      "testdata/INTEROP/ProcessOrchestrationBackend/UIFields",
+      "testdata/QA/ProcessOrchestrationBackend/UIFields"
+    ],
+    "criticalConfigEndpoints": [
+      "/list-page-config",
+      "/detail-page-config",
+      "/filter-config",
+      "/list-page-config-with-filter",
+      "/page/{name}/editor",
+      "/ui-component"
+    ],
+    "untestedAreas": [
+      "filter-config",
+      "page-registry",
+      "attribute-crud",
+      "ui-field-crud",
+      "rbac-abac-enforcement",
+      "ui-component-registry",
+      "subscriptions",
+      "field-rules"
+    ],
+    "nextRecommendedSpec": "Attribute CRUD + values lifecycle (tenant-wide, serial, with teardown)"
+  },
+  "lastReviewed": "2026-10-05",
+  "qualityGates": ["CodeQL", "Codacy", "42Crunch", "BlackDuck", "Spotless"]
+}

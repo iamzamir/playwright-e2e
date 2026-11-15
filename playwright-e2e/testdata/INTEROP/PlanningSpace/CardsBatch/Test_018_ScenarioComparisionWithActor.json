@@ -1,0 +1,22 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT_OPTION": "string (required)",
+    "ACTORS_PROCEDURE1": "object[] (required)",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "TestProcNew",
+  "VIEW_NAME": "Scenario Card Publish Procedure",
+  "DATA_ENDPOINT_OPTION": "Snowflake Data Source",
+  "ACTORS_PROCEDURE1": [
+    {
+      "actorName": "scs-actor-list",
+      "procedureName": "SCSMetadataFillRate",
+      "labelName": "Select Actor"
+    }
+  ],
+  "SCENARIO_TO_APPLY_IN_SCENARIOS": "Child_Scn_2"
+}

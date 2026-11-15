@@ -1,0 +1,12 @@
+{
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION": "PS Auto Assumption 5",
+  "VIEW_NAME": "duplicate view automation assumption",
+  "DUPLICATED_VIEW_NAME": "duplicate view automation assumption - Copy",
+  "CARDS": ["Maas Pivot Card", "BDE Card", "Maas Chart", "Demand Chart"],
+  "ACTORS_AND_DEFAULT_PROCEDURE": [
+    { "label": "Insight", "value": "Insight_actor" },
+    { "label": "Default Procedure", "value": "OnDemandMaasCluster" }
+  ]
+}

@@ -1,0 +1,12 @@
+/*
+ * Applied to the page and its frames while a `stableCapture` visual snapshot is taken (util/visual-helper.util.ts, plan T9.11).
+ * - Scrollbars: one that appears only when a grid holds one more row moved the header refresh icon by 15 px
+ *   (PO Planning Views, visual run 78), so they are hidden for a stable layout.
+ * - Portal background: #portal-bg paints an animated canvas behind the header and the page frame, so no two captures
+ *   matched in strict mode (2026-11-12). It is hidden and replaced with a solid navy close to its average colour, so the
+ *   header still looks like the product.
+ */
+*::-webkit-scrollbar { display: none !important; }
+* { scrollbar-width: none !important; }
+[data-testid="luminate-portal-background"] { background: #07102e !important; }
+[data-testid="luminate-portal-background"] canvas { visibility: hidden !important; }

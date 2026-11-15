@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "IDSPAutomationProcess",
+    "PROCESS_NAME_NO_SCENARIO": "IDSPProcessWithNoScenario",
+    "PROCESS_NAME_BASE_SCENARIO": "ProcessInteractive"
+}

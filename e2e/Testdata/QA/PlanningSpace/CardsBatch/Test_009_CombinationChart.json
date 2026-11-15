@@ -1,0 +1,9 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "combination chart test",
+    "DATA_ENDPOINT1":"https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/ColumnBar",
+    "DATA_ENDPOINT2": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/LineArea",
+    "NO_DATA_ENDPOINT":"https://jsonblob.com/api/1292746807116161024",
+    "WRONG_ENDPOINT": "invalid/endpoint"
+}

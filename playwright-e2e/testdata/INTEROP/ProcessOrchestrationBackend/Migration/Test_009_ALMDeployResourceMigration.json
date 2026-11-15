@@ -1,0 +1,79 @@
+{
+  "_schema": {
+    "RESOURCE_NAME_PREFIX": "string (required) - prefix for the generated resource name",
+    "PUBLISH_PAYLOAD": "object (required) - publish envelope; processes is filled at runtime with 5 source-realm process names",
+    "EXPORT_PAYLOAD": "object (required) - export envelope fallback; tests reuse the scoped publish payload when available",
+    "DEPLOY_PAYLOAD": "object (required) - deploy request body; must include resourceVersion (string) and forceDeployment (boolean)"
+  },
+  "RESOURCE_NAME_PREFIX": "PO",
+  "PUBLISH_PAYLOAD": {
+    "calendars": [],
+    "processes": [],
+    "customFields": {
+      "attributes": [],
+      "uiFields": []
+    },
+    "actionItems": {
+      "attributes": [],
+      "kpis": [],
+      "ui_fields": []
+    },
+    "assumptions": {
+      "attributes": [],
+      "ui_fields": [],
+      "ui_fields_values": [],
+      "insight_types": [],
+      "kpi_configs": [],
+      "insight_configs": [],
+      "assumption_types": []
+    },
+    "links": {
+      "entityViews": [],
+      "entityViewsProcedure": []
+    },
+    "supplyChainActions": [],
+    "featureToggle": {
+      "tenantLevel": [],
+      "processes": [],
+      "subProcesses": [],
+      "assumptions": []
+    }
+  },
+  "EXPORT_PAYLOAD": {
+    "calendars": [],
+    "processes": [],
+    "customFields": {
+      "attributes": [],
+      "uiFields": []
+    },
+    "actionItems": {
+      "attributes": [],
+      "kpis": [],
+      "ui_fields": []
+    },
+    "assumptions": {
+      "attributes": [],
+      "ui_fields": [],
+      "ui_fields_values": [],
+      "insight_types": [],
+      "kpi_configs": [],
+      "insight_configs": [],
+      "assumption_types": []
+    },
+    "links": {
+      "entityViews": [],
+      "entityViewsProcedure": []
+    },
+    "supplyChainActions": [],
+    "featureToggle": {
+      "tenantLevel": [],
+      "processes": [],
+      "subProcesses": [],
+      "assumptions": []
+    }
+  },
+  "DEPLOY_PAYLOAD": {
+    "resourceVersion": "1.0.0",
+    "forceDeployment": true
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "_schema": {
+    "tenantId": "string (required, SQL tenant_id / REALM_ID)",
+    "process": "object (required)",
+    "subprocess": "object (required)",
+    "gravitee": "object (optional, used when GATEWAY_TYPE=GRAVITEE; same shape plus realmKey)",
+    "gravitee.realmKey": "string (required inside gravitee, Gravitee REALM_KEY for this spec)"
+  },
+  "tenantId": "b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc",
+  "process": {
+    "createRequest": {
+      "viewId": "68bfb8dd74d5de1a3f960f67",
+      "entityId": "35361F8B-A47F-4E7C-ABDC-56F096C02A2E",
+      "entityType": "process",
+      "entityName": "IntegratedBusinessPlanning",
+      "filterId": "91d02f4b-9391-4c67-be1f-b95c617192ff",
+      "applyToAllUsers": true
+    },
+    "searchRequest": {
+      "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+      "entityId": "35361F8B-A47F-4E7C-ABDC-56F096C02A2E",
+      "entityType": "process",
+      "entityName": "IntegratedBusinessPlanning"
+    },
+    "clearRequest": {
+      "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+      "entityId": "35361F8B-A47F-4E7C-ABDC-56F096C02A2E",
+      "entityType": "process",
+      "applyToAllUsers": true,
+      "entityName": "IntegratedBusinessPlanning"
+    }
+  },
+  "subprocess": {
+    "createRequest": {
+      "viewId": "68ef2e81cdb9f94d180fb592",
+      "entityId": "BADEE84F-E402-44D6-B14F-71A6A4530A31",
+      "entityType": "subprocess",
+      "entityName": "IntegratedBusinessPlanning.DemandReview",
+      "filterId": "84712f16-f762-4ce2-a261-a3bcad34c73c",
+      "applyToAllUsers": true
+    },
+    "searchRequest": {
+      "viewIds": ["68ef2e81cdb9f94d180fb592"],
+      "entityId": "BADEE84F-E402-44D6-B14F-71A6A4530A31",
+      "entityType": "subprocess",
+      "entityName": "IntegratedBusinessPlanning.DemandReview"
+    },
+    "clearRequest": {
+      "viewIds": ["68ef2e81cdb9f94d180fb592"],
+      "entityId": "BADEE84F-E402-44D6-B14F-71A6A4530A31",
+      "entityType": "subprocess",
+      "applyToAllUsers": true,
+      "entityName": "IntegratedBusinessPlanning.DemandReview"
+    }
+  },
+  "gravitee": {
+    "realmKey": "cbpf-test27",
+    "tenantId": "ca7623d3-b234-431c-a445-4a1d5444668e",
+    "process": {
+      "createRequest": {
+        "viewId": "68bfb8dd74d5de1a3f960f67",
+        "entityId": "BF326AA2-5C68-401B-AEB5-CC5522042477",
+        "entityType": "process",
+        "entityName": "PSAutomation",
+        "filterId": "91d02f4b-9391-4c67-be1f-b95c617192ff",
+        "applyToAllUsers": true
+      },
+      "searchRequest": {
+        "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+        "entityId": "BF326AA2-5C68-401B-AEB5-CC5522042477",
+        "entityType": "process",
+        "entityName": "PSAutomation"
+      },
+      "clearRequest": {
+        "viewIds": ["68bfb8dd74d5de1a3f960f67"],
+        "entityId": "BF326AA2-5C68-401B-AEB5-CC5522042477",
+        "entityType": "process",
+        "applyToAllUsers": true,
+        "entityName": "PSAutomation"
+      }
+    },
+    "subprocess": {
+      "createRequest": {
+        "viewId": "68ef2e81cdb9f94d180fb592",
+        "entityId": "1CA99F65-46A3-4A3F-AFBD-E40A10D06884",
+        "entityType": "subprocess",
+        "entityName": "PSAutomation.DemandReview",
+        "filterId": "84712f16-f762-4ce2-a261-a3bcad34c73c",
+        "applyToAllUsers": true
+      },
+      "searchRequest": {
+        "viewIds": ["68ef2e81cdb9f94d180fb592"],
+        "entityId": "1CA99F65-46A3-4A3F-AFBD-E40A10D06884",
+        "entityType": "subprocess",
+        "entityName": "PSAutomation.DemandReview"
+      },
+      "clearRequest": {
+        "viewIds": ["68ef2e81cdb9f94d180fb592"],
+        "entityId": "1CA99F65-46A3-4A3F-AFBD-E40A10D06884",
+        "entityType": "subprocess",
+        "applyToAllUsers": true,
+        "entityName": "PSAutomation.DemandReview"
+      }
+    }
+  }
+}

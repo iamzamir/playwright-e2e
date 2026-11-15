@@ -1,0 +1,18 @@
+{
+    "REALM_NAME": "cbp-interop-po-ps-1",
+    "SUBJECT_ID": "3d407a6b-efdf-40f9-98b9-7a23db6c1787",
+    "PSAUTOMATION_SUBJECT_ID": "9744d408-3b78-4903-b704-1d339da77539",
+    "MACHINE_USER_NAME": "machineInterop",
+    "CREATE_PROCESS_FORM_DATA":{
+        "TEMPLATE_NAME": "BY-Template",
+        "DISPLAY_NAME":"DATA VERSION PROCESS TEST",
+        "DATA_VERSION_DEFAULT": "Default",
+        "DATA_VERSION_VALUE": "IDSP-EMEA",
+        "CALENDAR": "Monthly Calendar",
+        "CYCLE_NAME": "2024 NOVEMBER",
+        "DESCRIPTION": "This process is created for testing Data Version dropdown functionality"
+    },
+    "EDIT_PROCESS_FORM_DATA":{
+        "DATA_VERSION_DEFAULT": "Default"
+        }
+}

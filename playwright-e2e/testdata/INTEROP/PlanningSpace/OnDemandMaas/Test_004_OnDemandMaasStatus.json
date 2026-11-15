@@ -1,0 +1,26 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "REALM_ID": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "ANOTHER_VIEW_NAME": "string (required)",
+    "CARD_NAME": "string (required)",
+    "LoGGEDIN_USER_NAME": "string (required)",
+    "SCENARIOS": "string[] (required)",
+    "BASE_SCENARIO_NAME": "string (required)",
+    "FILTER_TO_APPLY_IN_SCOPE": "string (required)",
+    "HIERARCHY_LEVEL_TO_APPLY_IN_SCOPE": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "REALM_ID": "b844f992-82f7-4f0e-8ba6-ca5ef1dc2edc",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasCluster",
+  "ANOTHER_VIEW_NAME": "ODM - Drill Through - Target",
+  "CARD_NAME": "Maas Pivot Card - ODM",
+  "LoGGEDIN_USER_NAME": "PS Automation1",
+  "SCENARIOS": ["Base 30-03-2026-0535"],
+  "BASE_SCENARIO_NAME": "Base 30-03-2026-0535",
+  "FILTER_TO_APPLY_IN_SCOPE": "ODM Filter1",
+  "HIERARCHY_LEVEL_TO_APPLY_IN_SCOPE": "ODM filter 2"
+}

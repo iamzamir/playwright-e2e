@@ -1,0 +1,8 @@
+{
+    "_schema": {
+        "servicesEndpoint": "string (required)",
+        "errorsEndpoint": "string (required)"
+    },
+    "servicesEndpoint": "/api/validation/services",
+    "errorsEndpoint": "/api/validation/errors"
+}

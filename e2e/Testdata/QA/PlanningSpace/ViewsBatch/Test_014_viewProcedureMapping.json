@@ -1,0 +1,30 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomationProcess",
+    "VIEW_NAME": "Automation_Test_View",
+    "ACTOR_NAME1": "OnDemandMaasActor",
+    "PROCEDURE_NAME1": "ODM_v2",
+    "ACTOR_NAME2": "Actor config for Bring Up MaaS Cluster",
+    "PROCEDURE_NAME2": "OnDemandMaasClusterProcedure_v2",
+    "UI_CHACHE1": "TestBanjoUIcache",
+    "UI_CHACHE2": "TestBanjoUIcache2",
+    "SCENARIO_COMPARISON1": "TestBanjoSCS",
+    "SCENARIO_COMPARISON2": "TestBanjoSCS2",
+    "MaasActor": "actor-list",
+    "UI_CHACE": "uicache-actor-list",
+    "SCENARIO_COMPARISON": "scs-actor-list",
+    "DEFAULT_PROCEDURE": "procedure-list",
+    "ACTORS_PROCEDURE1": [
+      { "actorName": "actor-list", "procedureName": "OnDemandMaasActor", "labelName": "Select Actor" },
+      { "actorName": "uicache-actor-list", "procedureName": "TestBanjoUIcache", "labelName": "Select Actor" },
+      { "actorName": "scs-actor-list", "procedureName": "TestBanjoSCS", "labelName": "Select Actor" },
+      { "actorName": "procedure-list", "procedureName": "PSAutomation InsightsManager", "labelName": "Select Procedure" }
+    ],
+    "ACTORS_PROCEDURE2": [
+      { "actorName": "actor-list", "procedureName": "testActorWithNoScopee", "labelName": "Select Actor" },
+      { "actorName": "uicache-actor-list", "procedureName": "TestBanjoUIcache2", "labelName": "Select Actor" },
+      { "actorName": "scs-actor-list", "procedureName": "TestBanjoSCS2", "labelName": "Select Actor" },
+      { "actorName": "procedure-list", "procedureName": "Create Scenario SCA Popup Layout", "labelName": "Select Procedure" }
+    ]
+  }
+  

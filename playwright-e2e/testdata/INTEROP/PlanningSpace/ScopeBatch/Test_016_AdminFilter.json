@@ -1,0 +1,23 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUB_PROCESS_NAME": "string (required)",
+    "PROCESS_VIEW_NAME": "string (required)",
+    "SUB_PROCESS_VIEW_NAME": "string (required)",
+    "ADMIN_FILTER_NAME": "string (required)",
+    "RESET_DEFAULT_FILTER": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SUB_PROCESS_NAME": "Demand Review",
+  "PROCESS_VIEW_NAME": "ViewOne",
+  "SUB_PROCESS_VIEW_NAME": "Edit View Disabled",
+  "ADMIN_FILTER_NAME": "AdminFilterCheck",
+  "RESET_DEFAULT_FILTER": "No Filter Override",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

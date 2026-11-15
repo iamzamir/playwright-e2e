@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "ViewMappingFilterTest",
+    "SUBPROCESS_NAME": "DemandReview",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "VIEW_NAME": "Maas Pivot Card View",
+    "TARGET_VIEW_GROUP": "Move View Group 2",
+    "INITIAL_VIEW_GROUP": "Move View Group 1",
+    "VIEW_GROUP_NAME": "ViewGroupOne"
+}

@@ -1,0 +1,65 @@
+name: Copilot Setup Steps
+
+# Prepares the Copilot cloud agent's environment before it starts work on an issue or PR: Node 24 and the
+# playwright-e2e dependencies (some come from the private JFrog registry), so the agent can run typecheck, lint,
+# suite validation and the unit tests straight away. Copilot has no test-environment credentials, so it cannot run
+# Playwright specs against INTEROP/QA/PSR; people run those on its PR branch.
+# The job runs on its own when this file changes so the setup can be checked in a PR, and on demand from Actions.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # Copilot only picks up a job with exactly this name; only steps, permissions, runs-on, services, snapshot and
+  # timeout-minutes (max 59) are honoured.
+  copilot-setup-steps:
+    # Normal Actions runs (not Copilot sessions, which ignore `if`) skip pull requests from forks, so code from
+    # outside the repository never runs on the private runner or sees the JFrog secret. Same-repository PRs get
+    # the same trust as pr-checks.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    # Private Azure-networked runner, the same as pr-checks. The network must allow the Copilot cloud agent hosts
+    # (see the GitHub docs "Configure the development environment for agents on GitHub Actions").
+    runs-on: [az-dev-ubuntu-latest-8Core]
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+          cache: npm
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      # In a Copilot session the token comes from the repository's Agents secret JFROG_AUTH_TOKEN (exposed as an
+      # environment variable); in a normal Actions run it comes from the Actions secret of the same name.
+      # The .npmrc holding it is removed after the install, so the agent's later commands do not see it in a file.
+      - name: Install dependencies (playwright-e2e)
+        working-directory: playwright-e2e
+        env:
+          ACTIONS_JFROG_AUTH_TOKEN: ${{ secrets.JFROG_AUTH_TOKEN }}
+        run: |
+          token="${ACTIONS_JFROG_AUTH_TOKEN:-${JFROG_AUTH_TOKEN:-}}"
+          if [ -z "$token" ]; then
+            echo "::error::No JFrog token. Copilot sessions read the Agents secret JFROG_AUTH_TOKEN (Settings > Secrets and variables > Agents); normal Actions runs read the Actions secret of the same name."
+            exit 1
+          fi
+          trap 'rm -f ~/.npmrc' EXIT
+          {
+            echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/"
+            echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${token}"
+          } >> ~/.npmrc
+          npm ci --ignore-scripts
+
+      - name: Verify toolchain (typecheck)
+        working-directory: playwright-e2e
+        run: npm run typecheck

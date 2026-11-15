@@ -1,0 +1,18 @@
+{
+    "requestBody":{
+       "entityId":"APIEntityProcedureMappingTestDemandReview",
+       "entityType":"subprocess",
+       "views":["6862cd33dbae88cc1be1ae58"],
+       "procedures":[
+           {"procedureName":"ProcedureMapping_1","primary":true,"secondary":false},
+           {"procedureName":"ProcedureMapping_2","primary":false,"secondary":true},
+           {"procedureName":"ProcedureMapping_3","primary":false,"secondary":false},
+           {"procedureName":"ProcedureMapping_4","primary":false,"secondary":false}
+       ]
+    },
+    "requestSearchBody":{
+        "entityId":"APIEntityProcedureMappingTestDemandReview",
+        "entityType":"subprocess",
+        "viewId":"6862cd33dbae88cc1be1ae58"
+    }
+}

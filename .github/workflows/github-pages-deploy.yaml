@@ -1,0 +1,71 @@
+name: Deploy Pages to GitHub Pages
+
+# Replaces GitHub's managed "pages-build-deployment" workflow, which always
+# runs on public ubuntu-latest. This job publishes the current gh-pages tree
+# from the private az-dev-ubuntu-latest-8Core runner instead.
+#
+# After merging: Settings → Pages → Build and deployment → Source = GitHub Actions.
+# That disables the public-runner pages-build-deployment workflow.
+#
+# Automatic trigger: report/compaction workflows call this via workflow_call
+# after they push to gh-pages. Do not rely on push: gh-pages — GitHub loads
+# push workflows from the pushed ref, and gh-pages has no .github/workflows.
+
+on:
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: false
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ["${{ github.event.inputs.chosen-os || 'az-dev-ubuntu-latest-8Core' }}"]
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          fetch-depth: 1
+          path: site
+
+      - name: Remove git metadata
+        run: rm -rf site/.git
+
+      - name: Setup Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

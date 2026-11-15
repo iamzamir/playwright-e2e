@@ -1,0 +1,15 @@
+{
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "PROCEDURE_NAME": "CreateScenarioPopup",
+  "REQUEST_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/",
+  "PARENT_SCENARIO_NAME": "Base 30-03-2026-0535",
+  "PARENT_SCENARIO_ID": "ad406c97-7376-4ae1-925d-df2d87e089f3",
+  "REQUEST_BODY": {
+    "sourceIds": [
+      "ODMProcess"
+    ]
+  },
+  "PROCEDURE_EXECUTION_URL": "https://api-tst.jdadelivers.com/cbp/foundation-procedure-orchestration/v1ioptst/procedureExecutions",
+  "IS_DEFAULT_SEARCH": true
+}

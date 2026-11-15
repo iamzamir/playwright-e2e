@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ACTION_ITEM_NAME": "ACTION_ITEM_NAME",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ASSUMPTION": "PS Auto Assumption",
+    "STATUS": "In progress",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "EDIT_SUCCESS": "Your changes have been saved successfully.",
+    "DELETE_SUCCESS": "Action Item has been deleted successfully"
+}

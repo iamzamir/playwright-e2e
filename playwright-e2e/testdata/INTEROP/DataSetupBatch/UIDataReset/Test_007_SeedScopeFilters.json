@@ -1,0 +1,129 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required) - process opened to reach the Scope panel and the views",
+    "SAVED_FILTERS": "object[] (required) - { label, levels[], shared? } user1 must own with exactly these members; a level is { dimensionId, dimensionLabel, hierarchyId, hierarchyLabel, levelId, levelLabel, isTimeDimension?, members[{ id, description?, startDate?, endDate? }] } from the realm's dimension model (time members need their dates); shared shares it with every read role of the instance (needed for an admin default filter)",
+    "VIEW_DEFAULT_FILTERS": "object[] (required) - { VIEW_NAME, FILTER_NAME } default filter presets of PROCESS_NAME views for user1",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "SAVED_FILTERS": [],
+  "VIEW_DEFAULT_FILTERS": [],
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "SAVED_FILTERS": [
+      {
+        "label": "Default filter 1",
+        "levels": [
+          {
+            "dimensionId": "TIME",
+            "dimensionLabel": "Time",
+            "hierarchyId": "CALENDARTIMEHIERARCHY",
+            "hierarchyLabel": "Calendar Time Hierarchy",
+            "levelId": "CALENDARYEAR",
+            "levelLabel": "Calendar Year",
+            "isTimeDimension": true,
+            "members": [
+              {
+                "id": "CY-2022",
+                "startDate": "2022-01-01",
+                "endDate": "2022-12-31"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Default filter 2",
+        "levels": [
+          {
+            "dimensionId": "TIME",
+            "dimensionLabel": "Time",
+            "hierarchyId": "CALENDARTIMEHIERARCHY",
+            "hierarchyLabel": "Calendar Time Hierarchy",
+            "levelId": "CALENDARYEAR",
+            "levelLabel": "Calendar Year",
+            "isTimeDimension": true,
+            "members": [
+              {
+                "id": "CY-2022",
+                "startDate": "2022-01-01",
+                "endDate": "2022-12-31"
+              },
+              {
+                "id": "CY-2023",
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "GlobalScopeFilter",
+        "levels": [
+          {
+            "dimensionId": "LOCATION",
+            "dimensionLabel": "Location",
+            "hierarchyId": "LOCATIONHIERARCHY",
+            "hierarchyLabel": "Location Hierarchy",
+            "levelId": "REGION",
+            "levelLabel": "Region",
+            "members": [
+              {
+                "id": "REGION-01",
+                "description": "AMERICA"
+              }
+            ]
+          },
+          {
+            "dimensionId": "CUSTOMER",
+            "dimensionLabel": "Customer",
+            "hierarchyId": "DEMANDCHANNELHIERARCHY",
+            "hierarchyLabel": "Demand Channel Hierarchy",
+            "levelId": "CUSTOMER",
+            "levelLabel": "Customer",
+            "members": [
+              {
+                "id": "CUST-01",
+                "description": "R.Service"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "AdminFilterCheck",
+        "levels": [
+          {
+            "dimensionId": "ITEM",
+            "dimensionLabel": "Item",
+            "hierarchyId": "ITEMHIERARCHY",
+            "hierarchyLabel": "Item Hierarchy",
+            "levelId": "PRODUCTFAMILY",
+            "levelLabel": "Product Family",
+            "members": [
+              {
+                "id": "PF-00",
+                "description": "Beer"
+              }
+            ]
+          }
+        ],
+        "shared": true
+      }
+    ],
+    "VIEW_DEFAULT_FILTERS": [
+      {
+        "VIEW_NAME": "Default Filter View 1",
+        "FILTER_NAME": "Default filter 1"
+      },
+      {
+        "VIEW_NAME": "Default Filter View 2",
+        "FILTER_NAME": "Default filter 2"
+      }
+    ]
+  }
+}

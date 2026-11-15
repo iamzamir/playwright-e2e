@@ -1,0 +1,83 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "LoGGEDIN_USER_NAME": "string (required)",
+        "SOURCE_VIEW": "object[] (required)",
+        "TARGET_VIEW": "object[] (required)",
+        "CARD_NAME": "string (required)",
+        "HYDRATE_VIEW_NAME": "string (required)",
+        "DRILL_THROUGH_CELLS": "object[] (required)",
+        "FILTER_TO_APPLY_IN_SCOPE": "string (required)",
+        "CUSTOMER_VALUE": "string (required)",
+        "SCOPE_EDIT_DIMENSION": "string (required)",
+        "SCOPE_EDIT_HIERARCHY": "string (required)",
+        "SCOPE_UNCHECK_VALUE": "string (required)",
+        "QUICK_FILTER_ATTRIBUTES": "object[] (required)",
+        "QUICK_FILTER_TARGET_VIEW_ATTRIBUTES": "object[] (required)",
+        "QUICK_FILTER_VALUES": "object[] (required)",
+        "SCOPE_FILTER_VALUES_AFTER_DRILLTHROUGH": "object[] (required)",
+        "QUICK_FILTER_VALUE_VALIDATION": "object[] (required)",
+        "WORKFLOW_FILTER": "object (required)",
+        "WORKFLOW_FILTER_SCOPE_TO_DEFINE": "object (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "LoGGEDIN_USER_NAME": "PS Automation1",
+    "SOURCE_VIEW": [
+        {"SourceView1": "duplicate view automation"},
+        {"SourceView2": "Maas Pivot Card View AT"}
+    ],
+    "TARGET_VIEW": [
+        {"TargetView1": "Maas Pivot Card View"},
+        {"TargetView2": "duplicate view automation subprocess"}
+    ],
+    "CARD_NAME": "Maas Pivot Card - ODM",
+    "HYDRATE_VIEW_NAME": "Quick Filter AT View",
+    "DRILL_THROUGH_CELLS": [
+        {"SourceView1": "CUST-03"},
+        {"SourceView2": "FG-03"}
+    ],
+    "FILTER_TO_APPLY_IN_SCOPE": "Quick Filter AT",
+    "CUSTOMER_VALUE": "CUST-03",
+    "SCOPE_EDIT_DIMENSION": "LOCATION",
+    "SCOPE_EDIT_HIERARCHY": "Region",
+    "SCOPE_UNCHECK_VALUE": "Region-20",
+    "QUICK_FILTER_ATTRIBUTES": [
+        {"filterName": "ITEM", "hierarchy": "Item"},
+        {"filterName": "LOCATION", "hierarchy": "Region"},
+        {"filterName": "CUSTOMER", "hierarchy": "Customer"}
+    ],
+    "QUICK_FILTER_TARGET_VIEW_ATTRIBUTES": [
+        {"filterName": "ITEM", "hierarchy": "Item"},
+        {"filterName": "LOCATION", "hierarchy": "Region"}
+    ],
+    "QUICK_FILTER_VALUES": [
+        {"qfItemName": "Item", "qfValue": "FG-01"},
+        {"qfItemName": "Region", "qfValue": "REGION-00"},
+        {"qfItemName": "Customer", "qfValue": "CUST-01"}
+    ],
+    "SCOPE_FILTER_VALUES_AFTER_DRILLTHROUGH": [
+        {"filterValue1": "CUST-03", "filterValue2": "RETAIL OTHERS"}
+    ],
+    "QUICK_FILTER_VALUE_VALIDATION": [
+        {"qfItemName": "Item", "qfValue": "FG-03"},
+        {"qfItemName": "Region", "qfValue": "REGION-10"}
+    ],
+    "WORKFLOW_FILTER": {
+        "VIEW_NAME": "Quick Filter AT View",
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-00"]
+    },
+    "WORKFLOW_FILTER_SCOPE_TO_DEFINE": {
+        "DIMENSION_NAME": "ITEM",
+        "ATTRIBUTE_NAME": "Item",
+        "VALUES": ["FG-01"]
+    },
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1"
+    }
+}

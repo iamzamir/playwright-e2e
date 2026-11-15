@@ -1,0 +1,133 @@
+{
+    "MAP_5_VIEWS_REQUEST_PAYLOAD": {
+        "entities": [
+            {
+                "type": "subprocess",
+                "entityId": [
+                    "EntityViewMapping",
+                    "EE478245-3AB3-4283-B085-15A204231F81",
+                    "EntityViewMappingInitiativesAndAssumptionsReview",
+                    "36924313-B830-468C-A23A-1D640B0CE172",
+                    "EntityViewMappingDemandReview",
+                    "FDCE16C1-6C63-459E-B433-A968D699EA91",
+                    "EntityViewMappingSupplyReview",
+                    "41CDC591-E247-4171-833F-7B30B66888E5",
+                    "EntityViewMappingIntegratedReconcillation",
+                    "1424592A-664A-4031-96C9-668A7CDE1667",
+                    "EntityViewMappingExecutiveBusinessReview"
+                ]
+            }
+        ],
+        "views": [
+            {
+                "id": "68831ea8b02bf03146f23279",
+                "sequence": 1,
+                "hidden": false
+            },
+            {
+                "id": "68831ed347194343d8506e62",
+                "sequence": 2,
+                "hidden": false
+            },
+            {
+                "id": "68831eea47194343d8506e63",
+                "sequence": 3,
+                "hidden": false
+            },
+            {
+                "id": "68831f0847194343d8506e64",
+                "sequence": 4,
+                "hidden": true
+            },
+            {
+                "id": "68831f2847194343d8506e65",
+                "sequence": 5,
+                "hidden": true
+            }
+        ]
+    },
+    "SEARCH_MAPPINGS_REQUEST_PAYLOAD": {
+        "entityId": [
+            "EntityViewMapping",
+            "EE478245-3AB3-4283-B085-15A204231F81",
+            "EntityViewMappingInitiativesAndAssumptionsReview",
+            "36924313-B830-468C-A23A-1D640B0CE172",
+            "EntityViewMappingDemandReview",
+            "FDCE16C1-6C63-459E-B433-A968D699EA91",
+            "EntityViewMappingSupplyReview",
+            "41CDC591-E247-4171-833F-7B30B66888E5",
+            "EntityViewMappingIntegratedReconcillation",
+            "1424592A-664A-4031-96C9-668A7CDE1667",
+            "EntityViewMappingExecutiveBusinessReview"
+        ],
+        "entityType": "subprocess"
+    },
+    "FULL_ENTITY_VIEW_EXPORT_REQUEST_PAYLOAD": {
+        "links": {
+            "entityViews": []
+        }
+    },
+    "MAP_ANOTHER_5_VIEWS_REQUEST_PAYLOAD": {
+        "entities": [
+            {
+                "type": "subprocess",
+                "entityId": [
+                    "EntityViewMapping",
+                    "EE478245-3AB3-4283-B085-15A204231F81",
+                    "EntityViewMappingInitiativesAndAssumptionsReview",
+                    "36924313-B830-468C-A23A-1D640B0CE172",
+                    "EntityViewMappingDemandReview",
+                    "FDCE16C1-6C63-459E-B433-A968D699EA91",
+                    "EntityViewMappingSupplyReview",
+                    "41CDC591-E247-4171-833F-7B30B66888E5",
+                    "EntityViewMappingIntegratedReconcillation",
+                    "1424592A-664A-4031-96C9-668A7CDE1667",
+                    "EntityViewMappingExecutiveBusinessReview"
+                ]
+            }
+        ],
+        "views": [
+            {
+                "id": "688325822472da6d2e2fdcd4",
+                "sequence": 1,
+                "hidden": true
+            },
+            {
+                "id": "688325e8a5aa0a96bde5ab4b",
+                "sequence": 2,
+                "hidden": true
+            },
+            {
+                "id": "6883260b2472da6d2e2fdcd5",
+                "sequence": 3,
+                "hidden": false
+            },
+            {
+                "id": "6883261e2472da6d2e2fdcd6",
+                "sequence": 4,
+                "hidden": false
+            },
+            {
+                "id": "688326302472da6d2e2fdcd7",
+                "sequence": 5,
+                "hidden": false
+            }
+        ]
+    },
+    "CLEAR_MAPPINGS_REQUEST_PAYLOAD": {
+        "entityId": [
+            "EntityViewMapping",
+            "EE478245-3AB3-4283-B085-15A204231F81",
+            "EntityViewMappingInitiativesAndAssumptionsReview",
+            "36924313-B830-468C-A23A-1D640B0CE172",
+            "EntityViewMappingDemandReview",
+            "FDCE16C1-6C63-459E-B433-A968D699EA91",
+            "EntityViewMappingSupplyReview",
+            "41CDC591-E247-4171-833F-7B30B66888E5",
+            "EntityViewMappingIntegratedReconcillation",
+            "1424592A-664A-4031-96C9-668A7CDE1667",
+            "EntityViewMappingExecutiveBusinessReview"
+        ],
+        "entityType": "subprocess"
+    }
+}

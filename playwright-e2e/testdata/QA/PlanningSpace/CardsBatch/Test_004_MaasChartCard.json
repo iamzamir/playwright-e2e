@@ -1,0 +1,16 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "CARD_NAME": "string (required)",
+    "FILTER_TO_APPLY_IN_SCOPE": "string (required)",
+    "SCENARIO_TO_APPLY": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Maas Chart Card View",
+  "CARD_NAME": "Maas Chart",
+  "FILTER_TO_APPLY_IN_SCOPE": "Maas Chart Filter",
+  "SCENARIO_TO_APPLY": "scenario_mass_chart_test"
+}

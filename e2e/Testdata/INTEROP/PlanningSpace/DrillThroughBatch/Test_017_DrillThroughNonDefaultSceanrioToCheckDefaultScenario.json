@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_TO": "Maas Chart Card View AT",
+    "TC1_DRILL_THROUGH_CELL": "40",
+    "VIEW_NAME": "Maas Pivot Card View AT",
+    "CARD_NAME": "Maas Pivot Card",
+    "FILTER_TO_APPLY_IN_SCOPE": "Maas Pivot Filter",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS": "Sceanrio_Case_Automation",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS2": "Sceanrio_Case_Automation",
+    "SCENARIO_TO_APPLY_IN_SCENARIOS3": "Scenario_Selection",
+    "BASE_SCENARIO": "Base 14-05-2025-0535"
+
+}

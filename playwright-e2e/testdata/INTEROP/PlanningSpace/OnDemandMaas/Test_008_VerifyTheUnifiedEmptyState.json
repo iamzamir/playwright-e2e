@@ -1,0 +1,22 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME_1": "string (required)",
+    "ERROR_STATE_SCENARIO": "string (required)",
+    "PROCESS_NAME_2": "string (required)",
+    "EMPTY_STATE_SCENARIO": "string (required)",
+    "ERROR_VIEW_NAME": "string (required)",
+    "EMPTY_VIEW_NAME": "string (required)",
+    "DATA_SYNC_ERROR_MESSAGE": "string (required)",
+    "SET_FILTER_TITLE": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME_1": "FaultTolerance",
+  "ERROR_STATE_SCENARIO": "Fault_Tolerance_Scenario",
+  "PROCESS_NAME_2": "FT of Empty State",
+  "EMPTY_STATE_SCENARIO": "Fault_Tolerance_Empty_Scenario",
+  "ERROR_VIEW_NAME": "Error State",
+  "EMPTY_VIEW_NAME": "Empty State",
+  "DATA_SYNC_ERROR_MESSAGE": "Data couldn’t be synced",
+  "SET_FILTER_TITLE": "Welcome to the FTofEmptyState process."
+}

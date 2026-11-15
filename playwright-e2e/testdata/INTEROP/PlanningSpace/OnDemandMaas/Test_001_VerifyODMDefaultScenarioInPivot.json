@@ -1,0 +1,20 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "CARD_NAME": "string (required)",
+    "SCENARIO_DESC": "string (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "DATA_SYNC_STATUS": "string (required)",
+    "DATA_SYNC_STATUS_MESSAGE": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasCluster",
+  "CARD_NAME": "Maas Pivot Card - ODM",
+  "SCENARIO_DESC": "Scenario created for multi scenario odm testing",
+  "PROCEDURE_NAME": "CreateScenarioWizard",
+  "DATA_SYNC_STATUS": "started",
+  "DATA_SYNC_STATUS_MESSAGE": "Data is Synced"
+}

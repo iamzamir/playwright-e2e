@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "SCENARIO_NAME1": "string (required)",
+    "SUBPROCESS_NAME": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "Automation Sub Process View1",
+  "SCENARIO_NAME1": "PSAutoChidScenario",
+  "SUBPROCESS_NAME": "Demand Review"
+}

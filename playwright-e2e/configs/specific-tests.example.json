@@ -1,0 +1,6 @@
+{
+  "_comment": "Copy to configs/specific-tests.local.json to run locally with USE_SPECIFIC_TESTS=true. Example: **/ProcessOrchestration/ScopeBatch/Test_003_SaveAndDeleteFilterInSettings.spec.ts",
+  "testFiles": [
+    "**/ProcessOrchestration/ScopeBatch/Test_003_SaveAndDeleteFilterInSettings.spec.ts"
+  ]
+}

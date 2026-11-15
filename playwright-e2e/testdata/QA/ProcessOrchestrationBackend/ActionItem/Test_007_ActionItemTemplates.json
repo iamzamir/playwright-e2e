@@ -1,0 +1,37 @@
+{
+  "_schema": {
+    "PROCESS_NAME": "string (required) - process whose id is the template entityId (as both UIs send it)",
+    "SUBPROCESS_NAME": "string (required) - subprocess that owns the source action item",
+    "TEMPLATE_NAME_PREFIX": "string (required) - prefix for the unique template name (unique per tenant)",
+    "TEMPLATE_DESCRIPTION": "string (required) - template description",
+    "UNKNOWN_ID": "string (required) - UUID with no templates",
+    "DUPLICATE_TEMPLATE_ERROR_CODE": "string (required) - errorCode for a duplicate template name",
+    "DUPLICATE_TEMPLATE_MESSAGE": "string (required) - message for a duplicate template name",
+    "TEMPLATE_DELETED_MESSAGE": "string (required) - text returned by DELETE /actionitemTemplates/{id}",
+    "SUBPROCESS_ACTION_ITEM": "object (required) - create body for the source action item; name and entityId are set at runtime"
+  },
+  "PROCESS_NAME": "ProcessWithCustomAttribute",
+  "SUBPROCESS_NAME": "SupplyReview",
+  "TEMPLATE_NAME_PREFIX": "PWTemplate_",
+  "TEMPLATE_DESCRIPTION": "Playwright PSR gap template fixture",
+  "UNKNOWN_ID": "7d6c1b3e-0000-4000-8000-000000000000",
+  "DUPLICATE_TEMPLATE_ERROR_CODE": "IBP_AI_40_2002",
+  "DUPLICATE_TEMPLATE_MESSAGE": "Template with name already exists",
+  "TEMPLATE_DELETED_MESSAGE": "Action item template deleted successfully.",
+  "SUBPROCESS_ACTION_ITEM": {
+    "attributes": [
+      { "name": "processName", "value": "ProcessWithCustomAttribute", "id": "8220a965-fa89-4b48-8251-37b1360f4213" },
+      { "name": "processDisplayName", "value": "ProcessWithCustomAttribute", "id": "E1655BE8-D38E-4FC9-9DB4-29D5CC5D0B6E" },
+      { "name": "sourceDisplayName", "value": "Supply Review", "id": "375FDD34-5D64-439F-A9DD-6D10F75EA857" }
+    ],
+    "status": "0",
+    "actionType": "4",
+    "priority": "3",
+    "dueDate": "2025-04-04T04:49:54.636Z",
+    "assigneeUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "notifyUsers": ["1f93c6fc-5ee1-446f-8b40-ef336b2dd545"],
+    "description": "Playwright PSR gap template fixture",
+    "remarks": "Playwright PSR gap template fixture",
+    "sourceType": "SUBPROCESS"
+  }
+}

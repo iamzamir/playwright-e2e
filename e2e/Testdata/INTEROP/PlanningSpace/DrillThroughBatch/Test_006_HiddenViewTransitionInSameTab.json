@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "NON_HIDDEN_VIEWS":["Normal View 3","Normal View 4"],
+    "HIDDEN_VIEWS":["Hidden View 3","Hidden View 4"],
+    "DRILL_THOROUGH_ON_CELLS":["105","93","103","94"]
+}

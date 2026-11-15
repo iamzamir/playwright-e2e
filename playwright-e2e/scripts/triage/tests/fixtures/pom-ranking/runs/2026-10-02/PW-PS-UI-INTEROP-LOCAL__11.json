@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "suite": "PW-PS-UI-INTEROP-LOCAL",
+  "runNumber": 11,
+  "runAttempt": 1,
+  "trigger": "schedule",
+  "branch": "main",
+  "tests": [
+    { "id": "views-1", "spec": "PlanningSpace/Views/Test_001.spec.ts", "name": "TC1 select view", "status": "passed", "attempts": 2, "flaky": true },
+    { "id": "views-2", "spec": "PlanningSpace/Views/Test_001.spec.ts", "name": "TC2 edit view", "status": "passed" },
+    { "id": "cards-1", "spec": "PlanningSpace/Cards/Test_002.spec.ts", "name": "TC1 open card", "status": "failed", "signature": "TimeoutError: locator.waitFor: Timeout Nms exceeded.", "error": { "location": { "file": "pageobjects/sample.page.ts", "line": 4, "function": "SamplePage.openCard" } } },
+    { "id": "cards-2", "spec": "PlanningSpace/Cards/Test_002.spec.ts", "name": "TC2 card blocked", "status": "blocked", "blockedBy": "TC1 open card", "blockedById": "cards-1" },
+    { "id": "gone-1", "spec": "PlanningSpace/Old/Test_009.spec.ts", "name": "TC1 removed page", "status": "failed", "signature": "boom", "error": { "location": { "file": "pageobjects/removed.page.ts", "line": 3, "function": "RemovedPage.doThing" } } },
+    { "id": "flaky-2", "spec": "PlanningSpace/Other/Test_010.spec.ts", "name": "TC1 never failed outright", "status": "passed", "attempts": 2, "flaky": true }
+  ]
+}

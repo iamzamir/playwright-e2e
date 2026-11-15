@@ -1,0 +1,15 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Automation Process View1",
+    "SCENARIO_NAME1": "ProcessSelectSidenavchild1",
+    "SCENARIO_NAME2": "ProcessSelectSidenavchild2",
+    "SUBPROCESS_NAME": "Demand Review",
+    "SUBPROCESS_VIEW_NAME": "Automation Sub Process View1",
+    "SUBPROCESS_SCENARIO_NAME1": "SubprocessSelectSidenavchild1",
+    "SUBPROCESS_SCENARIO_NAME2": "SubprocessSelectSidenavchild2",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "ASSUMPTION_VIEW_NAME": "Automation Process View1",
+    "ASSUMPTION_SCENARIO_NAME1": "AssumptionScn3",
+    "ASSUMPTION_SCENARIO_NAME2": "AssumptionScn4"
+}

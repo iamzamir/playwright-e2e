@@ -1,0 +1,15 @@
+
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "string (required)",
+    "TC2_DRILL_THROUGH_VIEW_TO": "string (required)",
+    "TC2_DRILL_THROUGH_CELL": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "TC1_DRILL_THROUGH_VIEW_FROM": "TabbedCardTest",
+  "TC2_DRILL_THROUGH_VIEW_TO": "ViewOne",
+  "TC2_DRILL_THROUGH_CELL": "48"
+}

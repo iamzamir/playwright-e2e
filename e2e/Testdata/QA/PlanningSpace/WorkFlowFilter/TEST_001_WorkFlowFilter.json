@@ -1,0 +1,49 @@
+{
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "DEFAULT_SCOPE" : {
+    "VIEW_NAME" : "default view",
+    "FILTER_NAME" : "Time Filter",
+    "DEFAULT_SCOPE_FILTER":{
+      "DIMENSION_NAME": "TIME",
+      "ATTRIBUTE_NAME": "CALENDARYEAR",
+      "VALUES": ["CY-2023"]
+    },
+    "SCOPE_TO_DEFINE":{
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-00"]
+    },
+    "SCOPE_TO_EDIT" : {
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-10"]
+    },
+    "SCOPE_CHANGE":{
+        "DIMENSION_NAME": "ITEM",
+        "ATTRIBUTE_NAME": "Item",
+        "VALUES": ["FG-01"]
+    }
+  },
+  "NON_DEFAULT_SCOPE" : {
+    "VIEW_NAME" : "non default view",
+    "FILTER_NAME": "Cache filter",
+    "GLOBAL_FILTER":{
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-10"]
+    },
+    "SCOPE_TO_DEFINE":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-01"]
+    },
+    "SCOPE_TO_EDIT":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-02"]
+    }
+  },
+  "PO": "Process Orchestration QA",
+  "PS":"Planning Space QA 1"
+}

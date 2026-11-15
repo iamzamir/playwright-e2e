@@ -1,0 +1,15 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/DataSetupBatch/ODM/Test_002_RestartMaasCluster.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/ODM/Test_003_RestartPlanningInstance.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/Scenarios/Test_003_AddChildScenariosToMaas.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_002_MapViewsToContext.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_004_UpdateFeatureToggle.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_005_CleanupDuplicateViews.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_006_ResetDrawerPinPreference.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/UIDataReset/Test_008_SeedTreeCardEndpoints.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/ProcessOrchestration/Test_001_DeleteProcesses.spec.ts",
+    "**/playwright-e2e/tests/DataSetupBatch/ProcessOrchestration/Test_008_DeleteUnusedProcessRoles.spec.ts"
+  ]
+}

@@ -1,0 +1,274 @@
+# RETIRED (T8.1, 2026-10-09): legacy WDIO workflow, not in use. Disabled in GitHub Actions; do not re-enable.
+# The WDIO suite it runs (e2e/) is retired too and kept for reference only; see e2e/RETIRED.md.
+# Playwright replacements: playwright-po-iop-ui-local-suite.yaml and playwright-ps-iop-ui-local-suite.yaml.
+name: '[RETIRED] complete-qa-suite (WDIO)'
+
+permissions:
+  contents: read
+
+on:
+  # schedule:  # retired, see header
+  #   - cron: '00 22 * * *'  # Runs at 3:30 AM IST daily
+  workflow_dispatch:
+    inputs:
+      chosen-os:
+        description: Choose runner
+        required: true
+        default: az-dev-ubuntu-latest-8Core
+        type: choice
+        options:
+          - az-dev-ubuntu-latest
+          - az-dev-ubuntu-latest-4Core
+          - az-dev-ubuntu-latest-8Core
+          - az-dev-ubuntu-latest-16Core
+          - az-prod-ubuntu-latest
+          - az-prod-ubuntu-24
+          - az-prod-ubuntu-22
+          - az-prod-ubuntu-latest-4Core
+          - az-prod-ubuntu-latest-8Core
+          - az-prod-ubuntu-latest-16Core
+          - 2Core
+          - 4Core
+          - 8Core
+          - 16Core
+      test-type:
+        description: Choose testing type
+        required: false
+        default: 'saucelabs'
+        type: choice
+        options:
+          - local
+          - saucelabs
+      suite-name:
+        description: Choose suite name to run tests
+        required: true
+        default: 'complete-qa-suite'
+        type: string
+      branch:
+        description: Branch to run workflow on
+        required: true
+        default: 'main'
+        type: string
+      max-instances:
+        description: Choose max instances to run tests
+        required: true
+        default: 10
+        type: number
+
+env:
+  SAUCE_PS_USERNAME: ${{ secrets.SAUCE_PS_USERNAME }}
+  SAUCE_PS_ACCESS_KEY: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+  TEST_AUTOMATION_USER_1: ${{ secrets.TEST_AUTOMATION_USER_1 }}
+  TEST_AUTOMATION_USER_2: ${{ secrets.TEST_AUTOMATION_USER_2 }}
+  TEST_AUTOMATION_PASSWORD: ${{ secrets.TEST_AUTOMATION_PASSWORD }}
+  SAUCE_BAIL: ${{ secrets.SAUCE_BAIL }}
+  CLIENT_SECRET_QA: ${{ secrets.CLIENT_SECRET_QA_CBP_E2E_QA }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_1: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_QA_MIG_2: ${{ secrets.CLIENT_SECRET_QA_CBP_PO_MIG_2 }}
+  CLIENT_SECRET_IOP: ${{ secrets.CLIENT_SECRET_IOP_CBP_INTEROP_PS_AUTOMATION_2 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_1: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_1 }}
+  REALM_CLIENT_SECRET_PO_IOP_MIG_2: ${{ secrets.CLIENT_SECRET_IOP_CBP_PO_MIG_2 }}
+  SUITENAME: ${{ github.event.inputs.suite-name || 'complete-qa-suite' }}
+  MAX_INSTANCES: ${{ github.event.inputs.max-instances || '10' }}
+
+jobs:
+  # ============================
+  # 1. Run Tests Job
+  # ============================
+  run-tests:
+    name: Run UI Tests
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    strategy:
+      matrix:
+        node-version: [ '24.x' ]
+
+    steps:
+      - name: Free up disk space
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache
+          df -h
+
+      - name: Checkout ${{ github.event.inputs.branch || 'main' }} branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+          fetch-depth: 1
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+          npm install -g saucectl@latest
+          chromedriver --version
+          google-chrome --version
+
+      # - name: Sauce Connect tunnel proxy
+      #   if: ${{ contains(github.event.inputs.test-type, 'saucelabs') || github.event.inputs.test-type == '' }}
+      #   uses: saucelabs/sauce-connect-action@0ca0e6ce3a5513d6bec2a54044a536c3da3a53fb # v2.3.8
+      #   with:
+      #     username: ${{ secrets.SAUCE_PS_USERNAME }}
+      #     accessKey: ${{ secrets.SAUCE_PS_ACCESS_KEY }}
+      #     tunnelName: ${{ secrets.SAUCE_PS_USERNAME }}_tunnel_name
+
+      - name: Run Tests
+        working-directory: e2e
+        timeout-minutes: 120  # Force timeout after 120 minutes
+        run: |
+          if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+            npm run wdio:test:qa
+          else
+            npm run wdio:saucelabs:qa
+          fi
+        continue-on-error: true
+
+      # - name: Rerunning Failed Tests
+      #   working-directory: e2e
+      #   run: |
+      #     export SUITENAME=failed-qa-suite
+      #     if [[ "${{ github.event.inputs.test-type }}" == "local" ]]; then
+      #       npm run wdio:test:qa
+      #     else
+      #       npm run wdio:saucelabs:qa
+      #     fi
+      #   continue-on-error: true
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: allure-results
+          path: e2e/.e2e/reports/allure-results
+
+  # ============================
+  # 2. Report Generation Job
+  # ============================
+  generate-report:
+    name: Generate & Deploy Allure Report
+    runs-on: ["${{ github.event_name == 'schedule' && 'az-dev-ubuntu-latest-8Core' || github.event.inputs.chosen-os || 'az-prod-ubuntu-latest-8Core' }}"]
+    needs: run-tests
+    if: always()
+    permissions:
+      contents: write
+    steps:
+      - name: Free up disk space
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache
+          df -h
+
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages        
+
+      - name: Download Allure Results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: allure-results
+          path: e2e/.e2e/reports/allure-results
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.x'
+
+      - name: Setup Java (Allure dependency)
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Authenticate with npm (JFrog)
+        run: |
+          echo "@jda:registry=https://jdasoftware.jfrog.io/jdasoftware/api/npm/npm/" >> ~/.npmrc
+          echo "//jdasoftware.jfrog.io/jdasoftware/api/npm/npm/:_authToken=${{ secrets.JFROG_AUTH_TOKEN }}" >> ~/.npmrc
+
+      - name: Install Dependencies for Allure CLI
+        working-directory: e2e
+        run: npm ci
+
+      - name: Generate Allure Report (No Docker)
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          RESULTS_DIR="e2e/.e2e/reports/allure-results"
+          HISTORY_ROOT="e2e/.e2e/reports/allure-history/PSAutomationReports/QA"
+          CURRENT_REPORT_DIR="${HISTORY_ROOT}/${{ github.run_number }}"
+          LATEST_REPORT_DIR="${HISTORY_ROOT}/latest"
+          PREV_ROOT="gh-pages/PSAutomationReports/QA"
+          PREV_HISTORY_DIR="${PREV_ROOT}/latest/history"
+
+          mkdir -p "$RESULTS_DIR" "$HISTORY_ROOT"
+
+          # Restore previously published numbered report folders from gh-pages so the
+          # "keep last 7" retention operates over the full history, not just this run.
+          if [ -d "$PREV_ROOT" ]; then
+            for prev in "$PREV_ROOT"/[0-9]*; do
+              [ -d "$prev" ] || continue
+              cp -R "$prev" "$HISTORY_ROOT/"
+            done
+          fi
+
+          if [ -d "$PREV_HISTORY_DIR" ]; then
+            cp -R "$PREV_HISTORY_DIR" "$RESULTS_DIR/history"
+          fi
+
+          cd e2e
+          npx allure generate .e2e/reports/allure-results --clean -o ".e2e/reports/allure-history/PSAutomationReports/QA/${{ github.run_number }}"
+          cd - >/dev/null
+
+          rm -rf "$LATEST_REPORT_DIR"
+          cp -R "$CURRENT_REPORT_DIR" "$LATEST_REPORT_DIR"
+
+          cd "$HISTORY_ROOT"
+          ls -1d [0-9]* 2>/dev/null | sort -n | head -n -7 | xargs -r rm -rf
+          cd - >/dev/null
+
+      - name: Deploy report to Github Pages
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          personal_token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: e2e/.e2e/reports/allure-history
+          keep_files: true
+
+      - name: Send Report to Microsoft Teams Channel
+        if: always()
+        continue-on-error: true
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.PS_REPORT_MS_TEAMS_WEBHOOK }}
+          REPORT_URL: https://supreme-adventure-mr9k94p.pages.github.io/PSAutomationReports/QA/${{ github.run_number }}
+        run: |
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "Teams webhook secret is empty. Skipping notification."
+            exit 0
+          fi
+          curl --fail -s -S -X POST -H 'Content-Type: application/json' \
+            -d "{\"type\":\"message\",\"attachments\":[{\"contentType\":\"application/vnd.microsoft.card.adaptive\",\"content\":{\"\$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.4\",\"body\":[{\"type\":\"TextBlock\",\"size\":\"Medium\",\"weight\":\"Bolder\",\"text\":\"UI Automation Test Results - QA\",\"wrap\":true},{\"type\":\"TextBlock\",\"text\":\"Test Run #${{ github.run_number }}: ${{ job.status }}\",\"wrap\":true,\"spacing\":\"Small\"}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"Allure Report\",\"url\":\"$REPORT_URL\"}]}}]}" \
+            "$TEAMS_WEBHOOK_URL"
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: generate-report
+    if: always() && needs.generate-report.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages-deploy.yaml
+    secrets: inherit

@@ -1,0 +1,96 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PRIMARY_SCA_ACTION": "object (required)",
+    "SECONDARY_SCA_ACTION": "object (required)",
+    "OTHER_SCA_ACTIONS": "object[] (required)",
+    "SUBPROCESS_NAME": "string (required)",
+    "CREATE_VIEW_GROUP_REQUEST": "object (required)",
+    "CREATE_PLANNING_VIEW_REQUEST": "object[] (required)",
+    "MAP_VIEW_TO_PROCESS_REQUEST": "object (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PrimarySecondarySCA",
+  "PRIMARY_SCA_ACTION": {
+    "procedureDisplayName": "Clone Member"
+  },
+  "SECONDARY_SCA_ACTION": {
+    "procedureDisplayName": "CreateScenarioPopup"
+  },
+  "OTHER_SCA_ACTIONS": [
+    {
+      "procedureDisplayName": "InteractiveDemand"
+    },
+    {
+      "procedureDisplayName": "Create Scenario"
+    }
+  ],
+  "SUBPROCESS_NAME": "Supply Review",
+  "CREATE_VIEW_GROUP_REQUEST": {
+    "namespace": "planningsolutionarea",
+    "moduleId": "9000000021",
+    "displayName": "",
+    "realm": ""
+  },
+  "CREATE_PLANNING_VIEW_REQUEST": [
+    {
+      "isValid": true,
+      "name": "",
+      "containerId": "",
+      "user": "",
+      "admin": [
+        "process_admin"
+      ],
+      "read": [
+        "process_admin",
+        "process_viewer"
+      ],
+      "create": [
+        "process_admin"
+      ],
+      "viewRoleList": {
+        "read": [
+          "process_admin",
+          "process_viewer"
+        ],
+        "create": [
+          "process_admin"
+        ],
+        "admin": [
+          "process_admin"
+        ]
+      }
+    }
+  ],
+  "MAP_VIEW_TO_PROCESS_REQUEST": {
+    "entities": [
+      {
+        "type": "subprocess",
+        "entityId": [
+          ""
+        ]
+      }
+    ],
+    "views": [
+      {
+        "id": "",
+        "sequence": 1,
+        "hidden": false
+      }
+    ]
+  },
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "OTHER_SCA_ACTIONS": [
+      {
+        "procedureDisplayName": "Interactivedemand"
+      },
+      {
+        "procedureDisplayName": "CreateScenarioWizard"
+      }
+    ]
+  }
+}

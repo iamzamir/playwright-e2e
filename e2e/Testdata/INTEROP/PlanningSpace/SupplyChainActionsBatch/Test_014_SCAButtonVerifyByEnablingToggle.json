@@ -1,0 +1,27 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "ArrangeViewsTesting",
+    "PROCESS_NAME2": "SCAtoapplyallviews",
+    "PROCESS_DISPLAY_NAME": "SCA to apply all views",
+    "ATTRIBUTE_VALUE": "SCP-Reporting",
+    "PROCEDURE": {
+        "PROCEDURENAME1": "Clone Member",
+        "PROCEDURENAME2": "Publish Scenario Inline",
+        "PROCEDURENAME3": "CreateScenarioPopup",
+        "PROCEDURENAME4": "Publish Scenario popup"
+    },
+    "MAP_VIEWS_TO_PROCESS": "Automation View Mapping",
+    "CHILD_VIEWS": {
+        "VIEW1": "Automation Process View1",
+        "VIEW2": "Automation Sub Process View1",
+        "VIEW3": "Automation Assumption View 1",
+        "VIEW4": "Card Actions"
+    },
+    "PRIMARY_BUTTON": "CreateScenarioPopup",
+    "SECONDARY_BUTTON": "Clone Member",
+    "PROCEDURE_DROPDOWN": {
+        "PROCEDURENAME1": "Publish Scenario Inline",
+        "PROCEDURENAME2": "Publish Scenario popup"
+    }
+
+}

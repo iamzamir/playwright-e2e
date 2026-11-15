@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "--registry=https://registry.npmjs.org", "@playwright/mcp"]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+    "testFiles": [
+        "**/DataSetup/Scenarios/Test_002_SetBaseScenarioAsDefault.spec.ts",
+        "**/DataSetup/UIDataReset/Test_001_ResetProcessScope.spec.ts",
+        "**/DataSetup/UIDataReset/Test_002_MapViewsToContext.spec.ts"
+    ]
+}

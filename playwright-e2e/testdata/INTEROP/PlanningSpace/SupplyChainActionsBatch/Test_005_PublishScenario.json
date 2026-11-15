@@ -1,0 +1,46 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "PLANNING_DASHBOARD_NAME": "string (required)",
+    "PUBLISH_POLICY_NAME": "string (required)",
+    "PUBLISH_RESOURCE_NAME": "string (required)",
+    "PUBLISH_POLICY_PAYLOAD": "object (required)",
+    "NAMESPACE": "string (required)",
+    "ROLE_NAME": "string (required)",
+    "PUBLISH_BASE_POLICY_NAME": "string (required)",
+    "PUBLISH_BASE_POLICY_PAYLOAD": "object (required)",
+    "PROCEDURE_NAME": "string (required)",
+    "PUBLISH_BASE_RESOURCE": "string (required)",
+    "BASE_SCENARIO_NAME": "string (required)",
+    "CHILD_SCENARIO_NAME": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "PLANNING_DASHBOARD_NAME": "Maas Pivot Card View",
+  "PUBLISH_POLICY_NAME": "PublishScenTest",
+  "PUBLISH_RESOURCE_NAME": "PROCEDURE.PublishScenario",
+  "PUBLISH_POLICY_PAYLOAD": {
+    "displayName": "PublishScenTest",
+    "description": "PublishScenTest",
+    "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.cbp\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"PublishScenTest\",\"description\":\"PublishScenTest\",\"resource\":{\"name\":\"PROCEDURE.PublishScenario\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"execute\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}"
+  },
+  "NAMESPACE": "BY.CBP",
+  "ROLE_NAME": "procedure_execution",
+  "PUBLISH_BASE_POLICY_NAME": "PublishBaseScenTest",
+  "PUBLISH_BASE_POLICY_PAYLOAD": {
+    "displayName": "PublishBaseScenTest",
+    "description": "PublishBaseScenTest",
+    "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.cbp\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"PublishBaseScenTest\",\"description\":\"PublishBaseScenTest\",\"resource\":{\"name\":\"publish_base\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"publish\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}"
+  },
+  "PROCEDURE_NAME": "Publish Scenario",
+  "PUBLISH_BASE_RESOURCE": "Publish Base Scenario",
+  "BASE_SCENARIO_NAME": "Base 24-04-2026-0451",
+  "CHILD_SCENARIO_NAME": "Scenario_For_MaasPivot",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1",
+    "BASE_SCENARIO_NAME": "Base-2026-11-02T10:42:11"
+  }
+}

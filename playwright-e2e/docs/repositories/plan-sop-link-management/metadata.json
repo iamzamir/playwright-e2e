@@ -1,0 +1,83 @@
+{
+  "name": "plan-sop-link-management",
+  "displayName": "Link Management Service",
+  "org": "BY-Product-Development",
+  "type": "backend-service",
+  "language": "java",
+  "runtime": "Java 21",
+  "framework": "Spring Boot 3.5.16",
+  "commonsVersion": "2dacec2-SNAPSHOT",
+  "buildTool": "gradle",
+  "artifactGroup": "com.blueyonder.linkmanagement",
+  "artifactVersion": "0.0.1-SNAPSHOT",
+  "swaggerPath": "/swagger-ui/index.html",
+  "database": {
+    "engine": "azure-sql-server",
+    "name": "linkMgr",
+    "migrations": "liquibase",
+    "changelogLockWaitMinutes": 45,
+    "maxPoolSize": 100
+  },
+  "messaging": ["kafka"],
+  "controllers": 10,
+  "entities": 15,
+  "entityTypes": ["process", "subprocess", "assumption"],
+  "gatewayPrefix": {
+    "QA": { "old": "cbp/qa/ibp/links/v1", "new": "qa/lm/api/v1" },
+    "INTEROP": { "old": "cbp/interop/ibp/links/v1", "new": "lm/api/v1" },
+    "PSR": { "old": "cbp/psr/ibp/links/v1", "new": "lm/api/v1" }
+  },
+  "envVars": [
+    "VIEW_ENTITY_MAP",
+    "VIEW_ENTITY_PROCEDURE_MAP",
+    "DELETE_VIEW_ENTITY_MAP",
+    "DELETE_ENTITY_VIEW_PROCEDURE_MAP",
+    "ALM_VALIDATION"
+  ],
+  "dependsOn": ["liam-rbac", "kafka", "procedure-service"],
+  "consumedBy": [
+    "plan-sop-planning-mfe",
+    "plan-sop-lui",
+    "plan-sop-process-orchestration-service",
+    "plan-sop-ui-automation"
+  ],
+  "automation": {
+    "specGlobs": [
+      "tests/ProcessOrchestrationBackend/LinkManagement/**",
+      "tests/PlanningSpace/ViewsBatch/**",
+      "tests/PlanningSpace/ViewSearch/**",
+      "tests/PlanningSpace/ScopeBatch/**",
+      "tests/PlanningSpace/DuplicateView/**"
+    ],
+    "pageObjects": [
+      "scope.page.ts",
+      "planning.page.ts",
+      "planning-listing.page.ts",
+      "global-settings.page.ts"
+    ],
+    "fixtures": ["scopePage", "planningPage", "planningListingPage", "globalSettingsPage"],
+    "testSuites": [
+      "POBackendLinkManagementBatch.json",
+      "ViewsBatchA.json",
+      "ViewsBatchB.json",
+      "ScopeBatch.json",
+      "WorkflowFilterAndDuplicateViewsBatch.json",
+      "ObjectiveQuickLinksViewSearchBatch.json"
+    ],
+    "asyncEndpoints": ["/validate", "/exportData", "/importData"],
+    "pollEndpoints": ["/job/validation/{task_id}"],
+    "destructiveEndpoints": ["/view-entity-map/clear", "/preset/clear"],
+    "backendSpecs": 14,
+    "migrationSpecs": 3,
+    "endpointCoverage": { "exercised": 21, "setupOrViaPO": 3, "active": 30, "asOf": "2026-10-05" },
+    "utilities": ["util/mapping.util.ts"],
+    "untestedAreas": [
+      "entity-validation-job",
+      "tenant-and-user-endpoints",
+      "kafka-events"
+    ]
+  },
+  "exportImportReasonCodes": ["null (default)", "PROCEDURES_NEVER_MAPPED_TO_VIEW", "PLANNER_WANTS_NO_PROCEDURES"],
+  "lastReviewed": "2026-10-05",
+  "qualityGates": ["CodeQL", "Codacy", "42Crunch", "BlackDuck", "SonarQube", "Spotless"]
+}

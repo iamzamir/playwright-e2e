@@ -1,0 +1,53 @@
+{
+  "_schema": {
+    "VIEW_IDS": "object (required) - synthetic 24-hex view ids { PRIMARY, SECONDARY }; never real Planning Space views",
+    "ACTOR_TYPES": "object (required) - LM actor entity types { MAAS, SCS, INSIGHT }",
+    "PROCEDURE_TYPE": "string (required) - LM procedure entity type",
+    "ENTITY_PREFIX": "string (required) - prefix for run-unique synthetic actor/procedure ids",
+    "PSR_GROUPS": "array (required) - PSR LMSearch1 request groups [{ entityType, entityId[] }]",
+    "PSR_PROCEDURE_IDS": "string[] (required) - PSR 'PO To PS 7' procedure ids for the multi-entity /search",
+    "V2_SEARCH_SIZE": "number (required) - total ids sent in the LM-V2 multi-entity /search",
+    "LARGE_GROUP_SIZE": "number (required) - ids per group in the LM-01-E05 large request",
+    "UNKNOWN_ENTITY_TYPE": "string (required) - entity type that LM never stores",
+    "INVALID_JSON_ERROR_CODE": "string (required) - errorCode for a request body that is not valid JSON"
+  },
+  "VIEW_IDS": {
+    "PRIMARY": "6650aaaa00000000000000a1",
+    "SECONDARY": "6650aaaa00000000000000a2"
+  },
+  "ACTOR_TYPES": {
+    "MAAS": "maasactor",
+    "SCS": "scsactor",
+    "INSIGHT": "insightactor"
+  },
+  "PROCEDURE_TYPE": "SCP-Launch-Interactive-Planning",
+  "ENTITY_PREFIX": "PWLm",
+  "PSR_GROUPS": [
+    { "entityType": "scsactor", "entityId": ["SCSMetadataFillRate", "SCSMetadata"] },
+    { "entityType": "insightactor", "entityId": ["Insight_Actor1", "Insight_Actor2"] },
+    { "entityType": "maasactor", "entityId": ["ActorCfgBringUpOnDemandMaas", "OnDemandMaas"] },
+    { "entityType": "SCP-Launch-Interactive-Planning", "entityId": ["Procedure1", "Procedure2"] }
+  ],
+  "PSR_PROCEDURE_IDS": [
+    "PSR60_1749018227_IM", "PSR59_1749018204_IM", "PSR58_1749018183_IM", "PSR57_1749018160_IM", "PSR56_1749018139_IM",
+    "PSR55_1749018117_IM", "PSR54_1749018094_IM", "PSR53_1749018072_IM", "PSR52_1749018051_IM", "PSR51_1749018028_IM",
+    "PSR50_1749018005_IM", "PSR49_1749017983_IM", "PSR48_1749017960_IM", "PSR47_1749017938_IM", "PSR46_1749017916_IM",
+    "PSR45_1749017895_IM", "PSR44_1749017871_IM", "PSR43_1749017848_IM", "PSR42_1749017826_IM", "PSR41_1749017803_IM",
+    "PSR40_1749017724_IM", "PSR39_1749017700_IM", "PSR38_1749017677_IM", "PSR37_1749017653_IM", "PSR36_1749017629_IM",
+    "PSR35_1749017607_IM", "PSR34_1749017584_IM", "PSR33_1749017560_IM", "PSR32_1749017537_IM", "PSR31_1749017514_IM",
+    "PSR30_1749017490_IM", "PSR29_1749017465_IM", "PSR28_1749017442_IM", "PSR27_1749017418_IM", "PSR26_1749017395_IM",
+    "PSR25_1749017373_IM", "PSR24_1749017350_IM", "PSR23_1749017326_IM", "PSR22_1749017302_IM", "PSR21_1749017279_IM",
+    "PSR20_1749017010_IM", "PSR19_1749016991_IM", "PSR18_1749016969_IM", "PSR17_1749016948_IM", "PSR16_1749016925_IM",
+    "PSR15_1749016904_IM", "PSR14_1749016880_IM", "PSR13_1749016857_IM", "PSR12_1749016837_IM", "PSR11_1749016813_IM",
+    "PSR10_1749016638_IM", "PSR9_1749016617_IM", "PSR8_1749016596_IM", "PSR7_1749016575_IM", "PSR6_1749016554_IM",
+    "Procedure10", "Procedure9", "Procedure8", "Procedure7", "Procedure6",
+    "Procedure5", "Procedure4", "Procedure3", "Procedure2", "Procedure1",
+    "CreateBaseAndHydrateMaaSCluster", "PSR5_1748439260_IM", "PSR4_1748439234_IM", "PSR3_1748439208_IM", "PSR2_1748439185_IM",
+    "PSR1_1748439162_IM", "CreateScenario", "RunInsightJob", "CreateBaseAndHydrateMaaSOnSchedule", "IntegratedBusinessPlannin_1748428217_IM",
+    "PublishScenario"
+  ],
+  "V2_SEARCH_SIZE": 75,
+  "LARGE_GROUP_SIZE": 50,
+  "UNKNOWN_ENTITY_TYPE": "foo",
+  "INVALID_JSON_ERROR_CODE": "IBP_40_1022"
+}

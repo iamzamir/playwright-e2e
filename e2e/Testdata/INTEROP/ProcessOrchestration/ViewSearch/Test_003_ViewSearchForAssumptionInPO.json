@@ -1,0 +1,10 @@
+{
+  "REALM_NAME": "cbp-interop-ps-automation",
+  "PROCESS_NAME": "PSAutomation",
+  "ASSUMPTION": {
+      "ASSUMPTION_NAME": "PS Auto Assumption 5",
+      "ASSUMPTION_TYPE": "Opportunity"
+  },
+  "ASSUMPTION_VIEW_NAME": "arrange Views view1",
+  "ASSUMPTION_HIDDEN_VIEW_NAME": "Table Card View"
+}

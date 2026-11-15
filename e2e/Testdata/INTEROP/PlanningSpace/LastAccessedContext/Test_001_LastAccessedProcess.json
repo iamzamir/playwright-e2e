@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-interop-po-ps-1",
+    "PROCESS1": "PSProcess",
+    "PROCESS2": "IntegratedBusinessPlanning",
+    "POLICY_NAME": "integratedbusinessplanning_admin"
+}

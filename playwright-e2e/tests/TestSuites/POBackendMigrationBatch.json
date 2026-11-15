@@ -1,0 +1,13 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_001_CalendarMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_002_ProcessMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_003_FullAndPartialExport.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_004_SupplyChainActionsMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_005_AssumptionAndActionItemKPIMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_006_EntityViewMappingMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_007_LinkManagementALMValidation.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_008_EntityViewProcedureMappingMigration.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/Migration/Test_009_ALMDeployResourceMigration.spec.ts"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "TC1_DRILL_THROUGH_VIEW_FROM": "Source View With Merge",
+    "TC1_DRILL_THROUGH_VIEW_TO": "Target View Without Backend Filter",
+    "TC1_DRILL_THROUGH_CELL": "32",
+    "TC2_DRILL_THROUGH_VIEW_TO": "always AND BE Target View",
+    "TC2_DRILL_THROUGH_CELL": "41",
+    "DIMENSIONS1": {
+        "LOCATION": "REGION-0",
+        "CUSTOMER": "CG-01",
+        "TIME": "CY-2022",
+        "ITEM": "FG-05"
+    },
+    "DIMENSIONS2": {
+       "LOCATION": "REGION-00",
+        "CUSTOMER": "CG-01",
+        "TIME": "CY-2022",
+        "ITEM": "FG-05"
+    },
+    "BACKEND_FILTERS":{
+        "DIMENSION_NAME": "LOCATION",
+        "ATTRIBUTE_NAME": "Region",
+        "VALUES": ["REGION-20"]
+    },
+    "DRILL_THROUGH_SCOPE":[
+        {
+            "DIMENSION_NAME": "LOCATION",
+            "ATTRIBUTE_NAME": "Region",
+            "VALUES": ["REGION-00"]
+        },
+        {
+            "DIMENSION_NAME": "ITEM",
+            "ATTRIBUTE_NAME": "Item",
+            "VALUES": ["FG-01"]
+        }
+    ]
+}

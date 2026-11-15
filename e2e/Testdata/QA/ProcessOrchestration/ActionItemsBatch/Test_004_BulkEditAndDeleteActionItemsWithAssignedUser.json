@@ -1,0 +1,14 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "ASSIGNED_USER": "PS Automation2",
+    "PROCESS_NAME": "PSAutomation",
+    "ACTION_ITEM_NAME": "AI",
+    "STATUS": "In progress",
+    "CHANGE_STATUS": "Not started",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "BULK_EDIT_SUCCESS": "Status changed for selected Action Items successfully",
+    "BULK_DELETE_SUCCESS": "Action Items have been deleted successfully"
+}

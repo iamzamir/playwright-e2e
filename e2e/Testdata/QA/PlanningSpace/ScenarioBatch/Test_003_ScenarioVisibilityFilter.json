@@ -1,0 +1,6 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION_NAME": "PS Auto Assumption",
+    "SUBPROCESS_NAME": "DemandReview"
+}

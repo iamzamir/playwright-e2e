@@ -1,0 +1,6 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/UIFields/Test_001_PageConfigContracts.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/UIFields/Test_002_PageEditorConfig.spec.ts"
+  ]
+}

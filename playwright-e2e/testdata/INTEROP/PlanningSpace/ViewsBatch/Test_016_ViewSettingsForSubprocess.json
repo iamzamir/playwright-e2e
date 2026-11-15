@@ -1,0 +1,21 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "SUBPROCESS_NAME": "string (required)",
+        "VIEW_NAME": "string (required)",
+        "TARGET_VIEW_GROUP": "string (required)",
+        "INITIAL_VIEW_GROUP": "string (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "SUBPROCESS_NAME": "Demand Review",
+    "VIEW_NAME": "AT of Move View 1",
+    "TARGET_VIEW_GROUP": "Move View Group 2",
+    "INITIAL_VIEW_GROUP": "Move View Group 1",
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1"
+    }
+}

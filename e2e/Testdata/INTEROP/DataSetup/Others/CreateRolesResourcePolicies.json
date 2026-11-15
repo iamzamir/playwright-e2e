@@ -1,0 +1,388 @@
+[
+    [
+        {
+            "name": "PROCESS.IntegratedBusinessPlanning",
+            "typeId": 1002000129,
+            "namespaceId": 1002000268,
+            "displayName": "PROCESS.IntegratedBusinessPlanning",
+            "description": "PROCESS.IntegratedBusinessPlanning",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        },
+        {
+            "name": "SUBPROCESS.IntegratedBusinessPlanning.InitiativesAndAssumptionsReview",
+            "typeId": 1002000128,
+            "namespaceId": 1002000268,
+            "displayName": "SUBPROCESS.IntegratedBusinessPlanning.InitiativesAndAssumptionsReview",
+            "description": "SUBPROCESS.IntegratedBusinessPlanning.InitiativesAndAssumptionsReview",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        },
+        {
+            "name": "SUBPROCESS.IntegratedBusinessPlanning.DemandReview",
+            "typeId": 1002000128,
+            "namespaceId": 1002000268,
+            "displayName": "SUBPROCESS.IntegratedBusinessPlanning.DemandReview",
+            "description": "SUBPROCESS.IntegratedBusinessPlanning.DemandReview",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        },
+        {
+            "name": "SUBPROCESS.IntegratedBusinessPlanning.SupplyReview",
+            "typeId": 1002000128,
+            "namespaceId": 1002000268,
+            "displayName": "SUBPROCESS.IntegratedBusinessPlanning.SupplyReview",
+            "description": "SUBPROCESS.IntegratedBusinessPlanning.SupplyReview",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        },
+        {
+            "name": "SUBPROCESS.IntegratedBusinessPlanning.IntegratedReconcillation",
+            "typeId": 1002000128,
+            "namespaceId": 1002000268,
+            "displayName": "SUBPROCESS.IntegratedBusinessPlanning.IntegratedReconcillation",
+            "description": "SUBPROCESS.IntegratedBusinessPlanning.IntegratedReconcillation",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        },
+        {
+            "name": "SUBPROCESS.IntegratedBusinessPlanning.ExecutiveBusinessReview",
+            "typeId": 1002000128,
+            "namespaceId": 1002000268,
+            "displayName": "SUBPROCESS.IntegratedBusinessPlanning.ExecutiveBusinessReview",
+            "description": "SUBPROCESS.IntegratedBusinessPlanning.ExecutiveBusinessReview",
+            "realmId": "799b813f-8d2d-46d0-8794-d9038fb8c7da",
+            "actions": [
+                {
+                    "id": 1002000199,
+                    "name": "view",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "View",
+                    "description": "View a CBP Resource"
+                },
+                {
+                    "id": 1002000201,
+                    "name": "edit",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Edit",
+                    "description": "Edit an CBP Resource"
+                },
+                {
+                    "id": 1002000202,
+                    "name": "delete",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Delete",
+                    "description": "Delete a CBP Resource"
+                },
+                {
+                    "id": 1002000203,
+                    "name": "start",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Start",
+                    "description": "Start an CBP Resource"
+                },
+                {
+                    "id": 1002000204,
+                    "name": "stop",
+                    "namespaceId": 1002000268,
+                    "inheritable": false,
+                    "displayName": "Stop",
+                    "description": "Stop an IBP Resource"
+                }
+            ],
+            "owner": null
+        }
+    ],
+    [
+        {
+            "name": "integratedbusinessplanning_admin",
+            "description": "integratedbusinessplanning_admin",
+            "moduleId": 0,
+            "type": "realm"
+        },
+        {
+            "name": "integratedbusinessplanning_user",
+            "description": "integratedbusinessplanning_user",
+            "moduleId": 0,
+            "type": "realm"
+        }
+    ],
+    [
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning\",\"description\":\"IntegratedBusinessPlanning\",\"resource\":{\"name\":\"PROCESS.IntegratedBusinessPlanning\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning",
+            "description": "IntegratedBusinessPlanning"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"description\":\"IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.InitiativesAndAssumptionsReview",
+            "description": "IntegratedBusinessPlanning.InitiativesAndAssumptionsReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.DemandReview\",\"description\":\"IntegratedBusinessPlanning.DemandReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.DemandReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.DemandReview",
+            "description": "IntegratedBusinessPlanning.DemandReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.SupplyReview\",\"description\":\"IntegratedBusinessPlanning.SupplyReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.SupplyReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.SupplyReview",
+            "description": "IntegratedBusinessPlanning.SupplyReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.IntegratedReconcillation\",\"description\":\"IntegratedBusinessPlanning.IntegratedReconcillation\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.IntegratedReconcillation\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.IntegratedReconcillation",
+            "description": "IntegratedBusinessPlanning.IntegratedReconcillation"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"description\":\"IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"edit\",\"start\",\"stop\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.ExecutiveBusinessReview",
+            "description": "IntegratedBusinessPlanning.ExecutiveBusinessReview"
+        }
+    ],
+    [
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning\",\"description\":\"IntegratedBusinessPlanning\",\"resource\":{\"name\":\"PROCESS.IntegratedBusinessPlanning\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning",
+            "description": "IntegratedBusinessPlanning"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"description\":\"IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.InitiativesAndAssumptionsReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.InitiativesAndAssumptionsReview",
+            "description": "IntegratedBusinessPlanning.InitiativesAndAssumptionsReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.DemandReview\",\"description\":\"IntegratedBusinessPlanning.DemandReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.DemandReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.DemandReview",
+            "description": "IntegratedBusinessPlanning.DemandReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.SupplyReview\",\"description\":\"IntegratedBusinessPlanning.SupplyReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.SupplyReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.SupplyReview",
+            "description": "IntegratedBusinessPlanning.SupplyReview"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.IntegratedReconcillation\",\"description\":\"IntegratedBusinessPlanning.IntegratedReconcillation\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.IntegratedReconcillation\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.IntegratedReconcillation",
+            "description": "IntegratedBusinessPlanning.IntegratedReconcillation"
+        },
+        {
+            "expression": "{\"policyType\":\"entity\",\"namespace\":\"by.lsnop\",\"syntaxVersion\":\"1.0.0\",\"displayName\":\"IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"description\":\"IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"resource\":{\"name\":\"SUBPROCESS.IntegratedBusinessPlanning.ExecutiveBusinessReview\",\"policies\":{\"entitySecurity\":{\"effect\":\"allow\",\"actions\":[\"delete\",\"view\"]},\"attributeSecurity\":[],\"dataSecurity\":[]}}}",
+            "displayName": "IntegratedBusinessPlanning.ExecutiveBusinessReview",
+            "description": "IntegratedBusinessPlanning.ExecutiveBusinessReview"
+        }
+    ]
+]

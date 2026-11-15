@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption",
+        "ASSUMPTION_TYPE": "Opportunity"
+    },
+    "ASSUMPTION_VIEW_NAME": "arrange Views view1",
+    "ASSUMPTION_HIDDEN_VIEW_NAME": "qwerty view"
+}

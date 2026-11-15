@@ -1,0 +1,49 @@
+{
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "DEFAULT_SCOPE" : {
+    "VIEW_NAME" : "Default Scope View",
+    "FILTER_NAME" : "Time Filter with Data",
+    "DEFAULT_SCOPE_FILTER":{
+      "DIMENSION_NAME": "TIME",
+      "ATTRIBUTE_NAME": "CALENDARYEAR",
+      "VALUES": ["CY-2023"]
+    },
+    "SCOPE_TO_DEFINE":{
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-00"]
+    },
+    "SCOPE_TO_EDIT" : {
+       "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-10"]
+    },
+    "SCOPE_CHANGE":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-01"]
+    }
+  },
+  "NON_DEFAULT_SCOPE" : {
+    "VIEW_NAME" : "Non Default Scope View",
+    "FILTER_NAME": "GlobalScopeFilter",
+    "GLOBAL_FILTER":{
+      "DIMENSION_NAME": "LOCATION",
+      "ATTRIBUTE_NAME": "Region",
+      "VALUES": ["REGION-00"]
+    },
+    "SCOPE_TO_DEFINE":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-01"]
+    },
+    "SCOPE_TO_EDIT":{
+      "DIMENSION_NAME": "ITEM",
+      "ATTRIBUTE_NAME": "Item",
+      "VALUES": ["FG-02"]
+    }
+  },
+  "PO": "Process Orchestration Integration",
+  "PS":"Planning"
+}

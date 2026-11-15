@@ -1,0 +1,17 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_001_EntityViewMappingForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_002_EntityViewMappingForSubprocess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_004_EntityViewProcedureMappingWithSingleViewForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_005_EntityViewProcedureMappingWithMultipleViewsForProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_006_EntityViewProcedureMappingWithSingleViewForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_007_EntityViewProcedureMappingWithMultipleViewsForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_008_EntityViewActorsProcedures.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_009_PresetFilterManagement.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_010_ScopeMapping.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_011_AdminFilterManagement.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_012_LmSearchV2ActorsAndProcedures.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_013_UserFavouriteViews.spec.ts",
+    "**/playwright-e2e/tests/ProcessOrchestrationBackend/LinkManagement/Test_014_GlobalPresetFilter.spec.ts"
+  ]
+}

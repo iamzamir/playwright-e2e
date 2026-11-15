@@ -1,0 +1,16 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "NON_HIDDEN_VIEWS": "string[] (required)",
+    "HIDDEN_VIEWS": "string[] (required)",
+    "DRILL_THOROUGH_ON_CELLS": "string[] (required)",
+    "DRILL_THOROUGH_ON_CELLS_FALLBACK": "string[] (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "NON_HIDDEN_VIEWS": ["Normal View 3", "Normal View 4"],
+  "HIDDEN_VIEWS": ["Hidden View 3", "Hidden View 4"],
+  "DRILL_THOROUGH_ON_CELLS": ["42", "105", "41", "90"],
+  "DRILL_THOROUGH_ON_CELLS_FALLBACK": ["90", "100", "110", "120"]
+}

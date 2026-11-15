@@ -1,0 +1,58 @@
+{
+    "FULL_EXPORT_PAYLOAD": {
+        "calendars": [],
+        "processes": [],
+        "customFields": {
+            "attributes": [],
+            "uiFields": []
+        },
+        "actionItems": {
+            "attributes": [],
+            "kpis": [],
+            "ui_fields": []
+        },
+        "assumptions": {
+            "attributes": [],
+            "ui_fields": [],
+            "ui_fields_values": [],
+            "kpi_configs": [],
+            "assumption_types": []
+        },
+        "links": {
+            "entityViews": [],
+            "entityViewsProcedure": []
+        },
+        "supplyChainActions": [],
+        "featureToggle": {
+            "tenantLevel": [],
+            "processes": [],
+            "subProcesses": [],
+            "assumptions": []
+        }
+    },
+    "PARTIAL_EXPORT_PAYLOAD": {
+        "calendars": [
+            "Monthly Calendar"
+        ],
+        "processes": [
+            "IntegratedBusinessPlanning"
+        ],
+        "actionItems": {
+            "kpis": [
+                "02e274f3-915d-4551-a518-00f053c1d63d"
+            ]
+        },
+        "supplyChainActions": [],
+        "links": {
+            "entityViews": [
+                {
+                    "type": "subprocess",
+                    "entityId": [
+                        "IntegratedBusinessPlanning"
+                    ]
+                }
+            ],
+            "entityViewsProcedure":[]
+        }
+    }
+}

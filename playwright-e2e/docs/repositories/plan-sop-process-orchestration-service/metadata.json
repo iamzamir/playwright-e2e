@@ -1,0 +1,97 @@
+{
+  "name": "plan-sop-process-orchestration-service",
+  "displayName": "Process Orchestration Service",
+  "org": "BY-Product-Development",
+  "type": "backend-service",
+  "language": "java",
+  "runtime": "Java 21",
+  "framework": "Spring Boot 3.5.16",
+  "commonsVersion": "2dacec2-SNAPSHOT",
+  "buildTool": "gradle",
+  "artifactGroup": "com.blueyonder.po",
+  "artifactVersion": "1.0.0",
+  "swaggerPath": "/swagger-ui/index.html",
+  "database": {
+    "engine": "azure-sql-server",
+    "name": "process_orchestration_db",
+    "migrations": "liquibase",
+    "maxPoolSize": 29
+  },
+  "controllers": 23,
+  "entities": 28,
+  "gatewayPrefix": {
+    "QA": { "old": "cbp/qa/ibp/process-orchestration/v1", "new": "qa/po/api/v1" },
+    "INTEROP": { "old": "cbp/interop/ibp/process-orchestration/v1", "new": "po/api/v1" },
+    "PSR": { "old": "cbp/psr/ibp/process-orchestration/v1", "new": "po/api/v1" }
+  },
+  "dependsOn": [
+    "plan-sop-actionitem",
+    "plan-sop-po-be-commons",
+    "liam-rbac",
+    "alm-foundation-model"
+  ],
+  "consumedBy": [
+    "plan-sop-lui",
+    "plan-sop-planning-mfe",
+    "plan-sop-ui-automation"
+  ],
+  "automation": {
+    "specGlobs": [
+      "tests/ProcessOrchestrationBackend/ProcessBatch/**",
+      "tests/ProcessOrchestrationBackend/Calendar/**",
+      "tests/ProcessOrchestrationBackend/Migration/**",
+      "tests/ProcessOrchestration/**",
+      "tests/DataSetupBatch/ProcessOrchestration/**"
+    ],
+    "pageObjects": [
+      "process.page.ts",
+      "process-settings.page.ts",
+      "assumption.page.ts",
+      "powerbar.page.ts"
+    ],
+    "testSuites": [
+      "POBackendProcessBatch.json",
+      "POBackendCalendarBatch.json",
+      "POBackendMigrationBatch.json",
+      "POBackendSmokeBatch.json",
+      "PowerBarBatch.json",
+      "ScopeBatch.json"
+    ],
+    "testDataAreas": [
+      "testdata/INTEROP/ProcessOrchestrationBackend",
+      "testdata/QA/ProcessOrchestrationBackend",
+      "testdata/PSR/ProcessOrchestrationBackend",
+      "testdata/INTEROP/ProcessOrchestration",
+      "testdata/QA/ProcessOrchestration"
+    ],
+    "asyncEndpoints": [
+      "/process/{processName}/start",
+      "/process/{processName}/stop",
+      "/exportData",
+      "/importData",
+      "/configuration/exchange/publish"
+    ],
+    "pollEndpoints": [
+      "/process/{processName}/status",
+      "/job/{jobId}/status",
+      "/transitionJob/{jobId}/status"
+    ],
+    "backendSpecs": { "ProcessBatch": 9, "Calendar": 3, "Migration": 9, "ActionItemProxySearch": 2 },
+    "endpointCoverage": { "exercised": 59, "active": 144, "totalMappings": 163, "asOf": "2026-10-05" },
+    "utilities": ["util/process-fixture.util.ts", "util/process-start.util.ts", "util/calendar-cycle.util.ts", "util/alm-migration.util.ts"],
+    "untestedAreas": [
+      "transitions",
+      "subprocess-start-stop",
+      "process-create-update-via-POST-PUT",
+      "quota-and-metering",
+      "insights",
+      "reporting-config",
+      "event-actions",
+      "templates",
+      "node-schedules"
+    ]
+  },
+  "errorCodes": { "2104": "ALM_CUSTOMER_NOT_FOUND (404) — since SM-39457" },
+  "lastReviewed": "2026-10-05",
+  "qualityGates": ["CodeQL", "Codacy", "42Crunch", "BlackDuck", "SonarQube", "Spotless"]
+}

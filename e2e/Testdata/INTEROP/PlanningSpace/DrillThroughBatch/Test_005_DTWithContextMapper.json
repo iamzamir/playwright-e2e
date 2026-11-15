@@ -1,0 +1,7 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "DRILL_THROUGH_VIEW_FROM": "DR Source",
+    "DRILL_THROUGH_CELL": "44",
+    "TARGET_VIEW": "DR Destination,hidden view,Bullet Chart Automation,enhanced table view,ViewOne"
+}

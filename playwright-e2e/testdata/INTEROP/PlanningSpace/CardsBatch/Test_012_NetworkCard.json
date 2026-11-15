@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Network Card",
+  "DATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/NetworkCard"
+}

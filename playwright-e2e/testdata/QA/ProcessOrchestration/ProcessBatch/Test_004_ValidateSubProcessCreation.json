@@ -1,0 +1,8 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)"
+    },
+    "REALM_NAME": "cbp-qa-ps-automation",
+    "PROCESS_NAME": "IBP India"
+}

@@ -1,0 +1,42 @@
+{
+  "_schema": {
+    "requestBody.processNames": "string[] (required)",
+    "PROCESS_PAYLOAD": "object (required) - template used when a listed process is missing",
+    "TEMPLATE_CHILDREN": "array (required) - BY-Template subprocesses used for process model mapping"
+  },
+  "requestBody": {
+    "processNames": [
+      "AllocAndReplen",
+      "ProcessStartStop"
+    ]
+  },
+  "PROCESS_PAYLOAD": {
+    "attributes": [],
+    "templateName": "BY-Template",
+    "calendarName": "Monthly Calendar",
+    "cycleName": "2025 MAY",
+    "description": "Process used for start/stop API tests"
+  },
+  "TEMPLATE_CHILDREN": [
+    {
+      "name": "InitiativesAndAssumptionsReview",
+      "displayName": "Initiatives And Assumptions Review"
+    },
+    {
+      "name": "DemandReview",
+      "displayName": "Demand Review"
+    },
+    {
+      "name": "SupplyReview",
+      "displayName": "Supply Review"
+    },
+    {
+      "name": "IntegratedReconcillation",
+      "displayName": "Integrated Reconcillation"
+    },
+    {
+      "name": "ExecutiveBusinessReview",
+      "displayName": "Executive Business Review"
+    }
+  ]
+}

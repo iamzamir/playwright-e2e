@@ -1,0 +1,20 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT": "string (required)",
+    "METADATA_ENDPOINT": "string (required)",
+    "NO_DATA_ENDPOINT": "string (required)",
+    "NO_DATA_META_ENDPOINT": "string (required)",
+    "WRONG_ENDPOINT": "string (required)"
+  },
+  "REALM_NAME": "cbp-e2e-qa",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "Mytask",
+  "DATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/MyTasksTable",
+  "METADATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/mui5/MyTasksTable/columns",
+  "NO_DATA_ENDPOINT": "https://jsonblob.com/api/1309472935022616576",
+  "NO_DATA_META_ENDPOINT": "https://jsonblob.com/api/1309473271430963200",
+  "WRONG_ENDPOINT": "example.com/api/1sample1"
+}

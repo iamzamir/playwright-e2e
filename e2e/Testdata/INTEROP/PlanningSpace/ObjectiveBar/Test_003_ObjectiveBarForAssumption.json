@@ -1,0 +1,9 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "PROCESS": "TestProcNew",
+    "ASSUMPTION": {
+        "ASSUMPTION_NAME": "PS Auto Assumption",
+        "ASSUMPTION_TYPE": "Opportunity"
+    }
+}

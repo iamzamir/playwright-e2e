@@ -1,0 +1,66 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "quickLinks": [
+        {
+            "name": "Process Summary",
+            "env": "pofeatureqa",
+            "pageTitle": "Initiatives And Assumptions Review"
+        },
+        {
+            "name": "Planning",
+            "env": "IBPPlanQA",
+            "pageTitle": "Planning"
+        },
+        {
+            "name": "Assumptions",
+            "env": "pofeatureqa",
+            "pageTitle": "Assumptions"
+        },
+        {
+            "name": "Action Items",
+            "env": "pofeatureqa",
+            "pageTitle": "Action Items"
+        },
+        {
+            "name": "Scenario",
+            "env": "IBPPlanQA",
+            "pageTitle": "All Scenarios"
+        },
+        {
+            "name": "Interactive Planning",
+            "env": "IBPPlanQA",
+            "pageTitle": "Interactive Planning"
+        },
+        {
+            "name": "Semantic Network Architect",
+            "env": "semantic-network-architect-qa",
+            "pageTitle": "Cognitive Model"
+        },
+        {
+            "name": "Identity & Access",
+            "env": "identityaccess",
+            "pageTitle": "Users"
+        },
+        {
+            "name": "Process Settings",
+            "env": "pofeatureqa",
+            "pageTitle": "Structure & Schedule"
+        },
+        {
+            "name": "CBP Observability",
+            "env": "proc-svc-jes-qa",
+            "pageTitle": "Procedure Orchestration"
+        },
+        {
+            "name": "BYDM Workbench",
+            "env": "data-model-management",
+            "pageTitle": "Data Models"
+        },
+        {
+            "name": "MaaS Command Center",
+            "env": "maas-command-center-qa",
+            "pageTitle": "Clusters"
+        }
+    ]
+}

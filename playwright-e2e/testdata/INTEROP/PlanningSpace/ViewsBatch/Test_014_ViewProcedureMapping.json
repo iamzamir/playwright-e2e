@@ -1,0 +1,80 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "ACTOR_NAME1": "string (required)",
+    "PROCEDURE_NAME1": "string (required)",
+    "ACTOR_NAME2": "string (required)",
+    "PROCEDURE_NAME2": "string (required)",
+    "UI_CHACHE1": "string (required)",
+    "UI_CHACHE2": "string (required)",
+    "SCENARIO_COMPARISON1": "string (required)",
+    "SCENARIO_COMPARISON2": "string (required)",
+    "MaasActor": "string (required)",
+    "UI_CHACE": "string (required)",
+    "SCENARIO_COMPARISON": "string (required)",
+    "DEFAULT_PROCEDURE": "string (required)",
+    "ACTORS_PROCEDURE1": "object[] (required)",
+    "ACTORS_PROCEDURE2": "object[] (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomationProcess",
+  "VIEW_NAME": "Automation_Test_View",
+  "ACTOR_NAME1": "ActorCfgBringUpOnDemandMaas",
+  "PROCEDURE_NAME1": "OnDemandMaasCluster",
+  "ACTOR_NAME2": "Actor config for Bring Up MaaS Cluster",
+  "PROCEDURE_NAME2": "InteractiveDemand",
+  "UI_CHACHE1": "TestBanjoUIcache",
+  "UI_CHACHE2": "TestBanjoUIcache2",
+  "SCENARIO_COMPARISON1": "SCSMetadataFillRate",
+  "SCENARIO_COMPARISON2": "ScenarioComparison_InsightTest",
+  "MaasActor": "actor-list",
+  "UI_CHACE": "uicache-actor-list",
+  "SCENARIO_COMPARISON": "scs-actor-list",
+  "DEFAULT_PROCEDURE": "procedure-list",
+  "ACTORS_PROCEDURE1": [
+    {
+      "actorName": "actor-list",
+      "procedureName": "ActorCfgBringUpOnDemandMaas",
+      "labelName": "Select Actor"
+    },
+    {
+      "actorName": "insight-actor-list",
+      "procedureName": "Insight_actor",
+      "labelName": "Select Actor"
+    },
+    {
+      "actorName": "scs-actor-list",
+      "procedureName": "SCSMetadataFillRate",
+      "labelName": "Select Actor"
+    },
+    {
+      "actorName": "procedure-list",
+      "procedureName": "OnDemandMaasCluster",
+      "labelName": "Select Procedure"
+    }
+  ],
+  "ACTORS_PROCEDURE2": [
+    {
+      "actorName": "actor-list",
+      "procedureName": "Actor config for Bring Up MaaS Cluster",
+      "labelName": "Select Actor"
+    },
+    {
+      "actorName": "scs-actor-list",
+      "procedureName": "ScenarioComparison_InsightTest",
+      "labelName": "Select Actor"
+    },
+    {
+      "actorName": "procedure-list",
+      "procedureName": "InteractiveDemand",
+      "labelName": "Select Procedure"
+    }
+  ],
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

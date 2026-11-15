@@ -1,0 +1,209 @@
+{
+  "_schema": {
+    "IMPORT_PROCEDURE_MAPPING_PAYLOAD": "import request with links.entityViewsProcedure array (required)",
+    "EXPORT_PROCEDURE_REQUEST_PAYLOAD": "export request with links.entityViewsProcedure array (required)"
+  },
+  "IMPORT_PROCEDURE_MAPPING_PAYLOAD": {
+    "links": {
+      "tenantId": "dcd03d66-7c45-4269-b1a0-be3498e35156",
+      "entityViewsProcedure": [
+        {
+          "entityType": "subprocess",
+          "entityId": "IntegratedBusinessPlanning",
+          "entityTypeMappingId": "77a3cabb-afac-4d80-9c5f-77f8cb606e3e",
+          "views": [
+            {
+              "id": "68778a44373383a0a0013859",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "CreateBaseAndHydrateMaaSOnSchedule",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 0
+                },
+                {
+                  "procedureName": "PublishScenario",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 0
+                },
+                {
+                  "procedureName": "CreateScenario",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 0
+                }
+              ],
+              "scopeId": "71260bf8-2a12-4d32-857c-1ef9038240c6"
+            }
+          ]
+        },
+        {
+          "entityType": "subprocess",
+          "entityId": "EntityViewProcedureMapping",
+          "entityTypeMappingId": "ee3d8417-307e-4cda-84d4-5304ea48b5a4",
+          "views": [
+            {
+              "id": "68831ed347194343d8506e62",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "MigrationSCA3",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 3
+                },
+                {
+                  "procedureName": "MigrationSCA2",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 2
+                },
+                {
+                  "procedureName": "MigrationSCA1",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 1
+                }
+              ],
+              "scopeId": null
+            },
+            {
+              "id": "68831f2847194343d8506e65",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "MigrationSCA3",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 3
+                },
+                {
+                  "procedureName": "MigrationSCA2",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 2
+                },
+                {
+                  "procedureName": "MigrationSCA1",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 1
+                }
+              ],
+              "scopeId": null
+            },
+            {
+              "id": "68831ea8b02bf03146f23279",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "MigrationSCA5",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 5
+                },
+                {
+                  "procedureName": "MigrationSCA1",
+                  "primary": true,
+                  "secondary": false,
+                  "sequence": 1
+                },
+                {
+                  "procedureName": "MigrationSCA4",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 4
+                },
+                {
+                  "procedureName": "MigrationSCA2",
+                  "primary": false,
+                  "secondary": true,
+                  "sequence": 2
+                },
+                {
+                  "procedureName": "MigrationSCA3",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 3
+                }
+              ],
+              "scopeId": null
+            },
+            {
+              "id": "68831eea47194343d8506e63",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "MigrationSCA2",
+                  "primary": true,
+                  "secondary": false,
+                  "sequence": 2
+                },
+                {
+                  "procedureName": "MigrationSCA1",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 1
+                },
+                {
+                  "procedureName": "MigrationSCA3",
+                  "primary": false,
+                  "secondary": true,
+                  "sequence": 3
+                }
+              ],
+              "scopeId": null
+            },
+            {
+              "id": "68831f0847194343d8506e64",
+              "sequence": null,
+              "hidden": null,
+              "procedures": [
+                {
+                  "procedureName": "MigrationSCA2",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 2
+                },
+                {
+                  "procedureName": "MigrationSCA3",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 3
+                },
+                {
+                  "procedureName": "MigrationSCA1",
+                  "primary": false,
+                  "secondary": false,
+                  "sequence": 1
+                }
+              ],
+              "scopeId": null
+            }
+          ]
+        }
+      ],
+      "entityViews": []
+    }
+  },
+  "EXPORT_PROCEDURE_REQUEST_PAYLOAD": {
+    "links": {
+      "entityViewsProcedure": [
+        {
+          "type": "subprocess",
+          "entityId": [
+            "IntegratedBusinessPlanning",
+            "EntityViewProcedureMapping"
+          ]
+        }
+      ]
+    }
+  }
+}

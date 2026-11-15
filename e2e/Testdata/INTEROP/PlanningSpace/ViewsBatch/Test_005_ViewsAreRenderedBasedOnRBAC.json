@@ -1,0 +1,5 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "POLICY_NAME": "view rbac test"
+}

@@ -1,0 +1,12 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required) - interactive view with procedure mapping",
+    "SET_FILTER_TITLE": "string (required) - header prompt on empty filter screen"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ODMProcess",
+  "VIEW_NAME": "ViewToTest_MaasCluster",
+  "SET_FILTER_TITLE": "Welcome to the ODMProcess."
+}

@@ -1,0 +1,18 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "RECENTLY_OPENED_PROCESS": "string[] (required)",
+        "IS_PLANNING_SPACE": "boolean (required)",
+        "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+    },
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSManual3",
+    "RECENTLY_OPENED_PROCESS": ["PSManual4", "PSAutomation", "PSManual"],
+    "IS_PLANNING_SPACE": true,
+    "GRAVITEE": {
+        "REALM_NAME": "pspo-int-automation",
+        "REALM_KEY": "pspoat-test1"
+    }
+}
+

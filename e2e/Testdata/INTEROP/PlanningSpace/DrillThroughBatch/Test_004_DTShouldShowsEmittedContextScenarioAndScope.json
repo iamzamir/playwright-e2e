@@ -1,0 +1,10 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation-2",
+    "PROCESS_NAME": "PSAutomation",
+    "DRILL_THROUGH_VIEW_FROM": "Maas Pivot Card View",
+    "DRILL_THROUGH_VIEW_TO": "Maas Chart Card View",
+    "DRILL_THROUGH_CELL": "47",
+    "SCOPE_TAB" :"Scope",
+    "EXISTING_FILTER_NAME_FOR_TARGET": "clear context default filter",
+    "FILTER_NAME": "Maas Chart Filter"
+}

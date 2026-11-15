@@ -1,0 +1,14 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "VIEW_NAME": "string (required)",
+    "DATA_ENDPOINT_OPTION": "string (required)",
+    "WRONG_ENDPOINT_OPTION": "string (required)"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "PSAutomation",
+  "VIEW_NAME": "NPI Card",
+  "DATA_ENDPOINT_OPTION": "Test NPI MetaData Summary Card API",
+  "WRONG_ENDPOINT_OPTION": "MetaData Summary Card API with invalid endpoint"
+}

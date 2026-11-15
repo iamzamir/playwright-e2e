@@ -1,0 +1,26 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "ConfigSCATestingProcess",
+    "PROCESS_NAME2": "SCAtoapplyallviews",
+    "PROCESS_DISPLAY_NAME": "SCA to apply all views",
+    "ATTRIBUTE_VALUE": "SCP-Reporting",
+    "PROCEDURE": {
+        "PROCEDURENAME1": "Clone Member",
+        "PROCEDURENAME2": "CreateScenario3",
+        "PROCEDURENAME3": "Publish Scenario",
+        "PROCEDURENAME4": "CreateChildScenario"
+    },
+    "MAP_VIEWS_TO_PROCESS": "Arrange Views View Group",
+    "CHILD_VIEWS": {
+        "VIEW1": "scp testing",
+        "VIEW2": "arrange Views view1",
+        "VIEW3": "scp testing 1",
+        "VIEW4": "scp testing 2"
+    },
+     "PRIMARY_BUTTON": "Publish Scenario",
+    "SECONDARY_BUTTON": "Clone Member",
+    "PROCEDURE_DROPDOWN": {
+        "PROCEDURENAME1": "CreateScenario3",
+        "PROCEDURENAME2": "CreateChildScenario"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "Heatmap Chart",
+    "DATA_ENDPOINT": "https://api-tst.jdadelivers.com/lui/mockcards/v2/cards/HeatMap",
+    "WRONG_ENDPOINT": "example.com/api",
+    "DATA_ENDPOINT_OPTION": "Heatmap Chart",
+    "NO_DATA_ENDPOINT_OPTION": "HeatMap No Data"
+}

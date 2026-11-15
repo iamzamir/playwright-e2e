@@ -1,0 +1,12 @@
+{
+  "testFiles": [
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_003_EditViewWithoutPermission.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_004_RefreshAndEditView.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_005_Favourites.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_011_HiddenViewsForProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_012_HiddenViewsForSubProcess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_015_ViewSettings.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_016_ViewSettingsForSubprocess.spec.ts",
+    "**/playwright-e2e/tests/PlanningSpace/ViewsBatch/Test_019_PinUnpinInPs.spec.ts"
+  ]
+}

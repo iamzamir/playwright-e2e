@@ -1,0 +1,14 @@
+{
+    "_schema": {
+        "REALM_NAME": "string (required)",
+        "PROCESS_NAME": "string (required)",
+        "VIEW_NAME": "string (required)",
+        "VIEW_NAME_2": "string (required)",
+        "DEFAULT_SCOPE_VIEW_NAME": "string (required)"
+    },
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "VIEW_NAME": "GlobalScopeView1",
+    "VIEW_NAME_2": "GlobalScopeView2",
+    "DEFAULT_SCOPE_VIEW_NAME": "DefaultScopeView1"
+}

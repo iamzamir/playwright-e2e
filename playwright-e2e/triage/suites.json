@@ -1,0 +1,18 @@
+{
+  "_schema": {
+    "purpose": "Nightly suites (functional and visual smoke) the dashboard expects every day. A suite with no report for the date shows as running, failed to report, or missing. Keep schedule in sync with the workflow cron (UTC).",
+    "key": "Report folder name used on gh-pages (PSAutomationReports/<key>) and in run data files.",
+    "schedule": "Cron (UTC) of the scheduled run that produces this suite."
+  },
+  "suites": [
+    { "key": "PW-PO-BACKEND-QA-AZURE", "label": "PO Backend · QA · Azure", "area": "PO Backend", "environment": "QA", "gateway": "AZURE", "workflow": "playwright-po-backend-suite.yaml", "schedule": "30 19 * * *" },
+    { "key": "PW-PO-BACKEND-QA-GRAVITEE", "label": "PO Backend · QA · Gravitee", "area": "PO Backend", "environment": "QA", "gateway": "GRAVITEE", "workflow": "playwright-po-backend-suite.yaml", "schedule": "00 20 * * *" },
+    { "key": "PW-PO-BACKEND-INTEROP-GRAVITEE", "label": "PO Backend · INTEROP · Gravitee", "area": "PO Backend", "environment": "INTEROP", "gateway": "GRAVITEE", "workflow": "playwright-po-backend-suite.yaml", "schedule": "30 20 * * *" },
+    { "key": "PW-PO-BACKEND-INTEROP-AZURE", "label": "PO Backend · INTEROP · Azure", "area": "PO Backend", "environment": "INTEROP", "gateway": "AZURE", "workflow": "playwright-po-backend-suite.yaml", "schedule": "00 21 * * *" },
+    { "key": "PO-UI-INTEROP-AZURE", "label": "PO UI · INTEROP · Azure", "area": "PO UI", "environment": "INTEROP", "gateway": "AZURE", "workflow": "playwright-po-iop-ui-local-suite.yaml", "schedule": "30 21 * * *" },
+    { "key": "PO-UI-INTEROP-GRAVITEE", "label": "PO UI · INTEROP · Gravitee", "area": "PO UI", "environment": "INTEROP", "gateway": "GRAVITEE", "workflow": "playwright-po-iop-ui-local-suite.yaml", "schedule": "30 22 * * *" },
+    { "key": "PW-PS-UI-INTEROP-LOCAL", "label": "PS UI · INTEROP · Azure", "area": "PS UI", "environment": "INTEROP", "gateway": "AZURE", "workflow": "playwright-ps-iop-ui-local-suite.yaml", "schedule": "00 22 * * *" },
+    { "key": "PW-PS-UI-INTEROP-GRAVITEE", "label": "PS UI · INTEROP · Gravitee", "area": "PS UI", "environment": "INTEROP", "gateway": "GRAVITEE", "workflow": "playwright-ps-iop-ui-local-suite.yaml", "schedule": "30 0 * * *" },
+    { "key": "VISUAL-CompleteSmokeVisual", "label": "Visual smoke · INTEROP", "area": "Visual", "environment": "INTEROP", "gateway": null, "workflow": "visual-automation-test.yaml", "schedule": "15 22 * * *" }
+  ]
+}

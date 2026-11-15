@@ -1,0 +1,13 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "PUBLISH_POLICY_NAME" : "PublishScenTest",
+    "PUBLISH_RESOURCE_NAME":"PROCEDURE.PublishScenario",
+    "NAMESPACE" : "BY.CBP",
+    "ROLE_NAME" : "procedure_execution",
+    "PUBLISH_BASE_POLICY_NAME" : "PublishBaseScenTest",
+    "PROCEDURE_NAME" : "Publish Scenario",
+    "PUBLISH_BASE_RESOURCE": "Publish Base Scenario",
+    "BASE_SCENARIO_NAME": "Base_Scenario_920",
+    "CHILD_SCENARIO_NAME": "ProcessSelectSidenavchild1"
+}

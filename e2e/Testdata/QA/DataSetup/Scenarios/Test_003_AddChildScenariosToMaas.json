@@ -1,0 +1,20 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ASSUMPTION": "0a22e74e-91c1-1268-8191-fe98c3920542",
+    "SUBPROCESS_NAME": "DemandReview",
+    "CALC_ENGINE_ID": "ebf85d02-4163-446e-9a71-c000b905f419",
+    "API_ENV_SEGMENT": "qa",
+    "scenarioSets": {
+        "default": [
+            "Sceanrio_Case_Automation",
+            "Scenario_Selection",
+            "scenario_mass_chart_test",
+            "Scenario_For_MaasPivot",
+            "SubprocessSelectSidenavchild1",
+            "SubprocessSelectSidenavchild2AssumptionScn3",
+            "AssumptionScn3",
+            "SubprocessSelectSidenavchild2"
+        ]
+    }
+}

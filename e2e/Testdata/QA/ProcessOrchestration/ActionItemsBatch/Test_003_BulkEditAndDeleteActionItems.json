@@ -1,0 +1,18 @@
+{
+    "REALM_NAME": "cbp-e2e-qa",
+    "PROCESS_NAME": "PSAutomation",
+    "ACTION_ITEM_NAME": "AI",
+    "SUB_PROCESS_NAME": "Demand Review",
+    "ASSUMPTION": "PS Auto Assumption",
+    "STATUS": "In progress",
+    "CHANGE_STATUS": "Not started",
+    "ACTION_TYPE": "Assumption",
+    "PRIORITY": "High",
+    "PRIORITY_UPDATED": "Low",
+    "CREATE_SUCCESS": "Success! New Action Item has been created!",
+    "EDIT_SUCCESS": "Success! Your changes has been saved!",
+    "DELETE_SUCCESS": "Success! Action Item has been deleted!",
+    "BULK_EDIT_SUCCESS": "Status changed for selected Action Items successfully",
+    "BULK_DELETE_SUCCESS": "Action Items have been deleted successfully",
+    "PARTIAL_ALERT_MSG": "Your action may apply partially. You are not authorized to change some of the selected records."
+}

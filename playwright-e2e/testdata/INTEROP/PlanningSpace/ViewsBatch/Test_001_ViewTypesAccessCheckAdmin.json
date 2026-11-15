@@ -1,0 +1,27 @@
+{
+  "_schema": {
+    "REALM_NAME": "string (required)",
+    "PROCESS_NAME": "string (required)",
+    "SUB_PROCESS_NAME": "string (required)",
+    "ASSUMPTION": "string (required)",
+    "ADMIN_VIEW_TYPES": "string (required)",
+    "USER_VIEW_TYPES": "string (required)",
+    "ALL_VIEWS": "string (required)",
+    "HIDDEN_VIEWS": "string (required)",
+    "FAVOURITES": "string (required)",
+    "GRAVITEE": "object (required) - Gravitee gateway overrides; only keys that differ, deep-merged over the base keys when GATEWAY_TYPE=GRAVITEE"
+  },
+  "REALM_NAME": "cbp-interop-ps-automation-2",
+  "PROCESS_NAME": "ViewPermissionTest",
+  "SUB_PROCESS_NAME": "Demand Review",
+  "ASSUMPTION": "AssumptionViewCheck",
+  "ADMIN_VIEW_TYPES": "All Views,Favourites,Hidden Views",
+  "USER_VIEW_TYPES": "All Views,Favourites",
+  "ALL_VIEWS": "ViewOne,Save And Delete Filter",
+  "HIDDEN_VIEWS": "Edit View Disabled",
+  "FAVOURITES": "Save And Delete Filter",
+  "GRAVITEE": {
+    "REALM_NAME": "pspo-int-automation",
+    "REALM_KEY": "pspoat-test1"
+  }
+}

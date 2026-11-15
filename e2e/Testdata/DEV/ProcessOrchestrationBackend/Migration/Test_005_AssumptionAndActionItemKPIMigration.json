@@ -1,0 +1,56 @@
+{
+    "EXPORT_PAYLOAD_FOR_ASSUMPTION_KPI": {
+        "processes": [
+            "IntegratedBusinessPlanning"
+        ],
+        "assumptions": {
+            "kpi_configs": []
+        }
+    },
+    "PAYLOAD_FOR_ASSUMPTION_KPI_DEFINITION": {
+    "name": "Open Risks Migration in target realm",
+    "displayName": "Open Risks Migration in target realm",
+    "description": "Open Risks Migration in target realm",
+    "origin": "8FA05397-53CD-48AB-AADB-2FCD0E1B9909",
+    "rules": [
+      {
+        "id": "0a228b24-978e-1dd1-8197-a1865f770019",
+        "attrName": "status",
+        "attrValue": "1"
+      },
+      {
+        "id": "0a228b24-978e-1dd1-8197-a1865f84001a",
+        "attrName": "type",
+        "attrValue": "0a22cc00-9759-1a35-8197-77b04e680036"
+      }
+    ]
+  },
+    "PAYLOAD_FOR_ACTION_ITEM_KPI_DEFINITION": {
+        "attrName": "Overdue Action Items",
+        "displayName": "Overdue Action Items Migration",
+        "description": "Overdue Action Items",
+        "isActive": true,
+        "isEnabled": true,
+        "entityId": "99771c48-3e34-4e72-aa4c-5b03c161044e",
+        "kpiConfigAttributes": [
+            {
+                "kpiAttrName": "status",
+                "attrValue": "1",
+                "isActive": true,
+                "isEnabled": true
+            },
+            {
+                "kpiAttrName": "dueDate",
+                "attrValue": "1",
+                "isActive": true,
+                "isEnabled": true
+            }
+        ]
+    },
+    "EXPORT_PAYLOAD_FOR_ACTION_ITEM_KPI": {
+        "actionItems": {
+            "kpis": []
+        }
+    }
+}
+

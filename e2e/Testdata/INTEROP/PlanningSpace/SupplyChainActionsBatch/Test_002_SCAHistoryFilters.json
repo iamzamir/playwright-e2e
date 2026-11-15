@@ -1,0 +1,8 @@
+{
+    "REALM_NAME": "cbp-interop-ps-automation",
+    "PROCESS_NAME": "PSAutomation",
+    "SELECT_STATUS": "Complete",
+    "SELECT_PROCEDURE_NAME": "Create Scenario",
+    "EXPECTED_STATUS": "COMPLETE",
+    "EXPECTED_PROCEDURE_NAME": "Create Scenario"
+}
